@@ -1,71 +1,24 @@
 #!/usr/bin/python
-'''Usage: %s [OPTIONS] <input file(s)>
-Generate test source file for CxxTest.
-
-  -v, --version          Write CxxTest version
-  -o, --output=NAME      Write output to file NAME
-  --runner=CLASS         Create a main() function that runs CxxTest::CLASS
-  --gui=CLASS            Like --runner, with GUI component
-  --error-printer        Same as --runner=ErrorPrinter
-  --abort-on-fail        Abort tests on failed asserts (like xUnit)
-  --have-std             Use standard library (even if not found in tests)
-  --no-std               Don\'t use standard library (even if found in tests)
-  --have-eh              Use exception handling (even if not found in tests)
-  --no-eh                Don\'t use exception handling (even if found in tests)
-  --longlong=[TYPE]      Use TYPE (default: long long) as long long
-  --template=TEMPLATE    Use TEMPLATE file to generate the test runner
-  --include=HEADER       Include HEADER in test runner before other headers
-  --root                 Write CxxTest globals
-  --part                 Don\'t write CxxTest globals
-  --no-static-init       Don\'t rely on static initialization
-'''
 
 import re
 import sys
 import getopt
 import glob
 import string
+from optparse import OptionParser
 
 # Global variables
 suites = []
 suite = None
 inBlock = 0
 
-outputFileName = None
-runner = None
-gui = None
-root = None
-part = None
-noStaticInit = None
-templateFileName = None
-headers = []
-
-haveExceptionHandling = 0
-noExceptionHandling = 0
-haveStandardLibrary = 0
-noStandardLibrary = 0
-abortOnFail = 0
-factor = 0
-longlong = 0
+options = []
 
 def main():
     '''The main program'''
     files = parseCommandline()
     scanInputFiles( files )
     writeOutput()
-
-def usage( problem = None ):
-    '''Print usage info and exit'''
-    if problem is None:
-        print usageString()
-        sys.exit(0)
-    else:
-        sys.stderr.write( usageString() )
-        abort( problem )
-
-def usageString():
-    '''Construct program usage string'''
-    return __doc__ % sys.argv[0]
 
 def abort( problem ):
     '''Print error message and exit'''
@@ -76,79 +29,89 @@ def abort( problem ):
 
 def parseCommandline():
     '''Analyze command line arguments'''
-    try:
-        options, patterns = getopt.getopt( sys.argv[1:], 'o:r:',
-                                           ['version', 'output=', 'runner=', 'gui=',
-                                            'error-printer', 'abort-on-fail', 'have-std', 'no-std',
-                                            'have-eh', 'no-eh', 'template=', 'include=',
-                                            'root', 'part', 'no-static-init', 'factor', 'longlong='] )
-    except getopt.error, problem:
-        usage( problem )
-    setOptions( options )
-    return setFiles( patterns )
+    global options
+    parser = OptionParser("%prog [options] [input_files]")
+    parser.add_option("-v", "--version",
+                      action="store_true", dest="version", default=False,
+                      help="Write CxxTest version")
+    parser.add_option("-o", "--output",
+                      dest="outputFileName", default=None, metavar="NAME",
+                      help="Write output to file NAME")
+    parser.add_option("", "--runner",
+                      dest="runner", default=None, metavar="CLASS",
+                      help="Create a main() function that runs CxxTest::CLASS")
+    parser.add_option("", "--gui",
+                      dest="gui", metavar="CLASS",
+                      help="Like --runner, with GUI component")
+    parser.add_option("", "--error-printer",
+                      action="store_true", dest="error_printer", default=False,
+                      help="Same as --runner=ErrorPrinter")
+    parser.add_option("", "--abort-on-fail",
+                      action="store_true", dest="abortOnFail", default=False,
+                      help="Abort tests on failed asserts (like xUnit)")
+    parser.add_option("", "--have-std",
+                      action="store_true", dest="haveStandardLibrary", default=False,
+                      help="Use standard library (even if not found in tests)")
+    parser.add_option("", "--no-std",
+                      action="store_true", dest="noStandardLibrary", default=False,
+                      help="Don't use standard library (even if found in tests)")
+    parser.add_option("", "--have-eh",
+                      action="store_true", dest="haveExceptionHandling", default=False,
+                      help="Use exception handling (even if not found in tests)")
+    parser.add_option("", "--no-eh",
+                      action="store_true", dest="noExceptionHandling", default=False,
+                      help="Don't use exception handling (even if found in tests)")
+    parser.add_option("", "--longlong",
+                      dest="longlong", default="long long", metavar="TYPE",
+                      help="Use TYPE (default: long long) as long long")
+    parser.add_option("", "--template",
+                      dest="templateFileName", default=None, metavar="TEMPLATE",
+                      help="Use TEMPLATE file to generate the test runner")
+    parser.add_option("", "--include", action="append",
+                      dest="headers", default=[], metavar="HEADER",
+                      help="Include HEADER in test runner before other headers")
+    parser.add_option("", "--root",
+                      action="store_true", dest="root", default=False,
+                      help="Write CxxTest globals")
+    parser.add_option("", "--part",
+                      action="store_true", dest="part", default=False,
+                      help="Don't write CxxTest globals")
+    parser.add_option("", "--no-static-init",
+                      action="store_true", dest="noStaticInit", default=False,
+                      help="Don\'t rely on static initialization")
+    parser.add_option("", "--factor",
+                      action="store_true", dest="factor", default=False,
+                      help="Mystery option")
 
-def setOptions( options ):
-    '''Set options specified on command line'''
-    global outputFileName, templateFileName, runner, gui, haveStandardLibrary, factor, longlong
-    global haveExceptionHandling, noExceptionHandling, abortOnFail, headers, root, part, noStaticInit
-    for o, a in options:
-        if o in ('-v', '--version'):
-            printVersion()
-        elif o in ('-o', '--output'):
-            outputFileName = a
-        elif o == '--template':
-            templateFileName = a
-        elif o == '--runner':
-            runner = a
-        elif o == '--gui':
-            gui = a
-        elif o == '--include':
-            if not re.match( r'^["<].*[>"]$', a ):
-                a = ('"%s"' % a)
-            headers.append( a )
-        elif o == '--error-printer':
-            runner = 'ErrorPrinter'
-            haveStandardLibrary = 1
-        elif o == '--abort-on-fail':
-            abortOnFail = 1
-        elif o == '--have-std':
-            haveStandardLibrary = 1
-        elif o == '--no-std':
-            noStandardLibrary = 1
-        elif o == '--have-eh':
-            haveExceptionHandling = 1
-        elif o == '--no-eh':
-            noExceptionHandling = 1
-        elif o == '--root':
-            root = 1
-        elif o == '--part':
-            part = 1
-        elif o == '--no-static-init':
-            noStaticInit = 1
-        elif o == '--factor':
-            factor = 1
-        elif o == '--longlong':
-            if a:
-                longlong = a
-            else:
-                longlong = 'long long'
+    (options, args) = parser.parse_args()
 
-    if noStaticInit and (root or part):
+    if options.version:
+      printVersion()
+
+    if options.error_printer:
+      options.runner= "ErrorPrinter"
+      options.haveStandardLibrary = True
+
+    if options.noStaticInit and (options.root or options.part):
         abort( '--no-static-init cannot be used with --root/--part' )
 
-    if gui and not runner:
-        runner = 'StdioPrinter'
+    if options.gui and not options.runner:
+        options.runner = 'StdioPrinter'
+
+    files = setFiles(args)
+    if len(files) is 0 and not options.root:
+        print parser.error("No input files found")
+    return files
+
 
 def printVersion():
     '''Print CxxTest version and exit'''
     sys.stdout.write( "This is CxxTest version INSERT_VERSION_HERE.\n" )
     sys.exit(0)
 
-def setFiles( patterns ):
+def setFiles(patterns ):
     '''Set input files specified on command line'''
     files = expandWildcards( patterns )
-    if len(files) is 0 and not root:
-        usage( "No input files found" )
     return files
 
 def expandWildcards( patterns ):
@@ -169,7 +132,7 @@ def scanInputFiles(files):
     for file in files:
         scanInputFile(file)
     global suites
-    if len(suites) is 0 and not root:
+    if len(suites) is 0 and not options.root:
         abort( 'No tests defined' )
 
 def scanInputFile(fileName):
@@ -223,18 +186,18 @@ def lineBelongsToSuite( suite, lineNo, line ):
 std_re = re.compile( r"\b(std\s*::|CXXTEST_STD|using\s+namespace\s+std\b|^\s*\#\s*include\s+<[a-z0-9]+>)" )
 def scanLineForStandardLibrary( line ):
     '''Check if current line uses standard library'''
-    global haveStandardLibrary, noStandardLibrary
-    if not haveStandardLibrary and std_re.search(line):
-        if not noStandardLibrary:
-            haveStandardLibrary = 1
+    global options
+    if not options.haveStandardLibrary and std_re.search(line):
+        if not options.noStandardLibrary:
+            options.haveStandardLibrary = 1
 
 exception_re = re.compile( r"\b(throw|try|catch|TSM?_ASSERT_THROWS[A-Z_]*)\b" )
 def scanLineForExceptionHandling( line ):
     '''Check if current line uses exception handling'''
-    global haveExceptionHandling, noExceptionHandling
-    if not haveExceptionHandling and exception_re.search(line):
-        if not noExceptionHandling:
-            haveExceptionHandling = 1
+    global options
+    if not options.haveExceptionHandling and exception_re.search(line):
+        if not options.noExceptionHandling:
+            options.haveExceptionHandling = 1
 
 suite_re = re.compile( r'\bclass\s+(\w+)\s*:\s*public\s+((::)?\s*CxxTest\s*::\s*)?TestSuite\b' )
 generatedSuite_re = re.compile( r'\bCXXTEST_SUITE\s*\(\s*(\w*)\s*\)' )
@@ -349,7 +312,7 @@ def rememberSuite(suite):
 
 def writeOutput():
     '''Create output file'''
-    if templateFileName:
+    if options.templateFileName:
         writeTemplateOutput()
     else:
         writeSimpleOutput()
@@ -367,7 +330,7 @@ preamble_re = re.compile( r"^\s*<CxxTest\s+preamble>\s*$" )
 world_re = re.compile( r"^\s*<CxxTest\s+world>\s*$" )
 def writeTemplateOutput():
     '''Create output based on template file'''
-    template = open(templateFileName)
+    template = open(options.templateFileName)
     output = startOutputFile()
     while 1:
         line = template.readline()
@@ -387,8 +350,8 @@ def writeTemplateOutput():
 
 def startOutputFile():
     '''Create output file and write header'''
-    if outputFileName is not None:
-        output = open( outputFileName, 'w' )
+    if options.outputFileName is not None:
+        output = open( options.outputFileName, 'w' )
     else:
         output = sys.stdout
     output.write( "/* Generated file, do not edit */\n\n" )
@@ -397,46 +360,46 @@ def startOutputFile():
 wrotePreamble = 0
 def writePreamble( output ):
     '''Write the CxxTest header (#includes and #defines)'''
-    global wrotePreamble, headers, longlong
+    global wrotePreamble
     if wrotePreamble: return
     output.write( "#ifndef CXXTEST_RUNNING\n" )
     output.write( "#define CXXTEST_RUNNING\n" )
     output.write( "#endif\n" )
     output.write( "\n" )
-    if haveStandardLibrary:
+    if options.haveStandardLibrary:
         output.write( "#define _CXXTEST_HAVE_STD\n" )
-    if haveExceptionHandling:
+    if options.haveExceptionHandling:
         output.write( "#define _CXXTEST_HAVE_EH\n" )
-    if abortOnFail:
+    if options.abortOnFail:
         output.write( "#define _CXXTEST_ABORT_TEST_ON_FAIL\n" )
-    if longlong:
-        output.write( "#define _CXXTEST_LONGLONG %s\n" % longlong )
-    if factor:
+    if options.longlong:
+        output.write( "#define _CXXTEST_LONGLONG %s\n" % options.longlong )
+    if options.factor:
         output.write( "#define _CXXTEST_FACTOR\n" )
-    for header in headers:
+    for header in options.headers:
         output.write( "#include %s\n" % header )
     output.write( "#include <cxxtest/TestListener.h>\n" )
     output.write( "#include <cxxtest/TestTracker.h>\n" )
     output.write( "#include <cxxtest/TestRunner.h>\n" )
     output.write( "#include <cxxtest/RealDescriptions.h>\n" )
-    if runner:
+    if options.runner:
         output.write( "#include <cxxtest/%s.h>\n" % runner )
-    if gui:
+    if options.gui:
         output.write( "#include <cxxtest/%s.h>\n" % gui )
     output.write( "\n" )
     wrotePreamble = 1
 
 def writeMain( output ):
     '''Write the main() function for the test runner'''
-    if gui:
+    if options.gui:
         output.write( 'int main( int argc, char *argv[] ) {\n' )
-        if noStaticInit:
+        if options.noStaticInit:
             output.write( ' CxxTest::initialize();\n' )
         output.write( ' return CxxTest::GuiTuiRunner<CxxTest::%s, CxxTest::%s>( argc, argv ).run();\n' % (gui, runner) )
         output.write( '}\n' )
-    elif runner:
+    elif options.runner:
         output.write( 'int main() {\n' )
-        if noStaticInit:
+        if options.noStaticInit:
             output.write( ' CxxTest::initialize();\n' )
         output.write( ' return CxxTest::%s().run();\n' % runner )
         output.write( '}\n' )
@@ -444,13 +407,13 @@ def writeMain( output ):
 wroteWorld = 0
 def writeWorld( output ):
     '''Write the world definitions'''
-    global wroteWorld, part
+    global wroteWorld
     if wroteWorld: return
     writePreamble( output )
     writeSuites( output )
-    if root or not part:
+    if options.root or not options.part:
         writeRoot( output )
-    if noStaticInit:
+    if options.noStaticInit:
         writeInitialize( output )
     wroteWorld = 1
 
@@ -494,7 +457,7 @@ def generateSuite( output, suite ):
 
 def writeSuitePointer( output, suite ):
     '''Create static suite pointer object for dynamic suites'''
-    if noStaticInit:
+    if options.noStaticInit:
         output.write( 'static %s *%s;\n\n' % (suite['name'], suite['object']) )
     else:
         output.write( 'static %s *%s = 0;\n\n' % (suite['name'], suite['object']) )
@@ -505,7 +468,7 @@ def writeSuiteObject( output, suite ):
 
 def writeTestList( output, suite ):
     '''Write the head of the test linked list for a suite'''
-    if noStaticInit:
+    if options.noStaticInit:
         output.write( 'static CxxTest::List %s;\n' % suite['tlist'] )
     else:
         output.write( 'static CxxTest::List %s = { 0, 0 };\n' % suite['tlist'] )
@@ -519,7 +482,7 @@ def writeTestDescription( output, suite, test ):
     '''Write test description object'''
     output.write( 'static class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
     output.write( 'public:\n' )
-    if not noStaticInit:
+    if not options.noStaticInit:
         output.write( ' %s() : CxxTest::RealTestDescription( %s, %s, %s, "%s" ) {}\n' %
                       (test['class'], suite['tlist'], suite['dobject'], test['line'], test['name']) )
     output.write( ' void runTest() { %s }\n' % runBody( suite, test ) )
@@ -548,7 +511,7 @@ def writeSuiteDescription( output, suite ):
 def writeDynamicDescription( output, suite ):
     '''Write SuiteDescription for a dynamic suite'''
     output.write( 'CxxTest::DynamicSuiteDescription<%s> %s' % (suite['name'], suite['dobject']) )
-    if not noStaticInit:
+    if not options.noStaticInit:
         output.write( '( %s, %s, "%s", %s, %s, %s, %s )' %
                       (suite['cfile'], suite['line'], suite['name'], suite['tlist'],
                        suite['object'], suite['create'], suite['destroy']) )
@@ -557,7 +520,7 @@ def writeDynamicDescription( output, suite ):
 def writeStaticDescription( output, suite ):
     '''Write SuiteDescription for a static suite'''
     output.write( 'CxxTest::StaticSuiteDescription %s' % suite['dobject'] )
-    if not noStaticInit:
+    if not options.noStaticInit:
         output.write( '( %s, %s, "%s", %s, %s )' %
                       (suite['cfile'], suite['line'], suite['name'], suite['object'], suite['tlist']) )
     output.write( ';\n\n' )
