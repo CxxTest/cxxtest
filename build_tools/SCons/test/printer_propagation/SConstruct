@@ -1,0 +1,8 @@
+
+env = Environment(
+    toolpath=['../../'],
+    tools=['default','cxxtest'],
+    CXXTEST = '../../../../cxxtestgen.py',
+    )
+
+env.CxxTest(['src/failtest.t.h'], CPPPATH=['#'], CXXTEST_RUNNER="CrazyRunner")
