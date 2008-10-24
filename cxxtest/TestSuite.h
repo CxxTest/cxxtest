@@ -187,6 +187,10 @@ namespace CxxTest
     void doFailAssertThrowsNot( const char *file, unsigned line,
                                 const char *expression, const char *message );
 
+    void doAssertSameFiles( const char* file, unsigned line,
+                            const char* file1, const char* file2,
+                            const char* message);
+
 #   ifdef _CXXTEST_HAVE_EH
 #       define _TS_TRY try
 #       define _TS_CATCH_TYPE(t, b) catch t b
@@ -377,6 +381,23 @@ namespace CxxTest
 
 #   define ETSM_ASSERT_DELTA(m,x,y,d) _ETSM_ASSERT_DELTA(__FILE__,__LINE__,m,x,y,d)
 #   define TSM_ASSERT_DELTA(m,x,y,d) _TSM_ASSERT_DELTA(__FILE__,__LINE__,m,x,y,d)
+
+    // TS_ASSERT_SAME_FILES
+#   define ___ETS_ASSERT_SAME_FILES(f,l,x,y,m) CxxTest::doAssertSameFiles( (f), (l), (x), (y), (m) )
+#   define ___TS_ASSERT_SAME_FILES(f,l,x,y,m) { _TS_TRY { ___ETS_ASSERT_SAME_FILES(f,l,x,y,m); } __TS_CATCH(f,l) }
+    
+#   define _ETS_ASSERT_SAME_FILES(f,l,x,y) ___ETS_ASSERT_SAME_FILES(f,l,x,y,0)
+#   define _TS_ASSERT_SAME_FILES(f,l,x,y) ___TS_ASSERT_SAME_FILES(f,l,x,y,0)
+
+#   define ETS_ASSERT_SAME_FILES(x,y) _ETS_ASSERT_SAME_FILES(__FILE__,__LINE__,x,y)
+#   define TS_ASSERT_SAME_FILES(x,y) _TS_ASSERT_SAME_FILES(__FILE__,__LINE__,x,y)
+
+#   define _ETSM_ASSERT_SAME_FILES(f,l,m,x,y) ___ETS_ASSERT_SAME_FILES(f,l,x,y,TS_AS_STRING(m))
+#   define _TSM_ASSERT_SAME_FILES(f,l,m,x,y) ___TS_ASSERT_SAME_FILES(f,l,x,y,TS_AS_STRING(m))
+
+#   define ETSM_ASSERT_SAME_FILES(m,x,y) _ETSM_ASSERT_SAME_FILES(__FILE__,__LINE__,m,x,y)
+#   define TSM_ASSERT_SAME_FILES(m,x,y) _TSM_ASSERT_SAME_FILES(__FILE__,__LINE__,m,x,y)
+
 
     // TS_ASSERT_THROWS
 #   define ___TS_ASSERT_THROWS(f,l,e,t,m) { \

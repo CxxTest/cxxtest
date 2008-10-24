@@ -1,6 +1,8 @@
 #ifndef __cxxtest__TestSuite_cpp__
 #define __cxxtest__TestSuite_cpp__
 
+#include <sstream>
+#include <fstream>
 #include <cxxtest/TestSuite.h>
 
 namespace CxxTest
@@ -108,6 +110,56 @@ namespace CxxTest
             if ( message )
                 tracker().failedTest( file, line, message );
             tracker().failedAssertSameData( file, line, xExpr, yExpr, sizeExpr, x, y, size );
+            TS_ABORT();
+        }
+    }
+
+    bool sameFiles( const char* file1, const char* file2, std::ostringstream& explanation)
+    {
+    std::ifstream is1;
+    is1.open(file1);
+    std::ifstream is2;
+    is2.open(file2);
+    if (!is1) {
+	explanation << "File '" << file1 << "' does not exist!";
+	return false;
+	}
+    if (!is2) {
+	explanation << "File '" << file2 << "' does not exist!";
+	return false;
+	}
+
+    int nline=1;
+    char c1, c2;
+    while (1) {
+        is1.get(c1);
+        is2.get(c2);
+        if (!is1 && !is2) return true;
+        if (!is1) {
+		explanation << "File '" << file1 << "' ended before file '" << file2 << "' (line " << nline << ")";
+		return false;
+		}
+        if (!is2) {
+		explanation << "File '" << file2 << "' ended before file '" << file1 << "' (line " << nline << ")";
+		return false;
+		}
+        if (c1 != c2) {
+		explanation << "Files '" << file1 << "' and '" << file2 << "' differ at line " << nline;
+		return false;
+		}
+	if (c1 == '\n') nline++;
+        }
+    }
+
+    void doAssertSameFiles( const char* file, unsigned line,
+                            const char* file1, const char* file2,
+                            const char* message)
+    {
+	std::ostringstream explanation;
+        if ( !sameFiles( file1, file2, explanation ) ) {
+            if ( message )
+                tracker().failedTest( file, line, message );
+            tracker().failedAssertSameFiles( file, line, file1, file2, explanation.str().c_str());
             TS_ABORT();
         }
     }

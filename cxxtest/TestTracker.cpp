@@ -213,6 +213,12 @@ namespace CxxTest
         _l->failedAssertThrowsNot( file, line, expression );
     }
 
+    void TestTracker::failedAssertSameFiles( const char *file, unsigned line, const char *file1, const char* file2, const char* explanation )
+    {
+        countFailure();
+        _l->failedAssertSameFiles( file, line, file1, file2, explanation );
+    }
+
     void TestTracker::setWorld( const WorldDescription *w )
     {
         _world = fixWorld( w );

@@ -4,7 +4,7 @@
 //
 // The ErrorFormatter is a TestListener that
 // prints reports of the errors to an output
-// stream.  Since we cannot rely ou the standard
+// stream.  Since we cannot rely on the standard
 // iostreams, this header defines a base class
 // analogout to std::ostream.
 //
@@ -136,6 +136,14 @@ namespace CxxTest
             dump( x, size );
             (*_o) << "     differs from" << endl;
             dump( y, size );
+        }
+
+        void failedAssertSameFiles( const char *file, unsigned line,
+                                   const char *file1, const char *file2,
+				   const char* explanation
+                                   )
+        {
+            stop( file, line ) << "Error: " << explanation << endl;
         }
 
         void failedAssertDelta( const char *file, unsigned line,

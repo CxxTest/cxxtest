@@ -61,6 +61,7 @@ namespace CxxTest
                                          bool /*otherThrown*/ ) {}
         virtual void failedAssertThrowsNot( const char * /*file*/, unsigned /*line*/,
                                             const char * /*expression*/ ) {}
+	virtual void failedAssertSameFiles( const char* , unsigned , const char* , const char*, const char* ) {}
         virtual void leaveTest( const TestDescription & /*desc*/ ) {}
         virtual void leaveSuite( const SuiteDescription & /*desc*/ ) {}
         virtual void leaveWorld( const WorldDescription & /*desc*/ ) {}
