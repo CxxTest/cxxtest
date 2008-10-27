@@ -153,26 +153,33 @@ namespace CxxTest
     template<class GuiT, class TuiT>
     class GuiTuiRunner : public TeeListener
     {
-        int &_argc;
+        int* _argc;
         char **_argv;
         GuiT _gui;
         TuiT _tui;
         
     public:
-        GuiTuiRunner( int &argc, char **argv ) :
-            _argc( argc ),
-            _argv( argv )
+        GuiTuiRunner() : _argc(0), _argv(0) {}
+
+        void process_commandline( int& argc, char** argv )
         {  
+            _argc=&argc;
+            _argv=argv;
             setFirst( _gui );
             setSecond( _tui );
         }
 
         int run()
         {
-            _gui.runGui( _argc, _argv, *this );
+            _gui.runGui( *_argc, _argv, *this );
             return tracker().failedTests();
         }
     };
 }
 
 #endif //__CXXTEST__GUI_H
+
+// Copyright 2008 Sandia Corporation. Under the terms of Contract
+// DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government
+// retains certain rights in this software.
+

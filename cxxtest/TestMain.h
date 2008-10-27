@@ -56,8 +56,14 @@ if (argc==3) {
        }
     }
 
+tmp.process_commandline(argc,argv);
 return tmp.run();
 }
 
 }
 #endif
+
+// Copyright 2008 Sandia Corporation. Under the terms of Contract
+// DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government
+// retains certain rights in this software.
+

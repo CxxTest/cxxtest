@@ -19,6 +19,7 @@ namespace CxxTest
     public:
         TestListener() {}
         virtual ~TestListener() {}
+        virtual void process_commandline(int& /*argc*/, char** /*argv*/) {}
         
         virtual void enterWorld( const WorldDescription & /*desc*/ ) {}
         virtual void enterSuite( const SuiteDescription & /*desc*/ ) {}
@@ -69,3 +70,8 @@ namespace CxxTest
 }
 
 #endif // __cxxtest__TestListener_h__
+
+// Copyright 2008 Sandia Corporation. Under the terms of Contract
+// DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government
+// retains certain rights in this software.
+

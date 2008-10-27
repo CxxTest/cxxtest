@@ -110,6 +110,9 @@
 #           define _CXXTEST_PARTIAL_TEMPLATE_SPECIALIZATION
 #       endif
 #   endif
+#   if defined(__LONG_LONG_MAX__)
+#      define _CXXTEST_LONGLONG long long
+#   endif
 #endif // __GNUC__
 
 #ifdef __DMC__ // Digital Mars
@@ -119,3 +122,8 @@
 #endif
 
 #endif // __cxxtest__Flags_h__
+
+// Copyright 2008 Sandia Corporation. Under the terms of Contract
+// DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government
+// retains certain rights in this software.
+

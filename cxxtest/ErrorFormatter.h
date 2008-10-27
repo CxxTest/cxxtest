@@ -139,8 +139,8 @@ namespace CxxTest
         }
 
         void failedAssertSameFiles( const char *file, unsigned line,
-                                   const char *file1, const char *file2,
-				   const char* explanation
+                                   const char *, const char *,
+                                   const char* explanation
                                    )
         {
             stop( file, line ) << "Error: " << explanation << endl;
@@ -287,3 +287,8 @@ namespace CxxTest
 }
 
 #endif // __cxxtest__ErrorFormatter_h__
+
+// Copyright 2008 Sandia Corporation. Under the terms of Contract
+// DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government
+// retains certain rights in this software.
+
