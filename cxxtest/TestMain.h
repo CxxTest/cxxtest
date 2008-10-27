@@ -6,6 +6,16 @@
 
 namespace CxxTest {
 
+void print_help(const char* name)
+{
+   std::cerr << name << " <suitename>" << std::endl;
+   std::cerr << name << " <suitename> <testname>" << std::endl;
+   std::cerr << name << " -h" << std::endl;
+   std::cerr << name << " --help" << std::endl;
+   std::cerr << name << " --help-tests" << std::endl;
+}
+
+
 template <class TesterT>
 int Main(int argc, char* argv[])
 { 
@@ -20,35 +30,29 @@ TesterT tmp;
 //
 // Print command-line syntax
 //
-if ((argc > 3) || ((argc==2) && ((strcmp(argv[1],"-h")==0) || (strcmp(argv[1],"--help")==0)))) {
-   std::cerr << argv[0] << " <suitename>" << std::endl;
-   std::cerr << argv[0] << " <suitename> <testname>" << std::endl;
-   std::cerr << argv[0] << " -h" << std::endl;
-   std::cerr << argv[0] << " --help" << std::endl;
-   std::cerr << argv[0] << " --help-tests" << std::endl;
-   return -1;
-   }
-//
-// Print a list of the suite and test names
-//
-if ((argc==2) && (strcmp(argv[1],"--help-tests")==0)) {
-   std::cout << "Suite/Test Names" << std::endl;
-   std::cout << "---------------------------------------------------------------------------" << std::endl;
-   for ( SuiteDescription *sd = RealWorldDescription().firstSuite(); sd; sd = sd->next() )
-     for ( TestDescription *td = sd->firstTest(); td; td = td->next() )
-       std::cout << td->suiteName() << " " << td->testName() << std::endl;
-   return 0;
-   }
+for (int i=1; i<argc; i++) {
+  if ((strcmp(argv[i],"-h")==0) || (strcmp(argv[i],"--help")==0)) {
+     print_help(argv[0]);
+     return 0;
+  } else if ((strcmp(argv[1],"--help-tests")==0)) {
+    std::cout << "Suite/Test Names" << std::endl;
+    std::cout << "---------------------------------------------------------------------------" << std::endl;
+    for ( SuiteDescription *sd = RealWorldDescription().firstSuite(); sd; sd = sd->next() )
+        for ( TestDescription *td = sd->firstTest(); td; td = td->next() )
+            std::cout << td->suiteName() << " " << td->testName() << std::endl;
+    return 0;
+  }
+}
 
 bool status=false;
-if (argc==2) {
+if ((argc==2) && (argv[1][0] != '-')) {
     status=leaveOnly(argv[1]);
     if (!status) {
        std::cerr << "ERROR: unknown suite '" << argv[1] << "'" << std::endl;
        return -1;
        }
     }
-if (argc==3) {
+if ((argc==3) && (argv[1][0] != '-')) {
     status=leaveOnly(argv[1],argv[2]);
     if (!status) {
        std::cerr << "ERROR: unknown test '" << argv[1] << "::" << argv[2] << "'" << std::endl;
