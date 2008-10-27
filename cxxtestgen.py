@@ -43,7 +43,7 @@ def parseCommandline():
                       dest="outputFileName", default=None, metavar="NAME",
                       help="Write output to file NAME")
     parser.add_option("", "--runner",
-                      dest="runner", default=None, metavar="CLASS",
+                      dest="runner", default="", metavar="CLASS",
                       help="Create a main() function that runs CxxTest::CLASS")
     parser.add_option("", "--gui",
                       dest="gui", metavar="CLASS",
@@ -144,8 +144,7 @@ def writeSimpleOutput():
     '''Create output not based on template'''
     output = startOutputFile()
     writePreamble( output )
-    if not options.part:
-        writeMain( output )
+    writeMain( output )
     if len(suites) > 0:
         print >>output, "bool "+suites[0]['name']+"_init = false;"
     writeWorld( output )
@@ -203,7 +202,7 @@ def writePreamble( output ):
     if options.factor:
         output.write( "#define _CXXTEST_FACTOR\n" )
     for header in options.headers:
-        output.write( "#include %s\n" % header )
+        output.write( "#include \"%s\"\n" % header )
     output.write( "#include <cxxtest/TestListener.h>\n" )
     output.write( "#include <cxxtest/TestTracker.h>\n" )
     output.write( "#include <cxxtest/TestRunner.h>\n" )
@@ -218,11 +217,13 @@ def writePreamble( output ):
 
 def writeMain( output ):
     '''Write the main() function for the test runner'''
+    if not (options.gui or options.runner):
+       return
     output.write( 'int main( int argc, char *argv[] ) {\n' )
     if options.noStaticInit:
         output.write( ' CxxTest::initialize();\n' )
     if options.gui:
-        tester_t = "CxxTest::GuiTuiRunner<CxxTest::%s, CxxTest::%s>" % (options.gui, options.runner)
+        tester_t = "CxxTest::GuiTuiRunner<CxxTest::%s, CxxTest::%s> " % (options.gui, options.runner)
     else:
         tester_t = "CxxTest::%s" % (options.runner)
     output.write( '    return CxxTest::Main<%s>( argc, argv );\n' % tester_t )
