@@ -59,8 +59,10 @@ def parseCommandline():
                       action="store_true", dest="error_printer", default=False,
                       help="Same as --runner=ErrorPrinter")
     parser.add_option("", "--xunit-printer",
-                      action="store", dest="xunit_printer", default=None,
-                      help="Specifies the use of the XUnitPrinter.  The value of this option is an XML filename to which the XML summary is written.  The default XML filename is TEST-<header>.xml, where <header> is the prefix of the first header file.")
+                      action="store_true", dest="xunit_printer", default=False,
+                      help="Specifies the use of the XUnitPrinter.")
+    parser.add_option("", "--xunit-file",  dest="xunit_file", default="",
+                      help="The value of this option is an XML filename to which the XML summary is written.  The default XML filename is TEST-<header>.xml, where <header> is the prefix of the first header file.")
     parser.add_option("", "--abort-on-fail",
                       action="store_true", dest="abortOnFail", default=False,
                       help="Abort tests on failed asserts (like xUnit)")
@@ -104,13 +106,14 @@ def parseCommandline():
       printVersion()
 
     if options.xunit_printer or options.runner == "XUnitPrinter":
+        options.xunit_printer=True
         if len(args) > 1:
             options.runner="XUnitPrinter"
-            if options.xunit_printer == "" or options.xunit_printer is None:
+            if options.xunit_file == "":
                 prefix = os.path.splitext(os.path.split(args[0])[1])[0]
-                options.xunit_printer="TEST-"+prefix+".xml"
-        else:
-            options.xunit_printer="TEST-unknown.xml"
+                options.xunit_file="TEST-"+prefix+".xml"
+        elif options.xunit_file == "":
+            options.xunit_file="TEST-unknown.xml"
 
     if options.error_printer:
       options.runner= "ErrorPrinter"
@@ -248,7 +251,7 @@ def writeMain( output ):
     else:
         tester_t = "CxxTest::%s" % (options.runner)
     if options.xunit_printer:
-       output.write( '    std::ofstream ofstr("%s");\n' % options.xunit_printer )
+       output.write( '    std::ofstream ofstr("%s");\n' % options.xunit_file )
        output.write( '    %s tmp(ofstr);\n' % tester_t )
     else:
        output.write( '    %s tmp;\n' % tester_t )
