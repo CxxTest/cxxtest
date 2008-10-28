@@ -10,7 +10,11 @@ import glob
 import string
 from optparse import OptionParser
 import cxxtest_parser
-#import cxxtest_cxx
+try:
+    import cxxtest_fog
+    imported_fog=True
+except ImportError:
+    imported_fog=False
 from cxxtest_misc import *
 
 options = []
@@ -21,22 +25,24 @@ def main():
     global suites
     global options
     files = parseCommandline()
-    #if options.new:
-        #[options,suites] = cxxtest_cxx.scanInputFiles( files, options )
-    #else:
-    [options,suites] = cxxtest_parser.scanInputFiles( files, options )
+    if imported_fog and options.fog:
+        [options,suites] = cxxtest_fog.scanInputFiles( files, options )
+    else:
+        [options,suites] = cxxtest_parser.scanInputFiles( files, options )
     writeOutput()
 
 def parseCommandline():
     '''Analyze command line arguments'''
+    global imported_fog
     global options
     parser = OptionParser("%prog [options] [input_files]")
-    #parser.add_option("--new",
-    #                    action="store_true",
-    #                    dest="new",
-    #                    default=False,
-    #                    help="Use new C++ parser"
-    #                    )
+    if imported_fog:
+        parser.add_option("--fog",
+                        action="store_true",
+                        dest="fog",
+                        default=False,
+                        help="Use new FOG C++ parser"
+                        )
     parser.add_option("-v", "--version",
                       action="store_true", dest="version", default=False,
                       help="Write CxxTest version")
@@ -97,17 +103,14 @@ def parseCommandline():
     if options.version:
       printVersion()
 
-    #print "HERE",options.xunit_printer,len(args),options.runner
     if options.xunit_printer or options.runner == "XUnitPrinter":
         if len(args) > 1:
             options.runner="XUnitPrinter"
             if options.xunit_printer == "" or options.xunit_printer is None:
-                #print "HERE",os.path.split(args[0])[1]
                 prefix = os.path.splitext(os.path.split(args[0])[1])[0]
                 options.xunit_printer="TEST-"+prefix+".xml"
         else:
             options.xunit_printer="TEST-unknown.xml"
-    #print "xunit_printer",options.xunit_printer
 
     if options.error_printer:
       options.runner= "ErrorPrinter"
