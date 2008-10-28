@@ -40,6 +40,6 @@ namespace CxxTest
             (CXXTEST_STD(cout) << " {Stop} ").flush();
         }
     };
-};
+}
 
 #endif //__CXXTEST__DUMMYGUI_H

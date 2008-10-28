@@ -13,7 +13,7 @@ namespace NameSpace
 {
     static int identity( int i ) { return i; }
     static double identity( double d ) { return d; }
-};
+}
 
 class Opaque
 {

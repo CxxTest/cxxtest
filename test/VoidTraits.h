@@ -15,7 +15,7 @@ namespace CxxTest
         ValueTraits( void * ) {}
         const char *asString( void ) { return "(void *)"; }
     };
-};
+}
 
 #endif
 

@@ -4,7 +4,8 @@
 #include <cstring>
 #include <iostream>
 
-namespace CxxTest {
+namespace CxxTest
+{
 
 inline void print_help(const char* name)
 {

@@ -24,7 +24,7 @@ namespace CxxTest
         ValueTraits( int i ) { sprintf( _asString, "0x%X", i ); }
         const char *asString( void ) { return _asString; }
     };
-};
+}
 
 class TestUserTraits : public CxxTest::TestSuite
 {

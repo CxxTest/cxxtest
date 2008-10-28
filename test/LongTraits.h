@@ -13,7 +13,7 @@ namespace CxxTest
         ValueTraits( long * ) {}
         const char *asString() { return "(long *)"; }
     };
-};
+}
 
 //
 // Local Variables:

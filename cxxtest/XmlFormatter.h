@@ -451,7 +451,7 @@ namespace CxxTest
 
         OutputStream *_o;
     };
-};
+}
 
 #endif // __CXXTEST__XMLFORMATTER_H
 
