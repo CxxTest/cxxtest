@@ -107,8 +107,8 @@ def parseCommandline():
 
     if options.xunit_printer or options.runner == "XUnitPrinter":
         options.xunit_printer=True
+        options.runner="XUnitPrinter"
         if len(args) > 1:
-            options.runner="XUnitPrinter"
             if options.xunit_file == "":
                 prefix = os.path.splitext(os.path.split(args[0])[1])[0]
                 options.xunit_file="TEST-"+prefix+".xml"
