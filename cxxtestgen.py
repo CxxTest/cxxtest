@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import os.path
 from os.path import abspath, dirname
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 import re
@@ -51,6 +52,9 @@ def parseCommandline():
     parser.add_option("", "--error-printer",
                       action="store_true", dest="error_printer", default=False,
                       help="Same as --runner=ErrorPrinter")
+    parser.add_option("", "--xunit-printer",
+                      action="store", dest="xunit_printer", default=None,
+                      help="Specifies the use of the XUnitPrinter.  The value of this option is an XML filename to which the XML summary is written.  The default XML filename is TEST-<header>.xml, where <header> is the prefix of the first header file.")
     parser.add_option("", "--abort-on-fail",
                       action="store_true", dest="abortOnFail", default=False,
                       help="Abort tests on failed asserts (like xUnit)")
@@ -92,6 +96,18 @@ def parseCommandline():
 
     if options.version:
       printVersion()
+
+    #print "HERE",options.xunit_printer,len(args),options.runner
+    if options.xunit_printer or options.runner == "XUnitPrinter":
+        if len(args) > 1:
+            options.runner="XUnitPrinter"
+            if options.xunit_printer == "" or options.xunit_printer is None:
+                #print "HERE",os.path.split(args[0])[1]
+                prefix = os.path.splitext(os.path.split(args[0])[1])[0]
+                options.xunit_printer="TEST-"+prefix+".xml"
+        else:
+            options.xunit_printer="TEST-unknown.xml"
+    #print "xunit_printer",options.xunit_printer
 
     if options.error_printer:
       options.runner= "ErrorPrinter"
@@ -191,6 +207,8 @@ def writePreamble( output ):
     output.write( "#define CXXTEST_RUNNING\n" )
     output.write( "#endif\n" )
     output.write( "\n" )
+    if options.xunit_printer:
+        output.write( "#include <fstream>\n" )
     if options.haveStandardLibrary:
         output.write( "#define _CXXTEST_HAVE_STD\n" )
     if options.haveExceptionHandling:
@@ -226,18 +244,14 @@ def writeMain( output ):
         tester_t = "CxxTest::GuiTuiRunner<CxxTest::%s, CxxTest::%s> " % (options.gui, options.runner)
     else:
         tester_t = "CxxTest::%s" % (options.runner)
-    output.write( '    return CxxTest::Main<%s>( argc, argv );\n' % tester_t )
+    if options.xunit_printer:
+       output.write( '    std::ofstream ofstr("%s");\n' % options.xunit_printer )
+       output.write( '    %s tmp(ofstr);\n' % tester_t )
+    else:
+       output.write( '    %s tmp;\n' % tester_t )
+    output.write( '    return CxxTest::Main<%s>( tmp, argc, argv );\n' % tester_t )
     output.write( '}\n' )
 
-    #if options.gui:
-        #output.write( 'int main( int argc, char *argv[] ) {\n' )
-        #output.write( ' return CxxTest::GuiTuiRunner<CxxTest::%s, CxxTest::%s>( argc, argv ).run();\n' % (gui, runner) )
-        #output.write( '}\n' )
-    #elif options.runner:
-        #output.write( 'int main() {\n' )
-        #if options.noStaticInit:
-            #output.write( ' CxxTest::initialize();\n' )
-        #output.write( ' return CxxTest::%s().run();\n' % options.runner )
 
 wroteWorld = 0
 def writeWorld( output ):

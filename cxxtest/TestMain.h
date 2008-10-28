@@ -6,7 +6,7 @@
 
 namespace CxxTest {
 
-void print_help(const char* name)
+inline void print_help(const char* name)
 {
    std::cerr << name << " <suitename>" << std::endl;
    std::cerr << name << " <suitename> <testname>" << std::endl;
@@ -17,9 +17,8 @@ void print_help(const char* name)
 
 
 template <class TesterT>
-int Main(int argc, char* argv[])
+int Main(TesterT& tmp, int argc, char* argv[])
 { 
-TesterT tmp;
 //
 // Parse the command-line arguments. The default behavior is to run all tests
 //

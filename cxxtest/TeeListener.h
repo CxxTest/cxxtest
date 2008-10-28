@@ -2,7 +2,7 @@
 #define __cxxtest__TeeListener_h__
 
 //
-// A TeeListener notifies two "reular" TestListeners
+// A TeeListener notifies two "regular" TestListeners
 //
 
 #include <cxxtest/TestListener.h>
