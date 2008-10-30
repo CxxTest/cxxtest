@@ -121,13 +121,13 @@ namespace CxxTest
     std::ifstream is2;
     is2.open(file2);
     if (!is1) {
-	explanation << "File '" << file1 << "' does not exist!";
-	return false;
-	}
+        explanation << "File '" << file1 << "' does not exist!";
+        return false;
+        }
     if (!is2) {
-	explanation << "File '" << file2 << "' does not exist!";
-	return false;
-	}
+        explanation << "File '" << file2 << "' does not exist!";
+        return false;
+        }
 
     int nline=1;
     char c1, c2;
@@ -136,18 +136,18 @@ namespace CxxTest
         is2.get(c2);
         if (!is1 && !is2) return true;
         if (!is1) {
-		explanation << "File '" << file1 << "' ended before file '" << file2 << "' (line " << nline << ")";
-		return false;
-		}
+                explanation << "File '" << file1 << "' ended before file '" << file2 << "' (line " << nline << ")";
+                return false;
+                }
         if (!is2) {
-		explanation << "File '" << file2 << "' ended before file '" << file1 << "' (line " << nline << ")";
-		return false;
-		}
+                explanation << "File '" << file2 << "' ended before file '" << file1 << "' (line " << nline << ")";
+                return false;
+                }
         if (c1 != c2) {
-		explanation << "Files '" << file1 << "' and '" << file2 << "' differ at line " << nline;
-		return false;
-		}
-	if (c1 == '\n') nline++;
+                explanation << "Files '" << file1 << "' and '" << file2 << "' differ at line " << nline;
+                return false;
+                }
+        if (c1 == '\n') nline++;
         }
     }
 
@@ -155,7 +155,7 @@ namespace CxxTest
                             const char* file1, const char* file2,
                             const char* message)
     {
-	std::ostringstream explanation;
+        std::ostringstream explanation;
         if ( !sameFiles( file1, file2, explanation ) ) {
             if ( message )
                 tracker().failedTest( file, line, message );

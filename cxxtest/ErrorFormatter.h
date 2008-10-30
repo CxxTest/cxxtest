@@ -138,8 +138,8 @@ namespace CxxTest
             dump( y, size );
         }
 
-        void failedAssertSameFiles( const char *file, unsigned line,
-                                   const char *, const char *,
+        void failedAssertSameFiles( const char* file, unsigned line,
+                                   const char*, const char*,
                                    const char* explanation
                                    )
         {

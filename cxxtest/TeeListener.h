@@ -92,6 +92,12 @@ namespace CxxTest
             _second->failedAssertSameData( file, line, xStr, yStr, sizeStr, x, y, size );
         }
         
+        void failedAssertSameFiles( const char* file, unsigned line, const char* file1, const char* file2, const char* explanation)
+        {
+            _first->failedAssertSameFiles( file, line, file1, file2, explanation );
+            _second->failedAssertSameFiles( file, line, file1, file2, explanation );
+        }
+
         void failedAssertDelta( const char *file, unsigned line,
                                 const char *xStr, const char *yStr, const char *dStr,
                                 const char *x, const char *y, const char *d )
