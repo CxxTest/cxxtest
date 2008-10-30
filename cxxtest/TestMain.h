@@ -1,19 +1,31 @@
 #ifndef __CxxTestMain_h
 #define __CxxTestMain_h
 
+#include <cxxtest/Flags.h>
+
+#ifndef _CXXTEST_HAVE_STD
+#   define _CXXTEST_HAVE_STD
+#endif // _CXXTEST_HAVE_STD
+
+#include <cxxtest/StdValueTraits.h>
+
+#ifdef _CXXTEST_OLD_STD
+#   include <iostream.h>
+#else // !_CXXTEST_OLD_STD
+#   include <iostream>
+#endif // _CXXTEST_OLD_STD
 #include <cstring>
-#include <iostream>
 
 namespace CxxTest
 {
 
 inline void print_help(const char* name)
 {
-   std::cerr << name << " <suitename>" << std::endl;
-   std::cerr << name << " <suitename> <testname>" << std::endl;
-   std::cerr << name << " -h" << std::endl;
-   std::cerr << name << " --help" << std::endl;
-   std::cerr << name << " --help-tests" << std::endl;
+   CXXTEST_STD(cerr) << name << " <suitename>" << CXXTEST_STD(endl);
+   CXXTEST_STD(cerr) << name << " <suitename> <testname>" << CXXTEST_STD(endl);
+   CXXTEST_STD(cerr) << name << " -h" << CXXTEST_STD(endl);
+   CXXTEST_STD(cerr) << name << " --help" << CXXTEST_STD(endl);
+   CXXTEST_STD(cerr) << name << " --help-tests" << CXXTEST_STD(endl);
 }
 
 
@@ -35,11 +47,11 @@ for (int i=1; i<argc; i++) {
      print_help(argv[0]);
      return 0;
   } else if ((strcmp(argv[1],"--help-tests")==0)) {
-    std::cout << "Suite/Test Names" << std::endl;
-    std::cout << "---------------------------------------------------------------------------" << std::endl;
+    CXXTEST_STD(cout) << "Suite/Test Names" << CXXTEST_STD(endl);
+    CXXTEST_STD(cout) << "---------------------------------------------------------------------------" << CXXTEST_STD(endl);
     for ( SuiteDescription *sd = RealWorldDescription().firstSuite(); sd; sd = sd->next() )
         for ( TestDescription *td = sd->firstTest(); td; td = td->next() )
-            std::cout << td->suiteName() << " " << td->testName() << std::endl;
+            CXXTEST_STD(cout) << td->suiteName() << " " << td->testName() << CXXTEST_STD(endl);
     return 0;
   }
 }
@@ -48,14 +60,14 @@ bool status=false;
 if ((argc==2) && (argv[1][0] != '-')) {
     status=leaveOnly(argv[1]);
     if (!status) {
-       std::cerr << "ERROR: unknown suite '" << argv[1] << "'" << std::endl;
+       CXXTEST_STD(cerr) << "ERROR: unknown suite '" << argv[1] << "'" << CXXTEST_STD(endl);
        return -1;
        }
     }
 if ((argc==3) && (argv[1][0] != '-')) {
     status=leaveOnly(argv[1],argv[2]);
     if (!status) {
-       std::cerr << "ERROR: unknown test '" << argv[1] << "::" << argv[2] << "'" << std::endl;
+       CXXTEST_STD(cerr) << "ERROR: unknown test '" << argv[1] << "::" << argv[2] << "'" << CXXTEST_STD(endl);
        return -1;
        }
     }
