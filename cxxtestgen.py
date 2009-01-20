@@ -105,6 +105,10 @@ def parseCommandline():
     if options.version:
       printVersion()
 
+    # the cxxtest builder relies on this behaviour! don't remove
+    if options.runner == 'none':
+        options.runner = None
+
     if options.xunit_printer or options.runner == "XUnitPrinter":
         options.xunit_printer=True
         options.runner="XUnitPrinter"
@@ -118,6 +122,7 @@ def parseCommandline():
     if options.error_printer:
       options.runner= "ErrorPrinter"
       options.haveStandardLibrary = True
+    
 
     if options.noStaticInit and (options.root or options.part):
         abort( '--no-static-init cannot be used with --root/--part' )

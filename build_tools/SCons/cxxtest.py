@@ -252,7 +252,7 @@ def generate(env, **kwargs):
         #
         cxxtest_builder = Builder(
             action =
-            [["$CXXTEST_PYTHON",cxxtest,"--runner=$CXXTEST_RUNNER","$CXXTEST_OPTS","-o","$TARGET","$SOURCE"]],
+            [["$CXXTEST_PYTHON",cxxtest,"--runner=$CXXTEST_RUNNER","$CXXTEST_OPTS","$CXXTEST_ROOT_PART","-o","$TARGET","$SOURCE"]],
             suffix = ".cpp",
             src_suffix = '$CXXTEST_SUFFIX'
             )
@@ -290,7 +290,8 @@ def generate(env, **kwargs):
         else:
             deps.append(env.CxxTestCpp(headers.pop(0), **kwargs))
             deps.extend(
-                [env.CxxTestCpp(header, CXXTEST_RUNNER = 'none', **kwargs)
+                [env.CxxTestCpp(header, CXXTEST_RUNNER = 'none', 
+                    CXXTEST_ROOT_PART = '--part', **kwargs)
                     for header in headers]
                 )
         deps.extend(linkins)
