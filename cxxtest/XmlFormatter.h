@@ -100,6 +100,7 @@ namespace CxxTest
         double runtime;
         std::list<ElementInfo> elements;
         typedef std::list<ElementInfo>::iterator element_t;
+        std::string world;
 
         element_t add_element(const std::string& name)
             {
@@ -110,7 +111,7 @@ namespace CxxTest
 
         void write( OutputStream &o )
             {
-            o << "    <testcase classname=\"" << className.c_str() << "\" name=\"" << testName.c_str() << "\" ";
+            o << "    <testcase classname=\"" << tracker().world().worldName() << "." << className.c_str() << "\" name=\"" << testName.c_str() << "\" ";
             o << "line=\"" << line.c_str() << "\"";
             bool elts=false;
             element_t curr = elements.begin();
