@@ -16,6 +16,7 @@
 #include <cxxtest/XmlFormatter.h>
 #include <cxxtest/StdValueTraits.h>
 
+#include <sstream>
 #ifdef _CXXTEST_OLD_STD
 #   include <iostream.h>
 #else // !_CXXTEST_OLD_STD
@@ -28,10 +29,13 @@ namespace CxxTest
     {
     public:
         XmlPrinter( CXXTEST_STD(ostream) &o = CXXTEST_STD(cout), const char* /*preLine*/ = ":", const char* /*postLine*/ = "" ) :
-            XmlFormatter( new Adapter(o) ) {}
+            XmlFormatter( new Adapter(o), new Adapter(ostr), &ostr ) {}
         virtual ~XmlPrinter() { delete outputStream(); }
 
     private:
+
+        std::ostringstream ostr;
+
         class Adapter : public OutputStream
         {
             CXXTEST_STD(ostream) &_o;

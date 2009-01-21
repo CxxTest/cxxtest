@@ -62,7 +62,9 @@ def parseCommandline():
                       action="store_true", dest="xunit_printer", default=False,
                       help="Specifies the use of the XUnitPrinter.")
     parser.add_option("", "--xunit-file",  dest="xunit_file", default="",
-                      help="The value of this option is an XML filename to which the XML summary is written.  The default XML filename is TEST-<header>.xml, where <header> is the prefix of the first header file.")
+                      help="The value of this option is an XML filename to which the XML summary is written.  The default XML filename is TEST-<world>.xml, where <world> is the value of the --world option.")
+    parser.add_option("-w","--world", dest="world", default="",
+                      help="The label of the tests, used to name the XML results.")
     parser.add_option("", "--abort-on-fail",
                       action="store_true", dest="abortOnFail", default=False,
                       help="Abort tests on failed asserts (like xUnit)")
@@ -114,8 +116,9 @@ def parseCommandline():
         options.runner="XUnitPrinter"
         if len(args) > 1:
             if options.xunit_file == "":
-                prefix = os.path.splitext(os.path.split(args[0])[1])[0]
-                options.xunit_file="TEST-"+prefix+".xml"
+                if options.world == "":
+                    options.world = "cxxtest"
+                options.xunit_file="TEST-"+options.world+".xml"
         elif options.xunit_file == "":
             options.xunit_file="TEST-unknown.xml"
 
@@ -258,6 +261,7 @@ def writeMain( output ):
     if options.xunit_printer:
        output.write( '    std::ofstream ofstr("%s");\n' % options.xunit_file )
        output.write( '    %s tmp(ofstr);\n' % tester_t )
+       output.write( '    CxxTest::RealWorldDescription::_worldName = "%s";\n' % options.world )
     else:
        output.write( '    %s tmp;\n' % tester_t )
     output.write( '    return CxxTest::Main<%s>( tmp, argc, argv );\n' % tester_t )
@@ -275,6 +279,7 @@ def writeWorld( output ):
         writeRoot( output )
     if options.noStaticInit:
         writeInitialize( output )
+    writeWorldDescr( output )
     wroteWorld = 1
 
 def writeSuites(output):
@@ -332,6 +337,13 @@ def writeTestList( output, suite ):
         output.write( 'static CxxTest::List %s;\n' % suite['tlist'] )
     else:
         output.write( 'static CxxTest::List %s = { 0, 0 };\n' % suite['tlist'] )
+
+def writeWorldDescr( output ):
+    '''Write the static name of the world name'''
+    if options.noStaticInit:
+        output.write( 'const char* static CxxTest::RealDescriptions::_worldName;\n' )
+    else:
+        output.write( 'const char* CxxTest::RealWorldDescription::_worldName = "cxxtest";\n' )
 
 def writeTestDescriptions( output, suite ):
     '''Write all test descriptions for a suite'''

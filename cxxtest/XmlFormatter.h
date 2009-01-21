@@ -136,12 +136,16 @@ namespace CxxTest
     class XmlFormatter : public TestListener
     {
         public:
-        XmlFormatter( OutputStream *o ) : _o(o) { }
+        XmlFormatter( OutputStream *o, OutputStream *ostr, std::ostringstream *os) : _o(o), _ostr(ostr), _os(os) { }
 
         std::list<TestCaseInfo> info;
         std::list<TestCaseInfo>::iterator testcase;
         typedef std::list<ElementInfo>::iterator element_t;
         std::string classname;
+        int ntests;
+        int nfail;
+        int nerror;
+        double totaltime;
 
         int run()
         {
@@ -149,13 +153,12 @@ namespace CxxTest
             return tracker().failedTests();
         }
 
-        void enterWorld( const WorldDescription & /*desc*/ )
+        void enterWorld( const WorldDescription & desc )
         {
-            (*_o) << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
-            _o->flush();
-
-            //(*_o) << "<world>" << endl;
-            //_o->flush();
+            ntests=0;
+            nfail=0;
+            nerror=0;
+            totaltime=0;
         }
 
         static void totalTests( OutputStream &o )
@@ -167,19 +170,18 @@ namespace CxxTest
 
         void enterSuite( const SuiteDescription& desc )
         {
-                classname=desc.suiteName();
-                (*_o) << "<testsuite name=\"" << generate_classpath(desc.file()).c_str() << desc.suiteName() << "\" ";
-                (*_o) << "file=\"" << desc.file() << "\" ";
-                (*_o) << "line=\"" << desc.line() << "\"";
-                _o->flush();
+                classname=generate_classpath(desc.file()).c_str();
+                classname += desc.suiteName();
+                //std::cout << "HERE " << desc.file() << " " << classname << std::endl;
+
+                //classname=desc.suiteName();
+                //(*_o) << "file=\"" << desc.file() << "\" ";
+                //(*_o) << "line=\"" << desc.line() << "\"";
+                //_o->flush();
         }
 
         void leaveSuite( const SuiteDescription & )
         {
-                int ntests=0;
-                int nfail=0;
-                int nerror=0;
-                double totaltime=0;
                 std::list<TestCaseInfo>::iterator curr = info.begin();
                 std::list<TestCaseInfo>::iterator end  = info.end();
                 while (curr != end) {
@@ -189,18 +191,12 @@ namespace CxxTest
                     ntests++;
                     curr++;
                 }
-                std::ostringstream os;
-                os << totaltime;
-                (*_o) << " tests=\"" << ntests << "\" errors=\"" << nerror << "\" failures=\"" << nfail << "\" time=\"" << os.str().c_str() << "\" >";
-                _o->endl(*_o);
                 curr = info.begin();
                 end  = info.end();
                 while (curr != end) {
-                  (*curr).write(*_o);
+                  (*curr).write(*_ostr);
                   curr++;
                 }
-                (*_o) << "</testsuite>" << endl;
-                _o->flush();
                 info.clear();
         }
 
@@ -218,8 +214,17 @@ namespace CxxTest
         {
         }
 
-        void leaveWorld( const WorldDescription& /*desc*/ )
+        void leaveWorld( const WorldDescription& desc )
         {
+                std::ostringstream os;
+                os << totaltime;
+                (*_o) << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
+                (*_o) << "<testsuite name=\"" << desc.worldName() << "\" ";
+                (*_o) << " tests=\"" << ntests << "\" errors=\"" << nerror << "\" failures=\"" << nfail << "\" time=\"" << os.str().c_str() << "\" >";
+                _o->endl(*_o);
+                (*_o) << _os->str().c_str();
+                (*_o) << "</testsuite>" << endl;
+                _o->flush();
         }
 
         void trace( const char* /*file*/, unsigned line, const char *expression )
@@ -372,20 +377,30 @@ namespace CxxTest
         if (filename == 0) 
             // Empty filename
             return "";
-        if ((filename[0] == '\000') || (filename[0] == '/'))
-            // Absolute path for filename (Unix)
+        if (filename[0] == '\000') 
             return "";
-        if ((strlen(filename) > 2) && (filename[1] == ':'))
-            // Absolute path for filename (Windows)
-            return "";
-        if (strstr(filename,"..") != 0)
-            // We don't try to figure out a relative path that moves up...
-            return "";
+
+        const char* prev = filename;
+        const char* tmp = strstr(filename, "/");
+
+        while (tmp != 0) {
+            prev = tmp+1;
+            tmp = strstr(prev, "/");
+            //std::cout << "HERE X " << prev << " " << tmp << std::endl;
+            }
+        tmp = strstr(prev, "\\");
+        while (tmp != 0) {
+            prev = tmp+1;
+            tmp = strstr(prev, "\\");
+            //std::cout << "HERE Y " << prev << " " << tmp << std::endl;
+            }
+        filename = prev;
 
         std::string ans;
         int n=strlen(filename);
         int i=0;
         while (i<n) {
+          //std::cout << i << " " << filename[i] << std::endl;
           if (filename[i] == '/') ans += ".";
           else if (filename[i] == '\\') ans += ".";
           else if (filename [i] == '.') {
@@ -393,8 +408,15 @@ namespace CxxTest
                     ans += filename[i];
                 else if ((filename[i+1] == '/') || (filename[i+1] == '\\'))
                     i++;
-                else if ((strcmp(&(filename[i+1]),"h") == 0) || (strcmp(&(filename[i+1]),"hpp")==0) || (strcmp(&(filename[i+1]),"H")==0))
-                    i=n;
+                else if (strcmp(&(filename[i+1]),"h")==0) {
+                    i = n;
+                    }
+                else if (strcmp(&(filename[i+1]),"H")==0) {
+                    i = n;
+                    }
+                else if (strcmp(&(filename[i+1]),"hpp")==0) {
+                    i = n;
+                    }
                 else
                     ans += filename[i];
                 }
@@ -450,6 +472,8 @@ namespace CxxTest
         }
 
         OutputStream *_o;
+        OutputStream *_ostr;
+        std::ostringstream *_os;
     };
 }
 

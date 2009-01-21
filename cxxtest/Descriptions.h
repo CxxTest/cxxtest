@@ -60,6 +60,7 @@ namespace CxxTest
     public:
         virtual ~WorldDescription();
         
+        virtual const char *worldName() const { return "cxxtest"; }
         virtual unsigned numSuites( void ) const = 0;
         virtual unsigned numTotalTests( void ) const = 0;
         virtual const SuiteDescription &suiteDescription( unsigned /*i*/ ) const = 0;

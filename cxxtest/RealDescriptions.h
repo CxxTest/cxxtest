@@ -202,6 +202,7 @@ namespace CxxTest
     {
     public:
         static List &suites();
+        const char *worldName() const { return _worldName;}
         unsigned numSuites( void ) const;
         unsigned numTotalTests( void ) const;
         SuiteDescription *firstSuite();
@@ -213,6 +214,8 @@ namespace CxxTest
         bool setUp();
         bool tearDown();
         static void reportError( const char *message );
+
+        static const char *_worldName;
     };
 
     void activateAllTests();

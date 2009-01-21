@@ -4,7 +4,7 @@
 // This tests CxxTest's handling of "long long"
 //
 
-class LongLong : public CxxTest::TestSuite
+class LongLongTest : public CxxTest::TestSuite
 {
 public:
     void testLongLong()
