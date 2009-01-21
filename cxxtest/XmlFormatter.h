@@ -154,7 +154,7 @@ namespace CxxTest
             return tracker().failedTests();
         }
 
-        void enterWorld( const WorldDescription & desc )
+        void enterWorld( const WorldDescription & /*desc*/ )
         {
             ntests=0;
             nfail=0;
