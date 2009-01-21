@@ -120,7 +120,9 @@ def parseCommandline():
                     options.world = "cxxtest"
                 options.xunit_file="TEST-"+options.world+".xml"
         elif options.xunit_file == "":
-            options.xunit_file="TEST-unknown.xml"
+            if options.world == "":
+                options.world = "cxxtest"
+            options.xunit_file="TEST-"+options.world+".xml"
 
     if options.error_printer:
       options.runner= "ErrorPrinter"
@@ -277,9 +279,9 @@ def writeWorld( output ):
     writeSuites( output )
     if options.root or not options.part:
         writeRoot( output )
+        writeWorldDescr( output )
     if options.noStaticInit:
         writeInitialize( output )
-    writeWorldDescr( output )
     wroteWorld = 1
 
 def writeSuites(output):
