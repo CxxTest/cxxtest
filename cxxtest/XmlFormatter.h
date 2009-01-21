@@ -62,12 +62,12 @@ namespace CxxTest
                 os << "/>";
             }
             else {
-                os << ">" << escape(value) << "</" << name.c_str() << ">";
+                os << ">" << escape(value).c_str() << "</" << name.c_str() << ">";
             }
             os.endl(os);
             }
 
-        const char * escape(const std::string& str)
+        std::string escape(const std::string& str)
         {
             std::string escStr = "";
             for(size_t i = 0; i < str.length(); i++)
@@ -82,7 +82,7 @@ namespace CxxTest
                     default:   escStr += str[i]; break;
                 }
             }
-            return escStr.c_str();
+            return escStr;
         }
 
     };
@@ -223,6 +223,7 @@ namespace CxxTest
                 (*_o) << " tests=\"" << ntests << "\" errors=\"" << nerror << "\" failures=\"" << nfail << "\" time=\"" << os.str().c_str() << "\" >";
                 _o->endl(*_o);
                 (*_o) << _os->str().c_str();
+                _os->clear();
                 (*_o) << "</testsuite>" << endl;
                 _o->flush();
         }
