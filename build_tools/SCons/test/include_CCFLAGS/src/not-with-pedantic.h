@@ -14,6 +14,7 @@ class TestPedantic : public CxxTest::TestSuite
 {
 public:
     void testPedanticPresent() {
+        TS_ASSERT(true);
         int f = (true)?:5;
     }
 };
