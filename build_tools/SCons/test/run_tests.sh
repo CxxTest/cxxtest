@@ -101,4 +101,5 @@ test "expanding_#" &&\
 test "include_CCFLAGS" &&\
 test "include_CXXFLAGS" &&\
 test "globbing" &&\
+test "globbing_edmundo" &&\
 cleanup

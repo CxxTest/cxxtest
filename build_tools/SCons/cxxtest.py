@@ -293,8 +293,11 @@ def generate(env, **kwargs):
         linkins = []
         for l in sources:
             # check whether this is a file object or a string path
-            if isinstance(l, SCons.Node.FS.File): s = l.path
-            else: s = l
+            try:
+                s = l.abspath
+            except AttributeError:
+                s = l
+
             if s.endswith(multiget([kwargs, env], 'CXXTEST_SUFFIX', None)):
                 headers.append(l)
             else:
