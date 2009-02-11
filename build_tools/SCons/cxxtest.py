@@ -8,6 +8,7 @@
 # J. Darby Mitchell
 # Diego Nieto Cid
 # Joe Maruzsevski
+# Edmundo López B.
 #
 # please send bugreports/praise/comments/criticism to
 # gasper.azman at gmail.com or the cxxtest mailing list.
@@ -59,6 +60,9 @@
 # called that. Normal Program builder rules apply.
 #
 # == Changelog ==
+# 2009-02-11: Fixed passing variables via the environment. Added the
+#    CXXTEST_CCFLAGS_REMOVE variable. Fixed globbing thanks to a tip provided by
+#    Edmundo.
 # 2008-09-28: Added the option that #, as understood in pathnames in the rest of
 #    SCons, is now also understood here. Minor bugfixes all around.
 # 2008-08-30: CXXTEST_RUNNER became CXXTEST_PYTHON, and CXXTEST_PRINTER became
@@ -103,32 +107,16 @@ class ToolCxxTestWarning(SCons.Warnings.Warning):
 
 SCons.Warnings.enableWarningClass(ToolCxxTestWarning)
 
-def UnitTest(env, target, source = [], **kwargs):
+def accumulateEnvVar(dicts, name, default = []):
     """
-    Prepares the Program call arguments, calls Program and adds the result to
-    the check target.
+    Accumulates the values under key 'name' from the list of dictionaries dict.
+    The default value is appended to the end list if 'name' does not exist in
+    the dict.
     """
-
-    cxxflags = ""
-    ccflags  = ""
-    if isinstance(env["CCFLAGS"], str):
-        ccflags += env["CCFLAGS"]
-    if isinstance(env["CXXFLAGS"], str):
-        cxxflags += env["CXXFLAGS"]
-    cxxflags = kwargs.get("CXXFLAGS", cxxflags)
-    for item in env['CXXTEST_CXXFLAGS_REMOVE']:
-        cxxflags = cxxflags.replace(item, "")
-        ccflags  = ccflags.replace(item, "")
-    kwargs["CXXFLAGS"] = cxxflags
-    kwargs["CCFLAGS"]  = ccflags
-    test = env.Program(target, source = source, **kwargs)
-    if (env['CXXTEST_SKIP_ERRORS']):
-        runner = env.Action(test[0].abspath, exitstatfunc=lambda x:0)
-    else:
-        runner = env.Action(test[0].abspath)
-    env.Alias(env['CXXTEST_TARGET'], test, runner)
-    env.AlwaysBuild(env['CXXTEST_TARGET'])
-    return test
+    final = []
+    for d in dicts:
+        final += Split(d.get(name, default))
+    return final
 
 def multiget(dictlist, key, default = None):
     """
@@ -136,12 +124,37 @@ def multiget(dictlist, key, default = None):
     in each one and returns the 1st one it finds. If the key is found in no
     dictionaries, the default is returned.
     """
-
     for dict in dictlist:
         if dict.has_key(key):
             return dict[key]
     else:
         return default
+
+def UnitTest(env, target, source = [], **kwargs):
+    """
+    Prepares the Program call arguments, calls Program and adds the result to
+    the check target.
+    """
+    # get the c and cxx flags to process.
+    ccflags   = Split( multiget([kwargs, env], 'CCFLAGS' ))
+    cxxflags  = Split( multiget([kwargs, env], 'CXXFLAGS'))
+    # get the removal c and cxx flags
+    cxxremove = set( Split( multiget([kwargs, env],'CXXTEST_CXXFLAGS_REMOVE')))
+    ccremove  = set( Split( multiget([kwargs, env],'CXXTEST_CCFLAGS_REMOVE' )))
+    # remove the required flags
+    ccflags   = [item for item in ccflags if item not in ccremove]
+    cxxflags  = [item for item in cxxflags if item not in cxxremove]
+    # fill the flags into kwargs
+    kwargs["CXXFLAGS"] = cxxflags
+    kwargs["CCFLAGS"]  = ccflags
+    test = env.Program(target, source = source, **kwargs)
+    if multiget([kwargs, env], 'CXXTEST_SKIP_ERRORS', False):
+        runner = env.Action(test[0].abspath, exitstatfunc=lambda x:0)
+    else:
+        runner = env.Action(test[0].abspath)
+    env.Alias(env['CXXTEST_TARGET'], test, runner)
+    env.AlwaysBuild(env['CXXTEST_TARGET'])
+    return test
 
 def isValidScriptPath(cxxtestgen):
     """check keyword arg or environment variable locating cxxtestgen.py script"""
@@ -159,9 +172,7 @@ def findCxxTestGen(env):
     
     # check the SCons environment...
     # Then, check the OS environment...
-    cxxtest = (env.get('CXXTEST', None) or
-               os.environ.get('CXXTEST', None)
-              )
+    cxxtest = multiget([env, os.environ], 'CXXTEST', None)
 
     if cxxtest:
         try:
@@ -223,7 +234,7 @@ def generate(env, **kwargs):
         env["CXXTEST"] = findCxxTestGen(env)
 
     #
-    # Expected behavior: keyword arguments override environment variables;
+    # Expected behaviour: keyword arguments override environment variables;
     # environment variables override default settings.
     #          
     env.SetDefault( CXXTEST_RUNNER  = 'ErrorPrinter'        )
@@ -232,8 +243,11 @@ def generate(env, **kwargs):
     env.SetDefault( CXXTEST_TARGET  = 'check'               )
     env.SetDefault( CXXTEST_CPPPATH = ['#']                 )
     env.SetDefault( CXXTEST_PYTHON  = env.WhereIs('python') )
-    env.SetDefault( CXXTEST_CXXFLAGS_REMOVE = ['-pedantic','-Weffc++','-pedantic-errors'] )
     env.SetDefault( CXXTEST_SKIP_ERRORS = False             )
+    env.SetDefault( CXXTEST_CXXFLAGS_REMOVE =
+            ['-pedantic','-Weffc++','-pedantic-errors'] )
+    env.SetDefault( CXXTEST_CCFLAGS_REMOVE  =
+            ['-pedantic','-Weffc++','-pedantic-errors'] )
     
     #Here's where keyword arguments are applied
     apply(env.Replace, (), kwargs)
@@ -277,11 +291,14 @@ def generate(env, **kwargs):
         sources = Flatten(Split(source))
         headers = []
         linkins = []
-        for s in sources:
+        for l in sources:
+            # check whether this is a file object or a string path
+            if isinstance(l, SCons.Node.FS.File): s = l.path
+            else: s = l
             if s.endswith(multiget([kwargs, env], 'CXXTEST_SUFFIX', None)):
-                headers.append(s)
+                headers.append(l)
             else:
-                linkins.append(s)
+                linkins.append(l)
 
         deps = []
         if len(headers) == 0:

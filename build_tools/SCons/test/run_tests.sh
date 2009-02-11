@@ -20,6 +20,11 @@ function test() {
         elif [[ "$ACTION" == "--run" ]]
         then
             echo "### RUNNING TEST $testdir ###"
+            if [[ -f "README" ]]
+            then
+                cat README
+                echo "--------------------"
+            fi
             ../helpers.sh create_symlinks "$TEST_SYMLINKS_FILE"
             scons --clean && scons . && scons check
             local ret=$?
@@ -94,4 +99,6 @@ test "target_syntax" &&\
 test "recursive_sources" &&\
 test "expanding_#" &&\
 test "include_CCFLAGS" &&\
+test "include_CXXFLAGS" &&\
+test "globbing" &&\
 cleanup
