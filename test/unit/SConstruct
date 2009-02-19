@@ -1,11 +1,11 @@
-CxxTestBuilder_path = '../../sample/cxxtest.py'
+CxxTestBuilder_path = '../../build_tools/SCons/cxxtest.py'
 CxxTest_dir = '../..'
 
 # First a little python magic to pull in CxxTestBuilder
 import imp
 cxxtest = imp.load_source('cxxtest', CxxTestBuilder_path)
 env = Environment()
-cxxtest.generate(env, CXXTEST_DIR=CxxTest_dir)
+cxxtest.generate(env, CXXTEST=CxxTest_dir + '/cxxtestgen.py')
 
 for test in env.Glob('*.t.h'):
   env.CxxTest(test)

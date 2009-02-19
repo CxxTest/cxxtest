@@ -1,9 +1,11 @@
 
-cxxtestbuilder_path = '../cxxtest.py'
+cxxtestbuilder_path = '../../build_tools/SCons/cxxtest.py'
 cxxtest_path = '../..'
 
 # First a bit of python magic to make the CxxTestBuilder available 
 # without having to copy it into a particular path.
+# for nicer examples you *should* use, see the cxxtest builder tests in the 
+# build_tools/SCons/test directory.
 import imp
 cxxtest = imp.load_source('cxxtest', cxxtestbuilder_path)
 
@@ -20,10 +22,10 @@ libtested = env.StaticLibrary('build/embedded_platform/tested',
 # environment. For simplicity I am just copying the production environment.
 # If we are cross compiling for the "real" library, then this 
 # environement might be using the normal compiler.
-env_test = env.Copy()
+env_test = env.Clone()
 
 # Add the CxxTestBuilder to our testing build environment.
-cxxtest.generate(env_test, CXXTEST_DIR = cxxtest_path)
+cxxtest.generate(env_test, CXXTEST = cxxtest_path + '/cxxtestgen.py')
 
 # If we were working with an embedded platform we may want to create a 
 # seperate version of our library that runs on our development box in 

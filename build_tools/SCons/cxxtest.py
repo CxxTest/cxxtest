@@ -191,9 +191,10 @@ def findCxxTestGen(env):
     
     # No valid environment variable found, so...
     # Next, check the path...
-    # Finally, check the project
+    # Next, check the project
     cxxtest = (env.WhereIs('cxxtestgen.py') or 
-               env.WhereIs('cxxtestgen.py', path=Dir(path.join('#', 'cxxtest') ).abspath) 
+               env.WhereIs('cxxtestgen.py',
+                   path=Dir(path.join('#', 'cxxtest')).abspath)
               )
     
     if cxxtest:
@@ -202,7 +203,11 @@ def findCxxTestGen(env):
         # If we weren't able to locate the cxxtestgen.py script, complain...
         SCons.Warnings.warn(
                 ToolCxxTestWarning,
-                "Unable to locate cxxtestgen in environment, path or project!")
+                "Unable to locate cxxtestgen.py in environment, path or"
+                " project!\n"
+                "Please set the CXXTEST variable to the path of the"
+                " cxxtestgen.py script"
+                )
         return None
     
 
