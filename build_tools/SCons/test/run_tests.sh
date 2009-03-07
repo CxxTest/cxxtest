@@ -102,4 +102,5 @@ test "include_CCFLAGS" &&\
 test "include_CXXFLAGS" &&\
 test "globbing" &&\
 test "globbing_edmundo" &&\
+test "empty_source_list" &&\
 cleanup

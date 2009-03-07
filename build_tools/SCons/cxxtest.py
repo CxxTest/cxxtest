@@ -174,9 +174,18 @@ def findCxxTestGen(env):
     # Then, check the OS environment...
     cxxtest = multiget([env, os.environ], 'CXXTEST', None)
 
+    # check for common passing errors and provide diagnostics.
+    if isinstance(cxxtest, (list, tuple, dict)):
+        SCons.Warnings.warn(
+                ToolCxxTestWarning,
+                "The CXXTEST variable was specified as a list."
+                " This is not supported. Please pass a string."
+                )
+
     if cxxtest:
         try:
-            #try getting the absolute path of the file first. Required to expand '#'
+            #try getting the absolute path of the file first.
+            # Required to expand '#'
             cxxtest = env.File(cxxtest).abspath;
         except TypeError:
             try:
@@ -184,8 +193,8 @@ def findCxxTestGen(env):
                 cxxtest = env.File(cxxtest+'/cxxtestgen.py').abspath;
             except TypeError:
                 pass
-
-        # If the user specified the location in the environment, make sure it was correct
+        # If the user specified the location in the environment,
+        # make sure it was correct
         if isValidScriptPath(cxxtest):
            return cxxtest
     
@@ -224,10 +233,16 @@ def generate(env, **kwargs):
     CXXTEST_CXXFLAGS_REMOVE - the flags that cxxtests can't compile with,
                               or give lots of warnings. Will be stripped.
                               Default: -pedantic -Weffc++
+    CXXTEST_CCFLAGS_REMOVE - the same thing as CXXTEST_CXXFLAGS_REMOVE, just for
+                            CCFLAGS. Default: same as CXXFLAGS.
     CXXTEST_PYTHON  - the path to the python binary.
                         Default: searches path for python
     CXXTEST_SKIP_ERRORS - set to True to continue running the next test if one
                           test fails. Default: False
+    CXXTEST_CPPPATH - If you do not want to clutter your global CPPPATH with the
+                        CxxTest header files and other stuff you only need for
+                        your tests, this is the variable to set. Behaves as
+                        CPPPATH does.
     ... and all others that Program() accepts, like CPPPATH etc.
     """
 
@@ -271,12 +286,13 @@ def generate(env, **kwargs):
         #
         cxxtest_builder = Builder(
             action =
-            [["$CXXTEST_PYTHON",cxxtest,"--runner=$CXXTEST_RUNNER","$CXXTEST_OPTS","$CXXTEST_ROOT_PART","-o","$TARGET","$SOURCE"]],
+            [["$CXXTEST_PYTHON",cxxtest,"--runner=$CXXTEST_RUNNER",
+                "$CXXTEST_OPTS","$CXXTEST_ROOT_PART","-o","$TARGET","$SOURCE"]],
             suffix = ".cpp",
             src_suffix = '$CXXTEST_SUFFIX'
             )
 
-    def CxxTest(env, target, source = [], **kwargs):
+    def CxxTest(env, target, source = None, **kwargs):
         """Usage:
         The function is modelled to be called as the Program() call is:
         env.CxxTest('target_name') will build the test from the source
@@ -291,8 +307,9 @@ def generate(env, **kwargs):
         for passing different CPPPATHs and the sort. This function also appends
         CXXTEST_CPPPATH to CPPPATH. It does not clutter the environment's CPPPATH.
         """
-        if (source == []):
-            source = Split(target + multiget([kwargs, env], 'CXXTEST_SUFFIX', None))
+        if (source == None):
+            suffix = multiget([kwargs, env], 'CXXTEST_SUFFIX', "")
+            source = [t + suffix for t in target]
         sources = Flatten(Split(source))
         headers = []
         linkins = []
@@ -310,8 +327,9 @@ def generate(env, **kwargs):
 
         deps = []
         if len(headers) == 0:
-            # old functionality - the 1st source specified is the test
-            deps.append(env.CxxTestCpp(linkins.pop(0), **kwargs))
+            if len(linkins) != 0:
+                # the 1st source specified is the test
+                deps.append(env.CxxTestCpp(linkins.pop(0), **kwargs))
         else:
             deps.append(env.CxxTestCpp(headers.pop(0), **kwargs))
             deps.extend(
