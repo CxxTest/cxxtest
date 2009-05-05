@@ -6,6 +6,7 @@
 namespace CxxTest
 {
     bool TestTracker::_created = false;
+    bool TestTracker::print_tracing = false;
 
     TestTracker::TestTracker()
     {

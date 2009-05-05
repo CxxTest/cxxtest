@@ -20,6 +20,7 @@ namespace CxxTest
         virtual ~TestTracker();
         
         static TestTracker &tracker();
+        static bool print_tracing;
 
         const TestDescription *fixTest( const TestDescription *d ) const;
         const SuiteDescription *fixSuite( const SuiteDescription *d ) const;

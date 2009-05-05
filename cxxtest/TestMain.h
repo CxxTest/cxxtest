@@ -1,6 +1,7 @@
 #ifndef __CxxTestMain_h
 #define __CxxTestMain_h
 
+#include <cxxtest/TestTracker.h>
 #include <cxxtest/Flags.h>
 
 #ifndef _CXXTEST_HAVE_STD
@@ -26,6 +27,7 @@ inline void print_help(const char* name)
    CXXTEST_STD(cerr) << name << " -h" << CXXTEST_STD(endl);
    CXXTEST_STD(cerr) << name << " --help" << CXXTEST_STD(endl);
    CXXTEST_STD(cerr) << name << " --help-tests" << CXXTEST_STD(endl);
+   CXXTEST_STD(cerr) << name << " -v             Enable tracing output." << CXXTEST_STD(endl);
 }
 
 
@@ -56,6 +58,25 @@ for (int i=1; i<argc; i++) {
   }
 }
 
+//
+// Process command-line options here.
+//
+while ((argc > 1) && (argv[1][0] == '-')) {
+  if (strcmp(argv[1],"-v") == 0) {
+     TestTracker::print_tracing = true;
+     }
+  else {
+     CXXTEST_STD(cerr) << "ERROR: unknown option '" << argv[1] << "'" << CXXTEST_STD(endl);
+     return -1;
+     }
+  for (int i=1; i<(argc-1); i++)
+    argv[i] = argv[i+1];
+  argc--;
+  }
+
+//
+// Run experiments
+//
 bool status=false;
 if ((argc==2) && (argv[1][0] != '-')) {
     status=leaveOnly(argv[1]);

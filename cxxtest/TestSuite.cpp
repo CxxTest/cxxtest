@@ -57,7 +57,8 @@ namespace CxxTest
     //
     void doTrace( const char *file, unsigned line, const char *message )
     {
-        tracker().trace( file, line, message );
+        if (tracker().print_tracing)
+           tracker().trace( file, line, message );
     }
 
     void doWarn( const char *file, unsigned line, const char *message )
@@ -116,6 +117,11 @@ namespace CxxTest
 
     bool sameFiles( const char* file1, const char* file2, std::ostringstream& explanation)
     {
+    std::string ppprev_line;
+    std::string pprev_line;
+    std::string prev_line;
+    std::string curr_line;
+
     std::ifstream is1;
     is1.open(file1);
     std::ifstream is2;
@@ -137,17 +143,58 @@ namespace CxxTest
         if (!is1 && !is2) return true;
         if (!is1) {
                 explanation << "File '" << file1 << "' ended before file '" << file2 << "' (line " << nline << ")";
+                explanation << std::endl << "= " << ppprev_line << std::endl << "=  " << pprev_line << std::endl << "= " << prev_line << std::endl << "< " << curr_line;
+                is1.get(c1);
+                while (is1 && (c1 != '\n')) {
+                  explanation << c1;
+                  is1.get(c1);
+                  }
+                explanation << std::endl;
                 return false;
                 }
         if (!is2) {
                 explanation << "File '" << file2 << "' ended before file '" << file1 << "' (line " << nline << ")";
+                explanation << std::endl << "= " << ppprev_line << std::endl << "=  " << pprev_line << std::endl << "= " << prev_line << std::endl << "> " << curr_line;
+                is2.get(c2);
+                while (is2 && (c2 != '\n')) {
+                  explanation << c2;
+                  is2.get(c2);
+                  }
+                explanation << std::endl;
                 return false;
                 }
         if (c1 != c2) {
                 explanation << "Files '" << file1 << "' and '" << file2 << "' differ at line " << nline;
+                explanation << std::endl << "= " << ppprev_line << std::endl << "=  " << pprev_line << std::endl << "= " << prev_line;
+
+                explanation << std::endl << "< " << curr_line;
+                is2.get(c1);
+                while (is1 && (c1 != '\n')) {
+                  explanation << c1;
+                  is2.get(c1);
+                  }
+                explanation << std::endl;
+
+                explanation << std::endl << "> " << curr_line;
+                is2.get(c2);
+                while (is2 && (c2 != '\n')) {
+                  explanation << c2;
+                  is2.get(c2);
+                  }
+                explanation << std::endl;
+
                 return false;
                 }
-        if (c1 == '\n') nline++;
+        if (c1 == '\n') {
+           ppprev_line = pprev_line;
+           pprev_line = prev_line;
+           prev_line = curr_line;
+           curr_line = "";
+           nline++;
+           }
+        else {
+           curr_line += c1;
+           }
         }
     }
 
