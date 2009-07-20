@@ -176,9 +176,13 @@ def writeSimpleOutput():
     '''Create output not based on template'''
     output = startOutputFile()
     writePreamble( output )
-    writeMain( output )
+    if options.root or not options.part:
+        writeMain( output )
+        sys.stderr.write("printing main")
+
     if len(suites) > 0:
         print >>output, "bool "+suites[0]['name']+"_init = false;"
+
     writeWorld( output )
     output.close()
 
