@@ -32,7 +32,7 @@
 # For a list of environment variables and their defaults, see the generate()
 # function.
 #
-# This should be in a file called cxxtest.py somewhere in the scons toolos.path.
+# This should be in a file called cxxtest.py somewhere in the scons toolpath.
 # (default: #/site_scons/site_tools/)
 #
 # == Usage: ==
@@ -86,7 +86,7 @@
 # 2008-03-23:
 #    Added CXXTEST_CXXFLAGS_REMOVE
 #    Bugfix: if only a single test was specified, scons check would do nothing
-#    Bugfix: test would not compile if '#' was not a part of os.path. Now added
+#    Bugfix: test would not compile if '#' was not a part of path. Now added
 #    automatically.
 # 2008-06-22:
 #    Bugfix: on windows, the script would not work because windows does not
