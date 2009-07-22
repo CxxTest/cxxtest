@@ -197,7 +197,7 @@ def findCxxTestGen(env):
         # If the user specified the location in the environment,
         # make sure it was correct
         if isValidScriptPath(cxxtest):
-           return cxxtest
+           return os.path.realpath(cxxtest)
     
     # No valid environment variable found, so...
     # Next, check the path...
