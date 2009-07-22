@@ -1,17 +1,11 @@
 # coding=UTF-8
 #
 # == Preamble ==
-#
-# CxxTest builder by Gasper Azman
-#
-# Contributors:
-# J. Darby Mitchell
-# Diego Nieto Cid
-# Joe Maruzsevski
-# Edmundo López B.
+# Authors of this script are in the Authors file in the same directory as this
+# scrip.
 #
 # please send bugreports/praise/comments/criticism to
-# gasper.azman at gmail.com or the cxxtest mailing list.
+# gasper.azman at gmail.com or the cxxtest mailing list (dev at cxxtest.tigris.org)
 #
 # This file is maintained as a part of the CxxTest test suite.
 # 
@@ -37,6 +31,8 @@
 #
 # == Usage: ==
 #
+# For configuration options, check the comment of the generate() function.
+#
 # This builder has a variety of different possible usages, so bear with me.
 #
 # env.CxxTest('target')
@@ -59,44 +55,6 @@
 # the 1st argument to the function. This will result in the end executable
 # called that. Normal Program builder rules apply.
 #
-# == Changelog ==
-# 2009-07-22: Changed path to os.pat on Pavol Juhas' request.
-# 2009-02-11: Fixed passing variables via the environment. Added the
-#    CXXTEST_CCFLAGS_REMOVE variable. Fixed globbing thanks to a tip provided by
-#    Edmundo.
-# 2008-09-28: Added the option that #, as understood in pathnames in the rest of
-#    SCons, is now also understood here. Minor bugfixes all around.
-# 2008-08-30: CXXTEST_RUNNER became CXXTEST_PYTHON, and CXXTEST_PRINTER became
-#    CXXTEST_RUNNER because it now governs the argument of the --runner
-#    commandline option.
-# 2008-08-29: Gašper Ažman added the --root and --part functionality.
-#    Documentation above.
-# 2008-08-28: Gašper Ažman added CXXTEST_SKIP_ERRORS that makes all tests run no
-#    matter whether they fail or succeed. Fixed the issue where CPPPATH would
-#    vanish. Fixed bug #40
-# 2008-08-25: Gasper Azman and Darby Mitchell (MIT) refactored the tool to
-#    set defaults that don't override previously set environment variables, and 
-#    automatically search for the cxxtestgen Python script in the path and 
-#    project if it isn't specified by the user in the environment or kwargs.
-# 2008-08-23: Gasper Azman removed Perl support, since SCons is based on Python
-#    and CxxTest has plans to drop the cxxtestgen Perl script in the near future.
-# 2008-03-29:
-#    Fixed a bug introduced in the last version, where the script would fail if
-#    CXXFLAGS was never set.
-# 2008-03-23:
-#    Added CXXTEST_CXXFLAGS_REMOVE
-#    Bugfix: if only a single test was specified, scons check would do nothing
-#    Bugfix: test would not compile if '#' was not a part of path. Now added
-#    automatically.
-# 2008-06-22:
-#    Bugfix: on windows, the script would not work because windows does not
-#    support running scripts without an explicit interpreter invocation
-#    (./script.py). 
-#    Patch kindly provided by Diego Nieto Cid (dnietoc at gmail dot com)
-# 2008-06-25:
-#    Bugfix: Diego also provided a patch to his added functionality, so that
-#    now not all paths are imported, but just the path required to run the
-#    interpreter.
 
 from SCons.Script import *
 from SCons.Builder import Builder
