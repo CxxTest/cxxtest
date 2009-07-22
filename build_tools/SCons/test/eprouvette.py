@@ -102,13 +102,13 @@ def debug(msg):
 def run_test(t):
     """Runs the test in directory t."""
     opts = read_opts(t)
-    debug("running test {0}".format(t))
+    notice("running test '{0}'".format(t))
     readme = join(t, 'README')
     if isfile(readme):
         notice(open(readme).read())
         notice('------------------------------')
     if opts['type'] not in available_types:
-        warn('{0} is not a recognised type in {1}'.format(opts['type'], t))
+        warn('{0} is not a recognised test type in {1}'.format(opts['type'], t))
         return
     if not opts['expect_success']:
         warn("tests that fail intentionally are not yet supported.")
@@ -117,9 +117,18 @@ def run_test(t):
     # set up the environment
     setup_env(t, opts)
     # run the test
-    if opts['type'] == 'scons':
-        run_scons(t, opts)
-        notice('test successful.')
+    try:
+        if opts['type'] == 'scons':
+            run_scons(t, opts)
+    except RuntimeError as e:
+        print("Test {0} failed.".format(t))
+        return
+
+    if not options.verbose:
+        print('.', end='')
+        sys.stdout.flush()
+    else:
+        print("test '{0}' successful.".format(t))
 
 def read_opts(t):
     """Read the test options and return them."""
@@ -182,14 +191,8 @@ def run_scons(t, opts):
         check_call(['scons', '.'], stdout=tool_stdout)
         check_call(['scons', 'check'], stdout=tool_stdout)
     except CalledProcessError as e:
-        print("Test {0} failed.".format(t))
-        os.chdir(cwd)
+        os.chdir(cwd) # clean up
         raise e
-    if not options.verbose:
-        print('.', end='')
-        sys.stdout.flush()
-    else:
-        print("test {0} successful.".format(t))
     os.chdir(cwd)
     
 if __name__ == "__main__":

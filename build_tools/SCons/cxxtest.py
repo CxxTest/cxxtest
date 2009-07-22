@@ -32,7 +32,7 @@
 # For a list of environment variables and their defaults, see the generate()
 # function.
 #
-# This should be in a file called cxxtest.py somewhere in the scons toolpath.
+# This should be in a file called cxxtest.py somewhere in the scons toolos.path.
 # (default: #/site_scons/site_tools/)
 #
 # == Usage: ==
@@ -60,6 +60,7 @@
 # called that. Normal Program builder rules apply.
 #
 # == Changelog ==
+# 2009-07-22: Changed path to os.pat on Pavol Juhas' request.
 # 2009-02-11: Fixed passing variables via the environment. Added the
 #    CXXTEST_CCFLAGS_REMOVE variable. Fixed globbing thanks to a tip provided by
 #    Edmundo.
@@ -85,7 +86,7 @@
 # 2008-03-23:
 #    Added CXXTEST_CXXFLAGS_REMOVE
 #    Bugfix: if only a single test was specified, scons check would do nothing
-#    Bugfix: test would not compile if '#' was not a part of path. Now added
+#    Bugfix: test would not compile if '#' was not a part of os.path. Now added
 #    automatically.
 # 2008-06-22:
 #    Bugfix: on windows, the script would not work because windows does not
@@ -99,7 +100,7 @@
 
 from SCons.Script import *
 from SCons.Builder import Builder
-from os import path
+import os
 
 # A warning class to notify users of problems
 class ToolCxxTestWarning(SCons.Warnings.Warning):
@@ -159,7 +160,7 @@ def UnitTest(env, target, source = [], **kwargs):
 def isValidScriptPath(cxxtestgen):
     """check keyword arg or environment variable locating cxxtestgen.py script"""
        
-    if(cxxtestgen and cxxtestgen.endswith('.py') and path.exists(cxxtestgen) ):
+    if cxxtestgen and cxxtestgen.endswith('.py') and os.path.exists(cxxtestgen):
         return True
     else:
         SCons.Warnings.warn(ToolCxxTestWarning,
@@ -203,7 +204,7 @@ def findCxxTestGen(env):
     # Next, check the project
     cxxtest = (env.WhereIs('cxxtestgen.py') or 
                env.WhereIs('cxxtestgen.py',
-                   path=Dir(path.join('#', 'cxxtest')).abspath)
+                   path=Dir(os.path.join('#', 'cxxtest')).abspath)
               )
     
     if cxxtest:
@@ -277,9 +278,9 @@ def generate(env, **kwargs):
         # Check to see if there is a 'cxxtest' subdirectory in the location where
         # the script was found.  If so, assume that is the header directory, and  
         # therefore the script directory should be included in the CPPPATH
-        if(path.exists(path.join(path.dirname(cxxtest), 'cxxtest') ) ):
+        if(os.path.exists(os.path.join(os.path.dirname(cxxtest), 'cxxtest') ) ):
            # for some reason, setting PATH here doesn't work for me (Gašper)
-           env.AppendUnique(CXXTEST_CPPPATH = [path.dirname(cxxtest)] )
+           env.AppendUnique(CXXTEST_CPPPATH = [os.path.dirname(cxxtest)] )
         
         #
         # Create the Builder (only if we have a valid cxxtestgen!)
@@ -350,4 +351,4 @@ def generate(env, **kwargs):
     env.Append( BUILDERS = { "CxxTest" : CxxTest, "CxxTestCpp" : cxxtest_builder } )
 
 def exists(env):
-    return path.exists(env['CXXTEST'])
+    return os.path.exists(env['CXXTEST'])
