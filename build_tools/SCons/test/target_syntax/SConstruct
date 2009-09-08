@@ -2,7 +2,7 @@
 env = Environment(
     toolpath=['../../'],
     tools=['default','cxxtest'],
-    CXXTEST = '../../../../cxxtestgen.py',
+    CXXTEST_INSTALL_DIR = '../../../../',
     CPPPATH = ['src/cpppathdir/']
     )
 

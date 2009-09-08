@@ -25,7 +25,7 @@ $OUTPUT_AUTOFLUSH = 1;
 # Some command line options
 #
 my $noPython = 0;
-my $noPerl = 0;
+my $noPerl = 1;
 my $compiler;
 my $compilee;
 my $exe_option = '-o ';
@@ -203,14 +203,9 @@ sub testRoot($) {
   foreach my $i (1, 2) {
     my $args = "--have-eh --abort-on-fail --part Part${i}.h";
 
-    if ( !$noPerl ) {
-      say "perl...";
-      system( "perl ../cxxtestgen.pl -o ${p}pl${i}.cpp $args > ${p}pl.out 2>&1" );
-    }
-
     if ( !$noPython ) {
       say "python...";
-      system( "python ../cxxtestgen.py -o ${p}py${i}.cpp $args > ${p}py.out 2>&1" );
+      system( "python ../python/scripts/cxxtestgen -o ${p}py${i}.cpp $args > ${p}py.out 2>&1" );
     }
 
     if ( !$noPython && !$noPerl ) {
@@ -271,14 +266,9 @@ sub generate($) {
   my $test = $_[0];
   my ($name, $output, $args) = ($test->{'name'}, $test->{'output'}, $test->{'args'});
 
-  if ( !$noPerl ) {
-    say "perl...";
-    system( "perl ../cxxtestgen.pl -o ${plCpp} $args > ${p}pl.out 2>&1" );
-  }
-
   if ( !$noPython ) {
     say "python...";
-    system( "python ../cxxtestgen.py -o ${pyCpp} $args > ${p}py.out 2>&1" );
+    system( "python ../python/scripts/cxxtestgen -o ${pyCpp} $args > ${p}py.out 2>&1" );
   }
 }
 

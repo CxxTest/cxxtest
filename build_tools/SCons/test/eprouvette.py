@@ -16,6 +16,7 @@ tool_stdout = PIPE
 def main():
     global options
     global args
+    global tool_stdout
     """Parse the options and execute the program."""
     usage = \
     """Usage: %prog [options] [test1 [test2 [...]]]
@@ -51,7 +52,7 @@ def main():
 
     (options, args) = parser.parse_args()
  
-    if options.debug:
+    if options.debug or options.verbose:
         tool_stdout = None
     # gather the tests
     tests = []
@@ -102,11 +103,12 @@ def debug(msg):
 def run_test(t):
     """Runs the test in directory t."""
     opts = read_opts(t)
-    notice("running test '{0}'".format(t))
+    notice("-----------------------------------------------------")
+    notice("running test '{0}':\n".format(t))
     readme = join(t, 'README')
     if isfile(readme):
         notice(open(readme).read())
-        notice('------------------------------')
+        notice("")
     if opts['type'] not in available_types:
         warn('{0} is not a recognised test type in {1}'.format(opts['type'], t))
         return

@@ -2,7 +2,7 @@
 env = Environment(
     toolpath=['../../'],
     tools=['default','cxxtest'],
-    CXXTEST = '../../../../cxxtestgen.py',
+    CXXTEST_INSTALL_DIR = '../../../../',
     )
 
 env.CxxTest(['src/failtest.t.h'], CPPPATH=['#'], CXXTEST_RUNNER="CrazyRunner")

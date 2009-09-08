@@ -25,7 +25,7 @@ libtested = env.StaticLibrary('build/embedded_platform/tested',
 env_test = env.Clone()
 
 # Add the CxxTestBuilder to our testing build environment.
-cxxtest.generate(env_test, CXXTEST = cxxtest_path + '/cxxtestgen.py')
+cxxtest.generate(env_test, CXXTEST_INSTALL_DIR = cxxtest_path)
 
 # If we were working with an embedded platform we may want to create a 
 # seperate version of our library that runs on our development box in 

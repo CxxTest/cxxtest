@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+__all__ = ['main']
 
 import sys
 import os.path
@@ -20,18 +20,32 @@ from cxxtest_misc import *
 options = []
 suites = []
 
-def main():
+wrotePreamble = 0
+wroteWorld = 0
+lastIncluded = ''
+
+def main(args=None):
     '''The main program'''
+    #
+    # Reset global state
+    #
+    global wrotePreamble
+    wrotePreamble=0
+    global wroteWorld
+    wroteWorld=0
+    global lastIncluded
+    lastIncluded = ''
+
     global suites
     global options
-    files = parseCommandline()
+    files = parseCommandline(args)
     if imported_fog and options.fog:
         [options,suites] = cxxtest_fog.scanInputFiles( files, options )
     else:
         [options,suites] = cxxtest_parser.scanInputFiles( files, options )
     writeOutput()
 
-def parseCommandline():
+def parseCommandline(args):
     '''Analyze command line arguments'''
     global imported_fog
     global options
@@ -102,7 +116,7 @@ def parseCommandline():
                       action="store_true", dest="factor", default=False,
                       help="Mystery option")
 
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args(args=args)
 
     if options.version:
       printVersion()
@@ -217,7 +231,6 @@ def startOutputFile():
     output.write( "/* Generated file, do not edit */\n\n" )
     return output
 
-wrotePreamble = 0
 def writePreamble( output ):
     '''Write the CxxTest header (#includes and #defines)'''
     global wrotePreamble
@@ -273,7 +286,6 @@ def writeMain( output ):
     output.write( '}\n' )
 
 
-wroteWorld = 0
 def writeWorld( output ):
     '''Write the world definitions'''
     global wroteWorld
@@ -309,7 +321,6 @@ def isDynamic(suite):
     '''Checks whether a suite is dynamic'''
     return suite.has_key('create')
 
-lastIncluded = ''
 def writeInclude(output, file):
     '''Add #include "file" statement'''
     global lastIncluded
@@ -429,8 +440,6 @@ def writeInitialize(output):
 
     output.write( ' }\n' )
     output.write( '}\n' )
-
-main()
 
 #
 # Copyright 2008 Sandia Corporation. Under the terms of Contract

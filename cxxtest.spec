@@ -25,7 +25,7 @@ Its advantages over existing alternatives are that it:
 
 %install
 install -m 755 -d $RPM_BUILD_ROOT/usr/bin $RPM_BUILD_ROOT/usr/include/cxxtest
-install -m 755 cxxtestgen.p[ly] $RPM_BUILD_ROOT/usr/bin/
+install -m 755 python/scripts/cxxtestgen $RPM_BUILD_ROOT/usr/bin/
 install -m 644 cxxtest/* $RPM_BUILD_ROOT/usr/include/cxxtest/
 
 %clean
@@ -35,6 +35,5 @@ rm -rf $RPM_BUILD_ROOT
 %attr(-, root, root) %doc README
 %attr(-, root, root) %doc sample
 %attr(-, root, root) /usr/include/cxxtest
-%attr(-, root, root) /usr/bin/cxxtestgen.pl
-%attr(-, root, root) /usr/bin/cxxtestgen.py
+%attr(-, root, root) /usr/bin/cxxtestgen
 

@@ -17,9 +17,9 @@
 #  % scons check
 # This will first compile and then run the tests.
 #
-# The default configuration assumes that cxxtest is installed in the base
-# source directory (where SConstruct is), that the cxxtestgen.py is under
-# cxxtest/cxxtestgen.py and headers are in cxxtest/cxxtest/. The header
+# The default configuration assumes that cxxtest is located at the
+# base source directory (where SConstruct is), that the cxxtestgen is under
+# cxxtest/python/scripts/cxxtestgen and headers are in cxxtest/cxxtest/. The header
 # include path is automatically added to CPPPATH. It, however, can also
 # recognise that cxxtest is installed system-wide (based on redhat's RPM).
 #
@@ -37,7 +37,7 @@
 #
 # env.CxxTest('target')
 # The simplest of them all, it models the Program call. This sees if target.t.h
-# is around and passes it through the cxxtestgen.py and compiles it. Might only
+# is around and passes it through the cxxtestgen and compiles it. Might only
 # work on unix though, because target can't have a suffix right now.
 #
 # env.CxxTest(['target.t.h'])
@@ -89,17 +89,21 @@ def multiget(dictlist, key, default = None):
     else:
         return default
 
+def envget(env, key, default=None):
+    """Look in the env, then in os.environ. Otherwise same as multiget."""
+    return multiget([env, os.environ], key, default)
+
 def UnitTest(env, target, source = [], **kwargs):
     """
     Prepares the Program call arguments, calls Program and adds the result to
     the check target.
     """
     # get the c and cxx flags to process.
-    ccflags   = Split( multiget([kwargs, env], 'CCFLAGS' ))
-    cxxflags  = Split( multiget([kwargs, env], 'CXXFLAGS'))
+    ccflags   = Split( multiget([kwargs, env, os.environ], 'CCFLAGS' ))
+    cxxflags  = Split( multiget([kwargs, env, os.environ], 'CXXFLAGS'))
     # get the removal c and cxx flags
-    cxxremove = set( Split( multiget([kwargs, env],'CXXTEST_CXXFLAGS_REMOVE')))
-    ccremove  = set( Split( multiget([kwargs, env],'CXXTEST_CCFLAGS_REMOVE' )))
+    cxxremove = set( Split( multiget([kwargs, env, os.environ],'CXXTEST_CXXFLAGS_REMOVE')))
+    ccremove  = set( Split( multiget([kwargs, env, os.environ],'CXXTEST_CCFLAGS_REMOVE' )))
     # remove the required flags
     ccflags   = [item for item in ccflags if item not in ccremove]
     cxxflags  = [item for item in cxxflags if item not in cxxremove]
@@ -107,7 +111,7 @@ def UnitTest(env, target, source = [], **kwargs):
     kwargs["CXXFLAGS"] = cxxflags
     kwargs["CCFLAGS"]  = ccflags
     test = env.Program(target, source = source, **kwargs)
-    if multiget([kwargs, env], 'CXXTEST_SKIP_ERRORS', False):
+    if multiget([kwargs, env, os.environ], 'CXXTEST_SKIP_ERRORS', False):
         runner = env.Action(test[0].abspath, exitstatfunc=lambda x:0)
     else:
         runner = env.Action(test[0].abspath)
@@ -116,22 +120,27 @@ def UnitTest(env, target, source = [], **kwargs):
     return test
 
 def isValidScriptPath(cxxtestgen):
-    """check keyword arg or environment variable locating cxxtestgen.py script"""
+    """check keyword arg or environment variable locating cxxtestgen script"""
        
-    if cxxtestgen and cxxtestgen.endswith('.py') and os.path.exists(cxxtestgen):
+    if cxxtestgen and os.path.exists(cxxtestgen):
         return True
     else:
         SCons.Warnings.warn(ToolCxxTestWarning,
                             "Invalid CXXTEST environment variable specified!")
         return False
     
+def defaultCxxTestGenLocation(env):
+    return os.path.join(
+                envget(env, 'CXXTEST_CXXTESTGEN_DEFAULT_LOCATION'),
+                envget(env, 'CXXTEST_CXXTESTGEN_SCRIPT_NAME')
+                )
 
 def findCxxTestGen(env):
     """locate the cxxtestgen script by checking environment, path and project"""
     
     # check the SCons environment...
     # Then, check the OS environment...
-    cxxtest = multiget([env, os.environ], 'CXXTEST', None)
+    cxxtest = envget(env, 'CXXTEST', None)
 
     # check for common passing errors and provide diagnostics.
     if isinstance(cxxtest, (list, tuple, dict)):
@@ -145,11 +154,13 @@ def findCxxTestGen(env):
         try:
             #try getting the absolute path of the file first.
             # Required to expand '#'
-            cxxtest = env.File(cxxtest).abspath;
+            cxxtest = env.File(cxxtest).abspath
         except TypeError:
             try:
                 #maybe only the directory was specified?
-                cxxtest = env.File(cxxtest+'/cxxtestgen.py').abspath;
+                cxxtest = env.File(
+                        os.path.join(cxxtest, defaultCxxTestGenLocation(env)
+                            )).abspath
             except TypeError:
                 pass
         # If the user specified the location in the environment,
@@ -160,31 +171,45 @@ def findCxxTestGen(env):
     # No valid environment variable found, so...
     # Next, check the path...
     # Next, check the project
-    cxxtest = (env.WhereIs('cxxtestgen.py') or 
-               env.WhereIs('cxxtestgen.py',
-                   path=Dir(os.path.join('#', 'cxxtest')).abspath)
-              )
+    check_path = os.path.join(
+            envget(env, 'CXXTEST_INSTALL_DIR'),
+            envget(env, 'CXXTEST_CXXTESTGEN_DEFAULT_LOCATION'))
+    cxxtest = (env.WhereIs('cxxtestgen') or 
+               env.WhereIs('cxxtestgen', path=[Dir(check_path).abspath]))
     
     if cxxtest:
         return cxxtest
     else:
-        # If we weren't able to locate the cxxtestgen.py script, complain...
+        # If we weren't able to locate the cxxtestgen script, complain...
         SCons.Warnings.warn(
                 ToolCxxTestWarning,
-                "Unable to locate cxxtestgen.py in environment, path or"
+                "Unable to locate cxxtestgen in environment, path or"
                 " project!\n"
                 "Please set the CXXTEST variable to the path of the"
-                " cxxtestgen.py script"
+                " cxxtestgen script"
                 )
         return None
-    
+
+def findCxxTestHeaders(env):
+    searchfile = 'TestSuite.h'
+    cxxtestgen_pathlen = len(defaultCxxTestGenLocation(env))
+
+    default_path = Dir(envget(env,'CXXTEST_INSTALL_DIR')).abspath
+
+    alt_path = Dir(File(env['CXXTEST']).abspath[:-cxxtestgen_pathlen]).abspath
+
+    searchpaths = [default_path, alt_path]
+    for p in searchpaths:
+        if os.path.exists(os.path.join(p, 'cxxtest', searchfile)):
+            return p
 
 def generate(env, **kwargs):
     """
-    Accepted keyword arguments:
-    CXXTEST         - the path to the cxxtestgen.py
+    Keyword arguments (all can be set via environment variables as well):
+    CXXTEST         - the path to the cxxtestgen script.
                         Default: searches SCons environment, OS environment,
-                        path and project in that order.
+                        path and project in that order. Instead of setting this,
+                        you can also set CXXTEST_INSTALL_DIR
     CXXTEST_RUNNER  - the runner to use.  Default: ErrorPrinter
     CXXTEST_OPTS    - other options to pass to cxxtest.  Default: ''
     CXXTEST_SUFFIX  - the suffix of the test files.  Default: '.t.h'
@@ -202,15 +227,13 @@ def generate(env, **kwargs):
                         CxxTest header files and other stuff you only need for
                         your tests, this is the variable to set. Behaves as
                         CPPPATH does.
+    CXXTEST_INSTALL_DIR - this is where you tell the builder where CxxTest is
+                            installed. The install directory has cxxtest,
+                            python, docs and other subdirectories.
     ... and all others that Program() accepts, like CPPPATH etc.
     """
 
     print "Loading CxxTest tool..."
-    
-    #If the user specified the path to CXXTEST, make sure it is correct
-    #otherwise, search for and set the default toolpath.
-    if (not kwargs.has_key('CXXTEST') or not isValidScriptPath(kwargs['CXXTEST']) ):
-        env["CXXTEST"] = findCxxTestGen(env)
 
     #
     # Expected behaviour: keyword arguments override environment variables;
@@ -227,19 +250,28 @@ def generate(env, **kwargs):
             ['-pedantic','-Weffc++','-pedantic-errors'] )
     env.SetDefault( CXXTEST_CCFLAGS_REMOVE  =
             ['-pedantic','-Weffc++','-pedantic-errors'] )
-    
+    env.SetDefault( CXXTEST_INSTALL_DIR = '#/cxxtest/'      )
+
+    # this one's not for public use - it documents where the cxxtestgen script
+    # is located in the CxxTest tree normally.
+    env.SetDefault( CXXTEST_CXXTESTGEN_DEFAULT_LOCATION =
+            os.path.join('python', 'scripts') )
+    # the cxxtestgen script name.
+    env.SetDefault( CXXTEST_CXXTESTGEN_SCRIPT_NAME = 'cxxtestgen' )
+
     #Here's where keyword arguments are applied
     apply(env.Replace, (), kwargs)
+
+    #If the user specified the path to CXXTEST, make sure it is correct
+    #otherwise, search for and set the default toolpath.
+    if (not kwargs.has_key('CXXTEST') or not isValidScriptPath(kwargs['CXXTEST']) ):
+        env["CXXTEST"] = findCxxTestGen(env)
+
+    # find and add the CxxTest headers to the path.
+    env.AppendUnique( CXXTEST_CPPPATH = [findCxxTestHeaders(env)]  )
     
     cxxtest = env['CXXTEST']
-    if(cxxtest):
-        # Check to see if there is a 'cxxtest' subdirectory in the location where
-        # the script was found.  If so, assume that is the header directory, and  
-        # therefore the script directory should be included in the CPPPATH
-        if(os.path.exists(os.path.join(os.path.dirname(cxxtest), 'cxxtest') ) ):
-           # for some reason, setting PATH here doesn't work for me (Gašper)
-           env.AppendUnique(CXXTEST_CPPPATH = [os.path.dirname(cxxtest)] )
-        
+    if cxxtest:
         #
         # Create the Builder (only if we have a valid cxxtestgen!)
         #
@@ -250,6 +282,8 @@ def generate(env, **kwargs):
             suffix = ".cpp",
             src_suffix = '$CXXTEST_SUFFIX'
             )
+    else:
+        cxxtest_builder = (lambda *a: sys.stderr.write("ERROR: CXXTESTGEN NOT FOUND!"))
 
     def CxxTest(env, target, source = None, **kwargs):
         """Usage:
@@ -267,7 +301,7 @@ def generate(env, **kwargs):
         CXXTEST_CPPPATH to CPPPATH. It does not clutter the environment's CPPPATH.
         """
         if (source == None):
-            suffix = multiget([kwargs, env], 'CXXTEST_SUFFIX', "")
+            suffix = multiget([kwargs, env, os.environ], 'CXXTEST_SUFFIX', "")
             source = [t + suffix for t in target]
         sources = Flatten(Split(source))
         headers = []
@@ -279,7 +313,7 @@ def generate(env, **kwargs):
             except AttributeError:
                 s = l
 
-            if s.endswith(multiget([kwargs, env], 'CXXTEST_SUFFIX', None)):
+            if s.endswith(multiget([kwargs, env, os.environ], 'CXXTEST_SUFFIX', None)):
                 headers.append(l)
             else:
                 linkins.append(l)

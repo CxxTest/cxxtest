@@ -36,7 +36,7 @@ MyTest.h:
 
 2. Generate the tests file:
 
- # cxxtestgen.pl -o tests.cpp MyTestSuite.h
+ # cxxtestgen -o tests.cpp MyTestSuite.h
 
 
 3. Create a main function that runs the tests
