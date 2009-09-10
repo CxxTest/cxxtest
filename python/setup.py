@@ -56,7 +56,6 @@ setup(name="cxxtest",
       long_description = "\n".join(doclines[2:]),
       packages=packages,
       keywords=['utility'],
-      scripts=scripts,
-      provides=packages
+      scripts=scripts
       )
 
