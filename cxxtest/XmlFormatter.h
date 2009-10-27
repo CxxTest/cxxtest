@@ -35,12 +35,91 @@
 
 namespace CxxTest
 {
+    class TeeOutputStreams
+    {
+    private:
+       class teebuffer : public std::basic_streambuf<char>
+       {
+          typedef std::basic_streambuf<char> streambuf_t;
+       public:
+          teebuffer(streambuf_t * buf1, streambuf_t * buf2)
+             : buffer1(buf1), buffer2(buf2)
+          {}
+
+          virtual int overflow(int c)
+          {
+             if (c == EOF)
+                return !EOF;
+             else
+             {
+                int const ans1 = buffer1->sputc(c);
+                int const ans2 = buffer2->sputc(c);
+                return ans1 == EOF || ans2 == EOF ? EOF : c;
+             }
+          }
+
+          virtual int sync()
+          {
+             int ans1 = buffer1->pubsync();
+             int ans2 = buffer2->pubsync();
+             return ans1 || ans2 ? -1 : 0;
+          }
+
+          streambuf_t * buffer1;
+          streambuf_t * buffer2;
+       };
+
+    public:
+       TeeOutputStreams(std::ostream& _cout, std::ostream& _cerr)
+          : out(),
+            err(),
+            orig_cout(_cout),
+            orig_cerr(_cerr),
+            tee_out(out.rdbuf(), _cout.rdbuf()),
+            tee_err(err.rdbuf(), _cerr.rdbuf())
+       {
+          orig_cout.rdbuf(&tee_out);
+          orig_cerr.rdbuf(&tee_err);
+       }
+
+       ~TeeOutputStreams()
+       {
+          orig_cout.rdbuf(tee_out.buffer2);
+          orig_cerr.rdbuf(tee_err.buffer2);
+       }
+
+       std::stringstream out;
+       std::stringstream err;
+
+    private:
+       std::ostream&  orig_cout;
+       std::ostream&  orig_cerr;
+       teebuffer      tee_out;
+       teebuffer      tee_err;
+    };
+
     class ElementInfo
     {
     public:
         std::string name;
-        std::string value;
+        std::stringstream value;
         std::map<std::string,std::string> attribute;
+
+        ElementInfo()
+           : name(), value(), attribute()
+        {}
+
+        ElementInfo(const ElementInfo& rhs)
+           : name(rhs.name), value(rhs.value.str()), attribute(rhs.attribute)
+        {}
+
+        ElementInfo& operator=(const ElementInfo& rhs)
+        {
+           name = rhs.name;
+           value.str(rhs.value.str());
+           attribute = rhs.attribute;
+           return *this;
+        }
 
         template <class Type>
         void add(const std::string& name, Type& value)
@@ -58,11 +137,11 @@ namespace CxxTest
               os << curr->first.c_str() << "=\"" << curr->second.c_str() << "\" ";
               curr++;
               }
-            if (value == "") {
+            if (value.str().empty()) {
                 os << "/>";
             }
             else {
-                os << ">" << escape(value).c_str() << "</" << name.c_str() << ">";
+                os << ">" << escape(value.str()).c_str() << "</" << name.c_str() << ">";
             }
             os.endl(os);
             }
@@ -109,6 +188,17 @@ namespace CxxTest
             return elt;
             }
 
+        element_t update_element(const std::string& name)
+            {
+            element_t elt = elements.begin();
+            while ( elt != elements.end() )
+               {
+               if ( elt->name == name )
+                  return elt;
+               }
+            return add_element(name);
+            }
+
         void write( OutputStream &o )
             {
             o << "    <testcase classname=\"" << tracker().world().worldName() << "." << className.c_str() << "\" name=\"" << testName.c_str() << "\" ";
@@ -137,7 +227,9 @@ namespace CxxTest
     class XmlFormatter : public TestListener
     {
         public:
-        XmlFormatter( OutputStream *o, OutputStream *ostr, std::ostringstream *os) : _o(o), _ostr(ostr), _os(os) { }
+        XmlFormatter( OutputStream *o, OutputStream *ostr, std::ostringstream *os) 
+           : _o(o), _ostr(ostr), _os(os), stream_redirect(NULL) 
+        {}
 
         std::list<TestCaseInfo> info;
         std::list<TestCaseInfo>::iterator testcase;
@@ -209,10 +301,30 @@ namespace CxxTest
                 std::ostringstream os;
                 os << desc.line();
                 testcase->line = os.str();
+
+           if ( stream_redirect )
+              std::cerr << "ERROR: The stream_redirect != NULL" << std::endl;
+
+                stream_redirect = new TeeOutputStreams(std::cout, std::cerr);
         }
 
         void leaveTest( const TestDescription & )
         {
+           if ( stream_redirect != NULL )
+           {
+                std::string out = stream_redirect->out.str();
+                if ( ! out.empty() )
+                {
+                   // silently ignore the '.'
+                   if ( out[0] != '.' || out.size() > 1 )
+                      testcase->add_element("system-out")->value << out;
+                }
+                if ( ! stream_redirect->err.str().empty() )
+                   testcase->add_element("system-err")->value << stream_redirect->err.str();
+
+                delete stream_redirect;
+                stream_redirect = NULL;
+           }
         }
 
         void leaveWorld( const WorldDescription& desc )
@@ -233,47 +345,44 @@ namespace CxxTest
         {
             element_t elt = testcase->add_element("trace");
             elt->add("line",line);
-            elt->value = expression;
+            elt->value << expression;
         }
 
         void warning( const char* /*file*/, unsigned line, const char *expression )
         {
             element_t elt = testcase->add_element("warning");
             elt->add("line",line);
-            elt->value = expression;
+            elt->value << expression;
         }
 
-        void failedTest( const char* /*file*/, unsigned /*line*/, const char* /*expression*/ )
+        void failedTest( const char* file, unsigned line, const char* expression )
         {
-            testcase->fail=true;
-            //testFailure( file, line, "failure", expression );
+            testFailure( file, line, "failure") << "Test failed: " << expression;
         }
 
         void failedAssert( const char *file, unsigned line, const char *expression )
         {
-            testFailure( file, line, "failedAssert",
-              ( std::string( "Assertion failed: " ) + expression ).c_str() );
+            testFailure( file, line, "failedAssert" ) 
+               << "Assertion failed: " << expression;
         }
 
         void failedAssertEquals( const char *file, unsigned line,
                                  const char* xStr, const char* yStr,
                                  const char *x, const char *y )
         {
-            std::ostringstream os;
-            os << "Error: Expected (" <<
-                xStr << " == " << yStr << "), found (" <<
-                x << " != " << y << ")";
-            testFailure( file, line, "failedAssertEquals", os.str());
+            testFailure( file, line, "failedAssertEquals" )
+               << "Error: Expected ("
+               << xStr << " == " << yStr << "), found ("
+               << x << " != " << y << ")";
         }
 
         void failedAssertSameData( const char *file, unsigned line,
                                    const char *xStr, const char *yStr, const char *sizeStr,
                                    const void* /*x*/, const void* /*y*/, unsigned size )
         {
-            std::ostringstream os;
-            os << "Error: Expected " << sizeStr << " (" << size << ")  bytes to be equal at (" <<
-                xStr << ") and (" << yStr << "), found";
-            testFailure( file, line, "failedAssertSameData", os.str());
+            testFailure( file, line, "failedAssertSameData")
+               << "Error: Expected " << sizeStr << " (" << size << ")  bytes to be equal at ("
+               << xStr << ") and (" << yStr << "), found";
         }
 
         void failedAssertSameFiles( const char *file, unsigned line,
@@ -281,89 +390,80 @@ namespace CxxTest
                                    const char* explanation
                                    )
         {
-            std::ostringstream os;
-            os << "Error: " << explanation;
-            testFailure( file, line, "failedAssertSameFiles", os.str());
+            testFailure( file, line, "failedAssertSameFiles" )
+               << "Error: " << explanation;
         }
 
         void failedAssertDelta( const char *file, unsigned line,
                                 const char *xStr, const char *yStr, const char *dStr,
                                 const char *x, const char *y, const char *d )
         {
-            std::ostringstream os;
-            os << "Error: Expected (" <<
-                xStr << " == " << yStr << ") up to " << dStr << " (" << d << "), found (" <<
-                x << " != " << y << ")";
-            testFailure( file, line, "failedAssertDelta", os.str());
+            testFailure( file, line, "failedAssertDelta" )
+               << "Error: Expected (" 
+               << xStr << " == " << yStr << ") up to " << dStr << " (" << d << "), found (" 
+               << x << " != " << y << ")";
         }
 
         void failedAssertDiffers( const char *file, unsigned line,
                                   const char *xStr, const char *yStr,
                                   const char *value )
         {
-            std::ostringstream os;
-            os << "Error: Expected (" <<
-                xStr << " != " << yStr << "), found (" <<
-                value << ")";
-            testFailure( file, line, "failedAssertDiffers", os.str());
+            testFailure( file, line, "failedAssertDiffers" )
+               << "Error: Expected (" 
+               << xStr << " != " << yStr << "), found (" 
+               << value << ")";
         }
 
         void failedAssertLessThan( const char *file, unsigned line,
                                    const char *xStr, const char *yStr,
                                    const char *x, const char *y )
         {
-            std::ostringstream os;
-            os << "Error: Expected (" <<
-                xStr << " < " << yStr << "), found (" <<
-                x << " >= " << y << ")";
-            testFailure( file, line, "failedAssertLessThan", os.str());
+            testFailure( file, line, "failedAssertLessThan" )
+               << "Error: Expected (" <<
+               xStr << " < " << yStr << "), found (" <<
+               x << " >= " << y << ")";
         }
 
         void failedAssertLessThanEquals( const char *file, unsigned line,
                                          const char *xStr, const char *yStr,
                                          const char *x, const char *y )
         {
-            std::ostringstream os;
-            os << "Error: Expected (" <<
-                xStr << " <= " << yStr << "), found (" <<
-                x << " > " << y << ")";
-            testFailure( file, line, "failedAssertLessThanEquals", os.str());
+            testFailure( file, line, "failedAssertLessThanEquals" )
+               << "Error: Expected (" <<
+               xStr << " <= " << yStr << "), found (" <<
+               x << " > " << y << ")";
         }
 
         void failedAssertRelation( const char *file, unsigned line,
                                    const char *relation, const char *xStr, const char *yStr,
                                    const char *x, const char *y )
         {
-            std::ostringstream os;
-            os << "Error: Expected " << relation << "( " <<
-                xStr << ", " << yStr << " ), found !" << relation << "( " << x << ", " << y << " )";
-            testFailure( file, line, "failedAssertRelation", os.str());
+            testFailure( file, line, "failedAssertRelation" )
+               << "Error: Expected " << relation << "( " <<
+               xStr << ", " << yStr << " ), found !" << relation << "( " << x << ", " << y << " )";
         }
 
         void failedAssertPredicate( const char *file, unsigned line,
                                     const char *predicate, const char *xStr, const char *x )
         {
-            std::ostringstream os;
-            os << "Error: Expected " << predicate << "( " <<
-                xStr << " ), found !" << predicate << "( " << x << " )";
-            testFailure( file, line, "failedAssertPredicate", os.str());
+            testFailure( file, line, "failedAssertPredicate" )
+               << "Error: Expected " << predicate << "( " <<
+               xStr << " ), found !" << predicate << "( " << x << " )";
         }
 
         void failedAssertThrows( const char *file, unsigned line,
                                  const char *expression, const char *type,
                                  bool otherThrown )
         {
-            std::ostringstream os;
-            os << "Error: Expected (" << expression << ") to throw ("  <<
-                type << ") but it " << (otherThrown ? "threw something else" : "didn't throw");
-            testFailure( file, line, "failedAssertThrows", os.str());
+            testFailure( file, line, "failedAssertThrows" )
+               << "Error: Expected (" << expression << ") to throw ("  <<
+               type << ") but it " << (otherThrown ? "threw something else" : "didn't throw");
         }
 
         void failedAssertThrowsNot( const char *file, unsigned line, const char *expression )
         {
-            std::ostringstream os;
-            os << "Error: Expected (" << expression << ") not to throw, but it did";
-            testFailure( file, line, "failedAssertThrowsNot", os.str());
+            testFailure( file, line, "failedAssertThrowsNot" )
+               << "Error: Expected (" << expression << ") not to throw, but it did";
         }
 
     protected:
@@ -433,14 +533,20 @@ namespace CxxTest
         XmlFormatter( const XmlFormatter & );
         XmlFormatter &operator=( const XmlFormatter & );
 
-        void testFailure( const char* file, unsigned line, const char *failureType, const std::string& message)
+       std::stringstream& testFailure( const char* file, unsigned line, const char *failureType)
         {
-            element_t elt = testcase->add_element("failure");
-            elt->add("type",failureType);
-            elt->add("line",line);
-            elt->add("file",file);
-            elt->value = message;
-            failedTest(file,line,message.c_str());
+            testcase->fail=true;
+            element_t elt = testcase->update_element("failure");
+            if ( elt->value.str().empty() )
+            {
+               elt->add("type",failureType);
+               elt->add("line",line);
+               elt->add("file",file);
+            }
+            else
+               elt->value << std::endl;
+            return elt->value;
+            //failedTest(file,line,message.c_str());
         }
 
 #if 0
@@ -476,6 +582,8 @@ namespace CxxTest
         OutputStream *_o;
         OutputStream *_ostr;
         std::ostringstream *_os;
+
+        TeeOutputStreams *stream_redirect;
     };
 }
 
