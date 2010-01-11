@@ -196,10 +196,10 @@ namespace CxxTest
 #       define _TS_CATCH_TYPE(t, b) catch t b
 #       define _TS_CATCH_ABORT(b) _TS_CATCH_TYPE( (const CxxTest::AbortTest &), b )
 #       define _TS_LAST_CATCH(b) _TS_CATCH_TYPE( (...), b )
-#       define _TSM_LAST_CATCH(f,l,m) _TS_LAST_CATCH( { (CxxTest::tracker()).failedTest(f,l,m); } )
+#       define _TSM_LAST_CATCH(f,l,m) _TS_LAST_CATCH( { (CxxTest::tracker()).failedTest(f,l,m); TS_ABORT(); } )
 #       ifdef _CXXTEST_HAVE_STD
 #           define ___TSM_CATCH(f,l,m) \
-                    catch(const std::exception &e) { (CxxTest::tracker()).failedTest(f,l,e.what()); } \
+                    catch(const std::exception &e) { (CxxTest::tracker()).failedTest(f,l,e.what()); TS_ABORT(); } \
                     _TSM_LAST_CATCH(f,l,m)
 #       else // !_CXXTEST_HAVE_STD
 #           define ___TSM_CATCH(f,l,m) _TSM_LAST_CATCH(f,l,m)
