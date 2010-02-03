@@ -12,10 +12,11 @@
 
 #ifdef _CXXTEST_OLD_STD
 #   include <iostream.h>
+#   include <string.h>
 #else // !_CXXTEST_OLD_STD
 #   include <iostream>
+#   include <cstring>
 #endif // _CXXTEST_OLD_STD
-#include <cstring>
 
 namespace CxxTest
 {
@@ -45,10 +46,10 @@ int Main(TesterT& tmp, int argc, char* argv[])
 // Print command-line syntax
 //
 for (int i=1; i<argc; i++) {
-  if ((strcmp(argv[i],"-h")==0) || (strcmp(argv[i],"--help")==0)) {
+  if ((CXXTEST_STD(strcmp)(argv[i],"-h")==0) || (CXXTEST_STD(strcmp)(argv[i],"--help")==0)) {
      print_help(argv[0]);
      return 0;
-  } else if ((strcmp(argv[1],"--help-tests")==0)) {
+  } else if ((CXXTEST_STD(strcmp)(argv[1],"--help-tests")==0)) {
     CXXTEST_STD(cout) << "Suite/Test Names" << CXXTEST_STD(endl);
     CXXTEST_STD(cout) << "---------------------------------------------------------------------------" << CXXTEST_STD(endl);
     for ( SuiteDescription *sd = RealWorldDescription().firstSuite(); sd; sd = sd->next() )
@@ -62,7 +63,7 @@ for (int i=1; i<argc; i++) {
 // Process command-line options here.
 //
 while ((argc > 1) && (argv[1][0] == '-')) {
-  if (strcmp(argv[1],"-v") == 0) {
+  if (CXXTEST_STD(strcmp)(argv[1],"-v") == 0) {
      TestTracker::print_tracing = true;
      }
   else {

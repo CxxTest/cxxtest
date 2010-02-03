@@ -1,4 +1,4 @@
-// Licenced under the GLPL, see http://www.gnu.org/licenses/lgpl.html
+// Licensed under the LGPL, see http://www.gnu.org/licenses/lgpl.html
 
 #ifndef __CXXTEST__XMLFORMATTER_H
 #define __CXXTEST__XMLFORMATTER_H
@@ -32,6 +32,7 @@
 #include <cxxtest/StdHeaders.h>
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 namespace CxxTest
 {
@@ -134,14 +135,16 @@ namespace CxxTest
             std::map<std::string,std::string>::iterator curr=attribute.begin();
             std::map<std::string,std::string>::iterator end =attribute.end();
             while (curr != end) {
-              os << curr->first.c_str() << "=\"" << curr->second.c_str() << "\" ";
+              os << curr->first.c_str() 
+                 << "=\"" << curr->second.c_str() << "\" ";
               curr++;
               }
             if (value.str().empty()) {
                 os << "/>";
             }
             else {
-                os << ">" << escape(value.str()).c_str() << "</" << name.c_str() << ">";
+                os << ">" << escape(value.str()).c_str() 
+                   << "</" << name.c_str() << ">";
             }
             os.endl(os);
             }
@@ -201,8 +204,10 @@ namespace CxxTest
 
         void write( OutputStream &o )
             {
-            o << "    <testcase classname=\"" << tracker().world().worldName() << "." << className.c_str() << "\" name=\"" << testName.c_str() << "\" ";
-            o << "line=\"" << line.c_str() << "\"";
+            o << "    <testcase classname=\"" 
+              << tracker().world().worldName() << "." << className.c_str() 
+              << "\" name=\"" << testName.c_str() 
+              << "\" line=\"" << line.c_str() << "\"";
             bool elts=false;
             element_t curr = elements.begin();
             element_t end  = elements.end();
@@ -258,14 +263,16 @@ namespace CxxTest
         {
             char s[WorldDescription::MAX_STRLEN_TOTAL_TESTS];
             const WorldDescription &wd = tracker().world();
-            o << wd.strTotalTests( s ) << (wd.numTotalTests() == 1 ? " test" : " tests");
+            o << wd.strTotalTests( s ) 
+              << (wd.numTotalTests() == 1 ? " test" : " tests");
         }
 
         void enterSuite( const SuiteDescription& desc )
         {
                 classname=generate_classpath(desc.file()).c_str();
                 classname += desc.suiteName();
-                //std::cout << "HERE " << desc.file() << " " << classname << std::endl;
+                //CXXTEST_STD(cout) << "HERE " << desc.file() << " " 
+                //                  << classname << CXXTEST_STD(endl);
 
                 //classname=desc.suiteName();
                 //(*_o) << "file=\"" << desc.file() << "\" ";
@@ -303,9 +310,11 @@ namespace CxxTest
                 testcase->line = os.str();
 
            if ( stream_redirect )
-              std::cerr << "ERROR: The stream_redirect != NULL" << std::endl;
+              CXXTEST_STD(cerr) << "ERROR: The stream_redirect != NULL" 
+                                << CXXTEST_STD(endl);
 
-                stream_redirect = new TeeOutputStreams(std::cout, std::cerr);
+           stream_redirect = 
+              new TeeOutputStreams(CXXTEST_STD(cout), CXXTEST_STD(cerr));
         }
 
         void leaveTest( const TestDescription & )
@@ -333,7 +342,10 @@ namespace CxxTest
                 os << totaltime;
                 (*_o) << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
                 (*_o) << "<testsuite name=\"" << desc.worldName() << "\" ";
-                (*_o) << " tests=\"" << ntests << "\" errors=\"" << nerror << "\" failures=\"" << nfail << "\" time=\"" << os.str().c_str() << "\" >";
+                (*_o) << " tests=\"" << ntests 
+                      << "\" errors=\"" << nerror 
+                      << "\" failures=\"" << nfail 
+                      << "\" time=\"" << os.str().c_str() << "\" >";
                 _o->endl(*_o);
                 (*_o) << _os->str().c_str();
                 _os->clear();
@@ -381,7 +393,8 @@ namespace CxxTest
                                    const void* /*x*/, const void* /*y*/, unsigned size )
         {
             testFailure( file, line, "failedAssertSameData")
-               << "Error: Expected " << sizeStr << " (" << size << ")  bytes to be equal at ("
+               << "Error: Expected " << sizeStr 
+               << " (" << size << ")  bytes to be equal at ("
                << xStr << ") and (" << yStr << "), found";
         }
 
@@ -400,7 +413,8 @@ namespace CxxTest
         {
             testFailure( file, line, "failedAssertDelta" )
                << "Error: Expected (" 
-               << xStr << " == " << yStr << ") up to " << dStr << " (" << d << "), found (" 
+               << xStr << " == " << yStr << ") up to " << dStr 
+               << " (" << d << "), found (" 
                << x << " != " << y << ")";
         }
 
@@ -440,7 +454,8 @@ namespace CxxTest
         {
             testFailure( file, line, "failedAssertRelation" )
                << "Error: Expected " << relation << "( " <<
-               xStr << ", " << yStr << " ), found !" << relation << "( " << x << ", " << y << " )";
+               xStr << ", " << yStr << " ), found !" << relation 
+               << "( " << x << ", " << y << " )";
         }
 
         void failedAssertPredicate( const char *file, unsigned line,
@@ -457,13 +472,15 @@ namespace CxxTest
         {
             testFailure( file, line, "failedAssertThrows" )
                << "Error: Expected (" << expression << ") to throw ("  <<
-               type << ") but it " << (otherThrown ? "threw something else" : "didn't throw");
+               type << ") but it " 
+               << (otherThrown ? "threw something else" : "didn't throw");
         }
 
         void failedAssertThrowsNot( const char *file, unsigned line, const char *expression )
         {
             testFailure( file, line, "failedAssertThrowsNot" )
-               << "Error: Expected (" << expression << ") not to throw, but it did";
+               << "Error: Expected (" << expression 
+               << ") not to throw, but it did";
         }
 
     protected:
@@ -483,26 +500,28 @@ namespace CxxTest
             return "";
 
         const char* prev = filename;
-        const char* tmp = strstr(filename, "/");
+        const char* tmp = CXXTEST_STD(strstr)(filename, "/");
 
         while (tmp != 0) {
             prev = tmp+1;
-            tmp = strstr(prev, "/");
-            //std::cout << "HERE X " << prev << " " << tmp << std::endl;
+            tmp = CXXTEST_STD(strstr)(prev, "/");
+            //CXXTEST_STD(cout) << "HERE X " << prev << " " << tmp 
+            //                  << CXXTEST_STD(endl);
             }
-        tmp = strstr(prev, "\\");
+        tmp = CXXTEST_STD(strstr)(prev, "\\");
         while (tmp != 0) {
             prev = tmp+1;
-            tmp = strstr(prev, "\\");
-            //std::cout << "HERE Y " << prev << " " << tmp << std::endl;
+            tmp = CXXTEST_STD(strstr)(prev, "\\");
+            //CXXTEST_STD(cout) << "HERE Y " << prev << " " << tmp 
+            //                  << CXXTEST_STD(endl);
             }
         filename = prev;
 
         std::string ans;
-        int n=strlen(filename);
+        int n=CXXTEST_STD(strlen)(filename);
         int i=0;
         while (i<n) {
-          //std::cout << i << " " << filename[i] << std::endl;
+          //CXXTEST_STD(cout) << i << " " << filename[i] << CXXTEST_STD(endl);
           if (filename[i] == '/') ans += ".";
           else if (filename[i] == '\\') ans += ".";
           else if (filename [i] == '.') {
@@ -510,13 +529,13 @@ namespace CxxTest
                     ans += filename[i];
                 else if ((filename[i+1] == '/') || (filename[i+1] == '\\'))
                     i++;
-                else if (strcmp(&(filename[i+1]),"h")==0) {
+                else if (CXXTEST_STD(strcmp)(&(filename[i+1]),"h")==0) {
                     i = n;
                     }
-                else if (strcmp(&(filename[i+1]),"H")==0) {
+                else if (CXXTEST_STD(strcmp)(&(filename[i+1]),"H")==0) {
                     i = n;
                     }
-                else if (strcmp(&(filename[i+1]),"hpp")==0) {
+                else if (CXXTEST_STD(strcmp)(&(filename[i+1]),"hpp")==0) {
                     i = n;
                     }
                 else
@@ -544,7 +563,7 @@ namespace CxxTest
                elt->add("file",file);
             }
             else
-               elt->value << std::endl;
+               elt->value << CXXTEST_STD(endl);
             return elt->value;
             //failedTest(file,line,message.c_str());
         }
