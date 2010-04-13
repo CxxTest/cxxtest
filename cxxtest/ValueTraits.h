@@ -197,7 +197,23 @@ class ValueTraits<const char * const &> {
 public:
     ValueTraits(const char * const &value) : _asString(value) {}
     ValueTraits(const ValueTraits &other) : _asString(other._asString) {}
-    const char *asString(void) const { return _asString; }
+    const char *asString( void ) const {
+        std::string tmp(1, '"');
+        for (char const* src = _asString; src && *src; ++src) {
+            switch(*src) {
+                case '\\': tmp += "\\\\"; break;
+                case '\n': tmp += "\\n";  break;
+                case '\r': tmp += "\\r";  break;
+                case '\t': tmp += "\\t";  break;
+                case '"':  tmp += "\\\""; break;
+                default:   tmp += *src;   break;
+            }
+        }
+        tmp += '"';
+
+        char* res = new char[tmp.size()+1];
+        return strcpy(res, tmp.c_str());
+    }
 };
 
 CXXTEST_COPY_TRAITS(const char *, const char * const &);
