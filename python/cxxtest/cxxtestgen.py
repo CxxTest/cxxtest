@@ -194,7 +194,7 @@ def writeSimpleOutput():
         writeMain( output )
 
     if len(suites) > 0:
-        print >>output, "bool "+suites[0]['name']+"_init = false;"
+        print >>output, "bool "+suites[0]['object']+"_init = false;"
 
     writeWorld( output )
     output.close()

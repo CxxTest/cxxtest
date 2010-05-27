@@ -29,17 +29,30 @@ def scanInputFiles(files, _options):
 
     return [options,suites]
 
+lineCont_re = re.compile('(.*)\\\s*$')
 def scanInputFile(fileName):
     '''Scan single input file for test suites'''
     file = open(fileName)
+    prev = ""
     lineNo = 0
+    contNo = 0
     while 1:
         line = file.readline()
         if not line:
             break
-        lineNo = lineNo + 1
+        lineNo += 1
 
-        scanInputLine( fileName, lineNo, line )
+        m = lineCont_re.match(line)
+        if m:
+            prev += m.group(1) + " "
+            contNo += 1
+        else:
+            scanInputLine( fileName, lineNo - contNo, prev + line )
+            contNo = 0
+            prev = ""
+    if contNo:
+        scanInputLine( fileName, lineNo - contNo, prev + line )
+        
     closeSuite()
     file.close()
 
@@ -93,7 +106,11 @@ def scanLineForExceptionHandling( line ):
         if not options.noExceptionHandling:
             options.haveExceptionHandling = 1
 
-suite_re = re.compile( r'\bclass\s+(\w+)\s*:\s*public\s+((::)?\s*CxxTest\s*::\s*)?TestSuite\b' )
+classdef = '(?:::\s*)?(?:\w+\s*::\s*)*\w+'
+baseclassdef = '(?:public|private|protected)\s+%s' % (classdef,)
+testsuite = '(?:(?:::)?\s*CxxTest\s*::\s*)?TestSuite'
+suite_re = re.compile( r"\bclass\s+(%s)\s*:(?:\s*%s\s*,)*\s*public\s+%s"
+                       % (classdef, baseclassdef, testsuite) )
 generatedSuite_re = re.compile( r'\bCXXTEST_SUITE\s*\(\s*(\w*)\s*\)' )
 def scanLineForSuiteStart( fileName, lineNo, line ):
     '''Check if current line starts a new test suite'''
@@ -109,14 +126,15 @@ def startSuite( name, file, line, generated ):
     '''Start scanning a new suite'''
     global suite
     closeSuite()
+    object_name = name.replace(':',"_")
     suite = { 'name'         : name,
               'file'         : file,
               'cfile'        : cstr(file),
               'line'         : line,
               'generated'    : generated,
-              'object'       : 'suite_%s' % name,
-              'dobject'      : 'suiteDescription_%s' % name,
-              'tlist'        : 'Tests_%s' % name,
+              'object'       : 'suite_%s' % object_name,
+              'dobject'      : 'suiteDescription_%s' % object_name,
+              'tlist'        : 'Tests_%s' % object_name,
               'tests'        : [],
               'lines'        : [] }
 
@@ -135,8 +153,8 @@ def addTest( suite, name, line ):
     '''Add a test function to the current suite'''
     test = { 'name'   : name,
              'suite'  : suite,
-             'class'  : 'TestDescription_%s_%s' % (suite['name'], name),
-             'object' : 'testDescription_%s_%s' % (suite['name'], name),
+             'class'  : 'TestDescription_%s_%s' % (suite['object'], name),
+             'object' : 'testDescription_%s_%s' % (suite['object'], name),
              'line'   : line,
              }
     suite['tests'].append( test )
