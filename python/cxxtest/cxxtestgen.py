@@ -357,7 +357,7 @@ def writeTestList( output, suite ):
 def writeWorldDescr( output ):
     '''Write the static name of the world name'''
     if options.noStaticInit:
-        output.write( 'const char* static CxxTest::RealDescriptions::_worldName;\n' )
+        output.write( 'const char* CxxTest::RealWorldDescription::_worldName;\n' )
     else:
         output.write( 'const char* CxxTest::RealWorldDescription::_worldName = "cxxtest";\n' )
 

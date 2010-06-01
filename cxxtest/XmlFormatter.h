@@ -204,8 +204,7 @@ namespace CxxTest
 
         void write( OutputStream &o )
             {
-            o << "    <testcase classname=\"" 
-              << tracker().world().worldName() << "." << className.c_str() 
+            o << "    <testcase classname=\"" << className.c_str() 
               << "\" name=\"" << testName.c_str() 
               << "\" line=\"" << line.c_str() << "\"";
             bool elts=false;
@@ -269,8 +268,15 @@ namespace CxxTest
 
         void enterSuite( const SuiteDescription& desc )
         {
-                classname=generate_classpath(desc.file()).c_str();
-                classname += desc.suiteName();
+                classname = desc.suiteName();
+                // replace "::" namespace with java-style "."
+                size_t pos = 0;
+                while( (pos = classname.find("::", pos)) !=
+                       CXXTEST_STD(string::npos) )
+                   classname.replace(pos, 2, ".");
+                while ( ! classname.empty() && classname[0] == '.' )
+                   classname.erase(0,1);
+
                 //CXXTEST_STD(cout) << "HERE " << desc.file() << " " 
                 //                  << classname << CXXTEST_STD(endl);
 
@@ -488,64 +494,6 @@ namespace CxxTest
         OutputStream *outputStream() const
         {
             return _o;
-        }
-
-        /// Guess a class path to help structure the XML output
-        std::string generate_classpath(const char* filename)
-        {
-        if (filename == 0) 
-            // Empty filename
-            return "";
-        if (filename[0] == '\000') 
-            return "";
-
-        const char* prev = filename;
-        const char* tmp = CXXTEST_STD(strstr)(filename, "/");
-
-        while (tmp != 0) {
-            prev = tmp+1;
-            tmp = CXXTEST_STD(strstr)(prev, "/");
-            //CXXTEST_STD(cout) << "HERE X " << prev << " " << tmp 
-            //                  << CXXTEST_STD(endl);
-            }
-        tmp = CXXTEST_STD(strstr)(prev, "\\");
-        while (tmp != 0) {
-            prev = tmp+1;
-            tmp = CXXTEST_STD(strstr)(prev, "\\");
-            //CXXTEST_STD(cout) << "HERE Y " << prev << " " << tmp 
-            //                  << CXXTEST_STD(endl);
-            }
-        filename = prev;
-
-        std::string ans;
-        int n=CXXTEST_STD(strlen)(filename);
-        int i=0;
-        while (i<n) {
-          //CXXTEST_STD(cout) << i << " " << filename[i] << CXXTEST_STD(endl);
-          if (filename[i] == '/') ans += ".";
-          else if (filename[i] == '\\') ans += ".";
-          else if (filename [i] == '.') {
-                if (i==(n-1)) 
-                    ans += filename[i];
-                else if ((filename[i+1] == '/') || (filename[i+1] == '\\'))
-                    i++;
-                else if (CXXTEST_STD(strcmp)(&(filename[i+1]),"h")==0) {
-                    i = n;
-                    }
-                else if (CXXTEST_STD(strcmp)(&(filename[i+1]),"H")==0) {
-                    i = n;
-                    }
-                else if (CXXTEST_STD(strcmp)(&(filename[i+1]),"hpp")==0) {
-                    i = n;
-                    }
-                else
-                    ans += filename[i];
-                }
-          else ans += filename[i];
-          i++;
-          }
-        if (ans != "") ans += ".";
-        return ans;
         }
 
     private:
