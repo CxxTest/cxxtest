@@ -214,8 +214,11 @@ namespace CxxTest
     void doFailAssertThrows( const char *file, unsigned line,
                              const char *expr, const char *type,
                              bool otherThrown,
-                             const char *message )
+                             const char *message,
+                             const char *exception )
     {
+        if ( exception )
+            tracker().failedTest( file, line, exception );
         if ( message )
             tracker().failedTest( file, line, message );
         
@@ -224,8 +227,11 @@ namespace CxxTest
     }
 
     void doFailAssertThrowsNot( const char *file, unsigned line,
-                                const char *expression, const char *message )
+                                const char *expression, const char *message,
+                                const char *exception )
     {
+        if ( exception )
+            tracker().failedTest( file, line, exception );
         if ( message )
             tracker().failedTest( file, line, message );
         

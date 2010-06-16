@@ -201,10 +201,12 @@ namespace CxxTest
     void doFailAssertThrows( const char *file, unsigned line,
                              const char *expr, const char *type,
                              bool otherThrown,
-                             const char *message );
+                             const char *message,
+                             const char *exception = 0 );
     
     void doFailAssertThrowsNot( const char *file, unsigned line,
-                                const char *expression, const char *message );
+                                const char *expression, const char *message,
+                                const char *exception = 0 );
 
     void doAssertSameFiles( const char* file, unsigned line,
                             const char* file1, const char* file2,
@@ -217,12 +219,13 @@ namespace CxxTest
 #       define _TS_LAST_CATCH(b) _TS_CATCH_TYPE( (...), b )
 #       define _TSM_LAST_CATCH(f,l,m) _TS_LAST_CATCH( { (CxxTest::tracker()).failedTest(f,l,m); TS_ABORT(); } )
 #       ifdef _CXXTEST_HAVE_STD
-#           define ___TSM_CATCH(f,l,m) \
-                    catch(const std::exception &e) { (CxxTest::tracker()).failedTest(f,l,e.what()); TS_ABORT(); } \
-                    _TSM_LAST_CATCH(f,l,m)
+#           define _TS_CATCH_STD(e,b) _TS_CATCH_TYPE( (const std::exception& e), b )
 #       else // !_CXXTEST_HAVE_STD
-#           define ___TSM_CATCH(f,l,m) _TSM_LAST_CATCH(f,l,m)
+#           define _TS_CATCH_STD(e,b)
 #       endif // _CXXTEST_HAVE_STD
+#       define ___TSM_CATCH(f,l,m) \
+            _TS_CATCH_STD(e, { (CxxTest::tracker()).failedTest(f,l,e.what()); TS_ABORT(); }) \
+            _TSM_LAST_CATCH(f,l,m)
 #       define __TSM_CATCH(f,l,m) \
                 _TS_CATCH_ABORT( { throw; } ) \
                 ___TSM_CATCH(f,l,m)
@@ -236,6 +239,7 @@ namespace CxxTest
 #       define _TS_CATCH
 #       define _TS_CATCH_TYPE(t, b)
 #       define _TS_LAST_CATCH(b)
+#       define _TS_CATCH_STD(e,b)
 #       define _TS_CATCH_ABORT(b)
 #   endif // _CXXTEST_HAVE_EH
 
@@ -419,13 +423,7 @@ namespace CxxTest
 
 
     // TS_ASSERT_THROWS
-#   define ___TS_ASSERT_THROWS(f,l,e,t,m) { \
-            bool _ts_threw_expected = false, _ts_threw_else = false; \
-            _TS_TRY { e; } \
-            _TS_CATCH_TYPE( (t), { _ts_threw_expected = true; } ) \
-            _TS_CATCH_ABORT( { throw; } ) \
-            _TS_LAST_CATCH( { _ts_threw_else = true; } ) \
-            if ( !_ts_threw_expected ) { CxxTest::doFailAssertThrows( (f), (l), #e, #t, _ts_threw_else, (m) ); } }
+#   define ___TS_ASSERT_THROWS(f,l,e,t,m) ___TS_ASSERT_THROWS_ASSERT(f,l,e,t,(void)0,m)
 
 #   define _TS_ASSERT_THROWS(f,l,e,t) ___TS_ASSERT_THROWS(f,l,e,t,0)
 #   define TS_ASSERT_THROWS(e,t) _TS_ASSERT_THROWS(__FILE__,__LINE__,e,t)
@@ -439,8 +437,9 @@ namespace CxxTest
             _TS_TRY { e; } \
             _TS_CATCH_TYPE( (t), { a; _ts_threw_expected = true; } ) \
             _TS_CATCH_ABORT( { throw; } ) \
+            _TS_CATCH_STD( ex, { _ts_threw_expected = true; CxxTest::doFailAssertThrows((f), (l), #e, #t, true, (m), ex.what() ); } ) \
             _TS_LAST_CATCH( { _ts_threw_else = true; } ) \
-            if ( !_ts_threw_expected ) { CxxTest::doFailAssertThrows( (f), (l), #e, #t, _ts_threw_else, (m) ); } }
+            if ( !_ts_threw_expected ) { CxxTest::doFailAssertThrows( (f), (l), #e, #t, _ts_threw_else, (m), 0 ); } }
 
 #   define _TS_ASSERT_THROWS_ASSERT(f,l,e,t,a) ___TS_ASSERT_THROWS_ASSERT(f,l,e,t,a,0)
 #   define TS_ASSERT_THROWS_ASSERT(e,t,a) _TS_ASSERT_THROWS_ASSERT(__FILE__,__LINE__,e,t,a)
@@ -497,7 +496,8 @@ namespace CxxTest
 #   define ___TS_ASSERT_THROWS_NOTHING(f,l,e,m) { \
             _TS_TRY { e; } \
             _TS_CATCH_ABORT( { throw; } ) \
-            _TS_LAST_CATCH( { CxxTest::doFailAssertThrowsNot( (f), (l), #e, (m) ); } ) }
+            _TS_CATCH_STD(ex, { CxxTest::doFailAssertThrowsNot( (f), (l), #e, (m), ex.what() ); } ) \
+            _TS_LAST_CATCH( { CxxTest::doFailAssertThrowsNot( (f), (l), #e, (m), 0 ); } ) }
 
 #   define _TS_ASSERT_THROWS_NOTHING(f,l,e) ___TS_ASSERT_THROWS_NOTHING(f,l,e,0)
 #   define TS_ASSERT_THROWS_NOTHING(e) _TS_ASSERT_THROWS_NOTHING(__FILE__,__LINE__,e)
