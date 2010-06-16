@@ -121,6 +121,16 @@
 #   endif
 #endif
 
+#ifdef __xlC__ // IBM XL C/C++
+// Partial specialization may be supported before 7.0.0.3, but it is
+// definitely supported after.
+#   if __xlC__ >= 0x0700
+#       ifndef _CXXTEST_PARTIAL_TEMPLATE_SPECIALIZATION
+#           define _CXXTEST_PARTIAL_TEMPLATE_SPECIALIZATION
+#       endif
+#   endif
+#endif
+
 #endif // __cxxtest__Flags_h__
 
 // Copyright 2008 Sandia Corporation. Under the terms of Contract
