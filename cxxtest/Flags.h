@@ -121,6 +121,14 @@
 #   endif
 #endif
 
+#ifdef __SUNPRO_CC // Sun Studio C++
+#   if __SUNPRO_CC >= 0x510
+#       ifndef _CXXTEST_PARTIAL_TEMPLATE_SPECIALIZATION
+#           define _CXXTEST_PARTIAL_TEMPLATE_SPECIALIZATION
+#       endif
+#   endif
+#endif
+
 #ifdef __xlC__ // IBM XL C/C++
 // Partial specialization may be supported before 7.0.0.3, but it is
 // definitely supported after.
