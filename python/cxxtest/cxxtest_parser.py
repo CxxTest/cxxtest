@@ -108,15 +108,21 @@ def scanLineForExceptionHandling( line ):
 
 classdef = '(?:::\s*)?(?:\w+\s*::\s*)*\w+'
 baseclassdef = '(?:public|private|protected)\s+%s' % (classdef,)
+general_suite = r"\bclass\s+(%s)\s*:(?:\s*%s\s*,)*\s*public\s+" \
+                % (classdef, baseclassdef,)
 testsuite = '(?:(?:::)?\s*CxxTest\s*::\s*)?TestSuite'
-suite_re = re.compile( r"\bclass\s+(%s)\s*:(?:\s*%s\s*,)*\s*public\s+%s"
-                       % (classdef, baseclassdef, testsuite) )
+suites_re = { re.compile( general_suite + testsuite ) : None }
 generatedSuite_re = re.compile( r'\bCXXTEST_SUITE\s*\(\s*(\w*)\s*\)' )
 def scanLineForSuiteStart( fileName, lineNo, line ):
     '''Check if current line starts a new test suite'''
-    m = suite_re.search( line )
-    if m:
-        startSuite( m.group(1), fileName, lineNo, 0 )
+    for i in suites_re.items():
+        m = i[0].search( line )
+        if m:
+            suite = startSuite( m.group(1), fileName, lineNo, 0 )
+            if i[1] is not None:
+                for test in i[1]['tests']:
+                    addTest(suite, test['name'], test['line'])
+            break
     m = generatedSuite_re.search( line )
     if m:
         sys.stdout.write( "%s:%s: Warning: Inline test suites are deprecated.\n" % (fileName, lineNo) )
@@ -137,6 +143,8 @@ def startSuite( name, file, line, generated ):
               'tlist'        : 'Tests_%s' % object_name,
               'tests'        : [],
               'lines'        : [] }
+    suites_re[re.compile( general_suite + name )] = suite
+    return suite
 
 def lineStartsBlock( line ):
     '''Check if current line starts a new CXXTEST_CODE() block'''
