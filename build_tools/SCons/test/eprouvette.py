@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-# vim: encoding=utf-8
+# vim: fileencoding=utf-8
 
 from __future__ import print_function
-import shutil, os, sys
+import os, sys
 from os.path import isdir, isfile, islink, join
 from optparse import OptionParser
-from copy import copy
 from subprocess import check_call, CalledProcessError, PIPE
 
 options = None
@@ -25,11 +24,11 @@ def main():
     Otherwise, it will look for tests in the current directory and run them all.
     """
     # option parsing
-    parser = OptionParser(usage) 
+    parser = OptionParser(usage)
 
     parser.set_defaults(
             action='run',
-            verbose=True) 
+            verbose=True)
 
     parser.add_option("-c", "--clean",
             action='store_const', const='clean', dest='action',
@@ -139,8 +138,9 @@ def read_opts(t):
             'type'           : 'scons',
             'links'          : {}
             }
-    exec(open(join(t, "TestDef.py")), opts)
-    return opts 
+    f = open(join(t, "TestDef.py"))
+    exec(f.read(), opts)
+    return opts
 
 def setup_env(t, opts):
     """Set up the environment for the test."""

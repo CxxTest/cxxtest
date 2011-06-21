@@ -3,7 +3,7 @@ import re
 #import getopt
 #import glob
 import string
-from cxxtest_misc import *
+from .cxxtest_misc import *
 
 # Global variables
 suites = []
@@ -32,7 +32,13 @@ def scanInputFiles(files, _options):
 lineCont_re = re.compile('(.*)\\\s*$')
 def scanInputFile(fileName):
     '''Scan single input file for test suites'''
-    file = open(fileName)
+    # mode 'rb' is problematic in python3 - byte arrays don't behave the same as
+    # strings.
+    # As far as the choice of the default encoding: utf-8 chews through
+    # everything that the previous ascii codec could, plus most of new code.
+    # TODO: figure out how to do this properly - like autodetect encoding from
+    # file header.
+    file = open(fileName, mode='r', encoding='utf-8')
     prev = ""
     lineNo = 0
     contNo = 0
@@ -196,9 +202,9 @@ def scanLineForDestroy( suite, lineNo, line ):
     if destroy_re.search( line ):
         addSuiteCreateDestroy( suite, 'destroy', lineNo )
 
-def cstr( str ):
+def cstr( s ):
     '''Convert a string to its C representation'''
-    return '"' + string.replace( str, '\\', '\\\\' ) + '"'
+    return '"' + s.replace( '\\', '\\\\' ) + '"'
 
 
 def addSuiteCreateDestroy( suite, which, line ):
@@ -218,10 +224,10 @@ def closeSuite():
 
 def verifySuite(suite):
     '''Verify current suite is legal'''
-    if suite.has_key('create') and not suite.has_key('destroy'):
+    if 'create' in suite and 'destroy' not in suite:
         abort( '%s:%s: Suite %s has createSuite() but no destroySuite()' %
                (suite['file'], suite['create'], suite['name']) )
-    if suite.has_key('destroy') and not suite.has_key('create'):
+    elif 'destroy' in suite and 'create' not in suite:
         abort( '%s:%s: Suite %s has destroySuite() but no createSuite()' %
                (suite['file'], suite['destroy'], suite['name']) )
 

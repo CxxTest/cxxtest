@@ -2,7 +2,7 @@
 #
 # == Preamble ==
 # Authors of this script are in the Authors file in the same directory as this
-# scrip.
+# script.
 #
 # please send bugreports/praise/comments/criticism to
 # gasper.azman at gmail.com or the cxxtest mailing list (dev at cxxtest.tigris.org)

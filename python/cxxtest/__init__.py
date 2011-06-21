@@ -19,7 +19,7 @@ The cxxtest Python package includes capabilities for parsing C/C++ source files 
 CxxTest drivers.
 """
 
-from __release__ import __version__, __date__
+from .__release__ import __version__, __date__
 
 __maintainer__ = "TODO"
 __maintainer_email__ = "TODO"
@@ -27,4 +27,4 @@ __copyright__ = "TODO"
 __license__ = "LGPL"
 __url__ = "http://cxxtest.tigris.org/"
 
-from cxxtestgen import *
+from .cxxtestgen import *
