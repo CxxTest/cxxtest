@@ -4,7 +4,7 @@ import re
 #import getopt
 #import glob
 import string
-from .cxxtest_misc import *
+from cxxtest.cxxtest_misc import *
 
 # Global variables
 suites = []

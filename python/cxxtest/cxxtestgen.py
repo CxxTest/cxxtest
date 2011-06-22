@@ -1,4 +1,4 @@
-from __future__ import print_function, division
+from __future__ import division
 # vim: fileencoding=utf-8
 # the above import important for forward-compatibility with python3,
 # which is already the default in archlinux!
@@ -14,13 +14,13 @@ import getopt
 import glob
 import string
 from optparse import OptionParser
-from . import cxxtest_parser
+from cxxtest import cxxtest_parser
 try:
     import cxxtest_fog
     imported_fog=True
 except ImportError:
     imported_fog=False
-from .cxxtest_misc import *
+from cxxtest.cxxtest_misc import *
 
 options = []
 suites = []
@@ -156,7 +156,7 @@ def parseCommandline(args):
 
     files = setFiles(args)
     if len(files) is 0 and not options.root:
-        print(parser.error("No input files found"))
+        sys.stderr.write(parser.error("No input files found"))
     return files
 
 
@@ -199,7 +199,7 @@ def writeSimpleOutput():
         writeMain( output )
 
     if len(suites) > 0:
-        print("bool "+suites[0]['object']+"_init = false;", file=output)
+        output.write("bool "+suites[0]['object']+"_init = false;\n")
 
     writeWorld( output )
     output.close()
@@ -324,7 +324,7 @@ def isGenerated(suite):
 
 def isDynamic(suite):
     '''Checks whether a suite is dynamic'''
-    return True if 'create' in suite else False
+    return 'create' in suite
 
 def writeInclude(output, file):
     '''Add #include "file" statement'''
