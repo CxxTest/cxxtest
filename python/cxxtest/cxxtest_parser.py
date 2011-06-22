@@ -1,3 +1,4 @@
+import codecs
 import re
 #import sys
 #import getopt
@@ -38,7 +39,7 @@ def scanInputFile(fileName):
     # everything that the previous ascii codec could, plus most of new code.
     # TODO: figure out how to do this properly - like autodetect encoding from
     # file header.
-    file = open(fileName, mode='r', encoding='utf-8')
+    file = codecs.open(fileName, mode='r', encoding='utf-8')
     prev = ""
     lineNo = 0
     contNo = 0
