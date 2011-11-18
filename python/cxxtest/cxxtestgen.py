@@ -275,6 +275,7 @@ def writeMain( output ):
     if not (options.gui or options.runner):
        return
     output.write( 'int main( int argc, char *argv[] ) {\n' )
+    output.write( ' int status;\n' )
     if options.noStaticInit:
         output.write( ' CxxTest::initialize();\n' )
     if options.gui:
@@ -287,7 +288,8 @@ def writeMain( output ):
        output.write( '    CxxTest::RealWorldDescription::_worldName = "%s";\n' % options.world )
     else:
        output.write( '    %s tmp;\n' % tester_t )
-    output.write( '    return CxxTest::Main<%s>( tmp, argc, argv );\n' % tester_t )
+    output.write( '    status = CxxTest::Main<%s>( tmp, argc, argv );\n' % tester_t )
+    output.write( '    return status;\n')
     output.write( '}\n' )
 
 
