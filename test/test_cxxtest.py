@@ -1,14 +1,13 @@
 import sys
-if sys.version_info < (2,7):
-    print "Cannot execute these tests without Python 2.7"
-    sys.exit(1)
-
 import os
 import os.path
-import unittest
 import glob
 import difflib
 import subprocess
+if sys.version_info < (2,7):
+    import unittest2 as unittest
+else:
+    import unittest
 
 currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
 sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
