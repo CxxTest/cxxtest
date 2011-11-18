@@ -51,7 +51,7 @@ def file_diff(filename1, filename2):
 
 
 
-class TestBase(object):
+class BaseTestCase(object):
 
     def setUp(self):
         self.prefix=''
@@ -408,7 +408,7 @@ class TestBase(object):
 
 
 @unittest.skipIf(not available('c++', '-o'), 'Cannot test c++ compiler')
-class TestCpp(TestBase, unittest.TestCase):
+class TestCpp(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
     exe_option = '-o'
@@ -420,14 +420,14 @@ class TestCpp(TestBase, unittest.TestCase):
     w32Flags='-Ifake'
 
     def setUp(self):
-        TestBase.setUp(self)
+        BaseTestCase.setUp(self)
 
     def tearDown(self):
-        TestBase.tearDown(self)
+        BaseTestCase.tearDown(self)
 
 
 @unittest.skipIf(not available('g++', '-o'), 'Cannot test g++ compiler')
-class TestGpp(TestBase, unittest.TestCase):
+class TestGpp(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
     exe_option = '-o'
@@ -439,14 +439,14 @@ class TestGpp(TestBase, unittest.TestCase):
     w32Flags='-Ifake'
 
     def setUp(self):
-        TestBase.setUp(self)
+        BaseTestCase.setUp(self)
 
     def tearDown(self):
-        TestBase.tearDown(self)
+        BaseTestCase.tearDown(self)
 
 
 @unittest.skipIf(not available('cl', '-o'), 'Cannot test cl compiler')
-class TestCL(TestBase, unittest.TestCase):
+class TestCL(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
     exe_option = '-o'
@@ -458,10 +458,10 @@ class TestCL(TestBase, unittest.TestCase):
     w32Flags='-Ifake'
 
     def setUp(self):
-        TestBase.setUp(self)
+        BaseTestCase.setUp(self)
 
     def tearDown(self):
-        TestBase.tearDown(self)
+        BaseTestCase.tearDown(self)
 
 
 if __name__ == '__main__':
