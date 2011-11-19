@@ -79,7 +79,7 @@ class BaseTestCase(object):
     def check_if_supported(self, filename, msg):
         target=currdir+'check'+'px'+target_suffix
         log=currdir+'check'+'_build.log'
-        cmd = "%s %s %s %s. %s../ %s > %s 2>&1" % (self.compiler, self.exe_option, target, self.include_option, self.include_option, filename, log)
+        cmd = "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, target, self.include_option, self.include_option, currdir, filename, log)
         ##print cmd
         status = subprocess.call(cmd, shell=True)
         os.remove(log)
@@ -100,7 +100,7 @@ class BaseTestCase(object):
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
-        cmd = "%s ../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, self.py_cpp, args, self.py_out)
+        cmd = "%s %s../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, currdir, self.py_cpp, args, self.py_out)
         ##print cmd
         status = subprocess.call(cmd, shell=True)
         self.assertEquals(status, 0, 'Error executing cxxtestgen')
@@ -110,12 +110,12 @@ class BaseTestCase(object):
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+prefix+'_py%s.cpp' % str(i)
             files.append(file)
-            cmd = "%s ../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, file, args, self.py_out)
+            cmd = "%s %s../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, currdir, file, args, self.py_out)
             ##print cmd
             status = subprocess.call(cmd, shell=True)
             self.assertEquals(status, 0, 'Error executing cxxtestgen')
         #
-        cmd = "%s %s %s %s. %s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, ' '.join(files), self.build_log)
+        cmd = "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log)
         ##print cmd
         status = subprocess.call(cmd, shell=True)
         for file in files:
@@ -134,7 +134,7 @@ class BaseTestCase(object):
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None):
         self.init(prefix)
         #
-        cmd = "%s ../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, self.py_cpp, args, self.py_out)
+        cmd = "%s %s../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, currdir, self.py_cpp, args, self.py_out)
         status = subprocess.call(cmd, shell=True)
         if failGen:
             if status == 0: 
@@ -145,10 +145,10 @@ class BaseTestCase(object):
         #
         if not main is None:
             # Compile with main
-            cmd = "%s %s %s %s. %s../ %s main.cpp %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, compile, self.py_cpp, self.build_log)
+            cmd = "%s %s %s %s. %s%s../ %s main.cpp %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
         else:
             # Compile without main
-            cmd = "%s %s %s %s. %s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, compile, self.py_cpp, self.build_log)
+            cmd = "%s %s %s %s. %s%s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
         status = subprocess.call(cmd, shell=True)
         self.assertEquals(status, 0, 'Error executing command: '+cmd)
         #
@@ -183,7 +183,7 @@ class BaseTestCase(object):
 
     def test_wildcard(self):
         """Wildcard input"""
-        self.compile(prefix='wildcard', args='../sample/*.h', main=True, output="wildcard.out")
+        self.compile(prefix='wildcard', args=currdir+'../sample/*.h', main=True, output="wildcard.out")
 
     def test_stdio_printer(self):
         """Stdio printer"""
@@ -237,11 +237,11 @@ class BaseTestCase(object):
 
     def test_only_suite(self):
         """Only Suite"""
-        self.compile(prefix='only_suite', args="--template=../sample/only.tpl "+samples, run="%s SimpleTest > %s 2>&1", output="suite.out")
+        self.compile(prefix='only_suite', args="--template=%s../sample/only.tpl %s" % (currdir, samples), run="%s SimpleTest > %s 2>&1", output="suite.out")
 
     def test_only_test(self):
         """Only Test"""
-        self.compile(prefix='only_test', args="--template=../sample/only.tpl "+samples, run="%s SimpleTest testAddition > %s 2>&1", output="suite_test.out")
+        self.compile(prefix='only_test', args="--template=%s../sample/only.tpl %s" % (currdir, samples), run="%s SimpleTest testAddition > %s 2>&1", output="suite_test.out")
 
     #
     # Test cases which do not require exception handling
