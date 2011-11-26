@@ -50,7 +50,9 @@ namespace CxxTest
         }
 
         _TS_TRY {
-            _TSM_ASSERT_THROWS_NOTHING( file(), line(), "Exception thrown from setUp()", suite()->setUp() );
+            bool ok = false;
+            _TSM_ASSERT_THROWS_NOTHING( file(), line(), "Exception thrown from setUp()", suite()->setUp(); ok=true );
+            if (ok == false) return ok;
         }
         _TS_CATCH_ABORT( { return false; } );
 
