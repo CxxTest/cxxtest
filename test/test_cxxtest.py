@@ -123,7 +123,7 @@ class BaseTestCase(object):
                 os.remove(file)
         self.assertEquals(status, 0, 'Error executing command: '+cmd)
         #
-        status = subprocess.call("%s > %s 2>&1" % (self.build_target, self.px_pre), shell=True)
+        status = subprocess.call("%s -v > %s 2>&1" % (self.build_target, self.px_pre), shell=True)
         OUTPUT = open(self.px_pre,'a')
         print >>OUTPUT, 'Error level = '+str(status)
         OUTPUT.close()
@@ -154,7 +154,7 @@ class BaseTestCase(object):
         #
         if compile == '' and not output is None:
             if run is None:
-                cmd = "%s > %s 2>&1" % (self.build_target, self.px_pre)
+                cmd = "%s -v > %s 2>&1" % (self.build_target, self.px_pre)
             else:
                 cmd = run % (self.build_target, self.px_pre)
             status = subprocess.call(cmd, shell=True)
@@ -290,19 +290,23 @@ class BaseTestCase(object):
         """Throw w/o Std"""
         self.compile(prefix='test_throw_wo_std', args="--template=ThrowNoStd.tpl ThrowNoStd.h", output='throw.out')
 
-    ehNormals = "Exceptions.h DynamicAbort.h DeepAbort.h ThrowsAssert.h"
+    ehNormals = "Exceptions.h DynamicAbort.h"
 
     def test_exceptions(self):
         """Exceptions"""
-        self.compile(prefix='exceptions', args="--error-printer --abort-on-fail --have-eh "+self.ehNormals, output="eh_normals.out")
+        self.compile(prefix='exceptions', args="--error-printer --have-eh "+self.ehNormals, output="eh_normals.out")
+
+    def test_exceptions_plus_abort(self):
+        """Exceptions plus abort"""
+        self.compile(prefix='exceptions', args="--error-printer --abort-on-fail --have-eh DynamicAbort.h DeepAbort.h ThrowsAssert.h", output="eh_plus_abort.out")
 
     def test_default_abort(self):
         """Default abort"""
-        self.compile(prefix='default_abort', args="--error-printer --include=DefaultAbort.h "+self.ehNormals, output="default_abort.out")
+        self.compile(prefix='default_abort', args="--error-printer --include=DefaultAbort.h "+self.ehNormals+ " DeepAbort.h ThrowsAssert.h", output="default_abort.out")
 
     def test_default_no_abort(self):
         """Default no abort"""
-        self.compile(prefix='default_no_abort', args="--error-printer "+self.ehNormals, output="default_abort.out")
+        self.compile(prefix='default_no_abort', args="--error-printer "+self.ehNormals+" DeepAbort.h ThrowsAssert.h", output="default_abort.out")
 
     #
     # Global Fixtures

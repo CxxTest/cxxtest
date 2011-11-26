@@ -65,7 +65,7 @@ public:
 
     void testMoveOn()
     {
-        TS_WARN( "One failed test doesn't affect the others" );
+        TS_TRACE( "One failed test doesn't affect the others" );
     }
 };
 

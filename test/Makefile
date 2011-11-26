@@ -7,7 +7,8 @@ TEST = perl test.pl
 all: gcc
 
 clean:
-	rm -f *p[ly]*.cpp *p[ly].out *px *px.out *build.log *root.cpp
+	rm -f *p[ly].out *px *px.out *build.log *root.cpp
+	rm -Rf *.dSYM
 
 gcc:
 	$(TEST) --gcc || (diff -u pl.cpp py.cpp; cat pl.out py.out build.log px.out)
