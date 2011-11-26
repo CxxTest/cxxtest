@@ -57,8 +57,9 @@ namespace CxxTest
     //
     void doTrace( const char *file, unsigned line, const char *message )
     {
-        if (tracker().print_tracing)
+        if (tracker().print_tracing) {
            tracker().trace( file, line, message );
+           }
     }
 
     void doWarn( const char *file, unsigned line, const char *message )
