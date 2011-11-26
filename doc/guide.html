@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#xUnit">3. xUnit Testing Paradigm</a></span></dt><dt><span class="section"><a href="#testAssertions">4. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">5. The CxxTestGen Command</a></span></dt><dt><span class="section"><a href="#samples">6. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">7. Installation</a></span></dt><dt><span class="section"><a href="#discussion">8. Final Thoughts</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
+spirit to <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>,
+<a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
+<a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>.  CxxTest is easy to
+use because it does not require precompiling a CxxTest testing
+library, it employs no advanced features of C++ (e.g. RTTI) and it
+supports a very flexible form of test discovery.  This documentation
+describes CxxTest 4.0, which includes significant enhancements to
+the test discovery process, a modern test driver, and new documentation.</p></div><div class="section" title="1. Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_overview"></a>1. Overview</h2></div></div></div><p>CxxTest is a unit testing framework for C++ that is similar in
+spirit to <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>,
+<a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
+<a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>.
+CxxTest is designed to be as portable as possible;  it does not require</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+RTTI
+</li><li class="listitem">
+Member template functions
+</li><li class="listitem">
+Exception handling
+</li><li class="listitem">
+External libraries (including memory management, file/console I/O, graphics libraries)
+</li></ul></div><p>However, CxxTest can also leverage advanced features when
+they are supported by a compiler (e.g. catch unhandled exceptions).</p><p>Additionally, CxxTest supports <span class="emphasis"><em>test discovery</em></span>.  Tests are defined in
+C++ header files, which are parsed by CxxTest to automatically generate a test runner.
+Thus, CxxTest is somewhat easier to use than alternative
+C\++ testing frameworks, since you do not need to <span class="emphasis"><em>register</em></span> tests.</p><p>CxxTest is available under the <a class="ulink" href="http://www.gnu.org/copyleft/lesser.html" target="_top">GNU
+Lesser General Public</a>. The homepage for CxxTest is
+<a class="ulink" href="http://cxxtest.tigris.org" target="_top">http://cxxtest.tigris.org</a>.  The following are key resources for
+CxxTest:</p><div class="variablelist"><dl><dt><span class="term">
+Release downloads
+</span></dt><dd>
+     <a class="ulink" href="http://cxxtest.tigris.org/servlets/ProjectDocumentList" target="_top">http://cxxtest.tigris.org/servlets/ProjectDocumentList</a>
+</dd><dt><span class="term">
+HTML user guide
+</span></dt><dd>
+     <a class="ulink" href="http://cxxtest.tigris.org/guide.html" target="_top">http://cxxtest.tigris.org/guide.html</a>
+</dd><dt><span class="term">
+PDF user guide
+</span></dt><dd>
+     <a class="ulink" href="http://cxxtest.tigris.org/guide.pdf" target="_top">http://cxxtest.tigris.org/guide.pdf</a>
+</dd></dl></div><p>The remainder of the CxxTest User Guide provides the following documentation:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<a class="link" href="#gettingStarted" title="2. Getting Started">Getting Started</a>: Some simple examples that illustrate how to use CxxTest
+</li><li class="listitem">
+<a class="link" href="#xUnit" title="3. xUnit Testing Paradigm">xUnit Testing Paradigm</a>: A discussion of how CxxTest structures testing
+</li><li class="listitem">
+<a class="link" href="#testAssertions" title="4. Test Assertions">Test Assertions</a>: The test assertions supported by CxxTest
+</li><li class="listitem">
+<a class="link" href="#cxxtestgen" title="5. The CxxTestGen Command">The CxxTestGen Command</a>: Documentation for the <code class="literal">cxxtestgen</code> command
+</li><li class="listitem">
+<a class="link" href="#samples" title="6. Sample Problems">Sample Problems</a>: Examples that illustrate features of CxxTest
+</li><li class="listitem">
+<a class="link" href="#installation" title="7. Installation">Installation</a>: How to install CxxTest
+</li><li class="listitem">
+<a class="link" href="#discussion" title="8. Final Thoughts">Discussion</a>: Comments on the past, present and future of CxxTest
+</li></ul></div></div><div class="section" title="2. Getting Started"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="gettingStarted"></a>2. Getting Started</h2></div></div></div><p>Tests are organized into <span class="emphasis"><em>test suites</em></span>, and test suites are written
+in header files.  A test suite is a class that inherits from
+<code class="literal">CxxTest::TestSuite</code>.  A test is a public member function of that
+class whose name starts with <code class="literal">test</code>, e.g. <code class="literal">testDirectoryScanner()</code>,
+<code class="literal">test_cool_feature()</code> and <code class="literal">TestImportantBugFix()</code>.</p><div class="section" title="2.1. A First Example"><div class="titlepage"><div><div><h3 class="title"><a id="_a_first_example"></a>2.1. A First Example</h3></div></div></div><p>The following is a simple example of a
+test suite with a single test, <code class="literal">testAddition</code>, which perform two test assertions:</p><pre class="programlisting">// MyTestSuite.h
+#include &lt;cxxtest/TestSuite.h&gt;
+
+class MyTestSuite : public CxxTest::TestSuite
+{
+public:
+   void testAddition( void )
+   {
+      TS_ASSERT( 1 + 1 &gt; 1 );
+      TS_ASSERT_EQUALS( 1 + 1, 2 );
+   }
+};</pre><p>You use the <code class="literal">cxxtestgen</code> script to generate a <span class="emphasis"><em>test runner</em></span> for test suites in C\++ header files:</p><pre class="programlisting">$CXXTESTBIN/cxxtestgen --error-printer -o runner.cpp MyTestSuite.h</pre><p>This command generates the file <code class="literal">runner.cpp</code>, which can be compiled.</p><pre class="programlisting">$CXXTESTBIN/cxxtestgen --error-printer -o runner.cpp MyTestSuite.h</pre><p>Note that additional compiler flags may be needed to include headers
+and libraries that are used during testing.</p><p>This runner can be executed to perform the specified tests:</p><pre class="programlisting">./runner</pre><p>which generates the following output:</p><pre class="screen">Running 1 test.OK!</pre></div><div class="section" title="2.2. A Second Example"><div class="titlepage"><div><div><h3 class="title"><a id="_a_second_example"></a>2.2. A Second Example</h3></div></div></div><p>The following header file extends the previous example to
+include a test that generates an error:</p><pre class="programlisting">// MyTestSuite2.h
+#include &lt;cxxtest/TestSuite.h&gt;
+
+class MyTestSuite : public CxxTest::TestSuite
+{
+public:
+   void testAddition( void )
+   {
+      TS_ASSERT( 1 + 1 &gt; 1 );
+      TS_ASSERT_EQUALS( 1 + 1, 2 );
+   }
+
+   void testMultiplication( void )
+   {
+      TS_ASSERT_EQUALS( 2 * 2, 5 );
+   }
+};</pre><p>The test runner generated by <code class="literal">cxxtestgen</code> for this test suite generates the following output:</p><pre class="screen">Running 2 tests.
+In MyTestSuite::testMultiplication:
+MyTestSuite2.h:15: Error: Expected (2 * 2 == 5), found (4 != 5)
+Failed 1 of 2 tests
+Success rate: 50%</pre></div></div><div class="section" title="3. xUnit Testing Paradigm"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="xUnit"></a>3. xUnit Testing Paradigm</h2></div></div></div><p>The CxxTest supports test automation, sharing of setup
+and shutdown code for tests, aggregation of tests into collections,
+and independence of the tests from the reporting framework.  To
+achieve this, CxxTest supports some important concepts that are common to xUnit frameworks (
+e.g. <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>, <a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
+<a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>):</p><div class="variablelist"><dl><dt><span class="term">
+test fixture
+</span></dt><dd>
+   A <span class="emphasis"><em>test fixture</em></span> represents the preparation needed to perform one or more
+   tests, and any associate cleanup actions.  This may involve, for example,
+   creating temporary or proxy databases, directories, or starting a server
+   process.
+</dd></dl></div><div class="variablelist"><dl><dt><span class="term">
+test suite
+</span></dt><dd>
+   A <span class="emphasis"><em>test suite</em></span> is a collection of test cases, which represent the smallest unit of
+   testing.  The <code class="literal">TestSuite</code> class is used to aggregate tests that should be executed together.
+</dd><dt><span class="term">
+test runner
+</span></dt><dd>
+   A <span class="emphasis"><em>test runner</em></span> is a component which orchestrates the execution of tests
+   and provides the outcome to the user.
+</dd></dl></div><p>When building test fixtures using <code class="literal">TestSuite</code>, the <code class="literal">TestSuite.setUp</code>
+and <code class="literal">TestSuite.tearDown</code> methods can be overridden to provide
+initialization and cleanup for the fixture.  The <code class="literal">TestSuite.setUp</code>
+method is run before each test is executed, and the <code class="literal">TestSuite.tearDown</code>
+method is run after each test is executed.</p></div><div class="section" title="4. Test Assertions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="testAssertions"></a>4. Test Assertions</h2></div></div></div><p>The following table summarizes the test assertions supported by CxxTest:</p><div class="informaltable"><table cellpadding="4px" style="border-collapse: collapse;border-top: 3px solid #527bbd; border-bottom: 3px solid #527bbd; border-left: 3px solid #527bbd; border-right: 3px solid #527bbd; "><colgroup><col class="col_1" /><col class="col_2" /></colgroup><thead><tr><th style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"> Macro                                                                 </th><th style="border-bottom: 1px solid #527bbd; " align="left" valign="top"> Description</th></tr></thead><tbody><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert"><code class="literal">TS_ASSERT(<span class="emphasis"><em>expr</em></span>)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify <code class="literal"><span class="emphasis"><em>expr</em></span></code> is true</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_delta"><code class="literal">TS_ASSERT_DELTA(x,y,d)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal">abs(x-y) &lt; d</code></p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_differs"><code class="literal">TS_ASSERT_DIFFERS(x,y)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal"><span class="emphasis"><em>x != y</em></span></code></p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_equals"><code class="literal">TS_ASSERT_EQUALS(x,y)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal"><span class="emphasis"><em>x == y</em></span></code></p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_less_than"><code class="literal">TS_ASSERT_LESS_THAN(x,y)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal"><span class="emphasis"><em>x &lt; y</em></span></code></p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_less_than_equals"><code class="literal">TS_ASSERT_LESS_THAN_EQUALS(x,y)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal"><span class="emphasis"><em>x ⇐ y</em></span></code></p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_predicate"><code class="literal">TS_ASSERT_PREDICATE(P,x)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify <code class="literal"><span class="emphasis"><em>P(x)</em></span></code></p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_relation"><code class="literal">TS_ASSERT_RELATION(x,R,y)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify <code class="literal"><span class="emphasis"><em>x R y</em></span></code></p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_same_data"><code class="literal">TS_ASSERT_SAME_DATA(x,y,size)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify two buffers are equal</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_throws"><code class="literal">TS_ASSERT_THROWS(expr,type)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal"><span class="emphasis"><em>expr</em></span></code> throws the specified exception type</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_throws_anything"><code class="literal">TS_ASSERT_THROWS_ANYTHING(expr)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal"><span class="emphasis"><em>expr</em></span></code> throws an exception</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_throws_assert"><code class="literal">TS_ASSERT_THROWS_ASSERT(expr,arg,assertion)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify type and value of what <code class="literal"><span class="emphasis"><em>expr</em></span></code> throws</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_throws_equals"><code class="literal">TS_ASSERT_THROWS_EQUALS(expr,arg,x,y)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify type and value of what <code class="literal"><span class="emphasis"><em>expr</em></span></code> throws</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_assert_throws_nothing"><code class="literal">TS_ASSERT_THROWS_NOTHING(expr)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Verify that <code class="literal"><span class="emphasis"><em>expr</em></span></code> doesn’t throw anything</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_fail"><code class="literal">TS_FAIL(<span class="emphasis"><em>message</em></span>)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Fail unconditionally</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_trace"><code class="literal">TS_TRACE(<span class="emphasis"><em>message</em></span>)</code></a></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Print <code class="literal"><span class="emphasis"><em>message</em></span></code> as an informational message</p></td></tr><tr><td style="border-right: 1px solid #527bbd; " align="left" valign="top"><p><a class="link" href="#ts_warn"><code class="literal">TS_WARN(<span class="emphasis"><em>message</em></span>)</code></a></p></td><td style="" align="left" valign="top"><p>Print <code class="literal"><span class="emphasis"><em>message</em></span></code> as a warning</p></td></tr></tbody></table></div><p><a class="link" href="#appendix_A" title="A. Test Assertion Examples">Appendix A</a> provides examples that illustrate the use of these test assertions</p></div><div class="section" title="5. The CxxTestGen Command"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="cxxtestgen"></a>5. The CxxTestGen Command</h2></div></div></div></div><div class="section" title="6. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>6. Sample Problems</h2></div></div></div></div><div class="section" title="7. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>7. Installation</h2></div></div></div></div><div class="section" title="8. Final Thoughts"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="discussion"></a>8. Final Thoughts</h2></div></div></div><p>The CxxTest 4.0 release reflects major changes in the management
+and focus of CxxTest.  The 4.0 release is the first release of
+CxxTest in over seven years, and virtually all of the initial
+developers have moved on to other projects.  CxxTest is heavily
+used at Sandia National Laboratories, and Sandia’s ongoing use of
+CxxTest is a major driver for the 4.0 release.  Similarly, major
+changes in CxxTest reflect the focus of the developer team:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Perl is no longer used to support CxxTest scripts.  Python is now the only scripting language used by CxxTest.
+</li><li class="listitem">
+The testing scripts have been rewritten using the PyUnit framework.
+</li><li class="listitem">
+Installation process for CxxTest now leverages and integrates with the system Python installation.
+</li><li class="listitem">
+A more comprehensive C++ parser is now available, which supports testing of templates.
+</li><li class="listitem">
+The CxxTest GUI is no longer supported.  (TODO: verify this step.)
+</li><li class="listitem">
+CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
+</li><li class="listitem">
+A new user guide is now available in PDF, HTML and Ebook formats.
+</li></ul></div><p>Additionally, CxxTest is now validated with continuous integration
+tests.  Yes, the CxxTest developers eat their own dog food!</p><p>Macros vs templates…</p><p>GUI Support</p><p>Embedded systems</p><p>The <a class="link" href="#ts_trace">TS_TRACE</a> and <a class="link" href="#ts_warn">TS_WARN</a> commands have similar functionality.  However, they differ in that the <a class="link" href="#ts_warn">TS_WARN</a> command changes the behavior of CxxTest with a GUI runner.</p></div><div class="appendix" title="A. Test Assertion Examples"><h2 class="title" style="clear: both"><a id="appendix_A"></a>A. Test Assertion Examples</h2><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert"></a> TS_ASSERT
+</span></dt><dd>
+This is the most basic test assertion, which simply verifies that the <code class="literal"><span class="emphasis"><em>expr</em></span></code> argument is true:
+</dd></dl></div><pre class="programlisting">   void test_assert( void )
+   {
+      TS_ASSERT(1 + 1 &gt; 1);
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_delta"></a> TS_ASSERT_DELTA
+</span></dt><dd>
+This test assertion verifies two floating point values are within a specified absolute difference:
+</dd></dl></div><pre class="programlisting">   void test_assert_delta( void )
+   {
+      TS_ASSERT_DELTA(sqrt(4.0), 2.0, 1e-7);
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_differs"></a> TS_ASSERT_DIFFERS
+</span></dt><dd>
+This test assertion verifies that the two arguments are not equal:
+</dd></dl></div><pre class="programlisting">   void test_assert_differs( void )
+   {
+      TS_ASSERT_DIFFERS(1,2);
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_equals"></a> TS_ASSERT_EQUALS
+</span></dt><dd>
+  This test assertion verifies that the two arguments are equal:
+</dd></dl></div><pre class="programlisting">   void test_assert_equals( void )
+   {
+      TS_ASSERT_EQUALS(21 % 5, 1);
+   }</pre><p>Note that this test is performed using the C++ <code class="literal"><span class="emphasis"><em>==</em></span></code> operator, whose behavior may be redefined for the two argument types.</p><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_less_than"></a> TS_ASSERT_LESS_THAN
+</span></dt><dd>
+This test assertion verifies that the first argument is strictly less than the second argument:
+</dd></dl></div><pre class="programlisting">   void test_assert_less_than( void )
+   {
+      TS_ASSERT_LESS_THAN(0, 1);
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_less_than_equals"></a> TS_ASSERT_LESS_THAN_EQUALS
+</span></dt><dd>
+This test assertion verifies that the first argument is less than or equal to the second argument:
+</dd></dl></div><pre class="programlisting">   void test_assert_less_than_equals( void )
+   {
+      TS_ASSERT_LESS_THAN_EQUALS(0, 0);
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_predicate"></a> TS_ASSERT_PREDICATE
+</span></dt><dd>
+This test assertion takes as an argument the name of a class, similar to a STL <code class="literal"><span class="emphasis"><em>unary_function</em></span></code>, and evaluates the <code class="literal"><span class="emphasis"><em>operator()</em></span></code> method:
+</dd></dl></div><pre class="programlisting">   class IsOdd
+   {
+   public:
+    bool operator()(int x) const { return x % 2 == 1; }
+   };
+
+   void test_assert_predicate( void )
+   {
+      TS_ASSERT_PREDICATE(IsOdd, 29);
+   }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert">TS_ASSERT</a>, but it
+allows the tester to see the failed value.</p><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_relation"></a> TS_ASSERT_RELATION
+</span></dt><dd>
+It takes as an argument the name of a class, similar to a STL <code class="literal"><span class="emphasis"><em>binary_function</em></span></code>, and evaluates the <code class="literal"><span class="emphasis"><em>operator()</em></span></code> method:
+</dd></dl></div><pre class="programlisting">   void test_assert_relation( void )
+   {
+      TS_ASSERT_RELATION( std::greater&lt;double&gt;, 1e6, 1000.0 );
+   }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>, <a class="xref" href="#ts_assert_differs">[ts_assert_differs]</a>, <a class="link" href="#ts_assert_less_than">TS_ASSERT_LESS_THAN</a> and <a class="xref" href="#ts_assert_less_than_equals">[ts_assert_less_than_equals]</a>.
+This can be used to assert comparisons which are not covered by the builtin test assertions.</p><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_same_data"></a> TS_ASSERT_SAME_DATA
+</span></dt><dd>
+This test assertion is similar to <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>,
+except that it compares the contents of two buffers in memory:
+</dd></dl></div><pre class="programlisting">   void test_assert_same_data( void )
+   {
+        char input="The quick brown fox ran over the lazy dog";
+        char output[26];
+        memcopy( output, input, 26 );
+        TS_ASSERT_SAME_DATA( input, output, 26 );
+   }</pre><p>The standard runner dumps the contents of both buffers as hex values when this test fails.</p><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_throws"></a> TS_ASSERT_THROWS
+</span></dt><dd>
+This test assertion verifies that the specified exception is thrown when the first argument is executed:
+</dd></dl></div><pre class="programlisting">   void throws_runtime_error( void )
+   {
+        raise std::runtime_error, "This method simply generates an exception";
+   }
+
+   void test_assert_throws( void )
+   {
+        TS_ASSERT_THROWS( self.throws_runtime_error(), std::runtime_error );
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_throws_anything"></a> TS_ASSERT_THROWS_ANYTHING
+</span></dt><dd>
+This test assertion verifies that <span class="emphasis"><em>some</em></span> exception is thrown when the first argument is executed:
+</dd></dl></div><pre class="programlisting">   void test_assert_throws_anything( void )
+   {
+        TS_ASSERT_THROWS_ANYTHING( self.throws_runtime_error() );
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_throws_assert"></a> TS_ASSERT_THROWS_ASSERT
+</span></dt><dd>
+This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third argument is executed to test that
+exception value:
+</dd></dl></div><pre class="programlisting">   void throws_value( void )
+   {
+        raise 1;
+   }
+   void test_assert_throws_assert( void )
+   {
+        TS_ASSERT_THROWS_ASSERT( self.throws_value(), const Error&amp; e, TS_ASSERT_EQUALS(e, 1) );
+   }</pre><p>Note that this can be viewed as a generalization of <a class="link" href="#ts_assert_throws_equals">TS_ASSERT_THROWS_EQUALS</a>.</p><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_throws_equals"></a> TS_ASSERT_THROWS_EQUALS
+</span></dt><dd>
+This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third and fourth arguments are values that are asserted equal after the exception is thrown:
+</dd></dl></div><pre class="programlisting">   void test_assert_throws_equals( void )
+   {
+        TS_ASSERT_THROWS_EQUALS( self.throws_value(), const Error&amp; e, e.what(), 1 );
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_assert_throws_nothing"></a> TS_ASSERT_THROWS_NOTHING
+</span></dt><dd>
+This test assertion verifies that an exception is <span class="emphasis"><em>not</em></span> thrown when executing the first argument:
+</dd></dl></div><pre class="programlisting">   void throws_nothing( void )
+   { }
+   void test_assert_throws_nothing( void )
+   {
+        TS_ASSERT_THROWS_ASSERT( self.throws_nothing() );
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_fail"></a> TS_FAIL
+</span></dt><dd>
+This command triggers a test failure with an associated message:
+</dd></dl></div><pre class="programlisting">   void test_fail( void )
+   {
+        TS_FAIL( "This test has failed." );
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_trace"></a> TS_TRACE
+</span></dt><dd>
+This command prints an informational message:
+</dd></dl></div><pre class="programlisting">   void test_trace( void )
+   {
+        TS_TRACE( "This is a test tracing message." );
+   }</pre><div class="variablelist"><dl><dt><span class="term">
+<a id="ts_warn"></a> TS_WARN
+</span></dt><dd>
+This command prints a message as a warning:
+</dd></dl></div><pre class="programlisting">   void test_warn( void )
+   {
+        TS_WARN( "This is a warning message." );
+   }</pre></div></div></body></html>
