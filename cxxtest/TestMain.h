@@ -64,7 +64,7 @@ for (int i=1; i<argc; i++) {
 //
 while ((argc > 1) && (argv[1][0] == '-')) {
   if (CXXTEST_STD(strcmp)(argv[1],"-v") == 0) {
-     TestTracker::print_tracing = true;
+     tracker().print_tracing = true;
      }
   else {
      CXXTEST_STD(cerr) << "ERROR: unknown option '" << argv[1] << "'" << CXXTEST_STD(endl);
