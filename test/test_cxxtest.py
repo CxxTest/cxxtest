@@ -53,6 +53,8 @@ def file_diff(filename1, filename2):
 
 class BaseTestCase(object):
 
+    fog=''
+
     def setUp(self):
         self.prefix=''
         self.py_out=''
@@ -63,6 +65,7 @@ class BaseTestCase(object):
         self.build_target=''
 
     def tearDown(self):
+        return
         if os.path.exists(self.py_out):
             os.remove(self.py_out)
         if os.path.exists(self.py_cpp):
@@ -100,8 +103,8 @@ class BaseTestCase(object):
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
-        cmd = "%s %s../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, currdir, self.py_cpp, args, self.py_out)
-        ##print cmd
+        cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        #print self.fog, "CMD", cmd
         status = subprocess.call(cmd, shell=True)
         self.assertEquals(status, 0, 'Error executing cxxtestgen')
         #
@@ -110,7 +113,7 @@ class BaseTestCase(object):
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+prefix+'_py%s.cpp' % str(i)
             files.append(file)
-            cmd = "%s %s../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, currdir, file, args, self.py_out)
+            cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out)
             ##print cmd
             status = subprocess.call(cmd, shell=True)
             self.assertEquals(status, 0, 'Error executing cxxtestgen')
@@ -134,7 +137,8 @@ class BaseTestCase(object):
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None):
         self.init(prefix)
         #
-        cmd = "%s %s../python/scripts/cxxtestgen -o %s %s > %s 2>&1" % (sys.executable, currdir, self.py_cpp, args, self.py_out)
+        cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        #print "HERE", cmd
         status = subprocess.call(cmd, shell=True)
         if failGen:
             if status == 0: 
@@ -430,6 +434,12 @@ class TestCpp(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
+@unittest.skipIf(not available('c++', '-o'), 'Cannot test c++ compiler')
+class TestCppFOG(TestCpp):
+
+    fog='-f'
+
+
 @unittest.skipIf(not available('g++', '-o'), 'Cannot test g++ compiler')
 class TestGpp(BaseTestCase, unittest.TestCase):
 
@@ -449,6 +459,37 @@ class TestGpp(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
+@unittest.skipIf(not available('g++', '-o'), 'Cannot test g++ compiler')
+class TestGppFOG(TestGpp):
+
+    fog='-f'
+
+
+@unittest.skipIf(not available('clang', '-o'), 'Cannot test clang compiler')
+class TestClang(BaseTestCase, unittest.TestCase):
+
+    # Compiler specifics
+    exe_option = '-o'
+    include_option = '-I'
+    compiler='clang -v'
+    no_eh_option = ''
+    qtFlags='-Ifake'
+    x11Flags='-Ifake'
+    w32Flags='-Ifake'
+
+    def setUp(self):
+        BaseTestCase.setUp(self)
+
+    def tearDown(self):
+        BaseTestCase.tearDown(self)
+
+
+@unittest.skipIf(not available('clang', '-o'), 'Cannot test clang compiler')
+class TestClangFOG(TestClang):
+
+    fog='-f'
+
+
 @unittest.skipIf(not available('cl', '-o'), 'Cannot test cl compiler')
 class TestCL(BaseTestCase, unittest.TestCase):
 
@@ -466,6 +507,12 @@ class TestCL(BaseTestCase, unittest.TestCase):
 
     def tearDown(self):
         BaseTestCase.tearDown(self)
+
+
+@unittest.skipIf(not available('cl', '-o'), 'Cannot test cl compiler')
+class TestCLFOG(TestCL):
+
+    fog='-f'
 
 
 if __name__ == '__main__':
