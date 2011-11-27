@@ -55,13 +55,6 @@ def parseCommandline(args):
     global imported_fog
     global options
     parser = OptionParser("%prog [options] [input_files]")
-    if imported_fog:
-        parser.add_option("--fog",
-                        action="store_true",
-                        dest="fog",
-                        default=False,
-                        help="Use new FOG C++ parser"
-                        )
     parser.add_option("-v", "--version",
                       action="store_true", dest="version", default=False,
                       help="Write CxxTest version")
@@ -82,7 +75,7 @@ def parseCommandline(args):
                       help="Specifies the use of the XUnitPrinter.")
     parser.add_option("", "--xunit-file",  dest="xunit_file", default="",
                       help="The value of this option is an XML filename to which the XML summary is written.  The default XML filename is TEST-<world>.xml, where <world> is the value of the --world option.")
-    parser.add_option("-w","--world", dest="world", default="",
+    parser.add_option("-w","--world", dest="world", default="cxxtest",
                       help="The label of the tests, used to name the XML results.")
     parser.add_option("", "--abort-on-fail",
                       action="store_true", dest="abortOnFail", default=False,
@@ -120,6 +113,13 @@ def parseCommandline(args):
     parser.add_option("", "--factor",
                       action="store_true", dest="factor", default=False,
                       help="Mystery option")
+    if imported_fog:
+        parser.add_option("-f", "--fog-parser",
+                        action="store_true",
+                        dest="fog",
+                        default=False,
+                        help="Use new FOG C++ parser"
+                        )
 
     (options, args) = parser.parse_args(args=args)
 
@@ -147,16 +147,16 @@ def parseCommandline(args):
       options.runner= "ErrorPrinter"
       options.haveStandardLibrary = True
     
-
     if options.noStaticInit and (options.root or options.part):
         abort( '--no-static-init cannot be used with --root/--part' )
 
     if options.gui and not options.runner:
         options.runner = 'StdioPrinter'
 
-    files = setFiles(args)
+    files = setFiles(args[1:])
     if len(files) is 0 and not options.root:
         sys.stderr.write(parser.error("No input files found"))
+
     return files
 
 
