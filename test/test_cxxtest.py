@@ -65,7 +65,7 @@ class BaseTestCase(object):
         self.build_target=''
 
     def tearDown(self):
-        return
+        #return
         if os.path.exists(self.py_out):
             os.remove(self.py_out)
         if os.path.exists(self.py_cpp):
