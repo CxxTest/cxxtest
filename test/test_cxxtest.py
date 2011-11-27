@@ -465,14 +465,14 @@ class TestGppFOG(TestGpp):
     fog='-f'
 
 
-@unittest.skipIf(not available('clang', '-o'), 'Cannot test clang compiler')
+@unittest.skipIf(not available('clang++', '-o'), 'Cannot test clang++ compiler')
 class TestClang(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='clang -v'
-    no_eh_option = ''
+    compiler='clang++ -v -g -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo'
+    no_eh_option = '-fno-exceptions'
     qtFlags='-Ifake'
     x11Flags='-Ifake'
     w32Flags='-Ifake'
@@ -484,7 +484,7 @@ class TestClang(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
-@unittest.skipIf(not available('clang', '-o'), 'Cannot test clang compiler')
+@unittest.skipIf(not available('clang++', '-o'), 'Cannot test clang++ compiler')
 class TestClangFOG(TestClang):
 
     fog='-f'
