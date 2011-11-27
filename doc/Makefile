@@ -6,6 +6,6 @@ anchors:
 	python include_anchors.py guide.txt 
 
 clean:
-	- \rm book.xml
+	- \rm guide.xml
 	- \rm examples/*_*.py examples/*_*.h examples/*_*.cpp examples/*_*.sh examples/runner examples/runner.cpp
 

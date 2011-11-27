@@ -32,13 +32,15 @@ CxxTest is designed to be as portable as possible;  it does not require
  - Exception handling
  - External libraries (including memory management, file/console I/O, graphics libraries)
 
-However, CxxTest can also leverage advanced features when
+In particular, the design of CxxTest was tailored for C\++ compilers on embedded systems, for which
+many of these features are not supported.
+However, CxxTest can also leverage standard C++ features when
 they are supported by a compiler (e.g. catch unhandled exceptions).
 
 Additionally, CxxTest supports _test discovery_.  Tests are defined in 
 C\++ header files, which are parsed by CxxTest to automatically generate a test runner.
 Thus, CxxTest is somewhat easier to use than alternative
-C\++ testing frameworks, since you do not need to _register_ tests.
+C++ testing frameworks, since you do not need to _register_ tests.
 
 CxxTest is available under the http://www.gnu.org/copyleft/lesser.html[GNU
 Lesser General Public]. The homepage for CxxTest is
@@ -55,7 +57,6 @@ CxxTest:
 The remainder of the CxxTest User Guide provides the following documentation:
 
  - <<gettingStarted,Getting Started>>: Some simple examples that illustrate how to use CxxTest
- - <<xUnit,xUnit Testing Paradigm>>: A discussion of how CxxTest structures testing
  - <<testAssertions,Test Assertions>>: The test assertions supported by CxxTest
  - <<cxxtestgen,The CxxTestGen Command>>: Documentation for the +cxxtestgen+ command
  - <<samples,Sample Problems>>: Examples that illustrate features of CxxTest
@@ -67,11 +68,48 @@ The remainder of the CxxTest User Guide provides the following documentation:
 Getting Started
 ---------------
 
-Tests are organized into _test suites_, and test suites are written
-in header files.  A test suite is a class that inherits from
-+CxxTest::TestSuite+.  A test is a public member function of that
-class whose name starts with +test+, e.g. +testDirectoryScanner()+,
-+test_cool_feature()+ and +TestImportantBugFix()+.
+The CxxTest supports test automation, sharing of setup
+and shutdown code for tests, aggregation of tests into collections,
+and independence of the tests from the reporting framework.  To
+achieve this, CxxTest supports some important concepts that are common to xUnit frameworks (
+e.g. http://junit.org/[JUnit], http://cppunit.sourceforge.net[CppUnit], and
+http://xprogramming.com/software.html[xUnit]):
+
+test fixture::
+   A 'test fixture' represents the preparation needed to perform one or more
+   tests, and any associate cleanup actions.  This may involve, for example,
+   creating temporary or proxy databases, directories, or starting a server
+   process.
+
+/////
+test case::
+   A 'test case' is the smallest unit of testing.  It checks for a specific
+   response to a particular set of inputs.  CxxTest provides a base class,
+   +TestCase+, which may be used to create new test cases.
+/////
+
+test suite::
+   A 'test suite' is a collection of test cases, which represent
+   the smallest unit of testing.  A test suite is defined by a class
+   that inherits from the +CxxTest::TestSuite+ class, and the tests
+   in a test suite are executed together.
+
+test::
+    A test is a public member function of a test suite whose name
+    starts with +test+, e.g. +testDirectoryScanner()+,
+    +test_cool_feature()+ and +TestImportantBugFix()+.
+
+test runner::
+   A 'test runner' is a component which orchestrates the execution
+   of tests across one or more test suites and provides the outcome
+   to the user.
+
+When building test fixtures using +TestSuite+, the +TestSuite.setUp+
+and +TestSuite.tearDown+ methods can be overridden to provide
+initialization and cleanup for the fixture.  The +TestSuite.setUp+
+method is run before each test is executed, and the +TestSuite.tearDown+
+method is run after each test is executed.
+
 
 A First Example
 ~~~~~~~~~~~~~~~
@@ -83,7 +121,7 @@ test suite with a single test, +testAddition+, which perform two test assertions
 include::examples/MyTestSuite.h[]
 ----
 
-You use the +cxxtestgen+ script to generate a _test runner_ for test suites in C\++ header files:
+You use the +cxxtestgen+ script to generate a _test runner_ for test suites in C++ header files:
 [source,bash]
 ----
 include::examples/buildRunner_main.sh[]
@@ -126,52 +164,12 @@ include::examples/exeRunner2.out[]
 ----
 
 
-
-[[xUnit]]
-xUnit Testing Paradigm
-----------------------
-
-The CxxTest supports test automation, sharing of setup
-and shutdown code for tests, aggregation of tests into collections,
-and independence of the tests from the reporting framework.  To
-achieve this, CxxTest supports some important concepts that are common to xUnit frameworks (
-e.g. http://junit.org/[JUnit], http://cppunit.sourceforge.net[CppUnit], and
-http://xprogramming.com/software.html[xUnit]):
-
-test fixture::
-   A 'test fixture' represents the preparation needed to perform one or more
-   tests, and any associate cleanup actions.  This may involve, for example,
-   creating temporary or proxy databases, directories, or starting a server
-   process.
-
-/////
-test case::
-   A 'test case' is the smallest unit of testing.  It checks for a specific
-   response to a particular set of inputs.  CxxTest provides a base class,
-   +TestCase+, which may be used to create new test cases.
-/////
-
-test suite::
-   A 'test suite' is a collection of test cases, which represent the smallest unit of
-   testing.  The +TestSuite+ class is used to aggregate tests that should be executed together.
-
-test runner::
-   A 'test runner' is a component which orchestrates the execution of tests
-   and provides the outcome to the user.
-
-When building test fixtures using +TestSuite+, the +TestSuite.setUp+
-and +TestSuite.tearDown+ methods can be overridden to provide
-initialization and cleanup for the fixture.  The +TestSuite.setUp+
-method is run before each test is executed, and the +TestSuite.tearDown+
-method is run after each test is executed.
-
-
-
 [[testAssertions]]
 Test Assertions
 ---------------
 
-The following table summarizes the test assertions supported by CxxTest:
+The following table summarizes the test assertions supported by CxxTest.
+<<appendix_A,Appendix A>> provides examples that illustrate the use of these test assertions.
 
 [options="header"]
 |====================================================================================
@@ -195,7 +193,28 @@ The following table summarizes the test assertions supported by CxxTest:
 | <<ts_warn,+TS_WARN(_message_)+>>                                    | Print +_message_+ as a warning
 |====================================================================================
 
-<<appendix_A,Appendix A>> provides examples that illustrate the use of these test assertions
+The test assertions supported by CxxTest are defined as macros,
+which eliminates the need for certain templates within CxxTest and
+allows tests to catch exceptions.  There are four categories of
+test assertions in CxxTest, which are distinguished by their prefixes:
+
+TS_:: These test assertions perform a test. Catch exceptions generated
+during testing will cause the test to fail, except for tests that
+check for exceptions.
+
+TSM_:: These test assertions perform the same tests as the corresponding
++TS_+ assertions, but their first argument is a +const char*+ message
+buffer that is printed when the test fails.
+
+ETS_:: These test assertions perform the same tests as the corresponding
++TS_+ assertions.  However, these test assertions do not catch
+exceptions generated during testing.
+
+ETSM_:: These test assertions perform the same tests as the
+corresponding +TS_+ assertions, but (1) their first argument is a
++const char*+ message buffer is printed when the test fails, and
+(2) these assertions do not catch exceptions generated during
+testing.
 
 
 [[cxxtestgen]]
@@ -211,8 +230,8 @@ Installation
 ------------
 
 [[discussion]]
-Final Thoughts
---------------
+Status and Future Plans
+-----------------------
 
 The CxxTest 4.0 release reflects major changes in the management
 and focus of CxxTest.  The 4.0 release is the first release of
@@ -233,12 +252,13 @@ changes in CxxTest reflect the focus of the developer team:
 Additionally, CxxTest is now validated with continuous integration
 tests.  Yes, the CxxTest developers eat their own dog food!
 
+Discuss support for ...
 
-Macros vs templates...
+ - embedded compilers...  (Macros vs templates)
+ - GUI
+ - SCONS
+ - Python 3.0
 
-GUI Support
-
-Embedded systems
 
 The <<ts_trace,TS_TRACE>> and <<ts_warn,TS_WARN>> commands have similar functionality.  However, they differ in that the <<ts_warn,TS_WARN>> command changes the behavior of CxxTest with a GUI runner.
 
