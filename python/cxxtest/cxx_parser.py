@@ -165,7 +165,7 @@ class CppInfo(object):
             ans += scope.scope_t+" "+scope.abs_name+"\n"
             if scope.scope_t == "class":
                 ans += "  Base Classes: "+str(scope.base_classes)+"\n"
-                for fn in self.get_functions(scope.abs_name,quiet):
+                for fn in self.get_functions(scope.abs_name):
                     ans += "  "+fn+"\n"
             else:
                 for fn in scope.function:
@@ -266,7 +266,9 @@ reserved = {
     '"C++"' : 'CppLiteral',
 
     '__attribute__' : 'ATTRIBUTE',
-    '__cdecl__' : 'CDECL'
+    '__cdecl__' : 'CDECL',
+    '__typeof' : 'uTYPEOF',
+    'typeof' : 'TYPEOF'
 }
    
 tokens = [
@@ -609,7 +611,8 @@ def p_abstract_expression(p):
 def p_postfix_expression(p):
     '''postfix_expression :         primary_expression
     |                               postfix_expression parenthesis_clause
-    |                               postfix_expression LBRACKET bexpression_opt RBRACKET 
+    |                               postfix_expression LBRACKET bexpression_opt RBRACKET
+    |                               postfix_expression LBRACKET bexpression_opt RBRACKET attributes
     |                               postfix_expression '.' declarator_id
     |                               postfix_expression '.' scoped_pseudo_destructor_id
     |                               postfix_expression ARROW declarator_id
@@ -1035,7 +1038,7 @@ def p_suffix_built_in_decl_specifier(p):
 #    |                                       SCOPE id_scope_seq
 def p_suffix_named_decl_specifier(p):
     '''suffix_named_decl_specifier :        scoped_id 
-    |                               elaborate_type_specifier
+    |                               elaborate_type_specifier 
     |                               suffix_named_decl_specifier decl_specifier_suffix
     '''
     p[0]=p[1:]
@@ -1131,25 +1134,26 @@ def p_elaborate_type_specifier(p):
     pass
 
 def p_simple_type_specifier(p):
-    '''simple_type_specifier :      scoped_id attributes
+    '''simple_type_specifier :      scoped_id
+    |                               scoped_id attributes
     |                               built_in_type_specifier
     '''
     p[0] = p[1]
 
 def p_built_in_type_specifier(p):
-    '''built_in_type_specifier : Xbuilt_in_type_specifier attributes
+    '''built_in_type_specifier : Xbuilt_in_type_specifier
+    |                            Xbuilt_in_type_specifier attributes
     '''
     pass
 
 def p_attributes(p):
-    '''attributes :                 empty
+    '''attributes :                 attribute
     |                               attributes attribute
     '''
     pass
 
 def p_attribute(p):
-    '''attribute :                  ATTRIBUTE '(' '(' identifier ')' ')'
-    |                               ATTRIBUTE '(' '(' CDECL ')' ')'
+    '''attribute :                  ATTRIBUTE '(' parameters_clause ')'
     '''
 
 def p_Xbuilt_in_type_specifier(p):
@@ -1164,6 +1168,8 @@ def p_Xbuilt_in_type_specifier(p):
     | FLOAT 
     | DOUBLE 
     | VOID
+    | uTYPEOF parameters_clause
+    | TYPEOF parameters_clause
     '''
     pass
 
@@ -1254,9 +1260,9 @@ def p_push_scope(p):
     '''push_scope :                 empty'''
     global _parse_info
     if p[-2] == "namespace":
-        scope=""
+        scope=p[-1]
     else:
-        scope=p[-2]
+        scope=""
     _parse_info.push_scope(scope,"namespace")
 
 def p_using_declaration(p):
@@ -1342,9 +1348,11 @@ def p_cv_qualifier_seq_opt(p):
     '''
     pass
 
+# TODO: verify that we should include attributes here
 def p_cv_qualifier(p):
     '''cv_qualifier :               CONST 
     |                               VOLATILE
+    |                               attributes
     '''
     pass
 
@@ -1830,6 +1838,8 @@ def p_reserved(p):
     |                               TYPEID
     |                               ATTRIBUTE
     |                               CDECL
+    |                               TYPEOF
+    |                               uTYPEOF
     '''
     pass
 
