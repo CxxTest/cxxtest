@@ -30,8 +30,15 @@ def scanInputFiles(files, _options):
             continue
         print "done."
         sys.stdout.flush()
+        #
+        # WEH: see if it really makes sense to use parse information to
+        # initialize this data.  I don't think so...
+        #
+        _options.haveStandardLibrary=1
+        if not parse_info.noExceptionLogic:
+            _options.haveExceptionHandling=1
+        #
         keys = parse_info.index.keys()
-        keys.sort()
         tpat = re.compile("[Tt][Ee][Ss][Tt]")
         for key in keys:
             if parse_info.index[key].scope_t == "class" and parse_info.is_baseclass(key,"CxxTest::TestSuite"):
@@ -39,40 +46,33 @@ def scanInputFiles(files, _options):
                 suite = { 'name'         : name,
                         'file'         : file,
                         'cfile'        : cstr(file),
-                        'line'         : '0',
+                        'line'         : str(parse_info.index[key].lineno),
                         'generated'    : 0,
                         'object'       : 'suite_%s' % name,
                         'dobject'      : 'suiteDescription_%s' % name,
                         'tlist'        : 'Tests_%s' % name,
                         'tests'        : [],
                         'lines'        : [] }
-                for tname in parse_info.get_functions(key,quiet=True):
+                for fn in parse_info.get_functions(key,quiet=True):
+                    tname = fn[0]
+                    lineno = str(fn[1])
                     if tname.startswith('createSuite'):
                         # Indicate that we're using a dynamically generated test suite
-                        suite['create'] = '0' # (unknown line)
+                        suite['create'] = str(lineno) # (unknown line)
                     if tname.startswith('destroySuite'):
                         # Indicate that we're using a dynamically generated test suite
-                        suite['destroy'] = '0' # (unknown line)
+                        suite['destroy'] = str(lineno) # (unknown line)
                     if not tpat.match(tname):
                         # Skip non-test methods
                         continue
                     test = { 'name'   : tname,
                         'suite'  : suite,
-                        'class'  : 'TestDescription_%s_%s' % (suite['name'], tname),
-                        'object' : 'testDescription_%s_%s' % (suite['name'], tname),
-                        'line'   : '0',
+                        'class'  : 'TestDescription_suite_%s_%s' % (suite['name'], tname),
+                        'object' : 'testDescription_suite_%s_%s' % (suite['name'], tname),
+                        'line'   : lineno,
                         }
                     suite['tests'].append(test)
                 suites.append(suite)
-
-    #
-    # WEH: see if it really makes sense to use parse information to
-    # initialize this data.  I don't think so...
-    #
-    if not _options.noStandardLibrary:
-        _options.haveStandardLibrary=1
-    if not _options.noExceptionHandling:
-        _options.haveExceptionHandling=1
 
     #print "INFO\n"
     #for suite in suites:
