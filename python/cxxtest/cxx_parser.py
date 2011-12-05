@@ -49,9 +49,17 @@ import os
 import ply.lex as lex
 import ply.yacc as yacc
 import re
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
+lexer = None
+scope_lineno = 0
+identifier_lineno = {}
 _parse_info=None
 _parsedata=None
+noExceptionLogic = True
 
 def ply_init(data):
     global _parsedata
@@ -59,13 +67,15 @@ def ply_init(data):
 
 
 class Scope(object):
-    def __init__(self,name,abs_name,scope_t,base_classes):
+
+    def __init__(self,name,abs_name,scope_t,base_classes,lineno):
         self.function=[]
         self.name=name
         self.scope_t=scope_t
         self.sub_scopes=[]
         self.base_classes=base_classes
         self.abs_name=abs_name
+        self.lineno=lineno
    
     def insert(self,scope):
         self.sub_scopes.append(scope)
@@ -80,8 +90,8 @@ class CppInfo(object):
         else:
             self.filter=filter
         self.scopes=[""]
-        self.index={}
-        self.index[""]=Scope("","::","namespace",[])
+        self.index=OrderedDict()
+        self.index[""]=Scope("","::","namespace",[],1)
         self.function=[]
 
     def push_scope(self,ns,scope_t,base_classes=[]):
@@ -89,7 +99,7 @@ class CppInfo(object):
         if self.verbose>=2:
             print "-- Starting "+scope_t+" "+name
         self.scopes.append(name)
-        self.index[name] = Scope(ns,name,scope_t,base_classes)
+        self.index[name] = Scope(ns,name,scope_t,base_classes,scope_lineno-1)
 
     def pop_scope(self):
         scope = self.scopes.pop()
@@ -97,10 +107,10 @@ class CppInfo(object):
             print "-- Stopping "+scope
         return scope
 
-    def add_function(self,fn):
+    def add_function(self, fn):
         fn = str(fn)
         if self.filter.search(fn):
-            self.index[self.scopes[-1]].function.append(fn)
+            self.index[self.scopes[-1]].function.append((fn, identifier_lineno.get(fn,lexer.lineno-1)))
             tmp = self.scopes[-1]+"::"+fn
             if self.verbose==2:
                 print "-- Function declaration "+fn+"  "+tmp
@@ -120,7 +130,6 @@ class CppInfo(object):
                     print "WARNING: Unknown class "+key
             else:
                 fns += self.get_functions(cname,quiet)
-        fns.sort()
         return fns
         
     def find_class(self,name,scope):
@@ -148,7 +157,8 @@ class CppInfo(object):
         elif "::"+cls in self.index:
             bases = self.index["::"+cls]
         else:
-            raise IOError, "Unknown class "+cls
+            return False
+            #raise IOError, "Unknown class "+cls
         if base in bases.base_classes:
             return True
         for name in bases.base_classes:
@@ -268,7 +278,9 @@ reserved = {
     '__attribute__' : 'ATTRIBUTE',
     '__cdecl__' : 'CDECL',
     '__typeof' : 'uTYPEOF',
-    'typeof' : 'TYPEOF'
+    'typeof' : 'TYPEOF', 
+
+    'CXXTEST_STD' : 'CXXTEST_STD'
 }
    
 tokens = [
@@ -394,7 +406,11 @@ start = 'translation_unit'
 #
 
 def p_identifier(p):
-    '''identifier : Identifier'''
+    '''identifier : Identifier
+    |               CXXTEST_STD '(' Identifier ')'
+    '''
+    if p[1][0] in ('t','T','c','d'):
+        identifier_lineno[p[1]] = p.lineno(1)
     p[0] = p[1]
 
 def p_id(p):
@@ -435,6 +451,8 @@ def p_scoped_id(p):
     |                               id_scope_seq
     |                               global_scope id_scope_seq
     '''
+    global scope_lineno
+    scope_lineno = lexer.lineno
     data = flatten(p[1:])
     if data[0] != None:
         p[0] = "".join(data)
@@ -931,7 +949,8 @@ def p_labeled_statement(p):
 def p_try_block(p):
     '''try_block :                  TRY compound_statement handler_seq
     '''
-    pass
+    global noExceptionLogic
+    noExceptionLogic=False
 
 def p_jump_statement(p):
     '''jump_statement :             BREAK ';'
@@ -1473,6 +1492,8 @@ def p_constructor_head(p):
 def p_function_try_block(p):
     '''function_try_block :         TRY function_block handler_seq
     '''
+    global noExceptionLogic
+    noExceptionLogic=False
     p[0] = ['try']
 
 def p_function_block(p):
@@ -1841,7 +1862,9 @@ def p_reserved(p):
     |                               TYPEOF
     |                               uTYPEOF
     '''
-    pass
+    if p[1] in ('try', 'catch', 'throw'):
+        global noExceptionLogic
+        noExceptionLogic=False
 
 #---------------------------------------------------------------------------------------------------
 # A.12 Templates
@@ -1880,7 +1903,8 @@ def p_handler_seq(p):
 def p_handler(p):
     '''handler :                    CATCH '(' exception_declaration ')' compound_statement
     '''
-    pass
+    global noExceptionLogic
+    noExceptionLogic=False
 
 def p_exception_declaration(p):
     '''exception_declaration :      parameter_declaration
@@ -1891,13 +1915,15 @@ def p_throw_expression(p):
     '''throw_expression :           THROW
     |                               THROW assignment_expression
     '''
-    pass
+    global noExceptionLogic
+    noExceptionLogic=False
 
 def p_exception_specification(p):
     '''exception_specification :    THROW '(' ')'
     |                               THROW '(' type_id_list ')'
     '''
-    pass
+    global noExceptionLogic
+    noExceptionLogic=False
 
 def p_type_id_list(p):
     '''type_id_list :               type_id
@@ -2052,7 +2078,7 @@ def p_error(p):
         else:
             tmp = tmp + str(p.type)
         tmp = tmp + " with value '"+str(p.value)+"'"
-        tmp = tmp + " in line " + str(p.lineno)
+        tmp = tmp + " in line " + str(lexer.lineno-1)
         tmp = tmp + " at column "+str(_find_column(_parsedata,p))
     raise IOError, tmp
 
@@ -2082,7 +2108,8 @@ def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func
     #
     # Build lexer
     #
-    lex.lex()
+    global lexer
+    lexer = lex.lex()
     #
     # Initialize parse object
     #
@@ -2111,6 +2138,16 @@ def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func
         yacc.parse(data, debug=debug)
     else:
         return None
+    #
+    if not noExceptionLogic:
+        _parse_info.noExceptionLogic = False
+    else:
+        for key in identifier_lineno:
+            if 'ASSERT_THROWS' in key:
+                _parse_info.noExceptionLogic = False
+                break
+        _parse_info.noExceptionLogic = True
+    #
     return _parse_info
 
 
