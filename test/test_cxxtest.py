@@ -414,6 +414,17 @@ class BaseTestCase(object):
         """Missing template"""
         self.compile(prefix='missing_template', args='--template=NoSuchFile.h '+samples, failGen=True)
 
+    def test_inheritance(self):
+        """Test relying on inheritance"""
+        self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', output='inheritance_old.out')
+
+    def test_inheritance(self):
+        """Test relying on inheritance"""
+        if self.fog == '':
+            self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', failGen=True)
+        else:
+            self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', output='inheritance.out')
+
 
 @unittest.skipIf(not available('c++', '-o'), 'Cannot test c++ compiler')
 class TestCpp(BaseTestCase, unittest.TestCase):
