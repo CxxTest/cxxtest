@@ -425,6 +425,10 @@ class BaseTestCase(object):
         else:
             self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', output='inheritance.out')
 
+    def test_simple_inheritance(self):
+        """Test relying on simple inheritance"""
+        self.compile(prefix='simple_inheritance', args='--error-printer SimpleInheritedTest.h', output='simple_inheritance.out')
+
 
 @unittest.skipIf(not available('c++', '-o'), 'Cannot test c++ compiler')
 class TestCpp(BaseTestCase, unittest.TestCase):
