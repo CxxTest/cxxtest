@@ -70,7 +70,7 @@ class BaseTestCase(object):
             return
         if os.path.exists(self.py_out):
             os.remove(self.py_out)
-        if os.path.exists(self.py_cpp):
+        if os.path.exists(self.py_cpp) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
             os.remove(self.py_cpp)
         if os.path.exists(self.px_pre):
             os.remove(self.px_pre)
@@ -78,7 +78,7 @@ class BaseTestCase(object):
             os.remove(self.px_out)
         if os.path.exists(self.build_log):
             os.remove(self.build_log)
-        if os.path.exists(self.build_target):
+        if os.path.exists(self.build_target) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
             os.remove(self.build_target)
 
     def check_if_supported(self, filename, msg):
@@ -469,7 +469,7 @@ class TestGpp(BaseTestCase, unittest.TestCase):
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='g++ -g -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo'
+    compiler='g++ -g -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo %s' % os.environ.get('CXXTEST_GCOV_FLAGS','')
     no_eh_option = '-fno-exceptions'
     qtFlags='-Ifake'
     x11Flags='-Ifake'
