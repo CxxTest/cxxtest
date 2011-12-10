@@ -56,6 +56,7 @@ class BaseTestCase(object):
     fog=''
 
     def setUp(self):
+        self.passed=False
         self.prefix=''
         self.py_out=''
         self.py_cpp=''
@@ -65,7 +66,8 @@ class BaseTestCase(object):
         self.build_target=''
 
     def tearDown(self):
-        #return
+        if not self.passed:
+            return
         if os.path.exists(self.py_out):
             os.remove(self.py_out)
         if os.path.exists(self.py_cpp):
@@ -92,13 +94,13 @@ class BaseTestCase(object):
 
     def init(self, prefix):
         #
-        self.prefix = prefix
-        self.py_out = currdir+prefix+'_py.out'
-        self.py_cpp = currdir+prefix+'_py.cpp'
-        self.px_pre = currdir+prefix+'_px.pre'
-        self.px_out = currdir+prefix+'_px.out'
-        self.build_log = currdir+prefix+'_build.log'
-        self.build_target = currdir+prefix+'px'+target_suffix
+        self.prefix = self.__class__.__name__+'_'+prefix
+        self.py_out = currdir+self.prefix+'_py.out'
+        self.py_cpp = currdir+self.prefix+'_py.cpp'
+        self.px_pre = currdir+self.prefix+'_px.pre'
+        self.px_out = currdir+self.prefix+'_px.out'
+        self.build_log = currdir+self.prefix+'_build.log'
+        self.build_target = currdir+self.prefix+'px'+target_suffix
 
     def check_root(self, prefix='', output=None):
         self.init(prefix)
@@ -111,7 +113,7 @@ class BaseTestCase(object):
         files = [self.py_cpp]
         for i in [1,2]:
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
-            file = currdir+prefix+'_py%s.cpp' % str(i)
+            file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
             cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out)
             ##print cmd
@@ -133,6 +135,8 @@ class BaseTestCase(object):
         diffstr = file_diff(self.px_pre, output)
         if not diffstr == '':
             self.fail("Unexpected differences in output:\n"+diffstr)
+        #
+        self.passed=True
 
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None):
         self.init(prefix)
@@ -144,6 +148,7 @@ class BaseTestCase(object):
             if status == 0: 
                 self.fail('Expected cxxtestgen to fail.')
             else:
+                self.passed=True
                 return
         self.assertEquals(status, 0, 'Error executing command: '+cmd)
         #
@@ -172,6 +177,8 @@ class BaseTestCase(object):
         #
         if compile == '' and output is None and os.path.exists(self.py_cpp):
             self.fail("Output cpp file %s should not have been generated." % self.py_cpp)
+        #
+        self.passed=True
 
     #
     # Tests for cxxtestgen
