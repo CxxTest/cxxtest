@@ -13,7 +13,7 @@ currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
 sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
 
 # Headers from the cxxtest/sample directory
-samples = ' '.join(file for file in glob.glob(sampledir+'*.h'))
+samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
 guiInputs=currdir+'../sample/gui/GreenYellowRed.h'
 target_suffix = '.exe' if sys.platform.startswith('win') else ''
 
