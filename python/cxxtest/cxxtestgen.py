@@ -15,6 +15,7 @@ import glob
 import string
 from optparse import OptionParser
 from cxxtest import cxxtest_parser
+import cxxtest_fog
 try:
     import cxxtest_fog
     imported_fog=True
