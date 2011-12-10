@@ -437,7 +437,6 @@ class BaseTestCase(object):
         self.compile(prefix='simple_inheritance', args='--error-printer SimpleInheritedTest.h', output='simple_inheritance.out')
 
 
-@unittest.skipIf(not available('c++', '-o'), 'Cannot test c++ compiler')
 class TestCpp(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
@@ -449,6 +448,10 @@ class TestCpp(BaseTestCase, unittest.TestCase):
     x11Flags='-Ifake'
     w32Flags='-Ifake'
 
+    def run(self, *args, **kwds):
+        if available('c++', '-o'):
+            return unittest.TestCase.run(self, *args, **kwds)
+
     def setUp(self):
         BaseTestCase.setUp(self)
 
@@ -456,13 +459,11 @@ class TestCpp(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
-@unittest.skipIf(not available('c++', '-o'), 'Cannot test c++ compiler')
 class TestCppFOG(TestCpp):
 
     fog='-f'
 
 
-@unittest.skipIf(not available('g++', '-o'), 'Cannot test g++ compiler')
 class TestGpp(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
@@ -474,6 +475,10 @@ class TestGpp(BaseTestCase, unittest.TestCase):
     x11Flags='-Ifake'
     w32Flags='-Ifake'
 
+    def run(self, *args, **kwds):
+        if available('g++', '-o'):
+            return unittest.TestCase.run(self, *args, **kwds)
+
     def setUp(self):
         BaseTestCase.setUp(self)
 
@@ -481,13 +486,11 @@ class TestGpp(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
-@unittest.skipIf(not available('g++', '-o'), 'Cannot test g++ compiler')
 class TestGppFOG(TestGpp):
 
     fog='-f'
 
 
-@unittest.skipIf(not available('clang++', '-o'), 'Cannot test clang++ compiler')
 class TestClang(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
@@ -499,6 +502,10 @@ class TestClang(BaseTestCase, unittest.TestCase):
     x11Flags='-Ifake'
     w32Flags='-Ifake'
 
+    def run(self, *args, **kwds):
+        if available('clang++', '-o'):
+            return unittest.TestCase.run(self, *args, **kwds)
+
     def setUp(self):
         BaseTestCase.setUp(self)
 
@@ -506,13 +513,11 @@ class TestClang(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
-@unittest.skipIf(not available('clang++', '-o'), 'Cannot test clang++ compiler')
 class TestClangFOG(TestClang):
 
     fog='-f'
 
 
-@unittest.skipIf(not available('cl', '-o'), 'Cannot test cl compiler')
 class TestCL(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
@@ -524,6 +529,10 @@ class TestCL(BaseTestCase, unittest.TestCase):
     x11Flags='-Ifake'
     w32Flags='-Ifake'
 
+    def run(self, *args, **kwds):
+        if available('cl', '-o'):
+            return unittest.TestCase.run(self, *args, **kwds)
+
     def setUp(self):
         BaseTestCase.setUp(self)
 
@@ -531,7 +540,6 @@ class TestCL(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
-@unittest.skipIf(not available('cl', '-o'), 'Cannot test cl compiler')
 class TestCLFOG(TestCL):
 
     fog='-f'
