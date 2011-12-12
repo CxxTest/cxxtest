@@ -20,25 +20,25 @@ Exceptions.h:55: Error: Expected (suite()->tearDown()) not to throw, but it did
 In TestThrowFromTest::testThrowSomething:
 Exceptions.h:61: Error: Test failed: Exception thrown from test
 In TestThrowFromTest::testMoveOn:
-/Users/wehart/home/mac/src/cxxtest/test/Exceptions.h:68: Trace: One failed test doesn't affect the others
+test/Exceptions.h:68: Trace: One failed test doesn't affect the others
 .
 In DynamicAbort::test_Abort_on_fail_in_this_test:
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:8: Error: Expected (1 == 2), found (1 != 2)
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:9: Error: Expected (2 == 3), found (2 != 3)
+test/DynamicAbort.h:8: Error: Expected (1 == 2), found (1 != 2)
+test/DynamicAbort.h:9: Error: Expected (2 == 3), found (2 != 3)
 In DynamicAbort::test_Dont_abort_in_this_test:
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:15: Error: Expected (1 == 2), found (1 != 2)
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:16: Error: Expected (2 == 3), found (2 != 3)
+test/DynamicAbort.h:15: Error: Expected (1 == 2), found (1 != 2)
+test/DynamicAbort.h:16: Error: Expected (2 == 3), found (2 != 3)
 In DynamicAbort::test_Revert_to_abort:
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:21: Error: Expected (1 == 2), found (1 != 2)
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:22: Error: Expected (2 == 3), found (2 != 3)
+test/DynamicAbort.h:21: Error: Expected (1 == 2), found (1 != 2)
+test/DynamicAbort.h:22: Error: Expected (2 == 3), found (2 != 3)
 In SetUpWorksAllTests::test_Dont_abort_in_this_test:
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:36: Error: Expected (1 == 2), found (1 != 2)
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:37: Error: Expected (2 == 3), found (2 != 3)
+test/DynamicAbort.h:36: Error: Expected (1 == 2), found (1 != 2)
+test/DynamicAbort.h:37: Error: Expected (2 == 3), found (2 != 3)
 In SetUpWorksAllTests::test_Dont_abort_in_this_test_either:
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:42: Error: Expected (1 == 2), found (1 != 2)
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:43: Error: Expected (2 == 3), found (2 != 3)
+test/DynamicAbort.h:42: Error: Expected (1 == 2), found (1 != 2)
+test/DynamicAbort.h:43: Error: Expected (2 == 3), found (2 != 3)
 In SetUpWorksAllTests::test_Override_in_this_test:
-/Users/wehart/home/mac/src/cxxtest/test/DynamicAbort.h:49: Error: Expected (1 == 2), found (1 != 2)
+test/DynamicAbort.h:49: Error: Expected (1 == 2), found (1 != 2)
 Failed 12 of 13 tests
 Success rate: 7%
 Error level = 12

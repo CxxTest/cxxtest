@@ -11,6 +11,7 @@ else:
 
 currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
 sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
+cxxtestdir = os.path.dirname(os.path.dirname(currdir))+os.sep
 
 # Headers from the cxxtest/sample directory
 samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
@@ -27,23 +28,27 @@ def available(compiler, exe_option):
         os.remove(currdir+'anything')
     return flag
 
+def remove_absdir(filename):
+    INPUT=open(filename, 'r')
+    lines = INPUT.readlines()
+    INPUT.close()
+    OUTPUT=open(filename, 'w')
+    for line in lines:
+        print >>OUTPUT, ''.join(line.split(cxxtestdir)),
+    OUTPUT.close()
+
 def file_diff(filename1, filename2):
-    INPUT1=open(filename1, 'r')
-    lines1 = INPUT1.readlines()
-    for i in range(0,len(lines1)):
-        lines1[i] = lines1[i].strip()
-        if '/' in lines1[i]:
-            lines1[i] = lines1[i].split('/')[-1]
-    INPUT1.close()
-
-    INPUT2=open(filename2, 'r')
-    lines2 = INPUT2.readlines()
-    for i in range(0,len(lines2)):
-        lines2[i] = lines2[i].strip()
-        if '/' in lines2[i]:
-            lines2[i] = lines2[i].split('/')[-1]
-    INPUT2.close()
-
+    remove_absdir(filename1)
+    remove_absdir(filename2)
+    #
+    INPUT=open(filename1, 'r')
+    lines1 = INPUT.readlines()
+    INPUT.close()
+    #
+    INPUT=open(filename2, 'r')
+    lines2 = INPUT.readlines()
+    INPUT.close()
+    #
     s=""
     for line in difflib.unified_diff(lines2,lines1,fromfile=filename2,tofile=filename1):
         s += line+"\n"
@@ -138,7 +143,7 @@ class BaseTestCase(object):
         #
         self.passed=True
 
-    def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None):
+    def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None):
         self.init(prefix)
         #
         cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
@@ -171,9 +176,14 @@ class BaseTestCase(object):
             OUTPUT = open(self.px_pre,'a')
             print >>OUTPUT, 'Error level = '+str(status)
             OUTPUT.close()
-            diffstr = file_diff(self.px_pre, output)
+            if logfile is None:
+                diffstr = file_diff(self.px_pre, output)
+            else:
+                diffstr = file_diff(currdir+logfile, output)
             if not diffstr == '':
                 self.fail("Unexpected differences in output:\n"+diffstr)
+            if not logfile is None:
+                os.remove(currdir+logfile)
         #
         if compile == '' and output is None and os.path.exists(self.py_cpp):
             self.fail("Output cpp file %s should not have been generated." % self.py_cpp)
@@ -280,6 +290,10 @@ class BaseTestCase(object):
         self.compile(prefix='user_traits', args="--template=UserTraits.tpl UserTraits.h", output='user.out')
 
     normals = "LessThanEquals.h Relation.h DefaultTraits.h DoubleCall.h SameData.h SameFiles.h Tsm.h TraitsTest.h MockTest.h SameZero.h"
+
+    def test_normal_behavior_xunit(self):
+        """Normal Behavior with XUnit Output"""
+        self.compile(prefix='normal_behavior_xunit', args="--xunit-printer "+self.normals, logfile='TEST-cxxtest.xml', output="normal.xml")
 
     def test_normal_behavior(self):
         """Normal Behavior"""
