@@ -78,7 +78,7 @@ test/SameFiles.h:28: Error: Files 'SameFiles.h' and 'SameData.h' differ at line 
 .
 In SameFiles::testSafeAssertMessageSameFiles:
 test/SameFiles.h:38: Error: Test failed: Not same files
-test/SameFiles.h:38: Error: Files 'Samefiles.h' and 'SameData.h' differ at line 4
+test/SameFiles.h:38: Error: Files 'SameFiles.h' and 'SameData.h' differ at line 4
 = #include <cxxtest/TestSuite.h>
 =  
 = //

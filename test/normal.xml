@@ -174,7 +174,7 @@ test/SameFiles.h:28: Error: Files &apos;SameFiles.h&apos; and &apos;SameData.h&a
     <testcase classname="SameFiles" name="testSafeAssertSameFiles" line="31" />
     <testcase classname="SameFiles" name="testSafeAssertMessageSameFiles" line="36">
         <failure file="test/SameFiles.h" line="38" type="failure" >Test failed: Not same files
-Error: Files &apos;Samefiles.h&apos; and &apos;SameData.h&apos; differ at line 4
+Error: Files &apos;SameFiles.h&apos; and &apos;SameData.h&apos; differ at line 4
 = #include &lt;cxxtest/TestSuite.h&gt;
 =  
 = //
@@ -185,7 +185,7 @@ Error: Files &apos;Samefiles.h&apos; and &apos;SameData.h&apos; differ at line 4
         <system-out >
 In SameFiles::testSafeAssertMessageSameFiles:
 test/SameFiles.h:38: Error: Test failed: Not same files
-test/SameFiles.h:38: Error: Files &apos;Samefiles.h&apos; and &apos;SameData.h&apos; differ at line 4
+test/SameFiles.h:38: Error: Files &apos;SameFiles.h&apos; and &apos;SameData.h&apos; differ at line 4
 = #include &lt;cxxtest/TestSuite.h&gt;
 =  
 = //

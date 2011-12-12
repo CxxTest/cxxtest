@@ -35,7 +35,7 @@ public:
 
     void testSafeAssertMessageSameFiles()
     {
-        ETSM_ASSERT_SAME_FILES( "Not same files", "Samefiles.h", "SameData.h" );
+        ETSM_ASSERT_SAME_FILES( "Not same files", "SameFiles.h", "SameData.h" );
     }
 };
 
