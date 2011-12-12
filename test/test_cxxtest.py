@@ -279,7 +279,7 @@ class BaseTestCase(object):
         """User traits"""
         self.compile(prefix='user_traits', args="--template=UserTraits.tpl UserTraits.h", output='user.out')
 
-    normals = "LessThanEquals.h Relation.h DefaultTraits.h DoubleCall.h SameData.h Tsm.h TraitsTest.h MockTest.h SameZero.h"
+    normals = "LessThanEquals.h Relation.h DefaultTraits.h DoubleCall.h SameData.h SameFiles.h Tsm.h TraitsTest.h MockTest.h SameZero.h"
 
     def test_normal_behavior(self):
         """Normal Behavior"""
