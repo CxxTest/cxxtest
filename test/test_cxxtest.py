@@ -110,7 +110,7 @@ class BaseTestCase(object):
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
-        cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
         #print self.fog, "CMD", cmd
         status = subprocess.call(cmd, shell=True)
         self.assertEquals(status, 0, 'Error executing cxxtestgen')
@@ -120,7 +120,7 @@ class BaseTestCase(object):
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
-            cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out)
+            cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out)
             ##print cmd
             status = subprocess.call(cmd, shell=True)
             self.assertEquals(status, 0, 'Error executing cxxtestgen')
@@ -146,7 +146,7 @@ class BaseTestCase(object):
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None):
         self.init(prefix)
         #
-        cmd = "%s %s../python/scripts/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
         #print "HERE", cmd
         status = subprocess.call(cmd, shell=True)
         if failGen:
