@@ -20,28 +20,25 @@ Member template functions
 Exception handling
 </li><li class="listitem">
 External libraries (including memory management, file/console I/O, graphics libraries)
-</li></ul></div><p>In particular, the design of CxxTest was tailored for C++ compilers on embedded systems, for which
-many of these features are not supported.
-However, CxxTest can also leverage standard C++ features when
-they are supported by a compiler (e.g. catch unhandled exceptions).</p><p>Additionally, CxxTest supports <span class="emphasis"><em>test discovery</em></span>.  Tests are defined in
-C++ header files, which are parsed by CxxTest to automatically generate a test runner.
-Thus, CxxTest is somewhat easier to use than alternative
-C++ testing frameworks, since you do not need to <span class="emphasis"><em>register</em></span> tests.</p><p>CxxTest is available under the <a class="ulink" href="http://www.gnu.org/copyleft/lesser.html" target="_top">GNU
-Lesser General Public</a>. The homepage for CxxTest is
-<a class="ulink" href="http://cxxtest.tigris.org" target="_top">http://cxxtest.tigris.org</a>.  The following are key resources for
-CxxTest:</p><div class="variablelist"><dl><dt><span class="term">
-Release downloads
-</span></dt><dd>
-     <a class="ulink" href="http://cxxtest.tigris.org/servlets/ProjectDocumentList" target="_top">http://cxxtest.tigris.org/servlets/ProjectDocumentList</a>
-</dd><dt><span class="term">
-HTML user guide
-</span></dt><dd>
-     <a class="ulink" href="http://cxxtest.tigris.org/guide.html" target="_top">http://cxxtest.tigris.org/guide.html</a>
-</dd><dt><span class="term">
-PDF user guide
-</span></dt><dd>
-     <a class="ulink" href="http://cxxtest.tigris.org/guide.pdf" target="_top">http://cxxtest.tigris.org/guide.pdf</a>
-</dd></dl></div><p>The remainder of the CxxTest User Guide provides the following documentation:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+</li></ul></div><p>In particular, the design of CxxTest was tailored for C++ compilers
+on embedded systems, for which many of these features are not
+supported.  However, CxxTest can also leverage standard C++ features
+when they are supported by a compiler (e.g. catch unhandled
+exceptions).</p><p>Additionally, CxxTest supports <span class="emphasis"><em>test discovery</em></span>.  Tests are defined
+in C++ header files, which are parsed by CxxTest to automatically
+generate a test runner.  Thus, CxxTest is somewhat easier to use
+than alternative C++ testing frameworks, since you do not need to
+<span class="emphasis"><em>register</em></span> tests.</p><p>CxxTest is available under the <a class="ulink" href="http://www.gnu.org/copyleft/lesser.html" target="_top">GNU
+Lesser General Public</a>.
+The following are key online resources for CxxTest:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<a class="ulink" href="http://cxxtest.tigris.org" target="_top">CxxTest home page</a>
+</li><li class="listitem">
+<a class="ulink" href="http://cxxtest.tigris.org/servlets/ProjectDocumentListR" target="_top">Release downloads</a>
+</li><li class="listitem">
+<a class="ulink" href="http://cxxtest.tigris.org/guide.html" target="_top">HTML user guide</a>
+</li><li class="listitem">
+<a class="ulink" href="http://cxxtest.tigris.org/guide.pdf" target="_top">PDF user guide</a>
+</li></ul></div><p>The CxxTest User Guide provides the following documentation:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 <a class="link" href="#gettingStarted" title="2. Getting Started">Getting Started</a>: Some simple examples that illustrate how to use CxxTest
 </li><li class="listitem">
 <a class="link" href="#testAssertions" title="3. Test Assertions">Test Assertions</a>: The test assertions supported by CxxTest
@@ -244,7 +241,7 @@ It takes as an argument the name of a class, similar to a STL <code class="liter
 </dd></dl></div><pre class="programlisting">   void test_assert_relation( void )
    {
       TS_ASSERT_RELATION( std::greater&lt;double&gt;, 1e6, 1000.0 );
-   }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>, <a class="xref" href="#ts_assert_differs">[ts_assert_differs]</a>, <a class="link" href="#ts_assert_less_than">TS_ASSERT_LESS_THAN</a> and <a class="xref" href="#ts_assert_less_than_equals">[ts_assert_less_than_equals]</a>.
+   }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>, <a class="link" href="#ts_assert_differs">TS_ASSERT_DIFFERS</a>, <a class="link" href="#ts_assert_less_than">TS_ASSERT_LESS_THAN</a> and <a class="link" href="#ts_assert_less_than_equals">TS_ASSERT_LESS_THAN_EQUALS</a>.
 This can be used to assert comparisons which are not covered by the builtin test assertions.</p><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_same_data"></a> TS_ASSERT_SAME_DATA
 </span></dt><dd>
@@ -284,6 +281,7 @@ exception value:
    {
         raise 1;
    }
+
    void test_assert_throws_assert( void )
    {
         TS_ASSERT_THROWS_ASSERT( self.throws_value(), const Error&amp; e, TS_ASSERT_EQUALS(e, 1) );
@@ -300,6 +298,7 @@ This test assertion verifies that an exception is thrown when executing the firs
 This test assertion verifies that an exception is <span class="emphasis"><em>not</em></span> thrown when executing the first argument:
 </dd></dl></div><pre class="programlisting">   void throws_nothing( void )
    { }
+
    void test_assert_throws_nothing( void )
    {
         TS_ASSERT_THROWS_ASSERT( self.throws_nothing() );

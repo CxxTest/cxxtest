@@ -101,6 +101,7 @@ public:
    {
         raise 1;
    }
+
    void test_assert_throws_assert( void )
    {
         TS_ASSERT_THROWS_ASSERT( self.throws_value(), const Error& e, TS_ASSERT_EQUALS(e, 1) );
@@ -117,6 +118,7 @@ public:
 // @assertThrowsNothing:
    void throws_nothing( void )
    { }
+
    void test_assert_throws_nothing( void )
    {
         TS_ASSERT_THROWS_ASSERT( self.throws_nothing() );
