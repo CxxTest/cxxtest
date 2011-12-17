@@ -5,10 +5,10 @@ from __future__ import division
 
 __all__ = ['main']
 
+import __release__
 import sys
 import os.path
 from os.path import abspath, dirname
-#sys.path.insert(0, dirname(dirname(abspath(__file__))))
 import re
 import getopt
 import glob
@@ -29,7 +29,7 @@ wrotePreamble = 0
 wroteWorld = 0
 lastIncluded = ''
 
-def main(args=None):
+def main(args=sys.argv):
     '''The main program'''
     #
     # Reset global state
@@ -54,62 +54,62 @@ def parseCommandline(args):
     '''Analyze command line arguments'''
     global imported_fog
     global options
-    parser = OptionParser("%prog [options] [input_files]")
-    parser.add_option("-v", "--version",
+    parser = OptionParser("%prog [options] <filename> [<filename> ...]")
+    parser.add_option("--version",
                       action="store_true", dest="version", default=False,
-                      help="Write CxxTest version")
+                      help="Write the CxxTest version.")
     parser.add_option("-o", "--output",
                       dest="outputFileName", default=None, metavar="NAME",
-                      help="Write output to file NAME")
+                      help="Write output to file NAME.")
     parser.add_option("", "--runner",
                       dest="runner", default="", metavar="CLASS",
-                      help="Create a main() function that runs CxxTest::CLASS")
+                      help="Create a test runner that processes test events using the class CxxTest::CLASS.")
     parser.add_option("", "--gui",
                       dest="gui", metavar="CLASS",
-                      help="Like --runner, with GUI component")
+                      help="Create a GUI test runner that processes test events using the class CxxTest::CLASS.")
     parser.add_option("", "--error-printer",
                       action="store_true", dest="error_printer", default=False,
-                      help="Same as --runner=ErrorPrinter")
+                      help="Create a test runner using the ErrorPrinter class, and allow the use of the standard library.")
     parser.add_option("", "--xunit-printer",
                       action="store_true", dest="xunit_printer", default=False,
-                      help="Specifies the use of the XUnitPrinter.")
+                      help="Create a test runner using the XUnitPrinter class.")
     parser.add_option("", "--xunit-file",  dest="xunit_file", default="",
-                      help="The value of this option is an XML filename to which the XML summary is written.  The default XML filename is TEST-<world>.xml, where <world> is the value of the --world option.")
+                      help="The file to which the XML summary is written for test runners using the XUnitPrinter class.  The default XML filename is TEST-<world>.xml, where <world> is the value of the --world option.  (default: cxxtest)")
     parser.add_option("-w","--world", dest="world", default="cxxtest",
                       help="The label of the tests, used to name the XML results.")
     parser.add_option("", "--abort-on-fail",
                       action="store_true", dest="abortOnFail", default=False,
-                      help="Abort tests on failed asserts (like xUnit)")
+                      help="Abort tests on failed asserts (like xUnit).")
     parser.add_option("", "--have-std",
                       action="store_true", dest="haveStandardLibrary", default=False,
-                      help="Use standard library (even if not found in tests)")
+                      help="Use the standard library (even if not found in tests).")
     parser.add_option("", "--no-std",
                       action="store_true", dest="noStandardLibrary", default=False,
-                      help="Don't use standard library (even if found in tests)")
+                      help="Do not use standard library (even if found in tests).")
     parser.add_option("", "--have-eh",
                       action="store_true", dest="haveExceptionHandling", default=False,
-                      help="Use exception handling (even if not found in tests)")
+                      help="Use exception handling (even if not found in tests).")
     parser.add_option("", "--no-eh",
                       action="store_true", dest="noExceptionHandling", default=False,
-                      help="Don't use exception handling (even if found in tests)")
+                      help="Do not use exception handling (even if found in tests).")
     parser.add_option("", "--longlong",
                       dest="longlong", default="long long", metavar="TYPE",
-                      help="Use TYPE (default: long long) as long long")
+                      help="Use TYPE as long long.  (default: long long)")
     parser.add_option("", "--template",
                       dest="templateFileName", default=None, metavar="TEMPLATE",
-                      help="Use TEMPLATE file to generate the test runner")
+                      help="Generate the test runner using file TEMPLATE to define a template.")
     parser.add_option("", "--include", action="append",
                       dest="headers", default=[], metavar="HEADER",
-                      help="Include HEADER in test runner before other headers")
+                      help="Include file HEADER in the test runner before other headers.")
     parser.add_option("", "--root",
                       action="store_true", dest="root", default=False,
-                      help="Write CxxTest globals")
+                      help="Write the main() function and global data for a test runner.")
     parser.add_option("", "--part",
                       action="store_true", dest="part", default=False,
-                      help="Don't write CxxTest globals")
+                      help="Write the tester classes for a test runner.")
     parser.add_option("", "--no-static-init",
                       action="store_true", dest="noStaticInit", default=False,
-                      help="Don\'t rely on static initialization")
+                      help="Do not rely on static initialization in the test runner.")
     parser.add_option("", "--factor",
                       action="store_true", dest="factor", default=False,
                       help="Mystery option")
@@ -154,7 +154,7 @@ def parseCommandline(args):
         options.runner = 'StdioPrinter'
 
     files = setFiles(args[1:])
-    if len(files) is 0 and not options.root:
+    if len(files) == 0 and not options.root:
         sys.stderr.write(parser.error("No input files found"))
 
     return files
@@ -162,7 +162,7 @@ def parseCommandline(args):
 
 def printVersion():
     '''Print CxxTest version and exit'''
-    sys.stdout.write( "This is CxxTest version INSERT_VERSION_HERE.\n" )
+    sys.stdout.write( "This is CxxTest version %s.\n" % __release__.__version__ )
     sys.exit(0)
 
 def setFiles(patterns ):
@@ -453,4 +453,3 @@ def writeInitialize(output):
 # DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government
 # retains certain rights in this software.
 #
-

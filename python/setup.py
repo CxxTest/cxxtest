@@ -41,7 +41,6 @@ except ImportError:
     from distutils.core import setup
 packages = _find_packages('cxxtest')
 
-scripts = glob.glob("scripts/*")
 doclines = cxxtest.__doc__.split("\n")
 
 setup(name="cxxtest",
@@ -56,6 +55,9 @@ setup(name="cxxtest",
       long_description = "\n".join(doclines[2:]),
       packages=packages,
       keywords=['utility'],
-      scripts=scripts
+      entry_points="""
+        [console_scripts]
+        coopr = cxxtest.cxxtestgen:main
+      """
       )
 
