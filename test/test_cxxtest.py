@@ -482,6 +482,13 @@ class BaseTestCase(object):
         else:
             self.compile(prefix='cpp_template1', args="--error-printer CppTemplateTest.h", output='template.out')
 
+    def test_bad1(self):
+        """BadTest1"""
+        if self.fog == '':
+            self.compile(prefix='bad1', args="--error-printer BadTest.h", failGen=True)
+        else:
+            self.compile(prefix='bad1', args="--error-printer BadTest.h", output='bad.out')
+
 
 class TestCpp(BaseTestCase, unittest.TestCase):
 
