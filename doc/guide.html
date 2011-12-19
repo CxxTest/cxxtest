@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dt><span class="section"><a href="#samples">5. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">6. Installation</a></span></dt><dt><span class="section"><a href="#discussion">7. Status and Future Plans</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_test_runner_options">4.4. Test Runner Options</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_c_parser">4.6. C++ Parser</a></span></dt></dl></dd><dt><span class="section"><a href="#samples">5. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">6. Installation</a></span></dt><dt><span class="section"><a href="#discussion">7. Status and Future Plans</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
 spirit to <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>,
 <a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
 <a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>.  CxxTest is easy to
@@ -29,7 +29,7 @@ in C++ header files, which are parsed by CxxTest to automatically
 generate a test runner.  Thus, CxxTest is somewhat easier to use
 than alternative C++ testing frameworks, since you do not need to
 <span class="emphasis"><em>register</em></span> tests.</p><p>CxxTest is available under the <a class="ulink" href="http://www.gnu.org/copyleft/lesser.html" target="_top">GNU
-Lesser General Public</a>.
+Lesser General Public</a> license.
 The following are key online resources for CxxTest:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 <a class="ulink" href="http://cxxtest.tigris.org" target="_top">CxxTest home page</a>
 </li><li class="listitem">
@@ -50,7 +50,15 @@ The following are key online resources for CxxTest:</p><div class="itemizedlist"
 <a class="link" href="#installation" title="6. Installation">Installation</a>: How to install CxxTest
 </li><li class="listitem">
 <a class="link" href="#discussion" title="7. Status and Future Plans">Discussion</a>: Comments on the past, present and future of CxxTest
-</li></ul></div></div><div class="section" title="2. Getting Started"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="gettingStarted"></a>2. Getting Started</h2></div></div></div><p>The CxxTest supports test automation, sharing of setup
+</li></ul></div></div><div class="section" title="2. Getting Started"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="gettingStarted"></a>2. Getting Started</h2></div></div></div><p>Testing is performed with CxxTest in a four-step process:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+Tests are defined in C++ header files
+</li><li class="listitem">
+The <code class="literal">cxxtestgen</code> command processes header files to generate files for the test runner.
+</li><li class="listitem">
+Compile the test runner.
+</li><li class="listitem">
+Execute the test runner to run all test suites.
+</li></ol></div><p>CxxTest supports test automation, sharing of setup
 and shutdown code for tests, aggregation of tests into collections,
 and independence of the tests from the reporting framework.  To
 achieve this, CxxTest supports some important concepts that are common to xUnit frameworks (
@@ -86,10 +94,10 @@ and <code class="literal">TestSuite.tearDown</code> methods can be overridden to
 initialization and cleanup for the fixture.  The <code class="literal">TestSuite.setUp</code>
 method is run before each test is executed, and the <code class="literal">TestSuite.tearDown</code>
 method is run after each test is executed.</p><div class="section" title="2.1. A First Example"><div class="titlepage"><div><div><h3 class="title"><a id="_a_first_example"></a>2.1. A First Example</h3></div></div></div><p>The following is a simple example of a
-test suite with a single test, <code class="literal">testAddition</code>, which perform two test assertions:</p><pre class="programlisting">// MyTestSuite.h
+test suite with a single test, <code class="literal">testAddition</code>, which perform two test assertions:</p><pre class="programlisting">// MyTestSuite1.h
 #include &lt;cxxtest/TestSuite.h&gt;
 
-class MyTestSuite : public CxxTest::TestSuite
+class MyTestSuite1 : public CxxTest::TestSuite
 {
 public:
    void testAddition( void )
@@ -97,12 +105,12 @@ public:
       TS_ASSERT( 1 + 1 &gt; 1 );
       TS_ASSERT_EQUALS( 1 + 1, 2 );
    }
-};</pre><p>You use the <code class="literal">cxxtestgen</code> script to generate a <span class="emphasis"><em>test runner</em></span> for test suites in C++ header files:</p><pre class="programlisting">$CXXTESTBIN/cxxtestgen --error-printer -o runner.cpp MyTestSuite.h</pre><p>This command generates the file <code class="literal">runner.cpp</code>, which can be compiled.</p><pre class="programlisting">$CXXTESTBIN/cxxtestgen --error-printer -o runner.cpp MyTestSuite.h</pre><p>Note that additional compiler flags may be needed to include headers
+};</pre><p>You use the <code class="literal">cxxtestgen</code> script to generate a <span class="emphasis"><em>test runner</em></span> for test suites in C++ header files:</p><pre class="programlisting">cxxtestgen --error-printer -o runner.cpp MyTestSuite1.h</pre><p>This command generates the file <code class="literal">runner.cpp</code>, which can be compiled.</p><pre class="programlisting">cxxtestgen --error-printer -o runner.cpp MyTestSuite1.h</pre><p>Note that additional compiler flags may be needed to include headers
 and libraries that are used during testing.</p><p>This runner can be executed to perform the specified tests:</p><pre class="programlisting">./runner</pre><p>which generates the following output:</p><pre class="screen">Running 1 test.OK!</pre></div><div class="section" title="2.2. A Second Example"><div class="titlepage"><div><div><h3 class="title"><a id="_a_second_example"></a>2.2. A Second Example</h3></div></div></div><p>The following header file extends the previous example to
 include a test that generates an error:</p><pre class="programlisting">// MyTestSuite2.h
 #include &lt;cxxtest/TestSuite.h&gt;
 
-class MyTestSuite : public CxxTest::TestSuite
+class MyTestSuite2 : public CxxTest::TestSuite
 {
 public:
    void testAddition( void )
@@ -149,7 +157,130 @@ corresponding <code class="literal">TS_</code> assertions, but (1) their first a
 <code class="literal">const char*</code> message buffer is printed when the test fails, and
 (2) these assertions do not catch exceptions generated during
 testing.
-</dd></dl></div></div><div class="section" title="4. The CxxTestGen Command"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="cxxtestgen"></a>4. The CxxTestGen Command</h2></div></div></div></div><div class="section" title="5. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>5. Sample Problems</h2></div></div></div></div><div class="section" title="6. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>6. Installation</h2></div></div></div></div><div class="section" title="7. Status and Future Plans"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="discussion"></a>7. Status and Future Plans</h2></div></div></div><p>The CxxTest 4.0 release reflects major changes in the management
+</dd></dl></div></div><div class="section" title="4. The CxxTestGen Command"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="cxxtestgen"></a>4. The CxxTestGen Command</h2></div></div></div><p>The <code class="literal">cxxtestgen</code> command processes one or more C++ header files to
+generate a test runner.  The <code class="literal">cxxtestgen</code> command performs test
+discovery by parsing the header files to find test classes, which
+inherit from the class <code class="literal">CxxTest::TestSuite</code>.</p><p>The <code class="literal">--help</code> option generates the following summary of the <code class="literal">cxxtestgen</code> command line options:</p><pre class="screen">Usage: cxxtestgen [options] &lt;filename&gt; [&lt;filename&gt; ...]
+
+Options:
+  -h, --help            show this help message and exit
+  --version             Write the CxxTest version.
+  -o NAME, --output=NAME
+                        Write output to file NAME.
+  -w WORLD, --world=WORLD
+                        The label of the tests, used to name the XML results.
+  --include=HEADER      Include file HEADER in the test runner before other
+                        headers.
+  --abort-on-fail       Abort tests on failed asserts (like xUnit).
+  --runner=CLASS        Create a test runner that processes test events using
+                        the class CxxTest::CLASS.
+  --gui=CLASS           Create a GUI test runner that processes test events
+                        using the class CxxTest::CLASS. (deprecated)
+  --error-printer       Create a test runner using the ErrorPrinter class, and
+                        allow the use of the standard library.
+  --xunit-printer       Create a test runner using the XUnitPrinter class.
+  --xunit-file=XUNIT_FILE
+                        The file to which the XML summary is written for test
+                        runners using the XUnitPrinter class.  The default XML
+                        filename is TEST-&lt;world&gt;.xml, where &lt;world&gt; is the
+                        value of the --world option.  (default: cxxtest)
+  --have-std            Use the standard library (even if not found in tests).
+  --no-std              Do not use standard library (even if found in tests).
+  --have-eh             Use exception handling (even if not found in tests).
+  --no-eh               Do not use exception handling (even if found in
+                        tests).
+  --longlong=TYPE       Use TYPE as long long.  (default: long long)
+  --no-static-init      Do not rely on static initialization in the test
+                        runner.
+  --template=TEMPLATE   Generate the test runner using file TEMPLATE to define
+                        a template.
+  --root                Write the main() function and global data for a test
+                        runner.
+  --part                Write the tester classes for a test runner.
+  --factor              Declare the _CXXTEST_FACTOR macro.  (deprecated)</pre><p>The following section describe illustrate the use of these command line options.</p><div class="section" title="4.1. General Options"><div class="titlepage"><div><div><h3 class="title"><a id="_general_options"></a>4.1. General Options</h3></div></div></div><p>The default behavior of <code class="literal">cxxtestgen</code> is to send the source for the
+test runner to the standard output stream.  The <code class="literal">--output</code> (<code class="literal">-o</code>)
+option indicates a filename for the test runner.</p><p>The <code class="literal">--world</code> (<code class="literal">-w</code>) option specifies the value of the <code class="literal">CxxTest::RealWorldDescription::_worldName</code>
+variable.  This option also customizes the filename used for XML output files (see below).</p><p>The <code class="literal">--include</code> option defines a filename that is included in the runner before all other headers.</p><p>The <code class="literal">--abort-on-fail</code> option forces an abort if a test fails, rather than continuing execution
+to the next test.</p></div><div class="section" title="4.2. Test Listener Options"><div class="titlepage"><div><div><h3 class="title"><a id="_test_listener_options"></a>4.2. Test Listener Options</h3></div></div></div><p>The test runner behavior is controlled by a <span class="emphasis"><em>test listener</em></span> class
+that is used to define to the <code class="literal">main</code> function.  The test listener
+class is a subclass of <code class="literal">TestListener</code> that receives notifications
+about the testing process, notably which assertions failed.  The
+<code class="literal">--runner</code> option is used to specify the test listener that is used
+in the test runner.  The following test listeners are defined in
+CxxTest:</p><div class="variablelist"><dl><dt><span class="term">
+<code class="literal">ErrorPrinter</code>
+</span></dt><dd>
+    This is the standard error printer, which formats its output to the standard output stream (<code class="literal">std::cout</code>).
+</dd><dt><span class="term">
+<code class="literal">StdioPrinter</code>
+</span></dt><dd>
+    The same as <code class="literal">ErrorPrinter</code> except that it uses <code class="literal">printf</code> instead of <code class="literal">std::cout</code>.
+</dd><dt><span class="term">
+<code class="literal">ParenPrinter</code>
+</span></dt><dd>
+    Identical to <code class="literal">ErrorPrinter</code> except that it prints line numbers in parantheses. This is the way Visual Studio expects it.
+</dd><dt><span class="term">
+<code class="literal">XmlPrinter</code>
+</span></dt><dd>
+    Print test results to an XML file.
+</dd><dt><span class="term">
+<code class="literal">XUnitPrinter</code>
+</span></dt><dd>
+    This test listener generates output using both <code class="literal">ErrorPrinter</code> and <code class="literal">XmlPrinter</code>.
+</dd></dl></div><div class="section" title="ErrorPrinter"><div class="titlepage"><div><div><h4 class="title"><a id="_errorprinter"></a>ErrorPrinter</h4></div></div></div><p>The <code class="literal">--error-printer</code> option creates a runner using the <code class="literal">ErrorPrinter</code>
+test listener, and it indicates that the standard library is used
+in the test runner.  The <code class="literal">ErrorPrinter</code> test listener prints dots
+to summarize test execution, along with a summary of the test
+results.  For example, the command</p><pre class="programlisting">cxxtestgen --error-printer -o runner.cpp MyTestSuite2.h</pre><p>generates the following output:</p><pre class="programlisting">Running 2 tests.
+In MyTestSuite::testMultiplication:
+MyTestSuite2.h:15: Error: Expected (2 * 2 == 5), found (4 != 5)
+Failed 1 of 2 tests
+Success rate: 50%</pre></div><div class="section" title="StdioPrinter"><div class="titlepage"><div><div><h4 class="title"><a id="_stdioprinter"></a>StdioPrinter</h4></div></div></div><p>If your compiler does not support <code class="literal">std::cout</code>, then the <code class="literal">ErrorPrinter</code> test listener cannot be used.
+In this case, the <code class="literal">StdioPrinter</code> test listener can be used;  it provides the same output as <code class="literal">ErrorPrinter</code> but it uses the <code class="literal">printf</code> function. For example, the command line:</p><pre class="programlisting">cxxtestgen --runner=StdioPrinter -o runner.cpp MyTestSuite2.h</pre><p>generates the following output:</p><pre class="programlisting">Running 2 tests.
+In MyTestSuite::testMultiplication:
+MyTestSuite2.h:15: Error: Expected (2 * 2 == 5), found (4 != 5)
+Failed 1 of 2 tests
+Success rate: 50%</pre></div><div class="section" title="ParenPrinter"><div class="titlepage"><div><div><h4 class="title"><a id="_parenprinter"></a>ParenPrinter</h4></div></div></div><p>The <code class="literal">--runner=ParenPrinter</code> option creates a similar test runner:</p><pre class="programlisting">cxxtestgen --runner=ParenPrinter -o runner.cpp MyTestSuite2.h</pre><p>This test runner generates output that is similar to the <code class="literal">ErrorPrinter</code> test listener:</p><pre class="programlisting">Running 2 tests.
+In MyTestSuite::testMultiplication:
+MyTestSuite2.h(15): Error: Expected (2 * 2 == 5), found (4 != 5)
+Failed 1 of 2 tests
+Success rate: 50%</pre><p>The only difference is the parentheses used in the output.  This test listener provides a format that can be recognized by Visual Studio.</p></div><div class="section" title="XmlPrinter"><div class="titlepage"><div><div><h4 class="title"><a id="_xmlprinter"></a>XmlPrinter</h4></div></div></div><p>The <code class="literal">--runner=XmlPrinter</code> option creates a test runner whose output is an XML summary of the test results.  For example, the command:</p><pre class="programlisting">cxxtestgen --runner=XmlPrinter -o runner.cpp MyTestSuite2.h</pre><p>generates the following output:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;testsuite name="cxxtest"  tests="2" errors="0" failures="1" time="0" &gt;
+    &lt;testcase classname="MyTestSuite" name="testAddition" line="7" /&gt;
+    &lt;testcase classname="MyTestSuite" name="testMultiplication" line="13"&gt;
+        &lt;failure file="MyTestSuite2.h" line="15" type="failedAssertEquals" &gt;Error: Expected (2 * 2 == 5), found (4 != 5)&lt;/failure&gt;
+    &lt;/testcase&gt;
+&lt;/testsuite&gt;</pre><p>This XML format is conforms to the XML standard used by other xUnit tools.  Thus, this output can be used as input in other tools, like <a class="ulink" href="http://jenkins-ci.org/" target="_top">Jenkins</a>, to generate test summaries.</p></div><div class="section" title="XUnitPrinter"><div class="titlepage"><div><div><h4 class="title"><a id="_xunitprinter"></a>XUnitPrinter</h4></div></div></div><p>The <code class="literal">XUnitPrinter</code> test listener generates output using both the
+<code class="literal">ErrorPrinter</code> and <code class="literal">XmlPrinter</code> test listeners.  This allows the
+user to interactively view a simple test summary, while simultaneously
+generating an XML summary of the test results.  The <code class="literal">--xunit-printer</code>
+option specifies the use of <code class="literal">XUnitPrinter</code>:</p><pre class="programlisting">cxxtestgen --xunit-printer -o runner.cpp MyTestSuite2.h</pre><p>This test runner generates the following output:</p><pre class="programlisting">Running 2 tests.
+In MyTestSuite::testMultiplication:
+MyTestSuite2.h:15: Error: Expected (2 * 2 == 5), found (4 != 5)
+Failed 1 of 2 tests
+Success rate: 50%</pre><p>The default filename for the XML results is <code class="literal">TEST-cxxtest.xml</code>.  The <code class="literal">--xunit-file</code> option can be used to specify an alternative filename.  Additionally, the value of the <code class="literal">--world</code> option can be used to specify the filename <code class="literal">TEST-&lt;world&gt;.xml</code>.</p></div></div><div class="section" title="4.3. Language Options"><div class="titlepage"><div><div><h3 class="title"><a id="_language_options"></a>4.3. Language Options</h3></div></div></div><p>When <code class="literal">cxxtestgen</code> performs test discovery, it also performs checks
+to detect whether (1) the standard library is used and (2) exceptions
+are used.  These checks configure CxxTest to <span class="emphasis"><em>not</em></span> assume that these
+C++ language features are used when generating the test driver.
+Thus, CxxTest can naturally be used with compilers that do not
+support these features.</p><p>The <code class="literal">cxxtestgen</code> command includes several options that override
+these checks and define features of C++ that are used by the test
+runner.  The <code class="literal">--have-std</code> option indicates that the test runner
+should use the standard library, and the <code class="literal">--no-std</code> option indicates
+that the test runner should not use the standard library. The
+<code class="literal">--have-eh</code> options indicates that the test runner should use
+exception handling, and the <code class="literal">--no-eh</code> indicates that the test runner
+should not not use exception handling.</p><p>The <code class="literal">--longlong</code> option specifies the type used for long long
+integers.</p><p>CxxTest test runners depend quite heavily on static initialization
+of objects that are used to define and execute tests. The
+<code class="literal">--no-static-init</code> option can be used to avoid static initialization
+for compilers or linkers that have trouble compiling the default test runner.</p></div><div class="section" title="4.4. Test Runner Options"><div class="titlepage"><div><div><h3 class="title"><a id="_test_runner_options"></a>4.4. Test Runner Options</h3></div></div></div><p>The default behavior of <code class="literal">cxxtestgen</code> is to generate a test runner
+that directly integrates classes that define the tests along with
+a <code class="literal">main()</code> function that executes all test suites.  It is often useful to
+allow test suites to be processes separately and then linked together.  The <code class="literal">--root</code> and <code class="literal">--part</code> options
+support this logic.  For example, suppose that we wish to define a test runner for tests in the headers
+<code class="literal">MyTestSuite1.h</code> and <code class="literal">MyTestSuite2.h</code>.  We execute <code class="literal">cxxtestgen</code> with the <code class="literal">--part</code> option to generate source files for each of the test suites:</p><pre class="programlisting">cxxtestgen --part --error-printer -o MyTestSuite1.cpp MyTestSuite1.h
+cxxtestgen --part --error-printer -o MyTestSuite2.cpp MyTestSuite2.h</pre><p>Similarly, we execute <code class="literal">cxxtestgen</code> with the <code class="literal">--root</code> opiton to generate the <code class="literal">main()</code> routine:</p><pre class="programlisting">cxxtestgen --root --error-printer -o runner.cpp</pre><p>Finally, the test runner is built by compiling all of these source files together:</p><pre class="programlisting">g++ -o runner -I$CXXTEST runner.cpp MyTestSuite1.cpp MyTestSuite2.cpp</pre></div><div class="section" title="4.5. Template Files"><div class="titlepage"><div><div><h3 class="title"><a id="_template_files"></a>4.5. Template Files</h3></div></div></div><p>TODO</p><p>To use you own test runner, or to use the supplied ones in different ways, you can use CxxTest template files. These are ordinary source files with the embedded "command" &lt;CxxTest world&gt; which tells cxxtestgen.pl to insert the world definition at that point. You then specify the template file using the --template option.</p><p>See samples/file_printer.tpl for an example.</p><p>Note: CxxTest needs to insert certain definitions and #include directives in the runner file. It normally does that before the first #include &lt;cxxtest/*.h&gt; found in the template file. If this behvaior is not what you need, use the "command" &lt;CxxTest preamble&gt;. See test/preamble.tpl in the cxxtest-selftest archive for an example of this.</p></div><div class="section" title="4.6. C++ Parser"><div class="titlepage"><div><div><h3 class="title"><a id="_c_parser"></a>4.6. C++ Parser</h3></div></div></div><p>Default vs. FOG</p></div></div><div class="section" title="5. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>5. Sample Problems</h2></div></div></div></div><div class="section" title="6. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>6. Installation</h2></div></div></div></div><div class="section" title="7. Status and Future Plans"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="discussion"></a>7. Status and Future Plans</h2></div></div></div><p>The CxxTest 4.0 release reflects major changes in the management
 and focus of CxxTest.  The 4.0 release is the first release of
 CxxTest in over seven years, and virtually all of the initial
 developers have moved on to other projects.  CxxTest is heavily
@@ -160,25 +291,37 @@ Perl is no longer used to support CxxTest scripts.  Python is now the only scrip
 </li><li class="listitem">
 The testing scripts have been rewritten using the PyUnit framework.
 </li><li class="listitem">
-Installation process for CxxTest now leverages and integrates with the system Python installation.
+The installation process for CxxTest now leverages and integrates with the system Python installation.
 </li><li class="listitem">
 A more comprehensive C++ parser is now available, which supports testing of templates.
 </li><li class="listitem">
-The CxxTest GUI is no longer supported.  (TODO: verify this step.)
+The CxxTest GUI is no longer supported, and the <a class="link" href="#ts_warn">TS_WARN</a> is deprecated.
 </li><li class="listitem">
 CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
 </li><li class="listitem">
 A new user guide is now available in PDF, HTML and Ebook formats.
 </li></ul></div><p>Additionally, CxxTest is now validated with continuous integration
-tests.  Yes, the CxxTest developers eat their own dog food!</p><p>Discuss support for …</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+tests.  Yes, the CxxTest developers eat their own dog food!</p><p>Although the GUI option for <code class="literal">cxxtestgen</code> appears to work fine, this
+GUI is rather primitive.  It simply provides a visual summary of
+the test results, and not the interactive test execution that a
+user would expect.  This capability is deprecated since none of the
+current developers use this feature.  CxxTest users should consider
+using CxxTest with <a class="ulink" href="http://jenkins-ci.org/" target="_top">Jenkins</a>.  The <code class="literal">XUnitPrinter</code>
+test listener generates XML files that can be easily integrated by
+<a class="ulink" href="http://jenkins-ci.org/" target="_top">Jenkins</a>, which creates a visual summary of
+test results with links to drill-down into test outputs.</p><p>Discuss support for …</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 embedded compilers…  (Macros vs templates)
-</li><li class="listitem">
-GUI
 </li><li class="listitem">
 SCONS
 </li><li class="listitem">
 Python 3.0
-</li></ul></div><p>The <a class="link" href="#ts_trace">TS_TRACE</a> and <a class="link" href="#ts_warn">TS_WARN</a> commands have similar functionality.  However, they differ in that the <a class="link" href="#ts_warn">TS_WARN</a> command changes the behavior of CxxTest with a GUI runner.</p></div><div class="appendix" title="A. Test Assertion Examples"><h2 class="title" style="clear: both"><a id="appendix_A"></a>A. Test Assertion Examples</h2><div class="variablelist"><dl><dt><span class="term">
+</li></ul></div><p>This documentation has highlighted the commonly used test listeners.
+There are a variety of other test listeners provided by CxxTest
+that support advanced Cxxtest applications.  For example, the <code class="literal">YesNoRunner</code> is
+perhaps the simplest test listener;  it simply returns the number
+of test failures.  The <code class="literal">StdioFilePrinter</code> is used by <code class="literal">StdioPrinter</code>,
+but it does not assume that <code class="literal">stdio</code> is the default output stream.  This test listener can be used
+in contexts where a custom output stream must be specified.</p></div><div class="appendix" title="A. Test Assertion Examples"><h2 class="title" style="clear: both"><a id="appendix_A"></a>A. Test Assertion Examples</h2><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert"></a> TS_ASSERT
 </span></dt><dd>
 This is the most basic test assertion, which simply verifies that the <code class="literal"><span class="emphasis"><em>expr</em></span></code> argument is true:

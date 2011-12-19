@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/bin/bash -v
+
+export PATH=$CXXTEST/bin:$PATH
 
 # @main:
-$CXXTESTBIN/cxxtestgen --error-printer -o runner.cpp MyTestSuite2.h
+cxxtestgen --error-printer -o runner.cpp MyTestSuite2.h
 # @:main
 
 # @compile:

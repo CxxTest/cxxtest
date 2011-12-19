@@ -1,11 +1,13 @@
-#!/bin/bash -v
+#!/bin/bash
 
 export PATH=$CXXTEST/bin:$PATH
 
 # @main:
-cxxtestgen --error-printer -o runner.cpp MyTestSuite1.h
+cxxtestgen --runner=ParenPrinter -o runner.cpp MyTestSuite2.h
 # @:main
 
 # @compile:
 g++ -o runner -I$CXXTEST runner.cpp
 # @:compile
+
+./runner

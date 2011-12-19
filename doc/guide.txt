@@ -70,7 +70,14 @@ The CxxTest User Guide provides the following documentation:
 Getting Started
 ---------------
 
-The CxxTest supports test automation, sharing of setup
+Testing is performed with CxxTest in a four-step process:
+
+ 1. Tests are defined in C++ header files
+ 2. The +cxxtestgen+ command processes header files to generate files for the test runner.
+ 3. Compile the test runner.
+ 4. Execute the test runner to run all test suites.
+
+CxxTest supports test automation, sharing of setup
 and shutdown code for tests, aggregation of tests into collections,
 and independence of the tests from the reporting framework.  To
 achieve this, CxxTest supports some important concepts that are common to xUnit frameworks (
@@ -120,7 +127,7 @@ The following is a simple example of a
 test suite with a single test, +testAddition+, which perform two test assertions:
 [source,cplusplus]
 ----
-include::examples/.MyTestSuite_.h[]
+include::examples/.MyTestSuite1_.h[]
 ----
 
 You use the +cxxtestgen+ script to generate a _test runner_ for test suites in C++ header files:
@@ -223,6 +230,219 @@ testing.
 The CxxTestGen Command
 ----------------------
 
+The +cxxtestgen+ command processes one or more C++ header files to
+generate a test runner.  The +cxxtestgen+ command performs test
+discovery by parsing the header files to find test classes, which
+inherit from the class +CxxTest::TestSuite+.
+
+The +--help+ option generates the following summary of the +cxxtestgen+ command line options:
+[verbatim]
+----
+include::examples/cxxtestgen.out[]
+----
+The following section describe illustrate the use of these command line options.
+
+
+General Options
+~~~~~~~~~~~~~~~
+
+The default behavior of +cxxtestgen+ is to send the source for the
+test runner to the standard output stream.  The +--output+ (+-o+)
+option indicates a filename for the test runner.
+
+The +--world+ (+-w+) option specifies the value of the +CxxTest::RealWorldDescription::_worldName+
+variable.  This option also customizes the filename used for XML output files (see below).
+
+The +--include+ option defines a filename that is included in the runner before all other headers.
+
+The +--abort-on-fail+ option forces an abort if a test fails, rather than continuing execution
+to the next test.
+
+
+Test Listener Options
+~~~~~~~~~~~~~~~~~~~~~
+
+The test runner behavior is controlled by a _test listener_ class
+that is used to define to the +main+ function.  The test listener
+class is a subclass of +TestListener+ that receives notifications
+about the testing process, notably which assertions failed.  The
++--runner+ option is used to specify the test listener that is used
+in the test runner.  The following test listeners are defined in
+CxxTest:
+
+ +ErrorPrinter+::
+    This is the standard error printer, which formats its output to the standard output stream (+std::cout+).
+ +StdioPrinter+::
+    The same as +ErrorPrinter+ except that it uses +printf+ instead of +std::cout+.
+ +ParenPrinter+::
+    Identical to +ErrorPrinter+ except that it prints line numbers in parantheses. This is the way Visual Studio expects it.
+ +XmlPrinter+::
+    Print test results to an XML file.
+ +XUnitPrinter+::
+    This test listener generates output using both +ErrorPrinter+ and +XmlPrinter+.
+
+ErrorPrinter
+^^^^^^^^^^^^
+
+The +--error-printer+ option creates a runner using the +ErrorPrinter+
+test listener, and it indicates that the standard library is used
+in the test runner.  The +ErrorPrinter+ test listener prints dots
+to summarize test execution, along with a summary of the test
+results.  For example, the command
+[source,bash]
+----
+include::examples/.buildRunner2_main.sh[]
+----
+generates the following output:
+[source,bash]
+----
+include::examples/exeRunner2.out[]
+----
+
+StdioPrinter
+^^^^^^^^^^^^
+
+If your compiler does not support +std::cout+, then the +ErrorPrinter+ test listener cannot be used.
+In this case, the +StdioPrinter+ test listener can be used;  it provides the same output as +ErrorPrinter+ but it uses the +printf+ function. For example, the command line:
+[source,bash]
+----
+include::examples/.buildRunner4_main.sh[]
+----
+generates the following output:
+[source,bash]
+----
+include::examples/buildRunner4.txt[]
+----
+
+ParenPrinter
+^^^^^^^^^^^^
+
+The +--runner=ParenPrinter+ option creates a similar test runner:
+[source,bash]
+----
+include::examples/.buildRunner3_main.sh[]
+----
+This test runner generates output that is similar to the +ErrorPrinter+ test listener:
+[source,bash]
+----
+include::examples/buildRunner3.txt[]
+----
+The only difference is the parentheses used in the output.  This test listener provides a format that can be recognized by Visual Studio.
+
+////
+The +StdioPrinter+ makes reference to +stdout+ as the default output
+stream. In some environments, the +stdio.h+ header may be defined
+but not +stdout+.  The +StdioFilePrinter+ test listener can be used
+in this case, though the main() function needs to be adapted to specify the 
+stream that is used in output.
+////
+
+XmlPrinter
+^^^^^^^^^^
+
+The +--runner=XmlPrinter+ option creates a test runner whose output is an XML summary of the test results.  For example, the command:
+[source,bash]
+----
+include::examples/.buildRunner6_main.sh[]
+----
+generates the following output:
+[source,bash]
+----
+include::examples/buildRunner6.txt[]
+----
+This XML format is conforms to the XML standard used by other xUnit tools.  Thus, this output can be used as input in other tools, like http://jenkins-ci.org/[Jenkins], to generate test summaries.
+
+
+XUnitPrinter
+^^^^^^^^^^^^
+
+The +XUnitPrinter+ test listener generates output using both the
++ErrorPrinter+ and +XmlPrinter+ test listeners.  This allows the
+user to interactively view a simple test summary, while simultaneously
+generating an XML summary of the test results.  The +--xunit-printer+
+option specifies the use of +XUnitPrinter+:
+[source,bash]
+----
+include::examples/.buildRunner7_main.sh[]
+----
+This test runner generates the following output:
+[source,bash]
+----
+include::examples/buildRunner7.txt[]
+----
+The default filename for the XML results is +TEST-cxxtest.xml+.  The +--xunit-file+ option can be used to specify an alternative filename.  Additionally, the value of the +--world+ option can be used to specify the filename +TEST-<world>.xml+.
+
+
+Language Options
+~~~~~~~~~~~~~~~~
+
+When +cxxtestgen+ performs test discovery, it also performs checks
+to detect whether (1) the standard library is used and (2) exceptions
+are used.  These checks configure CxxTest to _not_ assume that these
+C++ language features are used when generating the test driver.
+Thus, CxxTest can naturally be used with compilers that do not
+support these features.
+
+The +cxxtestgen+ command includes several options that override
+these checks and define features of C++ that are used by the test
+runner.  The +--have-std+ option indicates that the test runner
+should use the standard library, and the +--no-std+ option indicates
+that the test runner should not use the standard library. The
++--have-eh+ options indicates that the test runner should use
+exception handling, and the +--no-eh+ indicates that the test runner
+should not not use exception handling.  
+
+The +--longlong+ option specifies the type used for long long
+integers.
+
+CxxTest test runners depend quite heavily on static initialization
+of objects that are used to define and execute tests. The
++--no-static-init+ option can be used to avoid static initialization
+for compilers or linkers that have trouble compiling the default test runner.
+
+
+Test Runner Options
+~~~~~~~~~~~~~~~~~~~
+
+The default behavior of +cxxtestgen+ is to generate a test runner
+that directly integrates classes that define the tests along with
+a +main()+ function that executes all test suites.  It is often useful to 
+allow test suites to be processes separately and then linked together.  The +--root+ and +--part+ options
+support this logic.  For example, suppose that we wish to define a test runner for tests in the headers
++MyTestSuite1.h+ and +MyTestSuite2.h+.  We execute +cxxtestgen+ with the +--part+ option to generate source files for each of the test suites:
+[source,bash]
+----
+include::examples/.buildRunner9_part.sh[]
+----
+Similarly, we execute +cxxtestgen+ with the +--root+ opiton to generate the +main()+ routine:
+[source,bash]
+----
+include::examples/.buildRunner9_root.sh[]
+----
+Finally, the test runner is built by compiling all of these source files together:
+[source,bash]
+----
+include::examples/.buildRunner9_compile.sh[]
+----
+
+
+Template Files
+~~~~~~~~~~~~~~
+
+TODO
+
+To use you own test runner, or to use the supplied ones in different ways, you can use CxxTest template files. These are ordinary source files with the embedded "command" <CxxTest world> which tells cxxtestgen.pl to insert the world definition at that point. You then specify the template file using the --template option.
+
+See samples/file_printer.tpl for an example.
+
+Note: CxxTest needs to insert certain definitions and #include directives in the runner file. It normally does that before the first #include <cxxtest/*.h> found in the template file. If this behvaior is not what you need, use the "command" <CxxTest preamble>. See test/preamble.tpl in the cxxtest-selftest archive for an example of this. 
+
+C++ Parser
+~~~~~~~~~~
+
+Default vs. FOG
+
+
 [[samples]]
 Sample Problems
 ---------------
@@ -245,24 +465,38 @@ changes in CxxTest reflect the focus of the developer team:
 
  - Perl is no longer used to support CxxTest scripts.  Python is now the only scripting language used by CxxTest.
  - The testing scripts have been rewritten using the PyUnit framework.
- - Installation process for CxxTest now leverages and integrates with the system Python installation.
+ - The installation process for CxxTest now leverages and integrates with the system Python installation.
  - A more comprehensive C++ parser is now available, which supports testing of templates.
- - The CxxTest GUI is no longer supported.  (TODO: verify this step.)
+ - The CxxTest GUI is no longer supported, and the <<ts_warn,TS_WARN>> is deprecated.
  - CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
  - A new user guide is now available in PDF, HTML and Ebook formats.
 
 Additionally, CxxTest is now validated with continuous integration
 tests.  Yes, the CxxTest developers eat their own dog food!
 
+Although the GUI option for +cxxtestgen+ appears to work fine, this
+GUI is rather primitive.  It simply provides a visual summary of
+the test results, and not the interactive test execution that a
+user would expect.  This capability is deprecated since none of the
+current developers use this feature.  CxxTest users should consider
+using CxxTest with http://jenkins-ci.org/[Jenkins].  The +XUnitPrinter+
+test listener generates XML files that can be easily integrated by
+http://jenkins-ci.org/[Jenkins], which creates a visual summary of
+test results with links to drill-down into test outputs.
+
 Discuss support for ...
 
  - embedded compilers...  (Macros vs templates)
- - GUI
  - SCONS
  - Python 3.0
 
-
-The <<ts_trace,TS_TRACE>> and <<ts_warn,TS_WARN>> commands have similar functionality.  However, they differ in that the <<ts_warn,TS_WARN>> command changes the behavior of CxxTest with a GUI runner.
+This documentation has highlighted the commonly used test listeners.
+There are a variety of other test listeners provided by CxxTest
+that support advanced Cxxtest applications.  For example, the +YesNoRunner+ is
+perhaps the simplest test listener;  it simply returns the number
+of test failures.  The +StdioFilePrinter+ is used by +StdioPrinter+,
+but it does not assume that +stdio+ is the default output stream.  This test listener can be used
+in contexts where a custom output stream must be specified.
 
 
 :numbered!:

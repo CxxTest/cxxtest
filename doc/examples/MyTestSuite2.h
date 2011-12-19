@@ -1,7 +1,7 @@
 // MyTestSuite2.h
 #include <cxxtest/TestSuite.h>
 
-class MyTestSuite : public CxxTest::TestSuite 
+class MyTestSuite2 : public CxxTest::TestSuite 
 {
 public:
    void testAddition( void )
