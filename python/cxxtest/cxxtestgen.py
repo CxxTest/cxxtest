@@ -61,12 +61,20 @@ def parseCommandline(args):
     parser.add_option("-o", "--output",
                       dest="outputFileName", default=None, metavar="NAME",
                       help="Write output to file NAME.")
+    parser.add_option("-w","--world", dest="world", default="cxxtest",
+                      help="The label of the tests, used to name the XML results.")
+    parser.add_option("", "--include", action="append",
+                      dest="headers", default=[], metavar="HEADER",
+                      help="Include file HEADER in the test runner before other headers.")
+    parser.add_option("", "--abort-on-fail",
+                      action="store_true", dest="abortOnFail", default=False,
+                      help="Abort tests on failed asserts (like xUnit).")
     parser.add_option("", "--runner",
                       dest="runner", default="", metavar="CLASS",
                       help="Create a test runner that processes test events using the class CxxTest::CLASS.")
     parser.add_option("", "--gui",
                       dest="gui", metavar="CLASS",
-                      help="Create a GUI test runner that processes test events using the class CxxTest::CLASS.")
+                      help="Create a GUI test runner that processes test events using the class CxxTest::CLASS. (deprecated)")
     parser.add_option("", "--error-printer",
                       action="store_true", dest="error_printer", default=False,
                       help="Create a test runner using the ErrorPrinter class, and allow the use of the standard library.")
@@ -75,11 +83,6 @@ def parseCommandline(args):
                       help="Create a test runner using the XUnitPrinter class.")
     parser.add_option("", "--xunit-file",  dest="xunit_file", default="",
                       help="The file to which the XML summary is written for test runners using the XUnitPrinter class.  The default XML filename is TEST-<world>.xml, where <world> is the value of the --world option.  (default: cxxtest)")
-    parser.add_option("-w","--world", dest="world", default="cxxtest",
-                      help="The label of the tests, used to name the XML results.")
-    parser.add_option("", "--abort-on-fail",
-                      action="store_true", dest="abortOnFail", default=False,
-                      help="Abort tests on failed asserts (like xUnit).")
     parser.add_option("", "--have-std",
                       action="store_true", dest="haveStandardLibrary", default=False,
                       help="Use the standard library (even if not found in tests).")
@@ -95,24 +98,21 @@ def parseCommandline(args):
     parser.add_option("", "--longlong",
                       dest="longlong", default="long long", metavar="TYPE",
                       help="Use TYPE as long long.  (default: long long)")
+    parser.add_option("", "--no-static-init",
+                      action="store_true", dest="noStaticInit", default=False,
+                      help="Do not rely on static initialization in the test runner.")
     parser.add_option("", "--template",
                       dest="templateFileName", default=None, metavar="TEMPLATE",
                       help="Generate the test runner using file TEMPLATE to define a template.")
-    parser.add_option("", "--include", action="append",
-                      dest="headers", default=[], metavar="HEADER",
-                      help="Include file HEADER in the test runner before other headers.")
     parser.add_option("", "--root",
                       action="store_true", dest="root", default=False,
                       help="Write the main() function and global data for a test runner.")
     parser.add_option("", "--part",
                       action="store_true", dest="part", default=False,
                       help="Write the tester classes for a test runner.")
-    parser.add_option("", "--no-static-init",
-                      action="store_true", dest="noStaticInit", default=False,
-                      help="Do not rely on static initialization in the test runner.")
     parser.add_option("", "--factor",
                       action="store_true", dest="factor", default=False,
-                      help="Mystery option")
+                      help="Declare the _CXXTEST_FACTOR macro.  (deprecated)")
     if imported_fog:
         parser.add_option("-f", "--fog-parser",
                         action="store_true",
