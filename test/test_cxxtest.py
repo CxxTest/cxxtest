@@ -461,12 +461,26 @@ class BaseTestCase(object):
         """Test relying on simple inheritance"""
         self.compile(prefix='simple_inheritance', args='--error-printer SimpleInheritedTest.h', output='simple_inheritance.out')
 
+    def test_simple_inheritance2(self):
+        """Test relying on simple inheritance (2)"""
+        if self.fog == '':
+            self.compile(prefix='simple_inheritance2', args='--error-printer SimpleInheritedTest2.h', failGen=True)
+        else:
+            self.compile(prefix='simple_inheritance2', args='--error-printer SimpleInheritedTest2.h', output='simple_inheritance2.out')
+
     def test_comments2(self):
         """Comments2"""
         if self.fog == '':
             self.compile(prefix='comments2', args="--error-printer Comments2.h", failBuild=True)
         else:
             self.compile(prefix='comments2', args="--error-printer Comments2.h", output='comments2.out')
+
+    def test_cpp_template1(self):
+        """C++ Templates"""
+        if self.fog == '':
+            self.compile(prefix='cpp_template1', args="--error-printer CppTemplateTest.h", failGen=True)
+        else:
+            self.compile(prefix='cpp_template1', args="--error-printer CppTemplateTest.h", output='template.out')
 
 
 class TestCpp(BaseTestCase, unittest.TestCase):
