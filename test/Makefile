@@ -7,7 +7,7 @@ TEST = perl test.pl
 all: gcc
 
 clean:
-	rm -f *p[ly].out *px *px.out *build.log *root.cpp parsetab.py *.gcno *.gcda ../cxxtest/*.gcno ../cxxtest/*.gcda ../sample/*.gcno ../sample/*.gcda Test*.cpp *.gcov
+	rm -f *p[ly].out *px *px.out *build.log *root.cpp parsetab.py *.gcno *.gcda ../cxxtest/*.gcno ../cxxtest/*.gcda ../sample/*.gcno ../sample/*.gcda Test*.cpp *.gcov *.pre
 	rm -Rf *.dSYM
 
 gcc:
