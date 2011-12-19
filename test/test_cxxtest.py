@@ -143,7 +143,7 @@ class BaseTestCase(object):
         #
         self.passed=True
 
-    def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None):
+    def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False):
         self.init(prefix)
         #
         cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
@@ -164,7 +164,14 @@ class BaseTestCase(object):
             # Compile without main
             cmd = "%s %s %s %s. %s%s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
         status = subprocess.call(cmd, shell=True)
-        self.assertEquals(status, 0, 'Error executing command: '+cmd)
+        if failBuild:
+            if status == 0:
+                self.fail('Expected compiler to fail.')
+            else:
+                self.passed=True
+                return
+        else:
+            self.assertEquals(status, 0, 'Error executing command: '+cmd)
         #
         if compile == '' and not output is None:
             if run is None:
@@ -439,6 +446,10 @@ class BaseTestCase(object):
         """Test relying on inheritance"""
         self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', output='inheritance_old.out')
 
+    #
+    # Tests that illustrate differences between the different C++ parsers
+    #
+
     def test_inheritance(self):
         """Test relying on inheritance"""
         if self.fog == '':
@@ -449,6 +460,13 @@ class BaseTestCase(object):
     def test_simple_inheritance(self):
         """Test relying on simple inheritance"""
         self.compile(prefix='simple_inheritance', args='--error-printer SimpleInheritedTest.h', output='simple_inheritance.out')
+
+    def test_comments2(self):
+        """Comments2"""
+        if self.fog == '':
+            self.compile(prefix='comments2', args="--error-printer Comments2.h", failBuild=True)
+        else:
+            self.compile(prefix='comments2', args="--error-printer Comments2.h", output='comments2.out')
 
 
 class TestCpp(BaseTestCase, unittest.TestCase):
