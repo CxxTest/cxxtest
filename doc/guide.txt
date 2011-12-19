@@ -58,7 +58,9 @@ The CxxTest User Guide provides the following documentation:
  - <<gettingStarted,Getting Started>>: Some simple examples that illustrate how to use CxxTest
  - <<testAssertions,Test Assertions>>: The test assertions supported by CxxTest
  - <<cxxtestgen,The CxxTestGen Command>>: Documentation for the +cxxtestgen+ command
+ - <<runner,Test Runner Syntax>>: Discussion of command line options for test runners
  - <<samples,Sample Problems>>: Examples that illustrate features of CxxTest
+ - <<advanced,Advanced Testing Features>>: Advanced features of CxxTest
  - <<installation,Installation>>: How to install CxxTest
  - <<discussion,Discussion>>: Comments on the past, present and future of CxxTest
 
@@ -212,16 +214,16 @@ during testing will cause the test to fail, except for tests that
 check for exceptions.
 
 TSM_:: These test assertions perform the same tests as the corresponding
-+TS_+ assertions, but their first argument is a +const char*+ message
+TS_+ assertions, but their first argument is a +const char*+ message
 buffer that is printed when the test fails.
 
 ETS_:: These test assertions perform the same tests as the corresponding
-+TS_+ assertions.  However, these test assertions do not catch
+TS_+ assertions.  However, these test assertions do not catch
 exceptions generated during testing.
 
 ETSM_:: These test assertions perform the same tests as the
 corresponding +TS_+ assertions, but (1) their first argument is a
-+const char*+ message buffer is printed when the test fails, and
+const char*+ message buffer is printed when the test fails, and
 (2) these assertions do not catch exceptions generated during
 testing.
 
@@ -266,7 +268,7 @@ The test runner behavior is controlled by a _test listener_ class
 that is used to define to the +main+ function.  The test listener
 class is a subclass of +TestListener+ that receives notifications
 about the testing process, notably which assertions failed.  The
-+--runner+ option is used to specify the test listener that is used
+--runner+ option is used to specify the test listener that is used
 in the test runner.  The following test listeners are defined in
 CxxTest:
 
@@ -357,7 +359,7 @@ XUnitPrinter
 ^^^^^^^^^^^^
 
 The +XUnitPrinter+ test listener generates output using both the
-+ErrorPrinter+ and +XmlPrinter+ test listeners.  This allows the
+ErrorPrinter+ and +XmlPrinter+ test listeners.  This allows the
 user to interactively view a simple test summary, while simultaneously
 generating an XML summary of the test results.  The +--xunit-printer+
 option specifies the use of +XUnitPrinter+:
@@ -388,7 +390,7 @@ these checks and define features of C++ that are used by the test
 runner.  The +--have-std+ option indicates that the test runner
 should use the standard library, and the +--no-std+ option indicates
 that the test runner should not use the standard library. The
-+--have-eh+ options indicates that the test runner should use
+--have-eh+ options indicates that the test runner should use
 exception handling, and the +--no-eh+ indicates that the test runner
 should not not use exception handling.  
 
@@ -397,19 +399,19 @@ integers.
 
 CxxTest test runners depend quite heavily on static initialization
 of objects that are used to define and execute tests. The
-+--no-static-init+ option can be used to avoid static initialization
+--no-static-init+ option can be used to avoid static initialization
 for compilers or linkers that have trouble compiling the default test runner.
 
 
-Test Runner Options
-~~~~~~~~~~~~~~~~~~~
+Creating Test Runners from Parts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The default behavior of +cxxtestgen+ is to generate a test runner
 that directly integrates classes that define the tests along with
 a +main()+ function that executes all test suites.  It is often useful to 
 allow test suites to be processes separately and then linked together.  The +--root+ and +--part+ options
 support this logic.  For example, suppose that we wish to define a test runner for tests in the headers
-+MyTestSuite1.h+ and +MyTestSuite2.h+.  We execute +cxxtestgen+ with the +--part+ option to generate source files for each of the test suites:
+MyTestSuite1.h+ and +MyTestSuite2.h+.  We execute +cxxtestgen+ with the +--part+ option to generate source files for each of the test suites:
 [source,bash]
 ----
 include::examples/.buildRunner9_part.sh[]
@@ -429,27 +431,184 @@ include::examples/.buildRunner9_compile.sh[]
 Template Files
 ~~~~~~~~~~~~~~
 
+CxxTest supports the use of _template files_ to provide a custom
+main()+ function.  This may be useful when using a custom test
+listener, or when using an existing CxxTest test listener in a
+nonstandard manner.  A template file is an ordinary source files
+with the embedded declaration +<CxxTest world>+, which tells
+cxxtestgen+ to insert the world definition at that point.
+
+The +--template+ option is used to specify the use of a template file:
+[source,bash]
+----
+include::examples/.buildRunner10_main.sh[]
+----
+For example, consider the following template file:
+[source,cplusplus]
+----
+include::examples/runner10.tpl[]
+----
+This file specifies macros that customize the test runner, and output is generated before and after the tests are run.
+
+Note that CxxTest needs to insert certain definitions and +#include+
+directives in the runner file. It normally does that before the
+first +#include <cxxtest/*.h>+ found in the template file. If this
+behavior is not what you need, use the directive +<CxxTest preamble>+
+to specify where this preamble is inserted.
+
+
+Test Discovery Options
+~~~~~~~~~~~~~~~~~~~~~~
+
+The +cxxtestgen+ command performs test discovery by searching C++
+header files for CxxTest test classes.  The default process for
+test discovery is a simple process that analyzes each line in a
+header file sequentially, looking for a sequence of lines that
+represent class definitions and test method definitions.
+
+There are many limitations to this simple process for test discovery,
+and in CxxTest 4.0 a new test discovery mechanism was added based
+on the a parser for the
+http://www.computing.surrey.ac.uk/research/dsrg/fog/[Flexible Object
+Generator (FOG)] language, which is a superset of C\++.  The grammar
+for the FOG language was adapted to parse C++ header files to
+identify class definitions and class inheritance relationships,
+class and namespace nesting of declarations, and class methods.
+This allows +cxxtestgen+ to identify test classes that are defined
+with complex inheritance relationships.
+
+The +--fog+ option is used to specify the use of the FOG parser for
+test discovery.  Although the FOG parser is more powerful, the
+simpler +cxxtestgen+ test discover process is the default because
+the FOG parser is slower execute.
+
+The following sections illustrate differences between these two test discovery mechanisms, along with
+general limitations of the test discovery process.
+
+Wierd Format
+^^^^^^^^^^^^
+
+CxxTest does a very simple analysis of the input files, which is
+sufficient in most cases.  This means, for example, that you can't
+indent you test code in ``weird'' ways.
+
+Commenting Out Tests
+^^^^^^^^^^^^^^^^^^^^
+
+Adding and disabling tests are two common steps in test development.
+The process of test discovery makes adding tests very easy.  However,
+disabling tests is somewhat more complicated.  Consider the following
+header file, which defines four tests (three of which are disabled):
+[source,cpp]
+-----
+include::examples/MyTestSuite3.h[]
+----
+
+The first is commented out with C\++-style comments, the second
+test is commented out with C-style comments, and the third test is
+named in a manner that is not recognized through test discovery
+(i.e., it does not start with +test+).
+
+The default test discovery mechanism only works with the first and
+third methods for disabling tests, but the FOG parser works with
+all three.  The FOG parser performs a complex, multi-line parse of
+the source file, so it can identify multi-line C-style comments.
+
+Note, however, that the use of C macros will not work:
+[source,cpp]
+-----
+include::examples/BadTestSuite1.h[]
+----
+The +cxxtestgen+ discovery mechanisms do not perform a C preprocessing
+step, since that would generally require using externally defined
+preprocessing variable definitions.  
+
+
+[[runner]]
+Test Runner Syntax
+------------------
+
 TODO
 
-To use you own test runner, or to use the supplied ones in different ways, you can use CxxTest template files. These are ordinary source files with the embedded "command" <CxxTest world> which tells cxxtestgen.pl to insert the world definition at that point. You then specify the template file using the --template option.
+[[advanced]]
+Advanced Testing Features
+-------------------------
 
-See samples/file_printer.tpl for an example.
+Macros
+~~~~~~
 
-Note: CxxTest needs to insert certain definitions and #include directives in the runner file. It normally does that before the first #include <cxxtest/*.h> found in the template file. If this behvaior is not what you need, use the "command" <CxxTest preamble>. See test/preamble.tpl in the cxxtest-selftest archive for an example of this. 
+CXXTEST_STD
+...
 
-C++ Parser
-~~~~~~~~~~
 
-Default vs. FOG
+Test Fixtures
+~~~~~~~~~~~~~
+
+When you have several test cases for the same module,
+you often find that all of them start with more or less
+the same code -- creating objects, files, inputs, etc.
+They may all have a common ending, too -- cleaning up
+the mess you left.
+
+You can (and should) put all this code in a common place by overriding
+the virtual functions `TestSuite::setUp()` and
+`TestSuite::tearDown()`. `setUp()` will
+then be called before each test, and `tearDown()`
+after each test.
+
+[source,cpp]
+-----
+class TestFileOps : public CxxTest::TestSuite 
+{
+public:
+   void setUp() { mkdir( "playground" ); }
+   void tearDown() { system( "rm -Rf playground"); }
+
+   void testCreateFile()
+   {
+      FileCreator fc( "playground" );
+      fc.createFile( "test.bin" );
+      TS_ASSERT_EQUALS( access( "playground/test.bin", 0 ), 0 );
+   }
+};
+-----
+
+.New users:
+NOTE: This is probably the single most important
+feature to use when your tests become non-trivial.
+
+==== Test suite level fixtures
+
+`setUp()`/`tearDown()` are executed around each test case.  If
+you need a fixture on the test suite level, i.e. something that gets
+constructed once before all the tests in the test suite are run, see
+<<dynamic,Dynamically creating test suites>> below.
 
 
 [[samples]]
 Sample Problems
 ---------------
 
+CxxTest comes with some samples in the `sample/` subdirectory of
+the distribution.  If you look in that directory, you will see three
+Makefiles: `Makefile.unix`, `Makefile.msvc` and
+`Makefile.bcc32` which are for Linux/Unix, MS Visual C\++ and
+Borland C\++, repectively.  These files are provided as a starting point,
+and some options may need to be tweaked in them for your system.
+
+If you are running under Windows, a good guess would be to run
+`nmake -fMakefile.msvc run_win32` (you may need to run
+`VCVARS32.BAT` first).
+
+Under Linux, `make -fMakefile.unix run_x11` should probably work.
+
+
 [[installation]]
 Installation
 ------------
+
+TODO
+
 
 [[discussion]]
 Status and Future Plans
@@ -489,6 +648,7 @@ Discuss support for ...
  - embedded compilers...  (Macros vs templates)
  - SCONS
  - Python 3.0
+ - ply cpp
 
 This documentation has highlighted the commonly used test listeners.
 There are a variety of other test listeners provided by CxxTest
@@ -501,7 +661,17 @@ in contexts where a custom output stream must be specified.
 
 :numbered!:
 
+[[acknowledgements]] 
+Acknowledgements
+----------------
+
+TODO
+
+ply
+FOG grammar
+
 [appendix]
+
 [[appendix_A]] 
 Test Assertion Examples
 -----------------------
@@ -632,6 +802,112 @@ This command prints a message as a warning:
 ----
 include::examples/.Assertions_warn.h[]
 ----
+
+
+[appendix]
+[[appendix_B]] 
+Integrating with Your Build Environment
+---------------------------------------
+
+It's very hard to maintain your tests if you have to generate,
+compile and run the test runner manually all the time.
+Fortunately, that's why we have build tools!
+
+==== Overview
+
+Let's assume you're developing an application.
+What I usually do is the following:
+
+* Split the application into a library and a main module that just calls
+  the library classes.
+  This way, the test runner will be able to access all your classes through
+  the library.
+* Create another application (or target, or project, or whatever) for the test runner.
+  Make the build tool generate it automatically.
+* For extra points, make the build tool run the tests automatically.
+
+==== Actually doing it
+
+Unfortunately, there are way too many different build tools and IDE's for me 
+to give ways to use CxxTest with all of them.
+
+I will try to outline the usage for some cases.
+
+===== Using Makefiles
+
+Generating the tests with a makefile is pretty straightforward.
+Simply add rules to generate, compile and run the test runner.
+
+[source,makefile]
+-----
+all: lib run_tests app
+
+# Rules to build your targets
+lib: ...
+
+app: ...
+
+# A rule that runs the unit tests
+run_tests: runner
+        ./runner
+
+# How to build the test runner
+runner: runner.cpp lib
+        g++ -o $@ $^
+
+# How to generate the test runner
+runner.cpp: SimpleTest.h ComplicatedTest.h
+         cxxtestgen -o $@ --error-printer $^
+-----
+
+===== Using Cons
+
+http://dsmit.com/cons/[Cons] is a powerful and 
+versatile make replacement which uses Perl scripts instead of Makefiles.
+
+See `sample/Construct` in the CxxTest distribution for an example of building CxxTest test runners
+with Cons.
+
+===== Using Microsoft Visual Studio
+
+I have tried several ways to integrate CxxTest with visual studio, none of
+which is perfect.  Take a look at `sample/msvc` in the distribution
+to see the best solution I'm aware of.  Basically, the workspace has three
+projects:
+
+* The project `CxxTest_3_Generate` runs `cxxtestgen`.
+* The project `CxxTest_2_Build` compiles the generated file.
+* The project `CxxTest_1_Run` runs the tests.
+
+This method certainly works, and the test results are conveniently
+displayed as compilation errors and warnings (for
+{ts_warn}.  However, there are still a few things missing;
+to integrate this approach with your own project, you usually need to
+work a little bit and tweak some makefiles and project options.  I have
+provided a small script in `sample/msvc/FixFiles.bat` to automate
+some of the process.
+
+===== Using Microsoft Windows DDK
+
+Unit testing for device drivers?!  Why not?
+And besides, the `build` utility can also be used to build
+user-mode application.
+
+To use CxxTest with the `build` utility, 
+you add the generated tests file as an extra dependency
+using the `NTBUILDTARGET0` macro and the `Makefile.inc`
+file.
+
+You can see an example of how to do this in the CxxTest distribution
+under `sample/winddk`.
+
+:leveloffset: 1
+
+[appendix]
+[[appendix_C]] 
+include::../Versions[]
+
+:leveloffset: 0
 
 // vim: set syntax=asciidoc:
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_test_runner_options">4.4. Test Runner Options</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_c_parser">4.6. C++ Parser</a></span></dt></dl></dd><dt><span class="section"><a href="#samples">5. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">6. Installation</a></span></dt><dt><span class="section"><a href="#discussion">7. Status and Future Plans</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_creating_test_runners_from_parts">4.4. Creating Test Runners from Parts</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_test_discovery_options">4.6. Test Discovery Options</a></span></dt></dl></dd><dt><span class="section"><a href="#runner">5. Test Runner Syntax</a></span></dt><dt><span class="section"><a href="#advanced">6. Advanced Testing Features</a></span></dt><dd><dl><dt><span class="section"><a href="#_macros">6.1. Macros</a></span></dt><dt><span class="section"><a href="#_test_fixtures">6.2. Test Fixtures</a></span></dt></dl></dd><dt><span class="section"><a href="#samples">7. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">8. Installation</a></span></dt><dt><span class="section"><a href="#discussion">9. Status and Future Plans</a></span></dt><dt><span class="section"><a href="#acknowledgements">10. Acknowledgements</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt><dt><span class="appendix"><a href="#appendix_B">B. Integrating with Your Build Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#_overview_2">B.1. Overview</a></span></dt><dt><span class="section"><a href="#_actually_doing_it">B.2. Actually doing it</a></span></dt><dd><dl><dt><span class="section"><a href="#_using_makefiles">Using Makefiles</a></span></dt><dt><span class="section"><a href="#_using_cons">Using Cons</a></span></dt><dt><span class="section"><a href="#_using_microsoft_visual_studio">Using Microsoft Visual Studio</a></span></dt><dt><span class="section"><a href="#_using_microsoft_windows_ddk">Using Microsoft Windows DDK</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#appendix_C">C. CxxTest Releases</a></span></dt><dd><dl><dt><span class="section"><a href="#_version_4_0_todo">C.1. Version 4.0 (TODO)</a></span></dt><dt><span class="section"><a href="#_version_3_10_1_2004_12_01">C.2. Version 3.10.1 (2004-12-01)</a></span></dt><dt><span class="section"><a href="#_version_3_10_0_2004_11_20">C.3. Version 3.10.0 (2004-11-20)</a></span></dt><dt><span class="section"><a href="#_version_3_9_1_2004_01_19">C.4. Version 3.9.1 (2004-01-19)</a></span></dt><dt><span class="section"><a href="#_version_3_9_0_2004_01_17">C.5. Version 3.9.0 (2004-01-17)</a></span></dt><dt><span class="section"><a href="#_version_3_8_5_2004_01_08">C.6. Version 3.8.5 (2004-01-08)</a></span></dt><dt><span class="section"><a href="#_version_3_8_4_2003_12_31">C.7. Version 3.8.4 (2003-12-31)</a></span></dt><dt><span class="section"><a href="#_version_3_8_3_2003_12_24">C.8. Version 3.8.3 (2003-12-24)</a></span></dt><dt><span class="section"><a href="#_version_3_8_1_2003_12_21">C.9. Version 3.8.1 (2003-12-21)</a></span></dt><dt><span class="section"><a href="#_version_3_8_0_2003_12_13">C.10. Version 3.8.0 (2003-12-13)</a></span></dt><dt><span class="section"><a href="#_version_3_7_1_2003_09_29">C.11. Version 3.7.1 (2003-09-29)</a></span></dt><dt><span class="section"><a href="#_version_3_7_0_2003_09_20">C.12. Version 3.7.0 (2003-09-20)</a></span></dt><dt><span class="section"><a href="#_version_3_6_1_2003_09_15">C.13. Version 3.6.1 (2003-09-15)</a></span></dt><dt><span class="section"><a href="#_version_3_6_0_2003_09_04">C.14. Version 3.6.0 (2003-09-04)</a></span></dt><dt><span class="section"><a href="#_version_3_5_1_2003_09_03">C.15. Version 3.5.1 (2003-09-03)</a></span></dt><dt><span class="section"><a href="#_version_3_1_1_2003_08_27">C.16. Version 3.1.1 (2003-08-27)</a></span></dt><dt><span class="section"><a href="#_version_3_1_0_2003_08_23">C.17. Version 3.1.0 (2003-08-23)</a></span></dt><dt><span class="section"><a href="#_version_3_0_1_2003_08_07">C.18. Version 3.0.1 (2003-08-07)</a></span></dt><dt><span class="section"><a href="#_version_2_8_4_2003_07_21">C.19. Version 2.8.4 (2003-07-21)</a></span></dt><dt><span class="section"><a href="#_version_2_8_3_2003_06_30">C.20. Version 2.8.3 (2003-06-30)</a></span></dt><dt><span class="section"><a href="#_version_2_8_2_2003_06_10">C.21. Version 2.8.2 (2003-06-10)</a></span></dt><dt><span class="section"><a href="#_version_2_8_1_2003_01_16">C.22. Version 2.8.1 (2003-01-16)</a></span></dt><dt><span class="section"><a href="#_version_2_8_0_2003_01_13">C.23. Version 2.8.0 (2003-01-13)</a></span></dt><dt><span class="section"><a href="#_version_2_7_0_2002_09_29">C.24. Version 2.7.0 (2002-09-29)</a></span></dt></dl></dd></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
 spirit to <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>,
 <a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
 <a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>.  CxxTest is easy to
@@ -45,11 +45,15 @@ The following are key online resources for CxxTest:</p><div class="itemizedlist"
 </li><li class="listitem">
 <a class="link" href="#cxxtestgen" title="4. The CxxTestGen Command">The CxxTestGen Command</a>: Documentation for the <code class="literal">cxxtestgen</code> command
 </li><li class="listitem">
-<a class="link" href="#samples" title="5. Sample Problems">Sample Problems</a>: Examples that illustrate features of CxxTest
+<a class="link" href="#runner" title="5. Test Runner Syntax">Test Runner Syntax</a>: Discussion of command line options for test runners
 </li><li class="listitem">
-<a class="link" href="#installation" title="6. Installation">Installation</a>: How to install CxxTest
+<a class="link" href="#samples" title="7. Sample Problems">Sample Problems</a>: Examples that illustrate features of CxxTest
 </li><li class="listitem">
-<a class="link" href="#discussion" title="7. Status and Future Plans">Discussion</a>: Comments on the past, present and future of CxxTest
+<a class="link" href="#advanced" title="6. Advanced Testing Features">Advanced Testing Features</a>: Advanced features of CxxTest
+</li><li class="listitem">
+<a class="link" href="#installation" title="8. Installation">Installation</a>: How to install CxxTest
+</li><li class="listitem">
+<a class="link" href="#discussion" title="9. Status and Future Plans">Discussion</a>: Comments on the past, present and future of CxxTest
 </li></ul></div></div><div class="section" title="2. Getting Started"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="gettingStarted"></a>2. Getting Started</h2></div></div></div><p>Testing is performed with CxxTest in a four-step process:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
 Tests are defined in C++ header files
 </li><li class="listitem">
@@ -141,20 +145,20 @@ check for exceptions.
 TSM_
 </span></dt><dd>
 These test assertions perform the same tests as the corresponding
-<code class="literal">TS_</code> assertions, but their first argument is a <code class="literal">const char*</code> message
+TS_+ assertions, but their first argument is a <code class="literal">const char*</code> message
 buffer that is printed when the test fails.
 </dd><dt><span class="term">
 ETS_
 </span></dt><dd>
 These test assertions perform the same tests as the corresponding
-<code class="literal">TS_</code> assertions.  However, these test assertions do not catch
+TS_+ assertions.  However, these test assertions do not catch
 exceptions generated during testing.
 </dd><dt><span class="term">
 ETSM_
 </span></dt><dd>
 These test assertions perform the same tests as the
 corresponding <code class="literal">TS_</code> assertions, but (1) their first argument is a
-<code class="literal">const char*</code> message buffer is printed when the test fails, and
+const char*+ message buffer is printed when the test fails, and
 (2) these assertions do not catch exceptions generated during
 testing.
 </dd></dl></div></div><div class="section" title="4. The CxxTestGen Command"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="cxxtestgen"></a>4. The CxxTestGen Command</h2></div></div></div><p>The <code class="literal">cxxtestgen</code> command processes one or more C++ header files to
@@ -205,7 +209,7 @@ to the next test.</p></div><div class="section" title="4.2. Test Listener Optio
 that is used to define to the <code class="literal">main</code> function.  The test listener
 class is a subclass of <code class="literal">TestListener</code> that receives notifications
 about the testing process, notably which assertions failed.  The
-<code class="literal">--runner</code> option is used to specify the test listener that is used
+--runner+ option is used to specify the test listener that is used
 in the test runner.  The following test listeners are defined in
 CxxTest:</p><div class="variablelist"><dl><dt><span class="term">
 <code class="literal">ErrorPrinter</code>
@@ -251,7 +255,7 @@ Success rate: 50%</pre><p>The only difference is the parentheses used in the out
         &lt;failure file="MyTestSuite2.h" line="15" type="failedAssertEquals" &gt;Error: Expected (2 * 2 == 5), found (4 != 5)&lt;/failure&gt;
     &lt;/testcase&gt;
 &lt;/testsuite&gt;</pre><p>This XML format is conforms to the XML standard used by other xUnit tools.  Thus, this output can be used as input in other tools, like <a class="ulink" href="http://jenkins-ci.org/" target="_top">Jenkins</a>, to generate test summaries.</p></div><div class="section" title="XUnitPrinter"><div class="titlepage"><div><div><h4 class="title"><a id="_xunitprinter"></a>XUnitPrinter</h4></div></div></div><p>The <code class="literal">XUnitPrinter</code> test listener generates output using both the
-<code class="literal">ErrorPrinter</code> and <code class="literal">XmlPrinter</code> test listeners.  This allows the
+ErrorPrinter+ and <code class="literal">XmlPrinter</code> test listeners.  This allows the
 user to interactively view a simple test summary, while simultaneously
 generating an XML summary of the test results.  The <code class="literal">--xunit-printer</code>
 option specifies the use of <code class="literal">XUnitPrinter</code>:</p><pre class="programlisting">cxxtestgen --xunit-printer -o runner.cpp MyTestSuite2.h</pre><p>This test runner generates the following output:</p><pre class="programlisting">Running 2 tests.
@@ -268,19 +272,152 @@ these checks and define features of C++ that are used by the test
 runner.  The <code class="literal">--have-std</code> option indicates that the test runner
 should use the standard library, and the <code class="literal">--no-std</code> option indicates
 that the test runner should not use the standard library. The
-<code class="literal">--have-eh</code> options indicates that the test runner should use
+--have-eh+ options indicates that the test runner should use
 exception handling, and the <code class="literal">--no-eh</code> indicates that the test runner
 should not not use exception handling.</p><p>The <code class="literal">--longlong</code> option specifies the type used for long long
 integers.</p><p>CxxTest test runners depend quite heavily on static initialization
 of objects that are used to define and execute tests. The
-<code class="literal">--no-static-init</code> option can be used to avoid static initialization
-for compilers or linkers that have trouble compiling the default test runner.</p></div><div class="section" title="4.4. Test Runner Options"><div class="titlepage"><div><div><h3 class="title"><a id="_test_runner_options"></a>4.4. Test Runner Options</h3></div></div></div><p>The default behavior of <code class="literal">cxxtestgen</code> is to generate a test runner
+--no-static-init+ option can be used to avoid static initialization
+for compilers or linkers that have trouble compiling the default test runner.</p></div><div class="section" title="4.4. Creating Test Runners from Parts"><div class="titlepage"><div><div><h3 class="title"><a id="_creating_test_runners_from_parts"></a>4.4. Creating Test Runners from Parts</h3></div></div></div><p>The default behavior of <code class="literal">cxxtestgen</code> is to generate a test runner
 that directly integrates classes that define the tests along with
 a <code class="literal">main()</code> function that executes all test suites.  It is often useful to
 allow test suites to be processes separately and then linked together.  The <code class="literal">--root</code> and <code class="literal">--part</code> options
 support this logic.  For example, suppose that we wish to define a test runner for tests in the headers
-<code class="literal">MyTestSuite1.h</code> and <code class="literal">MyTestSuite2.h</code>.  We execute <code class="literal">cxxtestgen</code> with the <code class="literal">--part</code> option to generate source files for each of the test suites:</p><pre class="programlisting">cxxtestgen --part --error-printer -o MyTestSuite1.cpp MyTestSuite1.h
-cxxtestgen --part --error-printer -o MyTestSuite2.cpp MyTestSuite2.h</pre><p>Similarly, we execute <code class="literal">cxxtestgen</code> with the <code class="literal">--root</code> opiton to generate the <code class="literal">main()</code> routine:</p><pre class="programlisting">cxxtestgen --root --error-printer -o runner.cpp</pre><p>Finally, the test runner is built by compiling all of these source files together:</p><pre class="programlisting">g++ -o runner -I$CXXTEST runner.cpp MyTestSuite1.cpp MyTestSuite2.cpp</pre></div><div class="section" title="4.5. Template Files"><div class="titlepage"><div><div><h3 class="title"><a id="_template_files"></a>4.5. Template Files</h3></div></div></div><p>TODO</p><p>To use you own test runner, or to use the supplied ones in different ways, you can use CxxTest template files. These are ordinary source files with the embedded "command" &lt;CxxTest world&gt; which tells cxxtestgen.pl to insert the world definition at that point. You then specify the template file using the --template option.</p><p>See samples/file_printer.tpl for an example.</p><p>Note: CxxTest needs to insert certain definitions and #include directives in the runner file. It normally does that before the first #include &lt;cxxtest/*.h&gt; found in the template file. If this behvaior is not what you need, use the "command" &lt;CxxTest preamble&gt;. See test/preamble.tpl in the cxxtest-selftest archive for an example of this.</p></div><div class="section" title="4.6. C++ Parser"><div class="titlepage"><div><div><h3 class="title"><a id="_c_parser"></a>4.6. C++ Parser</h3></div></div></div><p>Default vs. FOG</p></div></div><div class="section" title="5. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>5. Sample Problems</h2></div></div></div></div><div class="section" title="6. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>6. Installation</h2></div></div></div></div><div class="section" title="7. Status and Future Plans"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="discussion"></a>7. Status and Future Plans</h2></div></div></div><p>The CxxTest 4.0 release reflects major changes in the management
+MyTestSuite1.h+ and <code class="literal">MyTestSuite2.h</code>.  We execute <code class="literal">cxxtestgen</code> with the <code class="literal">--part</code> option to generate source files for each of the test suites:</p><pre class="programlisting">cxxtestgen --part --error-printer -o MyTestSuite1.cpp MyTestSuite1.h
+cxxtestgen --part --error-printer -o MyTestSuite2.cpp MyTestSuite2.h</pre><p>Similarly, we execute <code class="literal">cxxtestgen</code> with the <code class="literal">--root</code> opiton to generate the <code class="literal">main()</code> routine:</p><pre class="programlisting">cxxtestgen --root --error-printer -o runner.cpp</pre><p>Finally, the test runner is built by compiling all of these source files together:</p><pre class="programlisting">g++ -o runner -I$CXXTEST runner.cpp MyTestSuite1.cpp MyTestSuite2.cpp</pre></div><div class="section" title="4.5. Template Files"><div class="titlepage"><div><div><h3 class="title"><a id="_template_files"></a>4.5. Template Files</h3></div></div></div><p>CxxTest supports the use of <span class="emphasis"><em>template files</em></span> to provide a custom
+main()+ function.  This may be useful when using a custom test
+listener, or when using an existing CxxTest test listener in a
+nonstandard manner.  A template file is an ordinary source files
+with the embedded declaration <code class="literal">&lt;CxxTest world&gt;</code>, which tells
+cxxtestgen+ to insert the world definition at that point.</p><p>The <code class="literal">--template</code> option is used to specify the use of a template file:</p><pre class="programlisting">cxxtestgen -o runner.cpp --template runner10.tpl MyTestSuite2.h</pre><p>For example, consider the following template file:</p><pre class="programlisting">#define CXXTEST_HAVE_EH
+#define CXXTEST_ABORT_TEST_ON_FAIL
+#include &lt;cxxtest/ErrorPrinter.h&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Starting test runner" &lt;&lt; std::endl;
+    int status = CxxTest::ErrorPrinter().run();
+    std::cout &lt;&lt; "Stopping test runner" &lt;&lt; std::endl;
+    return status;
+}
+
+// The CxxTest "world"
+&lt;CxxTest world&gt;</pre><p>This file specifies macros that customize the test runner, and output is generated before and after the tests are run.</p><p>Note that CxxTest needs to insert certain definitions and <code class="literal">#include</code>
+directives in the runner file. It normally does that before the
+first <code class="literal">#include &lt;cxxtest/*.h&gt;</code> found in the template file. If this
+behavior is not what you need, use the directive <code class="literal">&lt;CxxTest preamble&gt;</code>
+to specify where this preamble is inserted.</p></div><div class="section" title="4.6. Test Discovery Options"><div class="titlepage"><div><div><h3 class="title"><a id="_test_discovery_options"></a>4.6. Test Discovery Options</h3></div></div></div><p>The <code class="literal">cxxtestgen</code> command performs test discovery by searching C++
+header files for CxxTest test classes.  The default process for
+test discovery is a simple process that analyzes each line in a
+header file sequentially, looking for a sequence of lines that
+represent class definitions and test method definitions.</p><p>There are many limitations to this simple process for test discovery,
+and in CxxTest 4.0 a new test discovery mechanism was added based
+on the a parser for the
+<a class="ulink" href="http://www.computing.surrey.ac.uk/research/dsrg/fog/" target="_top">Flexible Object
+Generator (FOG)</a> language, which is a superset of C+<code class="literal">.  The grammar
+for the FOG language was adapted to parse C</code>+ header files to
+identify class definitions and class inheritance relationships,
+class and namespace nesting of declarations, and class methods.
+This allows <code class="literal">cxxtestgen</code> to identify test classes that are defined
+with complex inheritance relationships.</p><p>The <code class="literal">--fog</code> option is used to specify the use of the FOG parser for
+test discovery.  Although the FOG parser is more powerful, the
+simpler <code class="literal">cxxtestgen</code> test discover process is the default because
+the FOG parser is slower execute.</p><p>The following sections illustrate differences between these two test discovery mechanisms, along with
+general limitations of the test discovery process.</p><div class="section" title="Wierd Format"><div class="titlepage"><div><div><h4 class="title"><a id="_wierd_format"></a>Wierd Format</h4></div></div></div><p>CxxTest does a very simple analysis of the input files, which is
+sufficient in most cases.  This means, for example, that you can’t
+indent you test code in “weird” ways.</p></div><div class="section" title="Commenting Out Tests"><div class="titlepage"><div><div><h4 class="title"><a id="_commenting_out_tests"></a>Commenting Out Tests</h4></div></div></div><p>Adding and disabling tests are two common steps in test development.
+The process of test discovery makes adding tests very easy.  However,
+disabling tests is somewhat more complicated.  Consider the following
+header file, which defines four tests (three of which are disabled):</p><pre class="programlisting">// MyTestSuite3.h
+#include &lt;cxxtest/TestSuite.h&gt;
+
+class MyTestSuite3 : public CxxTest::TestSuite
+{
+public:
+   void testAddition( void )
+   {
+      TS_ASSERT( 1 + 1 &gt; 1 );
+      TS_ASSERT_EQUALS( 1 + 1, 2 );
+   }
+
+//   void testMultiplication( void )
+//   {
+//      TS_ASSERT( 1 * 1 &lt; 2 );
+//      TS_ASSERT_EQUALS( 1 * 1, 2 );
+//   }
+
+/*
+   void testSubtraction( void )
+   {
+      TS_ASSERT( 1 - 1 &lt; 1 );
+      TS_ASSERT_EQUALS( 1 - 1, 0 );
+   }
+*/
+
+   void XtestDivision( void )
+   {
+      TS_ASSERT( 1 / 1 &lt; 2 );
+      TS_ASSERT_EQUALS( 1 / 1, 1 );
+   }
+};</pre><p>The first is commented out with C++-style comments, the second
+test is commented out with C-style comments, and the third test is
+named in a manner that is not recognized through test discovery
+(i.e., it does not start with <code class="literal">test</code>).</p><p>The default test discovery mechanism only works with the first and
+third methods for disabling tests, but the FOG parser works with
+all three.  The FOG parser performs a complex, multi-line parse of
+the source file, so it can identify multi-line C-style comments.</p><p>Note, however, that the use of C macros will not work:</p><pre class="programlisting">// BadTestSuite1.h
+#include &lt;cxxtest/TestSuite.h&gt;
+
+class MyTestSuite3 : public CxxTest::TestSuite
+{
+public:
+   void testAddition( void )
+   {
+      TS_ASSERT( 1 + 1 &gt; 1 );
+      TS_ASSERT_EQUALS( 1 + 1, 2 );
+   }
+#if 0
+   void testSubtraction( void )
+   {
+      TS_ASSERT( 1 - 1 &lt; 1 );
+      TS_ASSERT_EQUALS( 1 - 1, 0 );
+   }
+#endif
+};</pre><p>The <code class="literal">cxxtestgen</code> discovery mechanisms do not perform a C preprocessing
+step, since that would generally require using externally defined
+preprocessing variable definitions.</p></div></div></div><div class="section" title="5. Test Runner Syntax"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="runner"></a>5. Test Runner Syntax</h2></div></div></div><p>TODO</p></div><div class="section" title="6. Advanced Testing Features"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="advanced"></a>6. Advanced Testing Features</h2></div></div></div><div class="section" title="6.1. Macros"><div class="titlepage"><div><div><h3 class="title"><a id="_macros"></a>6.1. Macros</h3></div></div></div><p>CXXTEST_STD
+…</p></div><div class="section" title="6.2. Test Fixtures"><div class="titlepage"><div><div><h3 class="title"><a id="_test_fixtures"></a>6.2. Test Fixtures</h3></div></div></div><p>When you have several test cases for the same module,
+you often find that all of them start with more or less
+the same code — creating objects, files, inputs, etc.
+They may all have a common ending, too — cleaning up
+the mess you left.</p><p>You can (and should) put all this code in a common place by overriding
+the virtual functions <code class="literal">TestSuite::setUp()</code> and
+<code class="literal">TestSuite::tearDown()</code>. <code class="literal">setUp()</code> will
+then be called before each test, and <code class="literal">tearDown()</code>
+after each test.</p><pre class="programlisting">class TestFileOps : public CxxTest::TestSuite
+{
+public:
+   void setUp() { mkdir( "playground" ); }
+   void tearDown() { system( "rm -Rf playground"); }
+
+   void testCreateFile()
+   {
+      FileCreator fc( "playground" );
+      fc.createFile( "test.bin" );
+      TS_ASSERT_EQUALS( access( "playground/test.bin", 0 ), 0 );
+   }
+};</pre><div class="note" title="Note" style="margin-left: 0; margin-right: 10%;"><h3 class="title">Note</h3><p>This is probably the single most important
+feature to use when your tests become non-trivial.</p></div><div class="section" title="Test suite level fixtures"><div class="titlepage"><div><div><h4 class="title"><a id="_test_suite_level_fixtures"></a>Test suite level fixtures</h4></div></div></div><p><code class="literal">setUp()</code>/<code class="literal">tearDown()</code> are executed around each test case.  If
+you need a fixture on the test suite level, i.e. something that gets
+constructed once before all the tests in the test suite are run, see
+<a class="link" href="#">Dynamically creating test suites</a> below.</p></div></div></div><div class="section" title="7. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>7. Sample Problems</h2></div></div></div><p>CxxTest comes with some samples in the <code class="literal">sample/</code> subdirectory of
+the distribution.  If you look in that directory, you will see three
+Makefiles: <code class="literal">Makefile.unix</code>, <code class="literal">Makefile.msvc</code> and
+<code class="literal">Makefile.bcc32</code> which are for Linux/Unix, MS Visual C++ and
+Borland C\++, repectively.  These files are provided as a starting point,
+and some options may need to be tweaked in them for your system.</p><p>If you are running under Windows, a good guess would be to run
+<code class="literal">nmake -fMakefile.msvc run_win32</code> (you may need to run
+<code class="literal">VCVARS32.BAT</code> first).</p><p>Under Linux, <code class="literal">make -fMakefile.unix run_x11</code> should probably work.</p></div><div class="section" title="8. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>8. Installation</h2></div></div></div><p>TODO</p></div><div class="section" title="9. Status and Future Plans"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="discussion"></a>9. Status and Future Plans</h2></div></div></div><p>The CxxTest 4.0 release reflects major changes in the management
 and focus of CxxTest.  The 4.0 release is the first release of
 CxxTest in over seven years, and virtually all of the initial
 developers have moved on to other projects.  CxxTest is heavily
@@ -315,13 +452,16 @@ embedded compilers…  (Macros vs templates)
 SCONS
 </li><li class="listitem">
 Python 3.0
+</li><li class="listitem">
+ply cpp
 </li></ul></div><p>This documentation has highlighted the commonly used test listeners.
 There are a variety of other test listeners provided by CxxTest
 that support advanced Cxxtest applications.  For example, the <code class="literal">YesNoRunner</code> is
 perhaps the simplest test listener;  it simply returns the number
 of test failures.  The <code class="literal">StdioFilePrinter</code> is used by <code class="literal">StdioPrinter</code>,
 but it does not assume that <code class="literal">stdio</code> is the default output stream.  This test listener can be used
-in contexts where a custom output stream must be specified.</p></div><div class="appendix" title="A. Test Assertion Examples"><h2 class="title" style="clear: both"><a id="appendix_A"></a>A. Test Assertion Examples</h2><div class="variablelist"><dl><dt><span class="term">
+in contexts where a custom output stream must be specified.</p></div><div class="section" title="10. Acknowledgements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="acknowledgements"></a>10. Acknowledgements</h2></div></div></div><p>TODO</p><p>ply
+FOG grammar</p></div><div class="appendix" title="A. Test Assertion Examples"><h2 class="title" style="clear: both"><a id="appendix_A"></a>A. Test Assertion Examples</h2><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert"></a> TS_ASSERT
 </span></dt><dd>
 This is the most basic test assertion, which simply verifies that the <code class="literal"><span class="emphasis"><em>expr</em></span></code> argument is true:
@@ -466,4 +606,234 @@ This command prints a message as a warning:
 </dd></dl></div><pre class="programlisting">   void test_warn( void )
    {
         TS_WARN( "This is a warning message." );
-   }</pre></div></div></body></html>
+   }</pre></div><div class="appendix" title="B. Integrating with Your Build Environment"><h2 class="title" style="clear: both"><a id="appendix_B"></a>B. Integrating with Your Build Environment</h2><p>It’s very hard to maintain your tests if you have to generate,
+compile and run the test runner manually all the time.
+Fortunately, that’s why we have build tools!</p><div class="section" title="B.1. Overview"><div class="titlepage"><div><div><h3 class="title"><a id="_overview_2"></a>B.1. Overview</h3></div></div></div><p>Let’s assume you’re developing an application.
+What I usually do is the following:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Split the application into a library and a main module that just calls
+  the library classes.
+  This way, the test runner will be able to access all your classes through
+  the library.
+</li><li class="listitem">
+Create another application (or target, or project, or whatever) for the test runner.
+  Make the build tool generate it automatically.
+</li><li class="listitem">
+For extra points, make the build tool run the tests automatically.
+</li></ul></div></div><div class="section" title="B.2. Actually doing it"><div class="titlepage"><div><div><h3 class="title"><a id="_actually_doing_it"></a>B.2. Actually doing it</h3></div></div></div><p>Unfortunately, there are way too many different build tools and IDE’s for me
+to give ways to use CxxTest with all of them.</p><p>I will try to outline the usage for some cases.</p><div class="section" title="Using Makefiles"><div class="titlepage"><div><div><h4 class="title"><a id="_using_makefiles"></a>Using Makefiles</h4></div></div></div><p>Generating the tests with a makefile is pretty straightforward.
+Simply add rules to generate, compile and run the test runner.</p><pre class="programlisting">all: lib run_tests app
+
+# Rules to build your targets
+lib: ...
+
+app: ...
+
+# A rule that runs the unit tests
+run_tests: runner
+        ./runner
+
+# How to build the test runner
+runner: runner.cpp lib
+        g++ -o $@ $^
+
+# How to generate the test runner
+runner.cpp: SimpleTest.h ComplicatedTest.h
+         cxxtestgen -o $@ --error-printer $^</pre></div><div class="section" title="Using Cons"><div class="titlepage"><div><div><h4 class="title"><a id="_using_cons"></a>Using Cons</h4></div></div></div><p><a class="ulink" href="http://dsmit.com/cons/" target="_top">Cons</a> is a powerful and
+versatile make replacement which uses Perl scripts instead of Makefiles.</p><p>See <code class="literal">sample/Construct</code> in the CxxTest distribution for an example of building CxxTest test runners
+with Cons.</p></div><div class="section" title="Using Microsoft Visual Studio"><div class="titlepage"><div><div><h4 class="title"><a id="_using_microsoft_visual_studio"></a>Using Microsoft Visual Studio</h4></div></div></div><p>I have tried several ways to integrate CxxTest with visual studio, none of
+which is perfect.  Take a look at <code class="literal">sample/msvc</code> in the distribution
+to see the best solution I’m aware of.  Basically, the workspace has three
+projects:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+The project <code class="literal">CxxTest_3_Generate</code> runs <code class="literal">cxxtestgen</code>.
+</li><li class="listitem">
+The project <code class="literal">CxxTest_2_Build</code> compiles the generated file.
+</li><li class="listitem">
+The project <code class="literal">CxxTest_1_Run</code> runs the tests.
+</li></ul></div><p>This method certainly works, and the test results are conveniently
+displayed as compilation errors and warnings (for
+to integrate this approach with your own project, you usually need to
+work a little bit and tweak some makefiles and project options.  I have
+provided a small script in <code class="literal">sample/msvc/FixFiles.bat</code> to automate
+some of the process.</p></div><div class="section" title="Using Microsoft Windows DDK"><div class="titlepage"><div><div><h4 class="title"><a id="_using_microsoft_windows_ddk"></a>Using Microsoft Windows DDK</h4></div></div></div><p>Unit testing for device drivers?!  Why not?
+And besides, the <code class="literal">build</code> utility can also be used to build
+user-mode application.</p><p>To use CxxTest with the <code class="literal">build</code> utility,
+you add the generated tests file as an extra dependency
+using the <code class="literal">NTBUILDTARGET0</code> macro and the <code class="literal">Makefile.inc</code>
+file.</p><p>You can see an example of how to do this in the CxxTest distribution
+under <code class="literal">sample/winddk</code>.</p></div></div></div><div class="appendix" title="C. CxxTest Releases"><h2 class="title" style="clear: both"><a id="appendix_C"></a>C. CxxTest Releases</h2><div class="section" title="C.1. Version 4.0 (TODO)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_4_0_todo"></a>C.1. Version 4.0 (TODO)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Perl is no longer used to support CxxTest scripts.  Python is now the only scripting language used by      CxxTest.
+</li><li class="listitem">
+The testing scripts have been rewritten using the PyUnit framework.
+</li><li class="listitem">
+The installation process for CxxTest now leverages and integrates with the system Python installation.
+</li><li class="listitem">
+A more comprehensive C++ parser is now available, which supports testing of templates.
+</li><li class="listitem">
+The CxxTest GUI is no longer supported, and the <a class="link" href="#ts_warn">TS_WARN</a> is deprecated.
+</li><li class="listitem">
+CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
+</li><li class="listitem">
+A new user guide is now available in PDF, HTML and Ebook formats.
+</li></ul></div></div><div class="section" title="C.2. Version 3.10.1 (2004-12-01)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_10_1_2004_12_01"></a>C.2. Version 3.10.1 (2004-12-01)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Improved support for VC7
+</li><li class="listitem">
+Fixed clash with some versions of STL
+</li></ul></div></div><div class="section" title="C.3. Version 3.10.0 (2004-11-20)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_10_0_2004_11_20"></a>C.3. Version 3.10.0 (2004-11-20)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added mock framework for global functions
+</li><li class="listitem">
+Added TS_ASSERT_THROWS_ASSERT and TS_ASSERT_THROWS_EQUALS
+</li><li class="listitem">
+Added CXXTEST_ENUM_TRAITS
+</li><li class="listitem">
+Improved support for STL classes (vector, map etc.)
+</li><li class="listitem">
+Added support for Digital Mars compiler
+</li><li class="listitem">
+Reduced root/part compilation time and binary size
+</li><li class="listitem">
+Support C++-style commenting of tests
+</li></ul></div></div><div class="section" title="C.4. Version 3.9.1 (2004-01-19)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_9_1_2004_01_19"></a>C.4. Version 3.9.1 (2004-01-19)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Fixed small bug with runner exit code
+</li><li class="listitem">
+Embedded test suites are now deprecated
+</li></ul></div></div><div class="section" title="C.5. Version 3.9.0 (2004-01-17)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_9_0_2004_01_17"></a>C.5. Version 3.9.0 (2004-01-17)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added TS_TRACE
+</li><li class="listitem">
+Added --no-static-init
+</li><li class="listitem">
+CxxTest::setAbortTestOnFail() works even without --abort-on-fail
+</li></ul></div></div><div class="section" title="C.6. Version 3.8.5 (2004-01-08)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_8_5_2004_01_08"></a>C.6. Version 3.8.5 (2004-01-08)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added --no-eh
+</li><li class="listitem">
+Added CxxTest::setAbortTestOnFail() and CXXTEST_DEFAULT_ABORT
+</li><li class="listitem">
+Added CxxTest::setMaxDumpSize()
+</li><li class="listitem">
+Added StdioFilePrinter
+</li></ul></div></div><div class="section" title="C.7. Version 3.8.4 (2003-12-31)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_8_4_2003_12_31"></a>C.7. Version 3.8.4 (2003-12-31)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Split distribution into cxxtest and cxxtest-selftest
+</li><li class="listitem">
+Added ‘sample/msvc/FixFiles.bat’
+</li></ul></div></div><div class="section" title="C.8. Version 3.8.3 (2003-12-24)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_8_3_2003_12_24"></a>C.8. Version 3.8.3 (2003-12-24)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added TS_ASSERT_PREDICATE
+</li><li class="listitem">
+Template files can now specify where to insert the preamble
+</li><li class="listitem">
+Added a sample Visual Studio workspace in ‘sample/msvc’
+</li><li class="listitem">
+Can compile in MSVC with warning level 4
+</li><li class="listitem">
+Changed output format slightly
+</li></ul></div></div><div class="section" title="C.9. Version 3.8.1 (2003-12-21)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_8_1_2003_12_21"></a>C.9. Version 3.8.1 (2003-12-21)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Fixed small bug when using multiple --part files.
+</li><li class="listitem">
+Fixed X11 GUI crash when there’s no X server.
+</li><li class="listitem">
+Added GlobalFixture::setUpWorld()/tearDownWorld()
+</li><li class="listitem">
+Added leaveOnly(), activateAllTests() and ‘sample/only.tpl’
+</li><li class="listitem">
+Should now run without warnings on Sun compiler.
+</li></ul></div></div><div class="section" title="C.10. Version 3.8.0 (2003-12-13)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_8_0_2003_12_13"></a>C.10. Version 3.8.0 (2003-12-13)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Fixed bug where ‘Root.cpp’ needed exception handling
+</li><li class="listitem">
+Added TS_ASSERT_RELATION
+</li><li class="listitem">
+TSM_ macros now also tell you what went wrong
+</li><li class="listitem">
+Renamed Win32Gui::free() to avoid clashes
+</li><li class="listitem">
+Now compatible with more versions of Borland compiler
+</li><li class="listitem">
+Improved the documentation
+</li></ul></div></div><div class="section" title="C.11. Version 3.7.1 (2003-09-29)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_7_1_2003_09_29"></a>C.11. Version 3.7.1 (2003-09-29)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added --version
+</li><li class="listitem">
+Compiles with even more exotic g++ warnings
+</li><li class="listitem">
+Win32 Gui compiles with UNICODE
+</li><li class="listitem">
+Should compile on some more platforms (Sun Forte, HP aCC)
+</li></ul></div></div><div class="section" title="C.12. Version 3.7.0 (2003-09-20)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_7_0_2003_09_20"></a>C.12. Version 3.7.0 (2003-09-20)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added TS_ASSERT_LESS_THAN_EQUALS
+</li><li class="listitem">
+Minor cleanups
+</li></ul></div></div><div class="section" title="C.13. Version 3.6.1 (2003-09-15)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_6_1_2003_09_15"></a>C.13. Version 3.6.1 (2003-09-15)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Improved QT GUI
+</li><li class="listitem">
+Improved portability some more
+</li></ul></div></div><div class="section" title="C.14. Version 3.6.0 (2003-09-04)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_6_0_2003_09_04"></a>C.14. Version 3.6.0 (2003-09-04)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added --longlong
+</li><li class="listitem">
+Some portability improvements
+</li></ul></div></div><div class="section" title="C.15. Version 3.5.1 (2003-09-03)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_5_1_2003_09_03"></a>C.15. Version 3.5.1 (2003-09-03)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Major internal rewrite of macros
+</li><li class="listitem">
+Added TS_ASSERT_SAME_DATA
+</li><li class="listitem">
+Added --include option
+</li><li class="listitem">
+Added --part and --root to enable splitting the test runner
+</li><li class="listitem">
+Added global fixtures
+</li><li class="listitem">
+Enhanced Win32 GUI with timers, -keep and -title
+</li><li class="listitem">
+Now compiles with strict warnings
+</li></ul></div></div><div class="section" title="C.16. Version 3.1.1 (2003-08-27)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_1_1_2003_08_27"></a>C.16. Version 3.1.1 (2003-08-27)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Fixed small bug in TS_ASSERT_THROWS_*()
+</li></ul></div></div><div class="section" title="C.17. Version 3.1.0 (2003-08-23)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_1_0_2003_08_23"></a>C.17. Version 3.1.0 (2003-08-23)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Default ValueTraits now dumps value as hex bytes
+</li><li class="listitem">
+Fixed double invocation bug (e.g. TS_FAIL(functionWithSideEffects()))
+</li><li class="listitem">
+TS_ASSERT_THROWS*() are now "abort on fail"-friendly
+</li><li class="listitem">
+Win32 GUI now supports Windows 98 and doesn’t need comctl32.lib
+</li></ul></div></div><div class="section" title="C.18. Version 3.0.1 (2003-08-07)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_3_0_1_2003_08_07"></a>C.18. Version 3.0.1 (2003-08-07)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added simple GUI for X11, Win32 and Qt
+</li><li class="listitem">
+Added TS_WARN() macro
+</li><li class="listitem">
+Removed --exit-code
+</li><li class="listitem">
+Improved samples
+</li><li class="listitem">
+Improved support for older (pre-std::) compilers
+</li><li class="listitem">
+Made a PDF version of the User’s Guide
+</li></ul></div></div><div class="section" title="C.19. Version 2.8.4 (2003-07-21)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_2_8_4_2003_07_21"></a>C.19. Version 2.8.4 (2003-07-21)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Now supports g++-3.3
+</li><li class="listitem">
+Added --have-eh
+</li><li class="listitem">
+Fixed bug in numberToString()
+</li></ul></div></div><div class="section" title="C.20. Version 2.8.3 (2003-06-30)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_2_8_3_2003_06_30"></a>C.20. Version 2.8.3 (2003-06-30)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Fixed bugs in cxxtestgen.pl
+</li><li class="listitem">
+Fixed warning for some compilers in ErrorPrinter/StdioPrinter
+</li><li class="listitem">
+Thanks Martin Jost for pointing out these problems!
+</li></ul></div></div><div class="section" title="C.21. Version 2.8.2 (2003-06-10)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_2_8_2_2003_06_10"></a>C.21. Version 2.8.2 (2003-06-10)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Fixed bug when using CXXTEST_ABORT_TEST_ON_FAIL without standard library
+</li><li class="listitem">
+Added CXXTEST_USER_TRAITS
+</li><li class="listitem">
+Added --abort-on-fail
+</li></ul></div></div><div class="section" title="C.22. Version 2.8.1 (2003-01-16)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_2_8_1_2003_01_16"></a>C.22. Version 2.8.1 (2003-01-16)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Fixed charToString() for negative chars
+</li></ul></div></div><div class="section" title="C.23. Version 2.8.0 (2003-01-13)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_2_8_0_2003_01_13"></a>C.23. Version 2.8.0 (2003-01-13)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added CXXTEST_ABORT_TEST_ON_FAIL for xUnit-like behaviour
+</li><li class="listitem">
+Added ‘sample/winddk’
+</li><li class="listitem">
+Improved ValueTraits
+</li><li class="listitem">
+Improved output formatter
+</li><li class="listitem">
+Started version history
+</li></ul></div></div><div class="section" title="C.24. Version 2.7.0 (2002-09-29)"><div class="titlepage"><div><div><h3 class="title"><a id="_version_2_7_0_2002_09_29"></a>C.24. Version 2.7.0 (2002-09-29)</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+Added embedded test suites
+</li><li class="listitem">
+Major internal improvements
+</li></ul></div></div></div></div></body></html>
