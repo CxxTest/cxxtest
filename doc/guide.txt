@@ -480,20 +480,31 @@ with complex inheritance relationships.
 The +--fog+ option is used to specify the use of the FOG parser for
 test discovery.  Although the FOG parser is more powerful, the
 simpler +cxxtestgen+ test discover process is the default because
-the FOG parser is slower execute.
+the FOG parser is slower execute.  Additionally, the FOG parser
+requires the installation of +ply+ and, for Python version 2.6,
++ordereddict+.  If these packages are not available, then the +--fog+
+option is automatically disabled.
 
 The following sections illustrate differences between these two test discovery mechanisms, along with
 general limitations of the test discovery process.
 
-Wierd Format
-^^^^^^^^^^^^
+===== Unexpected Test Suite Format
 
-CxxTest does a very simple analysis of the input files, which is
-sufficient in most cases.  This means, for example, that you can't
-indent you test code in ``weird'' ways.
+The default test discovery mechanism does a very simple analysis
+of the input files, which can easily fail when test classes are not
+formated in a standard manner.  For example, consider the following
+test suite:
+[source,cpp]
+-----
+include::examples/MyTestSuite4.h[]
+----
+This test suite is not recognized by the default test discovery
+mechanism, but the FOG parser correctly parsers this file and
+recognizes the test suite.  A variety of similar discovery failures
+arise due to the simple process used by the test discovery mechanism.
 
-Commenting Out Tests
-^^^^^^^^^^^^^^^^^^^^
+
+===== Commenting Out Tests
 
 Adding and disabling tests are two common steps in test development.
 The process of test discovery makes adding tests very easy.  However,
@@ -648,7 +659,6 @@ Discuss support for ...
  - embedded compilers...  (Macros vs templates)
  - SCONS
  - Python 3.0
- - ply cpp
 
 This documentation has highlighted the commonly used test listeners.
 There are a variety of other test listeners provided by CxxTest
@@ -657,6 +667,11 @@ perhaps the simplest test listener;  it simply returns the number
 of test failures.  The +StdioFilePrinter+ is used by +StdioPrinter+,
 but it does not assume that +stdio+ is the default output stream.  This test listener can be used
 in contexts where a custom output stream must be specified.
+
+Future work:
+
+ - ply cpp
+ - ignore template test classes using the FOG parser
 
 
 :numbered!:
@@ -671,7 +686,6 @@ ply
 FOG grammar
 
 [appendix]
-
 [[appendix_A]] 
 Test Assertion Examples
 -----------------------

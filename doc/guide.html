@@ -322,10 +322,30 @@ This allows <code class="literal">cxxtestgen</code> to identify test classes tha
 with complex inheritance relationships.</p><p>The <code class="literal">--fog</code> option is used to specify the use of the FOG parser for
 test discovery.  Although the FOG parser is more powerful, the
 simpler <code class="literal">cxxtestgen</code> test discover process is the default because
-the FOG parser is slower execute.</p><p>The following sections illustrate differences between these two test discovery mechanisms, along with
-general limitations of the test discovery process.</p><div class="section" title="Wierd Format"><div class="titlepage"><div><div><h4 class="title"><a id="_wierd_format"></a>Wierd Format</h4></div></div></div><p>CxxTest does a very simple analysis of the input files, which is
-sufficient in most cases.  This means, for example, that you can’t
-indent you test code in “weird” ways.</p></div><div class="section" title="Commenting Out Tests"><div class="titlepage"><div><div><h4 class="title"><a id="_commenting_out_tests"></a>Commenting Out Tests</h4></div></div></div><p>Adding and disabling tests are two common steps in test development.
+the FOG parser is slower execute.  Additionally, the FOG parser
+requires the installation of <code class="literal">ply</code> and, for Python version 2.6,
+<code class="literal">ordereddict</code>.  If these packages are not available, then the <code class="literal">--fog</code>
+option is automatically disabled.</p><p>The following sections illustrate differences between these two test discovery mechanisms, along with
+general limitations of the test discovery process.</p><div class="section" title="Wierd Format"><div class="titlepage"><div><div><h4 class="title"><a id="_wierd_format"></a>Wierd Format</h4></div></div></div><p>The default test discovery mechanism does a very simple analysis
+of the input files, which can easily fail when test classes are not
+formated in a standard manner.  For example, consider the following
+test suite:</p><pre class="programlisting">// MyTestSuite4.h
+#include &lt;cxxtest/TestSuite.h&gt;
+
+class MyTestSuite4
+:
+public CxxTest::TestSuite
+{
+public:
+   void testAddition( void )
+   {
+      TS_ASSERT( 1 + 1 &gt; 1 );
+      TS_ASSERT_EQUALS( 1 + 1, 2 );
+   }
+};</pre><p>This test suite is not recognized by the default test discovery
+mechanism, but the FOG parser correctly parsers this file and
+recognizes the test suite.  A variety of similar discovery failures
+arise due to the simple process used by the test discovery mechanism.</p></div><div class="section" title="Commenting Out Tests"><div class="titlepage"><div><div><h4 class="title"><a id="_commenting_out_tests"></a>Commenting Out Tests</h4></div></div></div><p>Adding and disabling tests are two common steps in test development.
 The process of test discovery makes adding tests very easy.  However,
 disabling tests is somewhat more complicated.  Consider the following
 header file, which defines four tests (three of which are disabled):</p><pre class="programlisting">// MyTestSuite3.h
@@ -368,7 +388,7 @@ all three.  The FOG parser performs a complex, multi-line parse of
 the source file, so it can identify multi-line C-style comments.</p><p>Note, however, that the use of C macros will not work:</p><pre class="programlisting">// BadTestSuite1.h
 #include &lt;cxxtest/TestSuite.h&gt;
 
-class MyTestSuite3 : public CxxTest::TestSuite
+class BadTestSuite1 : public CxxTest::TestSuite
 {
 public:
    void testAddition( void )
