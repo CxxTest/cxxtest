@@ -271,6 +271,14 @@ class BaseTestCase(object):
         """Only Test"""
         self.compile(prefix='only_test', args="--template=%s../sample/only.tpl %s" % (currdir, samples), run="%s SimpleTest testAddition > %s 2>&1", output="suite_test.out")
 
+    def test_have_std_tpl(self):
+        """Have Std - Template"""
+        self.compile(prefix='have_std_tpl', args="--template=HaveStd.tpl HaveStd.h", output="std.out")
+
+    def test_exceptions_tpl(self):
+        """Exceptions - Template"""
+        self.compile(prefix='exceptions_tpl', args="--template=HaveEH.tpl "+self.ehNormals, output="eh_normals.out")
+
     #
     # Test cases which do not require exception handling
     #
