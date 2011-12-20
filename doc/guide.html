@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_creating_test_runners_from_parts">4.4. Creating Test Runners from Parts</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_test_discovery_options">4.6. Test Discovery Options</a></span></dt></dl></dd><dt><span class="section"><a href="#runner">5. Test Runner Syntax</a></span></dt><dt><span class="section"><a href="#advanced">6. Advanced Testing Features</a></span></dt><dd><dl><dt><span class="section"><a href="#_macros">6.1. Macros</a></span></dt><dt><span class="section"><a href="#_customizing_test_fixtures">6.2. Customizing Test Fixtures</a></span></dt></dl></dd><dt><span class="section"><a href="#samples">7. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">8. Installation</a></span></dt><dt><span class="section"><a href="#discussion">9. Status and Future Plans</a></span></dt><dt><span class="section"><a href="#acknowledgements">10. Acknowledgements</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt><dt><span class="appendix"><a href="#appendix_B">B. Integrating with Your Build Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#_overview_2">B.1. Overview</a></span></dt><dt><span class="section"><a href="#_actually_doing_it">B.2. Actually doing it</a></span></dt><dd><dl><dt><span class="section"><a href="#_using_makefiles">Using Makefiles</a></span></dt><dt><span class="section"><a href="#_using_cons">Using Cons</a></span></dt><dt><span class="section"><a href="#_using_microsoft_visual_studio">Using Microsoft Visual Studio</a></span></dt><dt><span class="section"><a href="#_using_microsoft_windows_ddk">Using Microsoft Windows DDK</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#appendix_C">C. CxxTest Releases</a></span></dt><dd><dl><dt><span class="section"><a href="#_version_4_0_todo">C.1. Version 4.0 (TODO)</a></span></dt><dt><span class="section"><a href="#_version_3_10_1_2004_12_01">C.2. Version 3.10.1 (2004-12-01)</a></span></dt><dt><span class="section"><a href="#_version_3_10_0_2004_11_20">C.3. Version 3.10.0 (2004-11-20)</a></span></dt><dt><span class="section"><a href="#_version_3_9_1_2004_01_19">C.4. Version 3.9.1 (2004-01-19)</a></span></dt><dt><span class="section"><a href="#_version_3_9_0_2004_01_17">C.5. Version 3.9.0 (2004-01-17)</a></span></dt><dt><span class="section"><a href="#_version_3_8_5_2004_01_08">C.6. Version 3.8.5 (2004-01-08)</a></span></dt><dt><span class="section"><a href="#_version_3_8_4_2003_12_31">C.7. Version 3.8.4 (2003-12-31)</a></span></dt><dt><span class="section"><a href="#_version_3_8_3_2003_12_24">C.8. Version 3.8.3 (2003-12-24)</a></span></dt><dt><span class="section"><a href="#_version_3_8_1_2003_12_21">C.9. Version 3.8.1 (2003-12-21)</a></span></dt><dt><span class="section"><a href="#_version_3_8_0_2003_12_13">C.10. Version 3.8.0 (2003-12-13)</a></span></dt><dt><span class="section"><a href="#_version_3_7_1_2003_09_29">C.11. Version 3.7.1 (2003-09-29)</a></span></dt><dt><span class="section"><a href="#_version_3_7_0_2003_09_20">C.12. Version 3.7.0 (2003-09-20)</a></span></dt><dt><span class="section"><a href="#_version_3_6_1_2003_09_15">C.13. Version 3.6.1 (2003-09-15)</a></span></dt><dt><span class="section"><a href="#_version_3_6_0_2003_09_04">C.14. Version 3.6.0 (2003-09-04)</a></span></dt><dt><span class="section"><a href="#_version_3_5_1_2003_09_03">C.15. Version 3.5.1 (2003-09-03)</a></span></dt><dt><span class="section"><a href="#_version_3_1_1_2003_08_27">C.16. Version 3.1.1 (2003-08-27)</a></span></dt><dt><span class="section"><a href="#_version_3_1_0_2003_08_23">C.17. Version 3.1.0 (2003-08-23)</a></span></dt><dt><span class="section"><a href="#_version_3_0_1_2003_08_07">C.18. Version 3.0.1 (2003-08-07)</a></span></dt><dt><span class="section"><a href="#_version_2_8_4_2003_07_21">C.19. Version 2.8.4 (2003-07-21)</a></span></dt><dt><span class="section"><a href="#_version_2_8_3_2003_06_30">C.20. Version 2.8.3 (2003-06-30)</a></span></dt><dt><span class="section"><a href="#_version_2_8_2_2003_06_10">C.21. Version 2.8.2 (2003-06-10)</a></span></dt><dt><span class="section"><a href="#_version_2_8_1_2003_01_16">C.22. Version 2.8.1 (2003-01-16)</a></span></dt><dt><span class="section"><a href="#_version_2_8_0_2003_01_13">C.23. Version 2.8.0 (2003-01-13)</a></span></dt><dt><span class="section"><a href="#_version_2_7_0_2002_09_29">C.24. Version 2.7.0 (2002-09-29)</a></span></dt></dl></dd></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_creating_test_runners_from_parts">4.4. Creating Test Runners from Parts</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_test_discovery_options">4.6. Test Discovery Options</a></span></dt></dl></dd><dt><span class="section"><a href="#runner">5. Test Runner Syntax</a></span></dt><dt><span class="section"><a href="#advanced">6. Advanced Testing Features</a></span></dt><dd><dl><dt><span class="section"><a href="#_blah">6.1. blah</a></span></dt><dt><span class="section"><a href="#_preprocessor_macros">6.2. Preprocessor Macros</a></span></dt><dt><span class="section"><a href="#_customizing_test_fixtures">6.3. Customizing Test Fixtures</a></span></dt></dl></dd><dt><span class="section"><a href="#samples">7. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">8. Installation</a></span></dt><dt><span class="section"><a href="#discussion">9. Status and Future Plans</a></span></dt><dt><span class="section"><a href="#acknowledgements">10. Acknowledgements</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt><dt><span class="appendix"><a href="#appendix_B">B. Integrating with Your Build Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#_overview_2">B.1. Overview</a></span></dt><dt><span class="section"><a href="#_actually_doing_it">B.2. Actually doing it</a></span></dt><dd><dl><dt><span class="section"><a href="#_using_makefiles">Using Makefiles</a></span></dt><dt><span class="section"><a href="#_using_cons">Using Cons</a></span></dt><dt><span class="section"><a href="#_using_microsoft_visual_studio">Using Microsoft Visual Studio</a></span></dt><dt><span class="section"><a href="#_using_microsoft_windows_ddk">Using Microsoft Windows DDK</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#appendix_C">C. CxxTest Releases</a></span></dt><dd><dl><dt><span class="section"><a href="#_version_4_0_todo">C.1. Version 4.0 (TODO)</a></span></dt><dt><span class="section"><a href="#_version_3_10_1_2004_12_01">C.2. Version 3.10.1 (2004-12-01)</a></span></dt><dt><span class="section"><a href="#_version_3_10_0_2004_11_20">C.3. Version 3.10.0 (2004-11-20)</a></span></dt><dt><span class="section"><a href="#_version_3_9_1_2004_01_19">C.4. Version 3.9.1 (2004-01-19)</a></span></dt><dt><span class="section"><a href="#_version_3_9_0_2004_01_17">C.5. Version 3.9.0 (2004-01-17)</a></span></dt><dt><span class="section"><a href="#_version_3_8_5_2004_01_08">C.6. Version 3.8.5 (2004-01-08)</a></span></dt><dt><span class="section"><a href="#_version_3_8_4_2003_12_31">C.7. Version 3.8.4 (2003-12-31)</a></span></dt><dt><span class="section"><a href="#_version_3_8_3_2003_12_24">C.8. Version 3.8.3 (2003-12-24)</a></span></dt><dt><span class="section"><a href="#_version_3_8_1_2003_12_21">C.9. Version 3.8.1 (2003-12-21)</a></span></dt><dt><span class="section"><a href="#_version_3_8_0_2003_12_13">C.10. Version 3.8.0 (2003-12-13)</a></span></dt><dt><span class="section"><a href="#_version_3_7_1_2003_09_29">C.11. Version 3.7.1 (2003-09-29)</a></span></dt><dt><span class="section"><a href="#_version_3_7_0_2003_09_20">C.12. Version 3.7.0 (2003-09-20)</a></span></dt><dt><span class="section"><a href="#_version_3_6_1_2003_09_15">C.13. Version 3.6.1 (2003-09-15)</a></span></dt><dt><span class="section"><a href="#_version_3_6_0_2003_09_04">C.14. Version 3.6.0 (2003-09-04)</a></span></dt><dt><span class="section"><a href="#_version_3_5_1_2003_09_03">C.15. Version 3.5.1 (2003-09-03)</a></span></dt><dt><span class="section"><a href="#_version_3_1_1_2003_08_27">C.16. Version 3.1.1 (2003-08-27)</a></span></dt><dt><span class="section"><a href="#_version_3_1_0_2003_08_23">C.17. Version 3.1.0 (2003-08-23)</a></span></dt><dt><span class="section"><a href="#_version_3_0_1_2003_08_07">C.18. Version 3.0.1 (2003-08-07)</a></span></dt><dt><span class="section"><a href="#_version_2_8_4_2003_07_21">C.19. Version 2.8.4 (2003-07-21)</a></span></dt><dt><span class="section"><a href="#_version_2_8_3_2003_06_30">C.20. Version 2.8.3 (2003-06-30)</a></span></dt><dt><span class="section"><a href="#_version_2_8_2_2003_06_10">C.21. Version 2.8.2 (2003-06-10)</a></span></dt><dt><span class="section"><a href="#_version_2_8_1_2003_01_16">C.22. Version 2.8.1 (2003-01-16)</a></span></dt><dt><span class="section"><a href="#_version_2_8_0_2003_01_13">C.23. Version 2.8.0 (2003-01-13)</a></span></dt><dt><span class="section"><a href="#_version_2_7_0_2002_09_29">C.24. Version 2.7.0 (2002-09-29)</a></span></dt></dl></dd><dt><span class="appendix"><a href="#appendix_D">D. Testing CxxTest</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
 spirit to <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>,
 <a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
 <a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>.  CxxTest is easy to
@@ -104,11 +104,11 @@ test suite with a single test, <code class="literal">testAddition</code>, which 
 class MyTestSuite1 : public CxxTest::TestSuite
 {
 public:
-   void testAddition( void )
-   {
-      TS_ASSERT( 1 + 1 &gt; 1 );
-      TS_ASSERT_EQUALS( 1 + 1, 2 );
-   }
+    void testAddition(void)
+    {
+        TS_ASSERT(1 + 1 &gt; 1);
+        TS_ASSERT_EQUALS(1 + 1, 2);
+    }
 };</pre><p>You use the <code class="literal">cxxtestgen</code> script to generate a <span class="emphasis"><em>test runner</em></span> for test suites in C++ header files:</p><pre class="programlisting">cxxtestgen --error-printer -o runner.cpp MyTestSuite1.h</pre><p>This command generates the file <code class="literal">runner.cpp</code>, which can be compiled.</p><pre class="programlisting">cxxtestgen --error-printer -o runner.cpp MyTestSuite1.h</pre><p>Note that additional compiler flags may be needed to include headers
 and libraries that are used during testing.</p><p>This runner can be executed to perform the specified tests:</p><pre class="programlisting">./runner</pre><p>which generates the following output:</p><pre class="screen">Running 1 test.OK!</pre></div><div class="section" title="2.2. A Second Example"><div class="titlepage"><div><div><h3 class="title"><a id="_a_second_example"></a>2.2. A Second Example</h3></div></div></div><p>The following header file extends the previous example to
 include a test that generates an error:</p><pre class="programlisting">// MyTestSuite2.h
@@ -117,18 +117,18 @@ include a test that generates an error:</p><pre class="programlisting">// MyTest
 class MyTestSuite2 : public CxxTest::TestSuite
 {
 public:
-   void testAddition( void )
-   {
-      TS_ASSERT( 1 + 1 &gt; 1 );
-      TS_ASSERT_EQUALS( 1 + 1, 2 );
-   }
+    void testAddition(void)
+    {
+        TS_ASSERT(1 + 1 &gt; 1);
+        TS_ASSERT_EQUALS(1 + 1, 2);
+    }
 
-   void testMultiplication( void )
-   {
-      TS_TRACE("Starting multiplication test");
-      TS_ASSERT_EQUALS( 2 * 2, 5 );
-      TS_TRACE("Finishing multiplication test");
-   }
+    void testMultiplication(void)
+    {
+        TS_TRACE("Starting multiplication test");
+        TS_ASSERT_EQUALS(2 * 2, 5);
+        TS_TRACE("Finishing multiplication test");
+    }
 };</pre><p>The test runner generated by <code class="literal">cxxtestgen</code> for this test suite generates the following output:</p><pre class="screen">Running 2 tests.
 In MyTestSuite::testMultiplication:
 MyTestSuite2.h:15: Error: Expected (2 * 2 == 5), found (4 != 5)
@@ -336,15 +336,15 @@ test suite:</p><pre class="programlisting">// MyTestSuite4.h
 #include &lt;cxxtest/TestSuite.h&gt;
 
 class MyTestSuite4
-:
+    :
 public CxxTest::TestSuite
 {
 public:
-   void testAddition( void )
-   {
-      TS_ASSERT( 1 + 1 &gt; 1 );
-      TS_ASSERT_EQUALS( 1 + 1, 2 );
-   }
+    void testAddition(void)
+    {
+        TS_ASSERT(1 + 1 &gt; 1);
+        TS_ASSERT_EQUALS(1 + 1, 2);
+    }
 };</pre><p>This test suite is not recognized by the default test discovery
 mechanism, but the FOG parser correctly parsers this file and
 recognizes the test suite.  A variety of similar discovery failures
@@ -357,11 +357,11 @@ header file, which defines four tests (three of which are disabled):</p><pre cla
 class MyTestSuite3 : public CxxTest::TestSuite
 {
 public:
-   void testAddition( void )
-   {
-      TS_ASSERT( 1 + 1 &gt; 1 );
-      TS_ASSERT_EQUALS( 1 + 1, 2 );
-   }
+    void testAddition(void)
+    {
+        TS_ASSERT(1 + 1 &gt; 1);
+        TS_ASSERT_EQUALS(1 + 1, 2);
+    }
 
 //   void testMultiplication( void )
 //   {
@@ -370,18 +370,18 @@ public:
 //   }
 
 /*
-   void testSubtraction( void )
-   {
-      TS_ASSERT( 1 - 1 &lt; 1 );
-      TS_ASSERT_EQUALS( 1 - 1, 0 );
-   }
+     void testSubtraction( void )
+     {
+        TS_ASSERT( 1 - 1 &lt; 1 );
+        TS_ASSERT_EQUALS( 1 - 1, 0 );
+     }
 */
 
-   void XtestDivision( void )
-   {
-      TS_ASSERT( 1 / 1 &lt; 2 );
-      TS_ASSERT_EQUALS( 1 / 1, 1 );
-   }
+    void XtestDivision(void)
+    {
+        TS_ASSERT(1 / 1 &lt; 2);
+        TS_ASSERT_EQUALS(1 / 1, 1);
+    }
 };</pre><p>The first is commented out with C++-style comments, the second
 test is commented out with C-style comments, and the third test is
 named in a manner that is not recognized through test discovery
@@ -394,17 +394,17 @@ the source file, so it can identify multi-line C-style comments.</p><p>Note, how
 class BadTestSuite1 : public CxxTest::TestSuite
 {
 public:
-   void testAddition( void )
-   {
-      TS_ASSERT( 1 + 1 &gt; 1 );
-      TS_ASSERT_EQUALS( 1 + 1, 2 );
-   }
+    void testAddition(void)
+    {
+        TS_ASSERT(1 + 1 &gt; 1);
+        TS_ASSERT_EQUALS(1 + 1, 2);
+    }
 #if 0
-   void testSubtraction( void )
-   {
-      TS_ASSERT( 1 - 1 &lt; 1 );
-      TS_ASSERT_EQUALS( 1 - 1, 0 );
-   }
+    void testSubtraction(void)
+    {
+        TS_ASSERT(1 - 1 &lt; 1);
+        TS_ASSERT_EQUALS(1 - 1, 0);
+    }
 #endif
 };</pre><p>The <code class="literal">cxxtestgen</code> discovery mechanisms do not perform a C preprocessing
 step, since that would generally require using externally defined
@@ -437,8 +437,21 @@ MyTestSuite2.h:15: Trace: Starting multiplication test
 MyTestSuite2.h:16: Error: Expected (2 * 2 == 5), found (4 != 5)
 MyTestSuite2.h:17: Trace: Finishing multiplication test
 Failed 1 of 1 test
-Success rate: 0%</pre></div><div class="section" title="6. Advanced Testing Features"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="advanced"></a>6. Advanced Testing Features</h2></div></div></div><div class="section" title="6.1. Macros"><div class="titlepage"><div><div><h3 class="title"><a id="_macros"></a>6.1. Macros</h3></div></div></div><p>CXXTEST_STD
-…</p></div><div class="section" title="6.2. Customizing Test Fixtures"><div class="titlepage"><div><div><h3 class="title"><a id="_customizing_test_fixtures"></a>6.2. Customizing Test Fixtures</h3></div></div></div><p>CxxTest test fixtures can be customized in several ways to manage
+Success rate: 0%</pre></div><div class="section" title="6. Advanced Testing Features"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="advanced"></a>6. Advanced Testing Features</h2></div></div></div><div class="section" title="6.1. blah"><div class="titlepage"><div><div><h3 class="title"><a id="_blah"></a>6.1. blah</h3></div></div></div><p>TODO: CxxTest also defines several other macros that
+CXXTEST_STD</p></div><div class="section" title="6.2. Preprocessor Macros"><div class="titlepage"><div><div><h3 class="title"><a id="_preprocessor_macros"></a>6.2. Preprocessor Macros</h3></div></div></div><p>CxxTest recognizes a variety of preprocessor macros that can be used to modify the behavior of a test runner.  Many of these mimic the options of the <code class="literal">cxxtestgen</code> command.</p><div class="informaltable"><table cellpadding="4px" style="border-collapse: collapse;border-top: 3px solid #527bbd; border-bottom: 3px solid #527bbd; border-left: 3px solid #527bbd; border-right: 3px solid #527bbd; "><colgroup><col class="col_1" /><col class="col_2" /></colgroup><thead><tr><th style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"> Preprocessor Macro  </th><th style="border-bottom: 1px solid #527bbd; " align="left" valign="top"> Description</th></tr></thead><tbody><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_HAVE_STD</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Use the standard library.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_HAVE_EH</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Use exception handling.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_ABORT_TEST_ON_FAIL</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Abort tests on failed asserts.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_USER_VALUE_TRAITS</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Enable user-defined ValueTraits.  The default traits dump up to 8 bytes of the data as hex values.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_OLD_TEMPLATE_SYNTAX</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Use old template syntax that is used by some compilers (e.g. Borland C++ 5).</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_OLD_STD</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>Use old syntax for libraries where <code class="literal">std::</code> is not recognize.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_MAX_DUMP_SIZE</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>The value of this macro defines the maximum number of bytes to dump if <code class="literal">TS_ASSERT_SAME_DATA()</code> fails. The default is 0, which indicates no limit.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_DEFAULT_ABORT</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>The value of this macro is the default value of the dynamic <span class="emphasis"><em>abort on fail</em></span> flag.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">CXXTEST_LONGLONG</code></p></td><td style="" align="left" valign="top"><p>The value of this macro is used to define long long integers.</p></td></tr></tbody></table></div><p>These preprocessor macros must be defined before the CxxTest header files are included in the test runner.  For example, the following template file defines <code class="literal">CXXTEST_HAVE_EH</code> and <code class="literal">CXXTEST_ABORT_TEST_ON_FAIL</code> before other headers are included:</p><pre class="programlisting">#define CXXTEST_HAVE_EH
+#define CXXTEST_ABORT_TEST_ON_FAIL
+#include &lt;cxxtest/ErrorPrinter.h&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Starting test runner" &lt;&lt; std::endl;
+    int status = CxxTest::ErrorPrinter().run();
+    std::cout &lt;&lt; "Stopping test runner" &lt;&lt; std::endl;
+    return status;
+}
+
+// The CxxTest "world"
+&lt;CxxTest world&gt;</pre></div><div class="section" title="6.3. Customizing Test Fixtures"><div class="titlepage"><div><div><h3 class="title"><a id="_customizing_test_fixtures"></a>6.3. Customizing Test Fixtures</h3></div></div></div><div class="section" title="Setup and Teardown"><div class="titlepage"><div><div><h4 class="title"><a id="_setup_and_teardown"></a>Setup and Teardown</h4></div></div></div><p>CxxTest test fixtures can be customized in several ways to manage
 the environment for test suites and individual tests.  A common
 feature of test suites is that they share a common logic for setting
 up data used in the tests.  Thus, there may be duplicate code for
@@ -480,9 +493,40 @@ public:
         TS_ASSERT_EQUALS(_buffer[0], 'H');
         TS_ASSERT_EQUALS(_buffer[1], 'e');
     }
-};</pre><p>If you need a fixture on the test suite level, i.e. something that gets
-constructed once before all the tests in the test suite are run, see
-<a class="link" href="#">Dynamically creating test suites</a> below.</p></div></div><div class="section" title="7. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>7. Sample Problems</h2></div></div></div><p>CxxTest comes with some samples in the <code class="literal">sample/</code> subdirectory of
+};</pre></div><div class="section" title="Dynamically Created Test Suites"><div class="titlepage"><div><div><h4 class="title"><a id="_dynamically_created_test_suites"></a>Dynamically Created Test Suites</h4></div></div></div><p>CxxTest test fixtures can also be customized during the construction
+and deconstruction of test suites.  By default, CxxTest test suites
+are instantiated statically in the test runner.  However, dynamically
+created test suites can be used to perform suite-level setup and
+teardown operations, verify the environment needed to execute a
+test suite, and construct test suites that require a nontrivial
+constructor.</p><p>CxxTest instantiates a test suite dynamically if the <code class="literal">createSuite()</code>
+or <code class="literal">destroySuite()</code> methods are defined.  For example, the following
+test suite checks to see if it is being compiled with Microsoft
+Visual Studio.  If not, the <code class="literal">createSuite()</code> returns a null pointer,
+indicating that the test suite was not created.</p><pre class="programlisting">// MyTestSuite6.h
+#include &lt;cxxtest/TestSuite.h&gt;
+
+class MyTestSuite6 : public CxxTest::TestSuite
+{
+public:
+
+    static MyTestSuite6* createSuite()
+    {
+    #ifdef _MSC_VER
+    return new MyTestSuite6();
+    #else
+    return 0;
+    #endif
+    }
+
+    static void destroySuite( MyTestSuite6* suite )
+    { delete suite; }
+
+    void test_nothing()
+    {
+        TS_FAIL( "Nothing to test" );
+    }
+};</pre></div></div></div><div class="section" title="7. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>7. Sample Problems</h2></div></div></div><p>CxxTest comes with some samples in the <code class="literal">sample/</code> subdirectory of
 the distribution.  If you look in that directory, you will see three
 Makefiles: <code class="literal">Makefile.unix</code>, <code class="literal">Makefile.msvc</code> and
 <code class="literal">Makefile.bcc32</code> which are for Linux/Unix, MS Visual C++ and
@@ -539,148 +583,148 @@ FOG grammar</p></div><div class="appendix" title="A. Test Assertion Examples"><
 <a id="ts_assert"></a> TS_ASSERT
 </span></dt><dd>
 This is the most basic test assertion, which simply verifies that the <code class="literal"><span class="emphasis"><em>expr</em></span></code> argument is true:
-</dd></dl></div><pre class="programlisting">   void test_assert( void )
-   {
-      TS_ASSERT(1 + 1 &gt; 1);
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert(void)
+    {
+        TS_ASSERT(1 + 1 &gt; 1);
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_delta"></a> TS_ASSERT_DELTA
 </span></dt><dd>
 This test assertion verifies two floating point values are within a specified absolute difference:
-</dd></dl></div><pre class="programlisting">   void test_assert_delta( void )
-   {
-      TS_ASSERT_DELTA(sqrt(4.0), 2.0, 1e-7);
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert_delta(void)
+    {
+        TS_ASSERT_DELTA(sqrt(4.0), 2.0, 1e-7);
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_differs"></a> TS_ASSERT_DIFFERS
 </span></dt><dd>
 This test assertion verifies that the two arguments are not equal:
-</dd></dl></div><pre class="programlisting">   void test_assert_differs( void )
-   {
-      TS_ASSERT_DIFFERS(1,2);
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert_differs(void)
+    {
+        TS_ASSERT_DIFFERS(1, 2);
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_equals"></a> TS_ASSERT_EQUALS
 </span></dt><dd>
   This test assertion verifies that the two arguments are equal:
-</dd></dl></div><pre class="programlisting">   void test_assert_equals( void )
-   {
-      TS_ASSERT_EQUALS(21 % 5, 1);
-   }</pre><p>Note that this test is performed using the C++ <code class="literal"><span class="emphasis"><em>==</em></span></code> operator, whose behavior may be redefined for the two argument types.</p><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert_equals(void)
+    {
+        TS_ASSERT_EQUALS(21 % 5, 1);
+    }</pre><p>Note that this test is performed using the C++ <code class="literal"><span class="emphasis"><em>==</em></span></code> operator, whose behavior may be redefined for the two argument types.</p><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_less_than"></a> TS_ASSERT_LESS_THAN
 </span></dt><dd>
 This test assertion verifies that the first argument is strictly less than the second argument:
-</dd></dl></div><pre class="programlisting">   void test_assert_less_than( void )
-   {
-      TS_ASSERT_LESS_THAN(0, 1);
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert_less_than(void)
+    {
+        TS_ASSERT_LESS_THAN(0, 1);
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_less_than_equals"></a> TS_ASSERT_LESS_THAN_EQUALS
 </span></dt><dd>
 This test assertion verifies that the first argument is less than or equal to the second argument:
-</dd></dl></div><pre class="programlisting">   void test_assert_less_than_equals( void )
-   {
-      TS_ASSERT_LESS_THAN_EQUALS(0, 0);
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert_less_than_equals(void)
+    {
+        TS_ASSERT_LESS_THAN_EQUALS(0, 0);
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_predicate"></a> TS_ASSERT_PREDICATE
 </span></dt><dd>
 This test assertion takes as an argument the name of a class, similar to a STL <code class="literal"><span class="emphasis"><em>unary_function</em></span></code>, and evaluates the <code class="literal"><span class="emphasis"><em>operator()</em></span></code> method:
-</dd></dl></div><pre class="programlisting">   class IsOdd
-   {
-   public:
-    bool operator()(int x) const { return x % 2 == 1; }
-   };
+</dd></dl></div><pre class="programlisting">    class IsOdd
+    {
+    public:
+        bool operator()(int x) const { return x % 2 == 1; }
+    };
 
-   void test_assert_predicate( void )
-   {
-      TS_ASSERT_PREDICATE(IsOdd, 29);
-   }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert">TS_ASSERT</a>, but it
+    void test_assert_predicate(void)
+    {
+        TS_ASSERT_PREDICATE(IsOdd, 29);
+    }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert">TS_ASSERT</a>, but it
 allows the tester to see the failed value.</p><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_relation"></a> TS_ASSERT_RELATION
 </span></dt><dd>
 It takes as an argument the name of a class, similar to a STL <code class="literal"><span class="emphasis"><em>binary_function</em></span></code>, and evaluates the <code class="literal"><span class="emphasis"><em>operator()</em></span></code> method:
-</dd></dl></div><pre class="programlisting">   void test_assert_relation( void )
-   {
-      TS_ASSERT_RELATION( std::greater&lt;double&gt;, 1e6, 1000.0 );
-   }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>, <a class="link" href="#ts_assert_differs">TS_ASSERT_DIFFERS</a>, <a class="link" href="#ts_assert_less_than">TS_ASSERT_LESS_THAN</a> and <a class="link" href="#ts_assert_less_than_equals">TS_ASSERT_LESS_THAN_EQUALS</a>.
+</dd></dl></div><pre class="programlisting">    void test_assert_relation(void)
+    {
+        TS_ASSERT_RELATION(std::greater&lt;double&gt;, 1e6, 1000.0);
+    }</pre><p>This test assertion can be seen as a generalization of <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>, <a class="link" href="#ts_assert_differs">TS_ASSERT_DIFFERS</a>, <a class="link" href="#ts_assert_less_than">TS_ASSERT_LESS_THAN</a> and <a class="link" href="#ts_assert_less_than_equals">TS_ASSERT_LESS_THAN_EQUALS</a>.
 This can be used to assert comparisons which are not covered by the builtin test assertions.</p><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_same_data"></a> TS_ASSERT_SAME_DATA
 </span></dt><dd>
 This test assertion is similar to <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>,
 except that it compares the contents of two buffers in memory:
-</dd></dl></div><pre class="programlisting">   void test_assert_same_data( void )
-   {
-        char input="The quick brown fox ran over the lazy dog";
+</dd></dl></div><pre class="programlisting">    void test_assert_same_data(void)
+    {
+        char input = "The quick brown fox ran over the lazy dog";
         char output[26];
-        memcopy( output, input, 26 );
-        TS_ASSERT_SAME_DATA( input, output, 26 );
-   }</pre><p>The standard runner dumps the contents of both buffers as hex values when this test fails.</p><div class="variablelist"><dl><dt><span class="term">
+        memcopy(output, input, 26);
+        TS_ASSERT_SAME_DATA(input, output, 26);
+    }</pre><p>The standard runner dumps the contents of both buffers as hex values when this test fails.</p><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_throws"></a> TS_ASSERT_THROWS
 </span></dt><dd>
 This test assertion verifies that the specified exception is thrown when the first argument is executed:
-</dd></dl></div><pre class="programlisting">   void throws_runtime_error( void )
-   {
+</dd></dl></div><pre class="programlisting">    void throws_runtime_error(void)
+    {
         raise std::runtime_error, "This method simply generates an exception";
-   }
+    }
 
-   void test_assert_throws( void )
-   {
-        TS_ASSERT_THROWS( self.throws_runtime_error(), std::runtime_error );
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+    void test_assert_throws(void)
+    {
+        TS_ASSERT_THROWS(self.throws_runtime_error(), std::runtime_error);
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_throws_anything"></a> TS_ASSERT_THROWS_ANYTHING
 </span></dt><dd>
 This test assertion verifies that <span class="emphasis"><em>some</em></span> exception is thrown when the first argument is executed:
-</dd></dl></div><pre class="programlisting">   void test_assert_throws_anything( void )
-   {
-        TS_ASSERT_THROWS_ANYTHING( self.throws_runtime_error() );
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert_throws_anything(void)
+    {
+        TS_ASSERT_THROWS_ANYTHING(self.throws_runtime_error());
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_throws_assert"></a> TS_ASSERT_THROWS_ASSERT
 </span></dt><dd>
 This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third argument is executed to test that
 exception value:
-</dd></dl></div><pre class="programlisting">   void throws_value( void )
-   {
+</dd></dl></div><pre class="programlisting">    void throws_value(void)
+    {
         raise 1;
-   }
+    }
 
-   void test_assert_throws_assert( void )
-   {
-        TS_ASSERT_THROWS_ASSERT( self.throws_value(), const Error&amp; e, TS_ASSERT_EQUALS(e, 1) );
-   }</pre><p>Note that this can be viewed as a generalization of <a class="link" href="#ts_assert_throws_equals">TS_ASSERT_THROWS_EQUALS</a>.</p><div class="variablelist"><dl><dt><span class="term">
+    void test_assert_throws_assert(void)
+    {
+        TS_ASSERT_THROWS_ASSERT(self.throws_value(), const Error &amp; e, TS_ASSERT_EQUALS(e, 1));
+    }</pre><p>Note that this can be viewed as a generalization of <a class="link" href="#ts_assert_throws_equals">TS_ASSERT_THROWS_EQUALS</a>.</p><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_throws_equals"></a> TS_ASSERT_THROWS_EQUALS
 </span></dt><dd>
 This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third and fourth arguments are values that are asserted equal after the exception is thrown:
-</dd></dl></div><pre class="programlisting">   void test_assert_throws_equals( void )
-   {
-        TS_ASSERT_THROWS_EQUALS( self.throws_value(), const Error&amp; e, e.what(), 1 );
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_assert_throws_equals(void)
+    {
+        TS_ASSERT_THROWS_EQUALS(self.throws_value(), const Error &amp; e, e.what(), 1);
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert_throws_nothing"></a> TS_ASSERT_THROWS_NOTHING
 </span></dt><dd>
 This test assertion verifies that an exception is <span class="emphasis"><em>not</em></span> thrown when executing the first argument:
-</dd></dl></div><pre class="programlisting">   void throws_nothing( void )
-   { }
+</dd></dl></div><pre class="programlisting">    void throws_nothing(void)
+    { }
 
-   void test_assert_throws_nothing( void )
-   {
-        TS_ASSERT_THROWS_ASSERT( self.throws_nothing() );
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+    void test_assert_throws_nothing(void)
+    {
+        TS_ASSERT_THROWS_ASSERT(self.throws_nothing());
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_fail"></a> TS_FAIL
 </span></dt><dd>
 This function triggers a test failure with an associated message:
-</dd></dl></div><pre class="programlisting">   void test_fail( void )
-   {
-        TS_FAIL( "This test has failed." );
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_fail(void)
+    {
+        TS_FAIL("This test has failed.");
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_trace"></a> TS_TRACE
 </span></dt><dd>
 This function prints an informational message:
-</dd></dl></div><pre class="programlisting">   void test_trace( void )
-   {
-        TS_TRACE( "This is a test tracing message." );
-   }</pre><div class="variablelist"><dl><dt><span class="term">
+</dd></dl></div><pre class="programlisting">    void test_trace(void)
+    {
+        TS_TRACE("This is a test tracing message.");
+    }</pre><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_warn"></a> TS_WARN
 </span></dt><dd>
 This function prints a message as a warning:
-</dd></dl></div><pre class="programlisting">   void test_warn( void )
-   {
-        TS_WARN( "This is a warning message." );
-   }</pre></div><div class="appendix" title="B. Integrating with Your Build Environment"><h2 class="title" style="clear: both"><a id="appendix_B"></a>B. Integrating with Your Build Environment</h2><p>It’s very hard to maintain your tests if you have to generate,
+</dd></dl></div><pre class="programlisting">    void test_warn(void)
+    {
+        TS_WARN("This is a warning message.");
+    }</pre></div><div class="appendix" title="B. Integrating with Your Build Environment"><h2 class="title" style="clear: both"><a id="appendix_B"></a>B. Integrating with Your Build Environment</h2><p>It’s very hard to maintain your tests if you have to generate,
 compile and run the test runner manually all the time.
 Fortunately, that’s why we have build tools!</p><div class="section" title="B.1. Overview"><div class="titlepage"><div><div><h3 class="title"><a id="_overview_2"></a>B.1. Overview</h3></div></div></div><p>Let’s assume you’re developing an application.
 What I usually do is the following:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
@@ -910,4 +954,20 @@ Started version history
 Added embedded test suites
 </li><li class="listitem">
 Major internal improvements
-</li></ul></div></div></div></div></body></html>
+</li></ul></div></div></div><div class="appendix" title="D. Testing CxxTest"><h2 class="title" style="clear: both"><a id="appendix_D"></a>D. Testing CxxTest</h2><p>In the <code class="literal">cxxtest/test</code> directory, you can execute</p><pre class="programlisting">python test_cxxtest.py</pre><p>to launch all tests.  By default, this script executes test suites
+for a variety of compilers if they are found on the user’s path:
+<code class="literal">g++</code>, <code class="literal">clang++</code>, <code class="literal">cl</code> (the Microsoft Visual Studio compiler).
+Additionally, this test script includes separate test suites for
+the default test discovery mechanism as well as test discovery using
+the new FOG parser.</p><p>You can execute a specific test suite by giving its name as an
+argument to this test script.  For example, the command</p><pre class="programlisting">python test_cxxtest.py TestGpp</pre><p>executes the <code class="literal">TestGpp</code> test suite, which tests CxxTest with the
+<code class="literal">g++</code> compiler.  Similarly, the command</p><pre class="programlisting">python test_cxxtest.py TestGppFOG</pre><p>executes the test suite that tests CxxTest using the <code class="literal">g++</code> compiler
+and the FOG parser.</p><p>The <code class="literal">test_cxxtest.py</code> script should work with versions Python 2.7
+or newer.  If you are running Python 2.6, you will need to install
+the <code class="literal">unittest2</code> package.  If you have
+<a class="ulink" href="http://pypi.python.org/pypi/setuptools" target="_top">setuptools</a> installed, then
+you can install this package from PyPI by executing</p><pre class="programlisting">easy_install unittest2</pre><p>The FOG parser requires relies on two Python packages:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<code class="literal">ply</code>
+</li><li class="listitem">
+<code class="literal">ordereddict</code> (This is only needed when running Python 2.6)
+</li></ul></div><p>If these packages are not available, then <code class="literal">test_cxxtest.py</code> will skip the FOG tests.</p></div></div></body></html>

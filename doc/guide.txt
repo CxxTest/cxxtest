@@ -612,15 +612,44 @@ include::examples/runner13.testMultiplicationVerbose.txt[]
 Advanced Testing Features
 -------------------------
 
-Macros
-~~~~~~
+blah
+~~~~
 
+TODO: CxxTest also defines several other macros that 
 CXXTEST_STD
-...
+
+
+Preprocessor Macros
+~~~~~~~~~~~~~~~~~~~
+
+CxxTest recognizes a variety of preprocessor macros that can be used to modify the behavior of a test runner.  Many of these mimic the options of the +cxxtestgen+ command.
+
+[options="header"]
+|====================================================================================
+| Preprocessor Macro  | Description 
+| +CXXTEST_HAVE_STD+              | Use the standard library. 
+| +CXXTEST_HAVE_EH+               | Use exception handling.   
+| +CXXTEST_ABORT_TEST_ON_FAIL+    | Abort tests on failed asserts. 
+| +CXXTEST_USER_VALUE_TRAITS+     | Enable user-defined ValueTraits.  The default traits dump up to 8 bytes of the data as hex values. 
+| +CXXTEST_OLD_TEMPLATE_SYNTAX+   | Use old template syntax that is used by some compilers (e.g. Borland C++ 5). 
+| +CXXTEST_OLD_STD+               | Use old syntax for libraries where +std::+ is not recognize. 
+| +CXXTEST_MAX_DUMP_SIZE+         | The value of this macro defines the maximum number of bytes to dump if +TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit. 
+| +CXXTEST_DEFAULT_ABORT+         | The value of this macro is the default value of the dynamic _abort on fail_ flag. 
+| +CXXTEST_LONGLONG+              | The value of this macro is used to define long long integers.
+|=====================================
+
+These preprocessor macros must be defined before the CxxTest header files are included in the test runner.  For example, the following template file defines +CXXTEST_HAVE_EH+ and +CXXTEST_ABORT_TEST_ON_FAIL+ before other headers are included:
+[source,cplusplus]
+----
+include::examples/runner10.tpl[]
+----
 
 
 Customizing Test Fixtures
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Setup and Teardown
+^^^^^^^^^^^^^^^^^^
 
 CxxTest test fixtures can be customized in several ways to manage
 the environment for test suites and individual tests.  A common
@@ -641,9 +670,26 @@ allocate and deallocate memory for a string buffer:
 include::examples/MyTestSuite5.h[]
 -----
 
-If you need a fixture on the test suite level, i.e. something that gets
-constructed once before all the tests in the test suite are run, see
-<<dynamic,Dynamically creating test suites>> below.
+Dynamically Created Test Suites
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CxxTest test fixtures can also be customized during the construction
+and deconstruction of test suites.  By default, CxxTest test suites
+are instantiated statically in the test runner.  However, dynamically
+created test suites can be used to perform suite-level setup and
+teardown operations, verify the environment needed to execute a
+test suite, and construct test suites that require a nontrivial
+constructor.
+
+CxxTest instantiates a test suite dynamically if the +createSuite()+
+or +destroySuite()+ methods are defined.  For example, the following
+test suite checks to see if it is being compiled with Microsoft
+Visual Studio.  If not, the +createSuite()+ returns a null pointer,
+indicating that the test suite was not created.
+[source,cpp]
+-----
+include::examples/MyTestSuite6.h[]
+-----
 
 
 [[samples]]
@@ -722,6 +768,13 @@ Future work:
 
  - ply cpp
  - ignore template test classes using the FOG parser
+
+////
+NOTE: we do not have test coverage for the following macros:
+CXXTEST_OLD_TEMPLATE_SYNTAX
+CXXTEST_OLD_STD
+CXXTEST_LONGLONG
+////
 
 
 :numbered!:
@@ -877,7 +930,7 @@ It's very hard to maintain your tests if you have to generate,
 compile and run the test runner manually all the time.
 Fortunately, that's why we have build tools!
 
-==== Overview
+=== Overview
 
 Let's assume you're developing an application.
 What I usually do is the following:
@@ -890,14 +943,14 @@ What I usually do is the following:
   Make the build tool generate it automatically.
 * For extra points, make the build tool run the tests automatically.
 
-==== Actually doing it
+=== Actually doing it
 
 Unfortunately, there are way too many different build tools and IDE's for me 
 to give ways to use CxxTest with all of them.
 
 I will try to outline the usage for some cases.
 
-===== Using Makefiles
+==== Using Makefiles
 
 Generating the tests with a makefile is pretty straightforward.
 Simply add rules to generate, compile and run the test runner.
@@ -924,7 +977,7 @@ runner.cpp: SimpleTest.h ComplicatedTest.h
          cxxtestgen -o $@ --error-printer $^
 -----
 
-===== Using Cons
+==== Using Cons
 
 http://dsmit.com/cons/[Cons] is a powerful and 
 versatile make replacement which uses Perl scripts instead of Makefiles.
@@ -932,7 +985,7 @@ versatile make replacement which uses Perl scripts instead of Makefiles.
 See `sample/Construct` in the CxxTest distribution for an example of building CxxTest test runners
 with Cons.
 
-===== Using Microsoft Visual Studio
+==== Using Microsoft Visual Studio
 
 I have tried several ways to integrate CxxTest with visual studio, none of
 which is perfect.  Take a look at `sample/msvc` in the distribution
@@ -951,7 +1004,7 @@ work a little bit and tweak some makefiles and project options.  I have
 provided a small script in `sample/msvc/FixFiles.bat` to automate
 some of the process.
 
-===== Using Microsoft Windows DDK
+==== Using Microsoft Windows DDK
 
 Unit testing for device drivers?!  Why not?
 And besides, the `build` utility can also be used to build
@@ -971,7 +1024,58 @@ under `sample/winddk`.
 [[appendix_C]] 
 include::../Versions[]
 
+////
 :leveloffset: 0
+////
+
+[appendix]
+[[appendix_D]] 
+Testing CxxTest
+===============
+
+In the +cxxtest/test+ directory, you can execute
+[source,bash]
+----
+python test_cxxtest.py 
+----
+to launch all tests.  By default, this script executes test suites
+for a variety of compilers if they are found on the user's path:
+`g++`, `clang++`, +cl+ (the Microsoft Visual Studio compiler).
+Additionally, this test script includes separate test suites for
+the default test discovery mechanism as well as test discovery using
+the new FOG parser.
+
+You can execute a specific test suite by giving its name as an
+argument to this test script.  For example, the command
+[source,bash]
+----
+python test_cxxtest.py TestGpp
+----
+executes the +TestGpp+ test suite, which tests CxxTest with the
+`g++` compiler.  Similarly, the command
+[source,bash]
+----
+python test_cxxtest.py TestGppFOG
+----
+executes the test suite that tests CxxTest using the `g++` compiler
+and the FOG parser.
+
+The +test_cxxtest.py+ script should work with versions Python 2.7
+or newer.  If you are running Python 2.6, you will need to install
+the +unittest2+ package.  If you have
+http://pypi.python.org/pypi/setuptools[setuptools] installed, then
+you can install this package from PyPI by executing
+[source,bash]
+----
+easy_install unittest2
+----
+
+The FOG parser requires two Python packages:
+
+ - +ply+
+ - +ordereddict+ (This is only needed when running Python 2.6)
+
+If these packages are not available, then +test_cxxtest.py+ will skip the FOG tests.
 
 // vim: set syntax=asciidoc:
 
