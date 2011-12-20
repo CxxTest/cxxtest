@@ -24,9 +24,3 @@ public:
         TS_ASSERT_SAME_DATA( 0, 0, 0 );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

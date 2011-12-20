@@ -14,9 +14,3 @@ namespace CxxTest
         const char *asString() { return "(long *)"; }
     };
 }
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

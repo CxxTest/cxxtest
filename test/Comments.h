@@ -22,9 +22,3 @@ public:
     //    TS_WARN( "Something else" );
     //}
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

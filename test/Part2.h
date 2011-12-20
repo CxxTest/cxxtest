@@ -16,9 +16,3 @@ public:
     {
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

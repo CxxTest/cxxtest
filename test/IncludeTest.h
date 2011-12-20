@@ -13,9 +13,3 @@ public:
         TS_WARN( (long *)0 );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

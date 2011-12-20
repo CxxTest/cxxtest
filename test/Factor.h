@@ -62,9 +62,3 @@ public:
         TS_ASSERT_RELATION( NotShorterThan, convert(reasonableLimit), MAX_STRLEN_TOTAL_TESTS );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

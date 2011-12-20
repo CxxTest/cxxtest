@@ -14,9 +14,3 @@ public:
         TS_ASSERT_LESS_THAN( (long long)5, (long long)4 );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

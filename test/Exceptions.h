@@ -68,9 +68,3 @@ public:
         TS_TRACE( "One failed test doesn't affect the others" );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

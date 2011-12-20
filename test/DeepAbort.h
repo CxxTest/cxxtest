@@ -82,9 +82,3 @@ public:
         TS_ASSERT_EQUALS( 1, 1 );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

@@ -70,9 +70,3 @@ public:
         TS_ASSERT_EQUALS(fixture2.tearDownCount(), 1);
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

@@ -16,9 +16,3 @@ public:
         TS_FAIL( std::basic_string<wchar_t>( array, 2 ) );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

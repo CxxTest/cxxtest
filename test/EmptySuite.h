@@ -14,9 +14,3 @@ public:
         TS_FAIL( "This suite has no tests" );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

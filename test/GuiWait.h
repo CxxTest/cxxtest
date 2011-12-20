@@ -4,9 +4,3 @@
 #define CXXTEST_SAMPLE_GUI_WAIT()
 
 #endif // __GUI_WAIT_H
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

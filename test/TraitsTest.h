@@ -59,9 +59,3 @@ public:
         TS_FAIL( String( "As are unprintable chars: \x12\x34\x56\x78" ) );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

@@ -51,9 +51,3 @@ public:
 #ifndef _CXXTEST_HAVE_EH
 #   error cxxtestgen should have found exception handling here!
 #endif // !_CXXTEST_HAVE_EH
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

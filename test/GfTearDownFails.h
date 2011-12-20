@@ -24,9 +24,3 @@ public:
     void testOne() {}
     void testTwo() { TS_WARN( "Testing should go on!" ); }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

@@ -23,9 +23,3 @@ class Suite : public CxxTest::TestSuite
 public:
     void testOne() {}
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

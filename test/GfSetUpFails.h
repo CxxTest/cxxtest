@@ -26,9 +26,3 @@ public:
         TS_FAIL( "Shouldn't get here at all" );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

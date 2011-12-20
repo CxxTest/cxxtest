@@ -13,9 +13,3 @@ public:
         TS_ASSERT_EQUALS( something(), "Something" );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

@@ -17,9 +17,3 @@ public:
         TS_FAIL(5);
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

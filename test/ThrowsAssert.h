@@ -99,9 +99,3 @@ public:
                                  TS_ASSERT_RELATION( Fail, thing.i(), 33 ) );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

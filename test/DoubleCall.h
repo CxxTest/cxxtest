@@ -36,9 +36,3 @@ public:
         return ++i;
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

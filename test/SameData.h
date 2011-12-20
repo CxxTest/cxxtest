@@ -38,9 +38,3 @@ public:
         ETSM_ASSERT_SAME_DATA( "Not same data", x, y, DATA_SIZE );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//

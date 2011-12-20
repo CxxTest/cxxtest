@@ -20,9 +20,3 @@ public:
         ETSM_ASSERT_LESS_THAN_EQUALS( "1 <=? 0", 1, 0 );
     }
 };
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//
