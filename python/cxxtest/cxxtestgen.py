@@ -114,14 +114,20 @@ def parseCommandline(args):
                       action="store_true", dest="factor", default=False,
                       help="Declare the _CXXTEST_FACTOR macro.  (deprecated)")
     if imported_fog:
-        parser.add_option("-f", "--fog-parser",
+        fog_help = "Use new FOG C++ parser"
+    else:
+        fog_help = "Use new FOG C++ parser (disabled)"
+    parser.add_option("-f", "--fog-parser",
                         action="store_true",
                         dest="fog",
                         default=False,
-                        help="Use new FOG C++ parser"
+                        help=fog_help
                         )
 
     (options, args) = parser.parse_args(args=args)
+
+    if options.fog and not imported_fog:
+        abort( "Cannot use the FOG parser.  Check that the 'ply' package is installed.  The 'ordereddict' package is also required if running Python 2.6")
 
     if options.version:
       printVersion()
@@ -221,6 +227,8 @@ def writeTemplateOutput():
         elif preamble_re.search( line ):
             writePreamble( output )
         elif world_re.search( line ):
+            if len(suites) > 0:
+                output.write("bool "+suites[0]['object']+"_init = false;\n")
             writeWorld( output )
         else:
             output.write( line )
