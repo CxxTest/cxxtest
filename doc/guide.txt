@@ -482,7 +482,7 @@ test discovery.  Although the FOG parser is more powerful, the
 simpler +cxxtestgen+ test discover process is the default because
 the FOG parser is slower execute.  Additionally, the FOG parser
 requires the installation of +ply+ and, for Python version 2.6,
-+ordereddict+.  If these packages are not available, then the +--fog+
+ordereddict+.  If these packages are not available, then the +--fog+
 option is automatically disabled.
 
 The following sections illustrate differences between these two test discovery mechanisms, along with
@@ -612,13 +612,6 @@ include::examples/runner13.testMultiplicationVerbose.txt[]
 Advanced Testing Features
 -------------------------
 
-blah
-~~~~
-
-TODO: CxxTest also defines several other macros that 
-CXXTEST_STD
-
-
 Preprocessor Macros
 ~~~~~~~~~~~~~~~~~~~
 
@@ -632,17 +625,31 @@ CxxTest recognizes a variety of preprocessor macros that can be used to modify t
 | +CXXTEST_ABORT_TEST_ON_FAIL+    | Abort tests on failed asserts. 
 | +CXXTEST_USER_VALUE_TRAITS+     | Enable user-defined ValueTraits.  The default traits dump up to 8 bytes of the data as hex values. 
 | +CXXTEST_OLD_TEMPLATE_SYNTAX+   | Use old template syntax that is used by some compilers (e.g. Borland C++ 5). 
-| +CXXTEST_OLD_STD+               | Use old syntax for libraries where +std::+ is not recognize. 
+| +CXXTEST_OLD_STD+               | Use old syntax for libraries where +std::+ is not recognized. 
 | +CXXTEST_MAX_DUMP_SIZE+         | The value of this macro defines the maximum number of bytes to dump if +TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit. 
 | +CXXTEST_DEFAULT_ABORT+         | The value of this macro is the default value of the dynamic _abort on fail_ flag. 
 | +CXXTEST_LONGLONG+              | The value of this macro is used to define long long integers.
 |=====================================
 
-These preprocessor macros must be defined before the CxxTest header files are included in the test runner.  For example, the following template file defines +CXXTEST_HAVE_EH+ and +CXXTEST_ABORT_TEST_ON_FAIL+ before other headers are included:
+These preprocessor macros must be defined before the CxxTest header
+files are included in the test runner.  For example, the following
+template file defines +CXXTEST_HAVE_EH+ and +CXXTEST_ABORT_TEST_ON_FAIL+
+before other headers are included:
 [source,cplusplus]
 ----
 include::examples/runner10.tpl[]
 ----
+
+Several of these macros concern whether modern C++ conventions are
+supported by the compiler.  If tests need to be ported to multiple
+compilers, then one important convention is whether the namespace
+std::+ is supported.  For example, switching between +cout+ and
+std::cout+ typically needs to be done throughout a code.  CxxTest
+supports this with the +CXXTEST_STD()+ macro.  For example,
+CXXTEST_STD(cout)+ can be used within a test suite, and CxxTest
+handles the mapping of this to +cout+ or +std::cout+ depending on
+options provided to +cxxtestgen+.
+
 
 
 Customizing Test Fixtures
@@ -690,6 +697,269 @@ indicating that the test suite was not created.
 -----
 include::examples/MyTestSuite6.h[]
 -----
+
+Global and World Fixtures
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TODO: review this section.
+
+
+The `setUp()` and `tearDown()` functions allow
+to have code executed before and after each test.  What if you want
+some code to be executed before all tests in _all_ test suites?
+Rather than duplicate that code, you can use 'global fixtures'.
+
+These are basically classes that inherit from
+`CxxTest::GlobalFixture`.  All objects of such classes are
+automatically notified before and after each test case.  It is best to
+create them as static objects so they get called right from the start.
+Look at `test/GlobalFixtures.h` in the `cxxtest-selftest`
+archive.
+
+Unlike `setUp()` and `tearDown()` in
+`TestSuite`, global fixtures should return a `bool` value to
+indicate success/failure.
+
+CxxTest also allows you to specify code which is executed
+once at the start of the testing process (and the corresponding cleanup
+code).  To do this, create (one or more) global fixture objects and
+implement `setUpWorld()`/`tearDownWorld()`.  For an example,
+see `test/WorldFixtures.h` in the `cxxtest-selftest` archive.
+
+
+Runtime Test Customization
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+CxxTest defines several functions that can be called in a test suite to modify the default behavior of CxxTest.
+
+[options="header"]
+|==================================
+| Test Suite Method | Description
+| +setAbortTestOnFail( bool )+ |  This function specifies whether tests abort after a failure.  The default value of the flag is +false+.  This function only has an effect if exception handling is enabled.
+| +setMaxDumpSize( unsigned )+ | This function sets the maximum number of bytes that are dumped when 
+TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit.
+|=============
+
+Note that the the configuration parameters are reset to their default
+values after each test is executed (more precisely, after +tearDown()+
+is called).  Consequently, calling these functions in the +setUp()+
+function has the effect of setting that value for the entire test
+suite.
+
+
+
+[[mock]]
+Testing with Mock Objects
+-------------------------
+
+Mock Objects are a very useful concept for testing complex software.
+The key idea is to pass special objects to tested code that facilitates
+the testing process.  For instance, a class that implements a
+protocol over TCP might rely on an abstract `ISocket` interface.
+Then a mock testing strategy could pass a `MockSocket` object that
+does anything that is useful for testing (e.g., keep a log of all
+data ``sent'' to verify later).
+
+However, when a challenge for C/C++ developers is that you may need
+to call _global_ functions which you cannot override.  Consider any
+code that uses `fopen()`, `fwrite()` and `fclose()`.  It is not
+very elegant to have this code actually create files while being
+tested.  Even more importantly, you need to test how the code behaves
+when ``bad'' things happen (e.g., when `fopen()` fails).  Handling
+these types of exceptional conditions is often a very challenging
+issue for software testing.
+
+CxxTest addresses this challenge by providing a generic mechanism for 
+defining mock global functions.  The next section illustrates this mechanism for a single 
+global function.  The following section provides more detail about specific features of CxxTest's 
+support for mock testing.
+
+
+Example: A Mock +time()+ Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Suppose that we want to perform mock testing using the well known
+standard library function `time()`.  Setting up a test suite with
+a mock global function for `time()` can be broken down into the
+following steps.
+
+Declare Mock Functions
+^^^^^^^^^^^^^^^^^^^^^^
+
+The `CXXTEST_MOCK_GLOBAL` macro is used to declare mock global functions.  It is often convenient to include
+these declarations in a header file, which is used in both the test suite as well as the code that is being tested:
+[source,cpp]
+-----
+include::examples/time_mock.h[]
+-----
+
+Mock Functions in Tested Code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The tested code uses mock global functions, rather than using the global functions directly.
+You access mock functions in the `T` (for _Test_) namespace, so the tested code calls `T::time()` instead of
+`time()`. This is the equivalent of using abstract interfaces
+instead of concrete classes.
+[source,cpp]
+-----
+include::examples/rand_example.cpp[]
+-----
+
+
+Mock Source Files
+^^^^^^^^^^^^^^^^^
+
+A source file needs to be defined that implements `T::time()` by
+calling the real global function.  This definition is performed automatically by
+defining `CXXTEST_MOCK_REAL_SOURCE_FILE` before the header file is defined:
+[source,cpp]
+-----
+include::examples/time_real.cpp[]
+-----
+This source file is not used for testing, but instead it supports normal use of the tested code.
+
+Similarly, a source file needs to be defined that implements `T::time()` by calling the mock
+global function.  This definition is performed automatically by defining `CXXTEST_MOCK_TEST_SOURCE_FILE` before the header file is defined:
+[source,cpp]
+-----
+include::examples/time_mock.cpp[]
+-----
+
+
+Test Suites using Mock Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A mock object for the `time()` function is created using the `T::Base_time` class,
+which is automatically created by CxxTest.  This class includes a `time()` method whose
+API is the same as the global `time()` function.  Thus, this method can be defined to have
+whatever behavior is desired during testing.  For example, the following example defines a 
+mock object that increments a counter to define an incremental value for `time()`.
+[source,cpp]
+-----
+include::examples/MockTestSuite.h[]
+-----
+Note that CxxTest uses global data to associate calls made with `T::time()`
+to calls to `MockObject::time()`.  The `MockObject` class simply
+needs to be instantiated prior to the call to `T::time()`.
+
+
+Building the Test Runner
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The +cxxtestgen+ command is used to create a test runner with mock functions in a normal manner:
+[source,bash]
+-----
+include::examples/.buildRunner16_main.sh[]
+-----
+The test runner source file, `runner.cpp`, needs to be compiled an linked to the mock function definition, `time_mock.cpp`, as well as the code being tested, `rand_example.cpp`:
+[source,bash]
+-----
+include::examples/.buildRunner16_compile.sh[]
+-----
+This generates a test runner that generates the following output:
+[source,bash]
+-----
+include::examples/buildRunner16.txt[]
+-----
+
+
+Advanced Topics
+~~~~~~~~~~~~~~~
+
+Void Functions
+^^^^^^^^^^^^^^
+
+The `CXXTEST_MOCK_VOID_GLOBAL` is used to define mock global functions that return `void`.  
+This is identical to
+`CXXTEST_MOCK_GLOBAL` except that it does not specify the return
+type.  Take a look in `sample/mock/T/stdlib.h` for a demonstation.
+
+Calling the Real Functions While Testing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+During testing it is sometimes necessary to call the real global
+function instead of the mock global function.  CxxTest allows a
+user to do this by creating a special mock object.  For a global
+mock function of `time()`, the object `T::Real_time` represents the
+real function.  If this class is created, then `T::time()` will be
+redirected to the real function.
+
+Mocking Nonexistent Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes the tested code calls functions that are not available
+when testing.  For example, this can happen when testing driver
+code that calls kernel functions that are not available to a user-mode
+test runner.  CxxTest can provide mock global function definitions
+for the test code while using the original functions in the tested code.
+
+
+The `CXXTEST_SUPPLY_GLOBAL` and `CXXTEST_SUPPLY_VOID_GLOBAL` macros are used to provide mock global function definitions.  For example, the following declaration creates a mock global function for the Win32 kernel function `IoCallDriver`:
+[source,cpp]
+-----
+CXXTEST_SUPPLY_GLOBAL( NTSTATUS,                /* Return type */
+                       IoCallDriver,            /* Name        */
+                       ( PDEVICE_OBJECT Device, /* Prototype   */
+                         PIRP Irp ),
+                       ( Device, Irp )          /* How to call */ );
+-----
+The tested driver code calls `IoCallDriver()` normally;  there is no need for the `T::` syntax.
+The test suite is defined using the `T::Base_IoCallDriver` as with normal mock objects.
+
+CxxTest also provides the macros `CXXTEST_SUPPLY_GLOBAL_C` and
+`CXXTEST_SUPPLY_GLOBAL_VOID_C` that declare the functions with `C`
+linkage (i.e., using `extern "C"`).  These macros are used to declare
+function prototypes, since you may not be able to include the header
+files in the test suite that are associated with the mock global function.
+
+
+Functions in Namespaces
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The `CXXTEST_MOCK` macro is used to declare a mock global function that is associated
+with a function in a namespace, including static class member functions.  
+For example, consider the function `bool Files::FileExists( const
+String &name )`;  the namespace `Files` contains the function
+`FileExists`.  The mock class will be called `T::Base_Files_FileExists`
+and the function to implemented would be `fileExists`.  The `CXXTEST_MOCK` macro declares this mock global function as follows:
+[source,cpp]
+-----
+CXXTEST_MOCK( Files_FileExists,       /* Suffix of mock class  */
+              bool,                   /* Return type           */
+              fileExists,             /* Name of mock member   */
+              ( const String &name ), /* Prototype             */
+              Files::FileExists,      /* Name of real function */
+              ( name )                /* Parameter list        */ );
+-----
+Similarly, the `CXXTEST_MOCK_VOID` macro is used to declare a mock global function that returns `void`.
+
+The `CXXTEST_SUPPLY` and `CXXTEST_SUPPLY_VOID` macros are used to provide mock global function definitions for nonexistent functions.  For example:
+[source,cpp]
+-----
+CXXTEST_SUPPLY( AllocateIrp,         /* => T::Base_AllocateIrp */
+                PIRP,                /* Return type            */
+                allocateIrp,         /* Name of mock member    */
+                ( CCHAR StackSize ), /* Prototype              */
+                IoAllocateIrp,       /* Name of real function  */
+                ( StackSize )        /* Parameter list         */ );
+-----
+Similarly, the `CXXTEST_SUPPLY_C` and `CXXTEST_SUPPLY_VOID_C` macros declare the functions with `C` linkage.
+
+Overloaded Functions
+^^^^^^^^^^^^^^^^^^^^
+
+The `CXXTEST_MOCK` and `CXXTEST_MOCK_VOID` macros have a flexible
+interface that can provide mock global function definitions for
+overloaded functions.  The arguments simply need to specify different
+mock class names, mock member names and different prototype definitions.  
+These different mock declarations will generate different mock objects that can be explicitly
+referenced in a test suite.
+
+The Mock Namespace
+^^^^^^^^^^^^^^^^^^
+
+The default namespace for mock functions is `T::`.  This namespace can be changed by defining the 
+`CXXTEST_MOCK_NAMESPACE` macro.
 
 
 [[samples]]

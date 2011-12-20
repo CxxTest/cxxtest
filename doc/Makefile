@@ -10,5 +10,5 @@ outputs:
 
 clean:
 	- \rm -f guide.xml
-	- \rm -f examples/.*.py examples/.*.h examples/.*.cpp examples/.*.sh examples/runner examples/*.cpp examples/TEST*.xml examples/parsetab.py examples/*.orig
+	- \rm -f examples/.*.py examples/.*.h examples/.*.cpp examples/.*.sh examples/runner examples/TEST*.xml examples/parsetab.py examples/*.orig
 
