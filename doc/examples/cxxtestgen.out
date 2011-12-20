@@ -36,3 +36,4 @@ Options:
                         runner.
   --part                Write the tester classes for a test runner.
   --factor              Declare the _CXXTEST_FACTOR macro.  (deprecated)
+  -f, --fog-parser      Use new FOG C++ parser

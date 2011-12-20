@@ -1,0 +1,5 @@
+Running 1 test
+In MyTestSuite2::testMultiplication:
+MyTestSuite2.h:16: Error: Expected (2 * 2 == 5), found (4 != 5)
+Failed 1 of 1 test
+Success rate: 0%

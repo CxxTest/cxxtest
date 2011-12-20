@@ -6,9 +6,9 @@ anchors:
 	python include_anchors.py guide.txt 
 
 outputs:
-	../bin/cxxtestgen -h > examples/cxxtestgen.out
+	lbin ../bin/cxxtestgen -h > examples/cxxtestgen.out
 
 clean:
 	- \rm -f guide.xml
-	- \rm -f examples/.*.py examples/.*.h examples/.*.cpp examples/.*.sh examples/runner examples/*.cpp examples/TEST*.xml examples/parsetab.py
+	- \rm -f examples/.*.py examples/.*.h examples/.*.cpp examples/.*.sh examples/runner examples/*.cpp examples/TEST*.xml examples/parsetab.py examples/*.orig
 

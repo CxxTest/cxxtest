@@ -12,6 +12,8 @@ public:
 
    void testMultiplication( void )
    {
+      TS_TRACE("Starting multiplication test");
       TS_ASSERT_EQUALS( 2 * 2, 5 );
+      TS_TRACE("Finishing multiplication test");
    }
 };
