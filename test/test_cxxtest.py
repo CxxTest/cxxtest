@@ -240,7 +240,7 @@ class BaseTestCase(object):
     def test_longlong(self):
         """Long long"""
         self.check_if_supported('longlong.cpp', "Long long is not supported by this compiler")
-        self.compile(prefix='longlong', args="--error-printer --longlong= LongLong.h", output="longlong.out")
+        self.compile(prefix='longlong', args="--error-printer --longlong='long long' LongLong.h", output="longlong.out")
 
     def test_int64(self):
         """Int64"""
@@ -530,7 +530,7 @@ class TestGpp(BaseTestCase, unittest.TestCase):
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='g++ -g -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo %s' % os.environ.get('CXXTEST_GCOV_FLAGS','')
+    compiler='g++ -g -ansi -pedantic -Wmissing-declarations -Werror -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo %s' % os.environ.get('CXXTEST_GCOV_FLAGS','')
     no_eh_option = '-fno-exceptions'
     qtFlags='-Ifake'
     x11Flags='-Ifake'
