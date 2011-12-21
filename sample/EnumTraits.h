@@ -22,7 +22,7 @@ CXXTEST_ENUM_TRAITS( Answer,
                      CXXTEST_ENUM_MEMBER( No )
                      CXXTEST_ENUM_MEMBER( Maybe )
                      CXXTEST_ENUM_MEMBER( DontKnow )
-                     CXXTEST_ENUM_MEMBER( DontCare ) )
+                     CXXTEST_ENUM_MEMBER( DontCare ) );
 
 class EnumTraits : public CxxTest::TestSuite
 {
