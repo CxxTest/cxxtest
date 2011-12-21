@@ -6,10 +6,3 @@ int main()
     long long ll = 0;
     return (int)ll;
 }
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//
-

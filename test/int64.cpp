@@ -6,10 +6,3 @@ int main()
     __int64 ll = 0;
     return (int)ll;
 }
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//
-

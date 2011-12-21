@@ -31,9 +31,3 @@ int main()
     SummaryPrinter().run();
     return 0;
 }
-
-//
-// Local Variables:
-// compile-command: "perl test.pl"
-// End:
-//
