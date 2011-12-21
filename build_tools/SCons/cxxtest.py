@@ -17,10 +17,10 @@
 #  % scons check
 # This will first compile and then run the tests.
 #
-# The default configuration assumes that cxxtest is located at the
-# base source directory (where SConstruct is), that the cxxtestgen is under
-# cxxtest/bin/cxxtestgen and headers are in cxxtest/cxxtest/. The header
-# include path is automatically added to CPPPATH. It, however, can also
+# The default configuration assumes that cxxtest is located at the base source
+# directory (where SConstruct is), that the cxxtestgen.py is under
+# cxxtest/python/cxxtest/cxxtestgen.py and headers are in cxxtest/cxxtest/. The
+# header include path is automatically added to CPPPATH. It, however, can also
 # recognise that cxxtest is installed system-wide (based on redhat's RPM).
 #
 # For a list of environment variables and their defaults, see the generate()
@@ -174,8 +174,10 @@ def findCxxTestGen(env):
     check_path = os.path.join(
             envget(env, 'CXXTEST_INSTALL_DIR'),
             envget(env, 'CXXTEST_CXXTESTGEN_DEFAULT_LOCATION'))
-    cxxtest = (env.WhereIs('cxxtestgen') or 
-               env.WhereIs('cxxtestgen', path=[Dir(check_path).abspath]))
+
+    cxxtest = (env.WhereIs(envget(env, 'CXXTEST_CXXTESTGEN_SCRIPT_NAME')) or 
+               env.WhereIs(envget(env, 'CXXTEST_CXXTESTGEN_SCRIPT_NAME'),
+                   path=[Dir(check_path).abspath]))
     
     if cxxtest:
         return cxxtest
@@ -254,7 +256,9 @@ def generate(env, **kwargs):
 
     # this one's not for public use - it documents where the cxxtestgen script
     # is located in the CxxTest tree normally.
-    env.SetDefault( CXXTEST_CXXTESTGEN_DEFAULT_LOCATION = 'bin' )
+    env.SetDefault( CXXTEST_CXXTESTGEN_DEFAULT_LOCATION =
+#            os.path.join('python', 'cxxtest') )
+            os.path.join('bin') )
     # the cxxtestgen script name.
     env.SetDefault( CXXTEST_CXXTESTGEN_SCRIPT_NAME = 'cxxtestgen' )
 
@@ -325,7 +329,7 @@ def generate(env, **kwargs):
         else:
             deps.append(env.CxxTestCpp(headers.pop(0), **kwargs))
             deps.extend(
-                [env.CxxTestCpp(header, CXXTEST_RUNNER = 'none', 
+                [env.CxxTestCpp(header, CXXTEST_RUNNER = 'none',
                     CXXTEST_ROOT_PART = '--part', **kwargs)
                     for header in headers]
                 )

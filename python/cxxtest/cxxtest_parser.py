@@ -1,10 +1,11 @@
+from __future__ import print_function, division
+
 import codecs
 import re
 #import sys
 #import getopt
 #import glob
-import string
-from cxxtest.cxxtest_misc import *
+from cxxtest.cxxtest_misc import abort
 
 # Global variables
 suites = []
@@ -22,11 +23,11 @@ def scanInputFiles(files, _options):
     if len(suites) is 0 and not options.root:
         abort( 'No tests defined' )
 
-    #print "INFO\n"
+    #print("INFO\n")
     #for suite in suites:
         #for key in suite:
-            #print key,suite[key]
-        #print ""
+            #print(key,suite[key])
+        #print("")
 
     return [options,suites]
 
@@ -210,7 +211,7 @@ def cstr( s ):
 
 def addSuiteCreateDestroy( suite, which, line ):
     '''Add createSuite()/destroySuite() to current suite'''
-    if suite.has_key(which):
+    if which in suite:
         abort( '%s:%s: %sSuite() already declared' % ( suite['file'], str(line), which ) )
     suite[which] = line
 

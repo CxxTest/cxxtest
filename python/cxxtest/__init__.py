@@ -20,6 +20,8 @@ CxxTest drivers.
 """
 
 from cxxtest.__release__ import __version__, __date__
+__date__
+__version__
 
 __maintainer__ = "TODO"
 __maintainer_email__ = "TODO"

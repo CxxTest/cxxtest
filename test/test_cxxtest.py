@@ -1,9 +1,11 @@
+from __future__ import print_function
 import sys
 import os
 import os.path
 import glob
 import difflib
 import subprocess
+import re
 if sys.version_info < (2,7):
     import unittest2 as unittest
 else:
@@ -12,6 +14,10 @@ else:
 currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
 sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
 cxxtestdir = os.path.dirname(os.path.dirname(currdir))+os.sep
+
+compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:[0-9]+:.*)$")
+dirre      = re.compile("^([^"+os.sep+"]*/)*")
+xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
 
 # Headers from the cxxtest/sample directory
 samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
@@ -30,12 +36,59 @@ def available(compiler, exe_option):
 
 def remove_absdir(filename):
     INPUT=open(filename, 'r')
-    lines = INPUT.readlines()
+    lines = [line.strip() for line in INPUT]
     INPUT.close()
     OUTPUT=open(filename, 'w')
     for line in lines:
-        print >>OUTPUT, ''.join(line.split(cxxtestdir)),
+        # remove basedir at front of line
+        match = compilerre.match(line) # see if we can remove the basedir
+        if match:
+            parts = match.groupdict()
+            line = dirre.sub("", parts['path']) + parts['rest']
+        print(line, file=OUTPUT, end='')
     OUTPUT.close()
+
+def normalize_line_for_diff(line):
+    # add spaces around {}<>()
+    line = re.sub("[{}<>()]", r" \0 ", line)
+
+    # beginnig and ending whitespace
+    line = line.strip()
+
+    # remove all whitespace
+    # and leave a single space
+    line = ' '.join(line.split())
+
+    # remove spaces around "="
+    line = re.sub(" ?= ?", "=", line)
+
+
+    # remove all absolute path prefixes
+    line = ''.join(line.split(cxxtestdir))
+    # for xml, remove prefixes from everything that looks like a 
+    # file path inside ""
+    line = xmlre.sub(
+            lambda match: '"'+re.sub("^[^/]+/", "", match.group(1))+'"',
+            line
+            )
+    return line
+
+def make_diff_readable(diff):
+    i = 0
+    while i+1 < len(diff):
+        if diff[i][0] == '-' and diff[i+1][0] == '+':
+            l1 = diff[i]
+            l2 = diff[i+1]
+            for j in range(1, min([len(l1), len(l2)])):
+                if l1[j] != l2[j]:
+                    if j > 4:
+                        j = j-2;
+                        l1 = l1[j:]
+                        l2 = l2[j:]
+                        diff[i] = '-(...)' + l1
+                        diff[i+1] = '+(...)' + l2
+                    break
+        i+=1
 
 def file_diff(filename1, filename2):
     remove_absdir(filename1)
@@ -49,12 +102,13 @@ def file_diff(filename1, filename2):
     lines2 = INPUT.readlines()
     INPUT.close()
     #
-    s=""
-    for line in difflib.unified_diff(lines2,lines1,fromfile=filename2,tofile=filename1):
-        s += line+"\n"
-    return s
-
-
+    lines1cmp = [normalize_line_for_diff(line) for line in lines1]
+    lines2cmp = [normalize_line_for_diff(line) for line in lines2]
+    diff = list(difflib.unified_diff(lines2cmp, lines1cmp,
+        fromfile=filename2, tofile=filename1))
+    if diff: make_diff_readable(diff)
+    diff = '\n'.join(diff)
+    return diff
 
 class BaseTestCase(object):
 
@@ -135,7 +189,7 @@ class BaseTestCase(object):
         #
         status = subprocess.call("%s -v > %s 2>&1" % (self.build_target, self.px_pre), shell=True)
         OUTPUT = open(self.px_pre,'a')
-        print >>OUTPUT, 'Error level = '+str(status)
+        print('Error level = '+str(status), file=OUTPUT)
         OUTPUT.close()
         diffstr = file_diff(self.px_pre, output)
         if not diffstr == '':
@@ -150,7 +204,7 @@ class BaseTestCase(object):
         #print "HERE", cmd
         status = subprocess.call(cmd, shell=True)
         if failGen:
-            if status == 0: 
+            if status == 0:
                 self.fail('Expected cxxtestgen to fail.')
             else:
                 self.passed=True
@@ -181,7 +235,7 @@ class BaseTestCase(object):
             status = subprocess.call(cmd, shell=True)
             #print "HERE-status",status
             OUTPUT = open(self.px_pre,'a')
-            print >>OUTPUT, 'Error level = '+str(status)
+            print('Error level = '+str(status), file=OUTPUT)
             OUTPUT.close()
             if logfile is None:
                 diffstr = file_diff(self.px_pre, output)

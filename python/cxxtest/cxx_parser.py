@@ -1,3 +1,5 @@
+# vim: fileencoding=utf-8
+
 #
 # Copyright 2008 Sandia Corporation. Under the terms of Contract 
 # DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government 
@@ -44,6 +46,8 @@
 #
 # TODO: document usage of this file
 #
+
+from __future__ import print_function, division
 
 import os
 import ply.lex as lex
@@ -97,14 +101,14 @@ class CppInfo(object):
     def push_scope(self,ns,scope_t,base_classes=[]):
         name = self.scopes[-1]+"::"+ns
         if self.verbose>=2:
-            print "-- Starting "+scope_t+" "+name
+            print("-- Starting "+scope_t+" "+name)
         self.scopes.append(name)
         self.index[name] = Scope(ns,name,scope_t,base_classes,scope_lineno-1)
 
     def pop_scope(self):
         scope = self.scopes.pop()
         if self.verbose>=2:
-            print "-- Stopping "+scope
+            print("-- Stopping "+scope)
         return scope
 
     def add_function(self, fn):
@@ -113,9 +117,9 @@ class CppInfo(object):
             self.index[self.scopes[-1]].function.append((fn, identifier_lineno.get(fn,lexer.lineno-1)))
             tmp = self.scopes[-1]+"::"+fn
             if self.verbose==2:
-                print "-- Function declaration "+fn+"  "+tmp
+                print("-- Function declaration "+fn+"  "+tmp)
             elif self.verbose==1:
-                print "-- Function declaration "+tmp
+                print("-- Function declaration "+tmp)
 
     def get_functions(self,name,quiet=False):
         if name == "::":
@@ -126,8 +130,8 @@ class CppInfo(object):
             cname = self.find_class(key,scope)
             if cname is None:
                 if not quiet:
-                    print "Defined classes: ",self.index.keys()
-                    print "WARNING: Unknown class "+key
+                    print("Defined classes: ",self.index.keys())
+                    print("WARNING: Unknown class "+key)
             else:
                 fns += self.get_functions(cname,quiet)
         return fns
@@ -185,9 +189,14 @@ class CppInfo(object):
 
 def flatten(x):
     """Flatten nested list"""
+    try:
+        strtypes = basestring
+    except: # for python3 etc
+        strtypes = (str, bytes)
+
     result = []
     for el in x:
-        if hasattr(el, "__iter__") and not isinstance(el, basestring):
+        if hasattr(el, "__iter__") and not isinstance(el, strtypes):
             result.extend(flatten(el))
         else:
             result.append(el)
@@ -318,7 +327,7 @@ tokens = [
  "DOT_STAR",
  "ELLIPSIS",
  "SCOPE",
-] + reserved.values()
+] + list(reserved.values())
 
 t_ignore = " \t\r"
 
@@ -373,7 +382,7 @@ def t_Identifier(t):
 
 
 def t_error(t):
-    print "Illegal character '%s'" % t.value[0]
+    print("Illegal character '%s'" % t.value[0])
     #raise IOError, "Parse error"
     #t.lexer.skip()
 
@@ -381,7 +390,7 @@ def t_newline(t):
     r'[\n]+'
     t.lexer.lineno += len(t.value)
 
-precedence = ( 
+precedence = (
     ( 'right', 'SHIFT_THERE', 'REDUCE_HERE_MOSTLY', 'SCOPE'),
     ( 'nonassoc', 'ELSE', 'INC', 'DEC', '+', '-', '*', '&', 'LBRACKET', 'LBRACE', '<', ':', ')')
     )
@@ -418,22 +427,22 @@ def p_id(p):
     |                               template_decl
     |                               TEMPLATE id
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_global_scope(p):
     '''global_scope :               SCOPE
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_id_scope(p):
     '''id_scope : id SCOPE'''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_id_scope_seq(p):
     '''id_scope_seq :                id_scope
     |                                id_scope id_scope_seq
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 #
 #  A :: B :: C; is ambiguous How much is type and how much name ?
@@ -443,7 +452,7 @@ def p_nested_id(p):
     '''nested_id :                  id %prec SHIFT_THERE
     |                               id_scope nested_id
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_scoped_id(p):
     '''scoped_id :                  nested_id
@@ -453,7 +462,7 @@ def p_scoped_id(p):
     '''
     global scope_lineno
     scope_lineno = lexer.lineno
-    data = flatten(p[1:])
+    data = flatten(get_rest(p))
     if data[0] != None:
         p[0] = "".join(data)
 
@@ -468,7 +477,7 @@ def p_destructor_id(p):
     '''destructor_id :              '~' id
     |                               TEMPLATE destructor_id
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 #def p_template_id(p):
 #    '''template_id :                empty
@@ -491,20 +500,20 @@ def p_special_function_id(p):
     |                               operator_function_id
     |                               TEMPLATE special_function_id
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 def p_nested_special_function_id(p):
     '''nested_special_function_id : special_function_id
     |                               id_scope destructor_id
     |                               id_scope nested_special_function_id
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 def p_scoped_special_function_id(p):
     '''scoped_special_function_id : nested_special_function_id
     |                               global_scope nested_special_function_id
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 # declarator-id is all names in all scopes, except reserved words
 def p_declarator_id(p):
@@ -608,13 +617,16 @@ def p_translation_unit(p):
 #  final name. 
 #
 
+def get_rest(p):
+    return [p[i] for i in range(1, len(p))]
+
 def p_primary_expression(p):
     '''primary_expression :         literal
     |                               THIS
     |                               suffix_decl_specified_ids
     |                               abstract_expression %prec REDUCE_HERE_MOSTLY
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 #
 #  Abstract-expression covers the () and [] of abstract-declarators.
@@ -644,7 +656,7 @@ def p_postfix_expression(p):
     |                               TYPEID parameters_clause
     '''
     #print "HERE",str(p[1])
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_bexpression_opt(p):
     '''bexpression_opt :            empty
@@ -700,7 +712,7 @@ def p_unary_expression(p):
     |                               delete_expression
     |                               global_scope delete_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_delete_expression(p):
     '''delete_expression :          DELETE cast_expression
@@ -749,14 +761,14 @@ def p_cast_expression(p):
     '''cast_expression :            unary_expression
     |                               abstract_expression cast_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_pm_expression(p):
     '''pm_expression :              cast_expression
     |                               pm_expression DOT_STAR cast_expression
     |                               pm_expression ARROW_STAR cast_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_multiplicative_expression(p):
     '''multiplicative_expression :  pm_expression
@@ -764,21 +776,21 @@ def p_multiplicative_expression(p):
     |                               multiplicative_expression '/' pm_expression
     |                               multiplicative_expression '%' pm_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_additive_expression(p):
     '''additive_expression :        multiplicative_expression
     |                               additive_expression '+' multiplicative_expression
     |                               additive_expression '-' multiplicative_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_shift_expression(p):
     '''shift_expression :           additive_expression
     |                               shift_expression SHL additive_expression
     |                               shift_expression SHR additive_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 #    |                               relational_expression '<' shift_expression
 #    |                               relational_expression '>' shift_expression
@@ -787,50 +799,50 @@ def p_shift_expression(p):
 def p_relational_expression(p):
     '''relational_expression :      shift_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_equality_expression(p):
     '''equality_expression :        relational_expression
     |                               equality_expression EQ relational_expression
     |                               equality_expression NE relational_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_and_expression(p):
     '''and_expression :             equality_expression
     |                               and_expression '&' equality_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_exclusive_or_expression(p):
     '''exclusive_or_expression :    and_expression
     |                               exclusive_or_expression '^' and_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_inclusive_or_expression(p):
     '''inclusive_or_expression :    exclusive_or_expression
     |                               inclusive_or_expression '|' exclusive_or_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_logical_and_expression(p):
     '''logical_and_expression :     inclusive_or_expression
     |                               logical_and_expression LOG_AND inclusive_or_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_logical_or_expression(p):
     '''logical_or_expression :      logical_and_expression
     |                               logical_or_expression LOG_OR logical_and_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_conditional_expression(p):
     '''conditional_expression :     logical_or_expression
     |                               logical_or_expression '?' expression ':' assignment_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 
 #
@@ -844,7 +856,7 @@ def p_assignment_expression(p):
     |                               logical_or_expression '=' braced_initializer
     |                               throw_expression
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 def p_assignment_operator(p):
     '''assignment_operator :        '=' 
@@ -871,7 +883,7 @@ def p_expression(p):
     '''expression :                 assignment_expression
     |                               expression_list ',' assignment_expression
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_constant_expression(p):
     '''constant_expression :        conditional_expression
@@ -1060,28 +1072,28 @@ def p_suffix_named_decl_specifier(p):
     |                               elaborate_type_specifier 
     |                               suffix_named_decl_specifier decl_specifier_suffix
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 def p_suffix_named_decl_specifier_bi(p):
     '''suffix_named_decl_specifier_bi :     suffix_named_decl_specifier
     |                               suffix_named_decl_specifier suffix_built_in_decl_specifier_raw
     '''
-    p[0] = p[1:]
-    #print "HERE",p[1:]
+    p[0] = get_rest(p)
+    #print "HERE",get_rest(p)
 
 def p_suffix_named_decl_specifiers(p):
     '''suffix_named_decl_specifiers :       suffix_named_decl_specifier_bi
     |                               suffix_named_decl_specifiers suffix_named_decl_specifier_bi
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_suffix_named_decl_specifiers_sf(p):
     '''suffix_named_decl_specifiers_sf :    scoped_special_function_id
     |                               suffix_named_decl_specifiers
     |                               suffix_named_decl_specifiers scoped_special_function_id
     '''
-    #print "HERE",p[1:]
-    p[0] = p[1:]
+    #print "HERE",get_rest(p)
+    p[0] = get_rest(p)
 
 def p_suffix_decl_specified_ids(p):
     '''suffix_decl_specified_ids :          suffix_built_in_decl_specifier
@@ -1098,7 +1110,7 @@ def p_suffix_decl_specified_scope(p):
     |                               suffix_built_in_decl_specifier suffix_named_decl_specifiers SCOPE
     |                               suffix_built_in_decl_specifier SCOPE
     '''
-    p[0] = p[1:]
+    p[0] = get_rest(p)
 
 def p_decl_specifier_affix(p):
     '''decl_specifier_affix :       storage_class_specifier
@@ -1320,12 +1332,12 @@ def p_init_declarations(p):
     '''init_declarations :          assignment_expression ',' init_declaration
     |                               init_declarations ',' init_declaration
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 def p_init_declaration(p):
     '''init_declaration :           assignment_expression
     '''
-    p[0]=p[1:]
+    p[0]=get_rest(p)
 
 def p_star_ptr_operator(p):
     '''star_ptr_operator :          '*'
@@ -1585,8 +1597,8 @@ def p_member_declaration(p):
     |                               using_declaration
     |                               template_declaration
     '''
-    p[0] = p[1:]
-    #print "Decl",p[1:]
+    p[0] = get_rest(p)
+    #print "Decl",get_rest(p)
 
 #
 #  The generality of constructor names (there need be no parenthesised argument list) means that that
@@ -1602,7 +1614,7 @@ def p_simple_member_declaration(p):
     |                               decl_specifier_prefix simple_member_declaration
     '''
     global _parse_info
-    decl = flatten(p[1:])
+    decl = flatten(get_rest(p))
     if len(decl) >= 4 and decl[-3] == "(":
         _parse_info.add_function(decl[-4])
 
@@ -2080,7 +2092,7 @@ def p_error(p):
         tmp = tmp + " with value '"+str(p.value)+"'"
         tmp = tmp + " in line " + str(lexer.lineno-1)
         tmp = tmp + " at column "+str(_find_column(_parsedata,p))
-    raise IOError, tmp
+    raise IOError( tmp )
 
 
 
@@ -2089,7 +2101,7 @@ def p_error(p):
 #
 def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func_filter=None):
     if debug > 0:
-        print "Debugging parse_cpp!"
+        print("Debugging parse_cpp!")
         #
         # Always remove the parser.out file, which is generated to create debugging
         #
@@ -2163,7 +2175,7 @@ if __name__ == '__main__':
     for arg in sys.argv[1:]:
         if arg == "-v":
             continue
-        print "Parsing file '"+arg+"'"
+        print("Parsing file '"+arg+"'")
         if '-v' in sys.argv:
             parse_cpp(filename=arg,debug=2,verbose=2)
         else:
@@ -2173,5 +2185,5 @@ if __name__ == '__main__':
         # This illustrates how class inheritance can be used to 
         # deduce class members.
         # 
-        print str(_parse_info)
+        print(str(_parse_info))
 

@@ -5,22 +5,20 @@ from __future__ import division
 
 __all__ = ['main']
 
-import __release__
+from . import __release__
 import sys
-import os.path
-from os.path import abspath, dirname
 import re
-import getopt
 import glob
-import string
 from optparse import OptionParser
-from cxxtest import cxxtest_parser
+from . import cxxtest_parser
+
 try:
-    import cxxtest_fog
+    from . import cxxtest_fog
     imported_fog=True
 except ImportError:
     imported_fog=False
-from cxxtest.cxxtest_misc import *
+
+from cxxtest.cxxtest_misc import abort
 
 options = []
 suites = []
