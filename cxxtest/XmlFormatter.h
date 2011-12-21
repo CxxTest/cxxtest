@@ -123,11 +123,11 @@ namespace CxxTest
         }
 
         template <class Type>
-        void add(const std::string& name, Type& value)
+        void add(const std::string& name_, Type& value_)
             {
             std::ostringstream os;
-            os << value;
-            attribute[name] = os.str();
+            os << value_;
+            attribute[name_] = os.str();
             }
 
         void write(OutputStream& os) {
