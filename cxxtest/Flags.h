@@ -110,7 +110,7 @@
 #           define _CXXTEST_PARTIAL_TEMPLATE_SPECIALIZATION
 #       endif
 #   endif
-#   if defined(__LONG_LONG_MAX__)
+#   if defined(__LONG_LONG_MAX__) && !defined(__cplusplus)
 #      define _CXXTEST_LONGLONG long long
 #   endif
 #endif // __GNUC__
