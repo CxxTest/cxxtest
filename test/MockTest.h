@@ -30,20 +30,20 @@ static Opaque getOpaque( int i )
 #define CXXTEST_MOCK_TEST_SOURCE_FILE
 #include <cxxtest/Mock.h>
 
-CXXTEST_MOCK_GLOBAL( int, one, ( void ), () );
-CXXTEST_MOCK_VOID_GLOBAL( two, ( int *p ), ( p ) );
+CXXTEST_MOCK_GLOBAL( int, one, ( void ), () )
+CXXTEST_MOCK_VOID_GLOBAL( two, ( int *p ), ( p ) )
 
-CXXTEST_MOCK( intIdentity, int, identity, ( int i ), NameSpace::identity, ( i ) );
-CXXTEST_MOCK( doubleIdentity, double, identity, ( double i ), NameSpace::identity, ( i ) );
+CXXTEST_MOCK( intIdentity, int, identity, ( int i ), NameSpace::identity, ( i ) )
+CXXTEST_MOCK( doubleIdentity, double, identity, ( double i ), NameSpace::identity, ( i ) )
 
-CXXTEST_MOCK_DEFAULT_VALUE( Opaque, Opaque( 42 ) );
-CXXTEST_MOCK_GLOBAL( Opaque, getOpaque, ( int i ), ( i ) );
+CXXTEST_MOCK_DEFAULT_VALUE( Opaque, Opaque( 42 ) )
+CXXTEST_MOCK_GLOBAL( Opaque, getOpaque, ( int i ), ( i ) )
 
-CXXTEST_SUPPLY_GLOBAL( int, supplyOne, ( void ), () );
-CXXTEST_SUPPLY_VOID_GLOBAL( supplyTwo, ( int *p ), ( p ) );
+CXXTEST_SUPPLY_GLOBAL( int, supplyOne, ( void ), () )
+CXXTEST_SUPPLY_VOID_GLOBAL( supplyTwo, ( int *p ), ( p ) )
 
-CXXTEST_SUPPLY( SupplyThree, int, doSupplyThree, ( void ), supplyThree, () );
-CXXTEST_SUPPLY_VOID( SupplyFour, doSupplyFour, ( int *p ), supplyFour, ( p ) );
+CXXTEST_SUPPLY( SupplyThree, int, doSupplyThree, ( void ), supplyThree, () )
+CXXTEST_SUPPLY_VOID( SupplyFour, doSupplyFour, ( int *p ), supplyFour, ( p ) )
 
 class MockOne : public T::Base_one
 {
