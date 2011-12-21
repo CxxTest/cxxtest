@@ -27,7 +27,8 @@ Options:
   --have-eh             Use exception handling (even if not found in tests).
   --no-eh               Do not use exception handling (even if found in
                         tests).
-  --longlong=TYPE       Use TYPE as long long.  (default: long long)
+  --longlong=TYPE       Use TYPE as for long long integers.  (default: not
+                        supported)
   --no-static-init      Do not rely on static initialization in the test
                         runner.
   --template=TEMPLATE   Generate the test runner using file TEMPLATE to define
