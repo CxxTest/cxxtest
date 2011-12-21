@@ -344,6 +344,8 @@ namespace CxxTest
 #   include <cxxtest/StdValueTraits.h>
 #endif // _CXXTEST_HAVE_STD
 
+namespace dummy_enum_ns {}
+
 //
 // CXXTEST_ENUM_TRAITS
 //
@@ -369,7 +371,7 @@ namespace CxxTest
                 } \
             } \
         }; \
-    }
+    } using namespace dummy_enum_ns
 
 #define CXXTEST_ENUM_MEMBER( MEMBER ) \
     case MEMBER: return #MEMBER;
