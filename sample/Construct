@@ -6,7 +6,7 @@
 
 $env = new cons( CXX => ("$^O" eq 'MSWin32') ? 'cl -nologo -GX' : 'c++',
 		 CPPPATH => '..',
-	         CXXTESTGEN => '../python/scripts/cxxtestgen' );
+	         CXXTESTGEN => '../bin/cxxtestgen' );
 
 @tests = <*.h>;
 

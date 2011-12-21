@@ -19,7 +19,7 @@
 #
 # The default configuration assumes that cxxtest is located at the
 # base source directory (where SConstruct is), that the cxxtestgen is under
-# cxxtest/python/scripts/cxxtestgen and headers are in cxxtest/cxxtest/. The header
+# cxxtest/bin/cxxtestgen and headers are in cxxtest/cxxtest/. The header
 # include path is automatically added to CPPPATH. It, however, can also
 # recognise that cxxtest is installed system-wide (based on redhat's RPM).
 #
@@ -254,8 +254,7 @@ def generate(env, **kwargs):
 
     # this one's not for public use - it documents where the cxxtestgen script
     # is located in the CxxTest tree normally.
-    env.SetDefault( CXXTEST_CXXTESTGEN_DEFAULT_LOCATION =
-            os.path.join('python', 'scripts') )
+    env.SetDefault( CXXTEST_CXXTESTGEN_DEFAULT_LOCATION = 'bin' )
     # the cxxtestgen script name.
     env.SetDefault( CXXTEST_CXXTESTGEN_SCRIPT_NAME = 'cxxtestgen' )
 

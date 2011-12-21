@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_creating_test_runners_from_parts">4.4. Creating Test Runners from Parts</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_test_discovery_options">4.6. Test Discovery Options</a></span></dt></dl></dd><dt><span class="section"><a href="#runner">5. Test Runner Syntax</a></span></dt><dt><span class="section"><a href="#advanced">6. Advanced Testing Features</a></span></dt><dd><dl><dt><span class="section"><a href="#_preprocessor_macros">6.1. Preprocessor Macros</a></span></dt><dt><span class="section"><a href="#_customizing_test_fixtures">6.2. Customizing Test Fixtures</a></span></dt></dl></dd><dt><span class="section"><a href="#mock">7. Testing with Mock Objects</a></span></dt><dd><dl><dt><span class="section"><a href="#_example_a_mock_literal_time_literal_function">7.1. Example: A Mock <code class="literal">time()</code> Function</a></span></dt><dt><span class="section"><a href="#_advanced_topics">7.2. Advanced Topics</a></span></dt></dl></dd><dt><span class="section"><a href="#samples">8. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">9. Installation</a></span></dt><dt><span class="section"><a href="#discussion">10. Status and Future Plans</a></span></dt><dt><span class="section"><a href="#acknowledgements">11. Acknowledgements</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt><dt><span class="appendix"><a href="#appendix_B">B. Integrating with Your Build Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#_overview_2">B.1. Overview</a></span></dt><dt><span class="section"><a href="#_actually_doing_it">B.2. Actually doing it</a></span></dt><dd><dl><dt><span class="section"><a href="#_using_makefiles">Using Makefiles</a></span></dt><dt><span class="section"><a href="#_using_cons">Using Cons</a></span></dt><dt><span class="section"><a href="#_using_microsoft_visual_studio">Using Microsoft Visual Studio</a></span></dt><dt><span class="section"><a href="#_using_microsoft_windows_ddk">Using Microsoft Windows DDK</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#appendix_C">C. CxxTest Releases</a></span></dt><dd><dl><dt><span class="section"><a href="#_version_4_0_todo">C.1. Version 4.0 (TODO)</a></span></dt><dt><span class="section"><a href="#_version_3_10_1_2004_12_01">C.2. Version 3.10.1 (2004-12-01)</a></span></dt><dt><span class="section"><a href="#_version_3_10_0_2004_11_20">C.3. Version 3.10.0 (2004-11-20)</a></span></dt><dt><span class="section"><a href="#_version_3_9_1_2004_01_19">C.4. Version 3.9.1 (2004-01-19)</a></span></dt><dt><span class="section"><a href="#_version_3_9_0_2004_01_17">C.5. Version 3.9.0 (2004-01-17)</a></span></dt><dt><span class="section"><a href="#_version_3_8_5_2004_01_08">C.6. Version 3.8.5 (2004-01-08)</a></span></dt><dt><span class="section"><a href="#_version_3_8_4_2003_12_31">C.7. Version 3.8.4 (2003-12-31)</a></span></dt><dt><span class="section"><a href="#_version_3_8_3_2003_12_24">C.8. Version 3.8.3 (2003-12-24)</a></span></dt><dt><span class="section"><a href="#_version_3_8_1_2003_12_21">C.9. Version 3.8.1 (2003-12-21)</a></span></dt><dt><span class="section"><a href="#_version_3_8_0_2003_12_13">C.10. Version 3.8.0 (2003-12-13)</a></span></dt><dt><span class="section"><a href="#_version_3_7_1_2003_09_29">C.11. Version 3.7.1 (2003-09-29)</a></span></dt><dt><span class="section"><a href="#_version_3_7_0_2003_09_20">C.12. Version 3.7.0 (2003-09-20)</a></span></dt><dt><span class="section"><a href="#_version_3_6_1_2003_09_15">C.13. Version 3.6.1 (2003-09-15)</a></span></dt><dt><span class="section"><a href="#_version_3_6_0_2003_09_04">C.14. Version 3.6.0 (2003-09-04)</a></span></dt><dt><span class="section"><a href="#_version_3_5_1_2003_09_03">C.15. Version 3.5.1 (2003-09-03)</a></span></dt><dt><span class="section"><a href="#_version_3_1_1_2003_08_27">C.16. Version 3.1.1 (2003-08-27)</a></span></dt><dt><span class="section"><a href="#_version_3_1_0_2003_08_23">C.17. Version 3.1.0 (2003-08-23)</a></span></dt><dt><span class="section"><a href="#_version_3_0_1_2003_08_07">C.18. Version 3.0.1 (2003-08-07)</a></span></dt><dt><span class="section"><a href="#_version_2_8_4_2003_07_21">C.19. Version 2.8.4 (2003-07-21)</a></span></dt><dt><span class="section"><a href="#_version_2_8_3_2003_06_30">C.20. Version 2.8.3 (2003-06-30)</a></span></dt><dt><span class="section"><a href="#_version_2_8_2_2003_06_10">C.21. Version 2.8.2 (2003-06-10)</a></span></dt><dt><span class="section"><a href="#_version_2_8_1_2003_01_16">C.22. Version 2.8.1 (2003-01-16)</a></span></dt><dt><span class="section"><a href="#_version_2_8_0_2003_01_13">C.23. Version 2.8.0 (2003-01-13)</a></span></dt><dt><span class="section"><a href="#_version_2_7_0_2002_09_29">C.24. Version 2.7.0 (2002-09-29)</a></span></dt></dl></dd><dt><span class="appendix"><a href="#appendix_D">D. Testing CxxTest</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_creating_test_runners_from_parts">4.4. Creating Test Runners from Parts</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_test_discovery_options">4.6. Test Discovery Options</a></span></dt></dl></dd><dt><span class="section"><a href="#runner">5. Test Runner Syntax</a></span></dt><dt><span class="section"><a href="#advanced">6. Advanced Testing Features</a></span></dt><dd><dl><dt><span class="section"><a href="#_preprocessor_macros">6.1. Preprocessor Macros</a></span></dt><dt><span class="section"><a href="#_customizing_test_fixtures">6.2. Customizing Test Fixtures</a></span></dt></dl></dd><dt><span class="section"><a href="#traits">7. Value Traits</a></span></dt><dd><dl><dt><span class="section"><a href="#_the_equality_operator">7.1. The equality operator</a></span></dt><dt><span class="section"><a href="#_value_traits">7.2. Value traits</a></span></dt><dt><span class="section"><a href="#_unknown_types">7.3. Unknown types</a></span></dt><dt><span class="section"><a href="#_enumeration_traits">7.4. Enumeration traits</a></span></dt><dt><span class="section"><a href="#_defining_new_value_traits">7.5. Defining new value traits</a></span></dt><dt><span class="section"><a href="#_overriding_the_default_value_traits">7.6. Overriding the default value traits</a></span></dt></dl></dd><dt><span class="section"><a href="#mock">8. Testing with Mock Objects</a></span></dt><dd><dl><dt><span class="section"><a href="#_example_a_mock_literal_time_literal_function">8.1. Example: A Mock <code class="literal">time()</code> Function</a></span></dt><dt><span class="section"><a href="#_advanced_topics">8.2. Advanced Topics</a></span></dt></dl></dd><dt><span class="section"><a href="#samples">9. Sample Problems</a></span></dt><dt><span class="section"><a href="#installation">10. Installation</a></span></dt><dt><span class="section"><a href="#discussion">11. Status and Future Plans</a></span></dt><dt><span class="section"><a href="#acknowledgements">12. Acknowledgements</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt><dt><span class="appendix"><a href="#appendix_B">B. Integrating with Your Build Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#_overview_2">B.1. Overview</a></span></dt><dt><span class="section"><a href="#_actually_doing_it">B.2. Actually doing it</a></span></dt><dd><dl><dt><span class="section"><a href="#_using_makefiles">Using Makefiles</a></span></dt><dt><span class="section"><a href="#_using_cons">Using Cons</a></span></dt><dt><span class="section"><a href="#_using_microsoft_visual_studio">Using Microsoft Visual Studio</a></span></dt><dt><span class="section"><a href="#_using_microsoft_windows_ddk">Using Microsoft Windows DDK</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#appendix_C">C. CxxTest Releases</a></span></dt><dd><dl><dt><span class="section"><a href="#_version_4_0_todo">C.1. Version 4.0 (TODO)</a></span></dt><dt><span class="section"><a href="#_version_3_10_1_2004_12_01">C.2. Version 3.10.1 (2004-12-01)</a></span></dt><dt><span class="section"><a href="#_version_3_10_0_2004_11_20">C.3. Version 3.10.0 (2004-11-20)</a></span></dt><dt><span class="section"><a href="#_version_3_9_1_2004_01_19">C.4. Version 3.9.1 (2004-01-19)</a></span></dt><dt><span class="section"><a href="#_version_3_9_0_2004_01_17">C.5. Version 3.9.0 (2004-01-17)</a></span></dt><dt><span class="section"><a href="#_version_3_8_5_2004_01_08">C.6. Version 3.8.5 (2004-01-08)</a></span></dt><dt><span class="section"><a href="#_version_3_8_4_2003_12_31">C.7. Version 3.8.4 (2003-12-31)</a></span></dt><dt><span class="section"><a href="#_version_3_8_3_2003_12_24">C.8. Version 3.8.3 (2003-12-24)</a></span></dt><dt><span class="section"><a href="#_version_3_8_1_2003_12_21">C.9. Version 3.8.1 (2003-12-21)</a></span></dt><dt><span class="section"><a href="#_version_3_8_0_2003_12_13">C.10. Version 3.8.0 (2003-12-13)</a></span></dt><dt><span class="section"><a href="#_version_3_7_1_2003_09_29">C.11. Version 3.7.1 (2003-09-29)</a></span></dt><dt><span class="section"><a href="#_version_3_7_0_2003_09_20">C.12. Version 3.7.0 (2003-09-20)</a></span></dt><dt><span class="section"><a href="#_version_3_6_1_2003_09_15">C.13. Version 3.6.1 (2003-09-15)</a></span></dt><dt><span class="section"><a href="#_version_3_6_0_2003_09_04">C.14. Version 3.6.0 (2003-09-04)</a></span></dt><dt><span class="section"><a href="#_version_3_5_1_2003_09_03">C.15. Version 3.5.1 (2003-09-03)</a></span></dt><dt><span class="section"><a href="#_version_3_1_1_2003_08_27">C.16. Version 3.1.1 (2003-08-27)</a></span></dt><dt><span class="section"><a href="#_version_3_1_0_2003_08_23">C.17. Version 3.1.0 (2003-08-23)</a></span></dt><dt><span class="section"><a href="#_version_3_0_1_2003_08_07">C.18. Version 3.0.1 (2003-08-07)</a></span></dt><dt><span class="section"><a href="#_version_2_8_4_2003_07_21">C.19. Version 2.8.4 (2003-07-21)</a></span></dt><dt><span class="section"><a href="#_version_2_8_3_2003_06_30">C.20. Version 2.8.3 (2003-06-30)</a></span></dt><dt><span class="section"><a href="#_version_2_8_2_2003_06_10">C.21. Version 2.8.2 (2003-06-10)</a></span></dt><dt><span class="section"><a href="#_version_2_8_1_2003_01_16">C.22. Version 2.8.1 (2003-01-16)</a></span></dt><dt><span class="section"><a href="#_version_2_8_0_2003_01_13">C.23. Version 2.8.0 (2003-01-13)</a></span></dt><dt><span class="section"><a href="#_version_2_7_0_2002_09_29">C.24. Version 2.7.0 (2002-09-29)</a></span></dt></dl></dd><dt><span class="appendix"><a href="#appendix_D">D. Testing CxxTest</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
 spirit to <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>,
 <a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
 <a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>.  CxxTest is easy to
@@ -47,13 +47,13 @@ The following are key online resources for CxxTest:</p><div class="itemizedlist"
 </li><li class="listitem">
 <a class="link" href="#runner" title="5. Test Runner Syntax">Test Runner Syntax</a>: Discussion of command line options for test runners
 </li><li class="listitem">
-<a class="link" href="#samples" title="8. Sample Problems">Sample Problems</a>: Examples that illustrate features of CxxTest
+<a class="link" href="#samples" title="9. Sample Problems">Sample Problems</a>: Examples that illustrate features of CxxTest
 </li><li class="listitem">
 <a class="link" href="#advanced" title="6. Advanced Testing Features">Advanced Testing Features</a>: Advanced features of CxxTest
 </li><li class="listitem">
-<a class="link" href="#installation" title="9. Installation">Installation</a>: How to install CxxTest
+<a class="link" href="#installation" title="10. Installation">Installation</a>: How to install CxxTest
 </li><li class="listitem">
-<a class="link" href="#discussion" title="10. Status and Future Plans">Discussion</a>: Comments on the past, present and future of CxxTest
+<a class="link" href="#discussion" title="11. Status and Future Plans">Discussion</a>: Comments on the past, present and future of CxxTest
 </li></ul></div></div><div class="section" title="2. Getting Started"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="gettingStarted"></a>2. Getting Started</h2></div></div></div><p>Testing is performed with CxxTest in a four-step process:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
 Tests are defined in C++ header files
 </li><li class="listitem">
@@ -536,12 +536,147 @@ public:
     {
         TS_FAIL( "Nothing to test" );
     }
-};</pre></div><div class="section" title="Runtime Test Customization"><div class="titlepage"><div><div><h4 class="title"><a id="_runtime_test_customization"></a>Runtime Test Customization</h4></div></div></div><p>CxxTest defines several functions that can be called in a test suite to modify the default behavior of CxxTest.</p><div class="informaltable"><table cellpadding="4px" style="border-collapse: collapse;border-top: 3px solid #527bbd; border-bottom: 3px solid #527bbd; border-left: 3px solid #527bbd; border-right: 3px solid #527bbd; "><colgroup><col class="col_1" /><col class="col_2" /></colgroup><thead><tr><th style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"> Test Suite Method </th><th style="border-bottom: 1px solid #527bbd; " align="left" valign="top"> Description</th></tr></thead><tbody><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setAbortTestOnFail( bool )</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>This function specifies whether tests abort after a failure.  The default value of the flag is <code class="literal">false</code>.  This function only has an effect if exception handling is enabled.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setMaxDumpSize( unsigned )</code></p></td><td style="" align="left" valign="top"><p>This function sets the maximum number of bytes that are dumped when
+};</pre></div><div class="section" title="Global and World Fixtures"><div class="titlepage"><div><div><h4 class="title"><a id="_global_and_world_fixtures"></a>Global and World Fixtures</h4></div></div></div><p>TODO: review this section.</p><p>The <code class="literal">setUp()</code> and <code class="literal">tearDown()</code> functions allow
+to have code executed before and after each test.  What if you want
+some code to be executed before all tests in <span class="emphasis"><em>all</em></span> test suites?
+Rather than duplicate that code, you can use <span class="emphasis"><em>global fixtures</em></span>.</p><p>These are basically classes that inherit from
+<code class="literal">CxxTest::GlobalFixture</code>.  All objects of such classes are
+automatically notified before and after each test case.  It is best to
+create them as static objects so they get called right from the start.
+Look at <code class="literal">test/GlobalFixtures.h</code> in the <code class="literal">cxxtest-selftest</code>
+archive.</p><p>Unlike <code class="literal">setUp()</code> and <code class="literal">tearDown()</code> in
+<code class="literal">TestSuite</code>, global fixtures should return a <code class="literal">bool</code> value to
+indicate success/failure.</p><p>CxxTest also allows you to specify code which is executed
+once at the start of the testing process (and the corresponding cleanup
+code).  To do this, create (one or more) global fixture objects and
+implement <code class="literal">setUpWorld()</code>/<code class="literal">tearDownWorld()</code>.  For an example,
+see <code class="literal">test/WorldFixtures.h</code> in the <code class="literal">cxxtest-selftest</code> archive.</p></div><div class="section" title="Runtime Test Customization"><div class="titlepage"><div><div><h4 class="title"><a id="_runtime_test_customization"></a>Runtime Test Customization</h4></div></div></div><p>CxxTest defines several functions that can be called in a test suite to modify the default behavior of CxxTest.</p><div class="informaltable"><table cellpadding="4px" style="border-collapse: collapse;border-top: 3px solid #527bbd; border-bottom: 3px solid #527bbd; border-left: 3px solid #527bbd; border-right: 3px solid #527bbd; "><colgroup><col class="col_1" /><col class="col_2" /></colgroup><thead><tr><th style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"> Test Suite Method </th><th style="border-bottom: 1px solid #527bbd; " align="left" valign="top"> Description</th></tr></thead><tbody><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setAbortTestOnFail( bool )</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>This function specifies whether tests abort after a failure.  The default value of the flag is <code class="literal">false</code>.  This function only has an effect if exception handling is enabled.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setMaxDumpSize( unsigned )</code></p></td><td style="" align="left" valign="top"><p>This function sets the maximum number of bytes that are dumped when
 TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit.</p></td></tr></tbody></table></div><p>Note that the the configuration parameters are reset to their default
 values after each test is executed (more precisely, after <code class="literal">tearDown()</code>
 is called).  Consequently, calling these functions in the <code class="literal">setUp()</code>
 function has the effect of setting that value for the entire test
-suite.</p></div></div></div><div class="section" title="7. Testing with Mock Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="mock"></a>7. Testing with Mock Objects</h2></div></div></div><p>Mock Objects are a very useful concept for testing complex software.
+suite.</p></div></div></div><div class="section" title="7. Value Traits"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="traits"></a>7. Value Traits</h2></div></div></div><p>You may have noticed that <a class="link" href="#">TS_EQUALS</a> only works for
+built-in types.  This is because CxxTest needs a way to compare
+object and to convert them to strings, in order to print them should
+the test fail.</p><p>If you do want to use <a class="link" href="#">TS_EQUALS</a> on your own data
+types, this is how you do it.</p><div class="section" title="7.1. The equality operator"><div class="titlepage"><div><div><h3 class="title"><a id="_the_equality_operator"></a>7.1. The equality operator</h3></div></div></div><p>First of all, don’t forget to implement the equality operator (<code class="literal">operator==()</code>)
+on your data types!</p></div><div class="section" title="7.2. Value traits"><div class="titlepage"><div><div><h3 class="title"><a id="_value_traits"></a>7.2. Value traits</h3></div></div></div><p>Since CxxTest tries not to rely on any external library (including the standard library,
+which is not always available), conversion from arbitrary data types to strings
+is done using value traits.</p><p>For example, to convert an integer to a string, CxxTest does the following actions:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<code class="literal">int i = _value to convert</code>;_
+</li><li class="listitem">
+<code class="literal">CxxTest::ValueTraits&lt;int&gt; converter(i);</code>
+</li><li class="listitem">
+<code class="literal">string = converter.asString();</code>
+</li></ul></div><p>CxxTest comes with predefined <code class="literal">ValueTrait</code>s for <code class="literal">int</code>,
+<code class="literal">char</code>, <code class="literal">double</code> etc. in <code class="literal">cxxtest/ValueTraits.h</code> in the
+<code class="literal">cxxtest-selftest</code> archive.</p></div><div class="section" title="7.3. Unknown types"><div class="titlepage"><div><div><h3 class="title"><a id="_unknown_types"></a>7.3. Unknown types</h3></div></div></div><p>Obviously, CxxTest doesn’t “know” about all possible types.
+The default ValueTraits class for unknown types dumps up to 8 bytes of the value in hex format.</p><p>For example, the following code</p><pre class="programlisting">#include &lt;cxxtest/TestSuite.h&gt;
+
+class TestMyData : public CxxTest::TestSuite
+{
+public:
+   struct Data
+   {
+      char data[3];
+   };
+
+   void testCompareData()
+   {
+      Data x, y;
+      memset( x.data, 0x12, sizeof(x.data) );
+      memset( y.data, 0xF6, sizeof(y.data) );
+      TS_ASSERT_EQUALS( x, y );
+   }
+};</pre><p>would output</p><pre class="screen">Running 1 test.
+TestMyData.h:16: Expected (x == y), found ({ 12 12 12 } != { F6 F6 F6 })
+Failed 1 of 1 test
+Success rate: 0%</pre></div><div class="section" title="7.4. Enumeration traits"><div class="titlepage"><div><div><h3 class="title"><a id="_enumeration_traits"></a>7.4. Enumeration traits</h3></div></div></div><p><sub>(v3.10.0)</sub> CxxTest provides a simple way to define value traits for
+your enumeration types, which is very handy for things like status
+codes.  To do this, simply use <code class="literal">CXXTEST_VALUE_TRAITS</code> as in the
+following example:</p><pre class="programlisting">enum Status { STATUS_IDLE, STATUS_BUSY, STATUS_ERROR };
+
+CXXTEST_ENUM_TRAITS( Status,
+                     CXXTEST_ENUM_MEMBER( STATUS_IDLE )
+                     CXXTEST_ENUM_MEMBER( STATUS_BUSY )
+                     CXXTEST_ENUM_MEMBER( STATUS_ERROR ) );</pre><p>See <code class="literal">sample/EnumTraits.h</code> for a working sample.</p></div><div class="section" title="7.5. Defining new value traits"><div class="titlepage"><div><div><h3 class="title"><a id="_defining_new_value_traits"></a>7.5. Defining new value traits</h3></div></div></div><p>Defining value traits for new (non-enumeration) types is easy.  All you
+need is to define a way to convert an object of your class to a
+string. You can use this example as a possible skeleton:</p><pre class="programlisting">class MyClass
+{
+   int _value;
+
+public:
+   MyClass( int value ) : _value( value ) {}
+   int value() const { return _value; }
+
+   // CxxTest requires a copy constructor
+   MyClass( const MyClass &amp;other ) : _value( other._value ) {}
+
+   // If you want to use TS_ASSERT_EQUALS
+   bool operator== ( const MyClass &amp;other ) const { return _value == other._value; }
+
+   // If you want to use TS_ASSERT_LESS_THAN
+   bool operator== ( const MyClass &amp;other ) const { return _value &lt; other._value; }
+};
+
+#ifdef CXXTEST_RUNNING
+#include &lt;cxxtest/ValueTraits.h&gt;
+#include &lt;stdio.h&gt;
+
+namespace CxxTest
+{
+   CXXTEST_TEMPLATE_INSTANTIATION
+   class ValueTraits&lt;MyClass&gt;
+   {
+      char _s[256];
+
+   public:
+      ValueTraits( const MyClass &amp;m ) { sprintf( _s, "MyClass( %i )", m.value() ); }
+      const char *asString() const { return _s; }
+   };
+};
+#endif // CXXTEST_RUNNING</pre><div class="section" title="Defining value traits for template classes"><div class="titlepage"><div><div><h4 class="title"><a id="_defining_value_traits_for_template_classes"></a>Defining value traits for template classes</h4></div></div></div><p>A simple modification to the above scheme allows you to define value
+traits for your template classes.  Unfortunately, this syntax (partial
+template specialization) is not supported by some popular C++ compilers.
+Here is an example:</p><pre class="programlisting">template&lt;class T&gt;
+class TMyClass
+{
+   T _value;
+
+public:
+   TMyClass( const T &amp;value ) : _value( value );
+   const T &amp;value() const { return _value; }
+
+   // CxxTest requires a copy constructor
+   TMyClass( const TMyClass&lt;T&gt; &amp;other ) : _value( other._value ) {}
+
+   // If you want to use TS_ASSERT_EQUALS
+   bool operator== ( const TMyClass&lt;T&gt; &amp;other ) const { return _value == other._value; }
+};
+
+#ifdef CXXTEST_RUNNING
+#include &lt;cxxtest/ValueTraits.h&gt;
+#include &lt;typeinfo&gt;
+#include &lt;sstream&gt;
+
+namespace CxxTest
+{
+   template&lt;class T&gt;
+   class ValueTraits&lt; TMyClass&lt;T&gt; &gt;
+   {
+      std::ostringstream _s;
+
+   public:
+      ValueTraits( const TMyClass&lt;T&gt; &amp;t )
+         { _s &lt;&lt; typeid(t).name() &lt;&lt; "( " &lt;&lt; t.value() &lt;&lt; " )"; }
+      const char *asString() const { return _s.str().c_str(); }
+   };
+};
+#endif // CXXTEST_RUNNING</pre></div></div><div class="section" title="7.6. Overriding the default value traits"><div class="titlepage"><div><div><h3 class="title"><a id="_overriding_the_default_value_traits"></a>7.6. Overriding the default value traits</h3></div></div></div><p><sub>(v2.8.2)</sub> If you don’t like the way CxxTest defines the default <code class="literal">ValueTrait</code>s,
+you can override them by <code class="literal">#define</code>-ing <code class="literal">CXXTEST_USER_VALUE_TRAITS</code>;
+this causes CxxTest to omit the default definitions, and from there on you are
+free to implement them as you like.</p><p>You can see a sample of this technique in <code class="literal">test/UserTraits.tpl</code> in
+the <code class="literal">cxxtest-selftest</code> archive.</p></div></div><div class="section" title="8. Testing with Mock Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="mock"></a>8. Testing with Mock Objects</h2></div></div></div><p>Mock Objects are a very useful concept for testing complex software.
 The key idea is to pass special objects to tested code that facilitates
 the testing process.  For instance, a class that implements a
 protocol over TCP might rely on an abstract <code class="literal">ISocket</code> interface.
@@ -557,7 +692,7 @@ these types of exceptional conditions is often a very challenging
 issue for software testing.</p><p>CxxTest addresses this challenge by providing a generic mechanism for
 defining mock global functions.  The next section illustrates this mechanism for a single
 global function.  The following section provides more detail about specific features of CxxTest’s
-support for mock testing.</p><div class="section" title="7.1. Example: A Mock time() Function"><div class="titlepage"><div><div><h3 class="title"><a id="_example_a_mock_literal_time_literal_function"></a>7.1. Example: A Mock <code class="literal">time()</code> Function</h3></div></div></div><p>Suppose that we want to perform mock testing using the well known
+support for mock testing.</p><div class="section" title="8.1. Example: A Mock time() Function"><div class="titlepage"><div><div><h3 class="title"><a id="_example_a_mock_literal_time_literal_function"></a>8.1. Example: A Mock <code class="literal">time()</code> Function</h3></div></div></div><p>Suppose that we want to perform mock testing using the well known
 standard library function <code class="literal">time()</code>.  Setting up a test suite with
 a mock global function for <code class="literal">time()</code> can be broken down into the
 following steps.</p><div class="section" title="Declare Mock Functions"><div class="titlepage"><div><div><h4 class="title"><a id="_declare_mock_functions"></a>Declare Mock Functions</h4></div></div></div><p>The <code class="literal">CXXTEST_MOCK_GLOBAL</code> macro is used to declare mock global functions.  It is often convenient to include
@@ -615,7 +750,7 @@ public:
     }
 };</pre><p>Note that CxxTest uses global data to associate calls made with <code class="literal">T::time()</code>
 to calls to <code class="literal">MockObject::time()</code>.  The <code class="literal">MockObject</code> class simply
-needs to be instantiated prior to the call to <code class="literal">T::time()</code>.</p></div><div class="section" title="Building the Test Runner"><div class="titlepage"><div><div><h4 class="title"><a id="_building_the_test_runner"></a>Building the Test Runner</h4></div></div></div><p>The <code class="literal">cxxtestgen</code> command is used to create a test runner with mock functions in a normal manner:</p><pre class="programlisting">cxxtestgen --error-printer -o runner.cpp MockTestSuite.h</pre><p>The test runner source file, <code class="literal">runner.cpp</code>, needs to be compiled an linked to the mock function definition, <code class="literal">time_mock.cpp</code>, as well as the code being tested, <code class="literal">rand_example.cpp</code>:</p><pre class="programlisting">g++ -o runner -I. -I$CXXTEST runner.cpp time_mock.cpp rand_example.cpp</pre><p>This generates a test runner that generates the following output:</p><pre class="programlisting">Running 1 test.OK!</pre></div></div><div class="section" title="7.2. Advanced Topics"><div class="titlepage"><div><div><h3 class="title"><a id="_advanced_topics"></a>7.2. Advanced Topics</h3></div></div></div><div class="section" title="Void Functions"><div class="titlepage"><div><div><h4 class="title"><a id="_void_functions"></a>Void Functions</h4></div></div></div><p>The <code class="literal">CXXTEST_MOCK_VOID_GLOBAL</code> is used to define mock global functions that return <code class="literal">void</code>.
+needs to be instantiated prior to the call to <code class="literal">T::time()</code>.</p></div><div class="section" title="Building the Test Runner"><div class="titlepage"><div><div><h4 class="title"><a id="_building_the_test_runner"></a>Building the Test Runner</h4></div></div></div><p>The <code class="literal">cxxtestgen</code> command is used to create a test runner with mock functions in a normal manner:</p><pre class="programlisting">cxxtestgen --error-printer -o runner.cpp MockTestSuite.h</pre><p>The test runner source file, <code class="literal">runner.cpp</code>, needs to be compiled an linked to the mock function definition, <code class="literal">time_mock.cpp</code>, as well as the code being tested, <code class="literal">rand_example.cpp</code>:</p><pre class="programlisting">g++ -o runner -I. -I$CXXTEST runner.cpp time_mock.cpp rand_example.cpp</pre><p>This generates a test runner that generates the following output:</p><pre class="programlisting">Running 1 test.OK!</pre></div></div><div class="section" title="8.2. Advanced Topics"><div class="titlepage"><div><div><h3 class="title"><a id="_advanced_topics"></a>8.2. Advanced Topics</h3></div></div></div><div class="section" title="Void Functions"><div class="titlepage"><div><div><h4 class="title"><a id="_void_functions"></a>Void Functions</h4></div></div></div><p>The <code class="literal">CXXTEST_MOCK_VOID_GLOBAL</code> is used to define mock global functions that return <code class="literal">void</code>.
 This is identical to
 <code class="literal">CXXTEST_MOCK_GLOBAL</code> except that it does not specify the return
 type.  Take a look in <code class="literal">sample/mock/T/stdlib.h</code> for a demonstation.</p></div><div class="section" title="Calling the Real Functions While Testing"><div class="titlepage"><div><div><h4 class="title"><a id="_calling_the_real_functions_while_testing"></a>Calling the Real Functions While Testing</h4></div></div></div><p>During testing it is sometimes necessary to call the real global
@@ -657,14 +792,14 @@ overloaded functions.  The arguments simply need to specify different
 mock class names, mock member names and different prototype definitions.
 These different mock declarations will generate different mock objects that can be explicitly
 referenced in a test suite.</p></div><div class="section" title="The Mock Namespace"><div class="titlepage"><div><div><h4 class="title"><a id="_the_mock_namespace"></a>The Mock Namespace</h4></div></div></div><p>The default namespace for mock functions is <code class="literal">T::</code>.  This namespace can be changed by defining the
-<code class="literal">CXXTEST_MOCK_NAMESPACE</code> macro.</p></div></div></div><div class="section" title="8. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>8. Sample Problems</h2></div></div></div><p>CxxTest comes with some samples in the <code class="literal">sample/</code> subdirectory of
+<code class="literal">CXXTEST_MOCK_NAMESPACE</code> macro.</p></div></div></div><div class="section" title="9. Sample Problems"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="samples"></a>9. Sample Problems</h2></div></div></div><p>CxxTest comes with some samples in the <code class="literal">sample/</code> subdirectory of
 the distribution.  If you look in that directory, you will see three
 Makefiles: <code class="literal">Makefile.unix</code>, <code class="literal">Makefile.msvc</code> and
 <code class="literal">Makefile.bcc32</code> which are for Linux/Unix, MS Visual C++ and
 Borland C\++, repectively.  These files are provided as a starting point,
 and some options may need to be tweaked in them for your system.</p><p>If you are running under Windows, a good guess would be to run
 <code class="literal">nmake -fMakefile.msvc run_win32</code> (you may need to run
-<code class="literal">VCVARS32.BAT</code> first).</p><p>Under Linux, <code class="literal">make -fMakefile.unix run_x11</code> should probably work.</p></div><div class="section" title="9. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>9. Installation</h2></div></div></div><p>TODO</p></div><div class="section" title="10. Status and Future Plans"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="discussion"></a>10. Status and Future Plans</h2></div></div></div><p>The CxxTest 4.0 release reflects major changes in the management
+<code class="literal">VCVARS32.BAT</code> first).</p><p>Under Linux, <code class="literal">make -fMakefile.unix run_x11</code> should probably work.</p></div><div class="section" title="10. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>10. Installation</h2></div></div></div><p>TODO</p></div><div class="section" title="11. Status and Future Plans"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="discussion"></a>11. Status and Future Plans</h2></div></div></div><p>The CxxTest 4.0 release reflects major changes in the management
 and focus of CxxTest.  The 4.0 release is the first release of
 CxxTest in over seven years, and virtually all of the initial
 developers have moved on to other projects.  CxxTest is heavily
@@ -709,7 +844,7 @@ in contexts where a custom output stream must be specified.</p><p>Future work:</
 ply cpp
 </li><li class="listitem">
 ignore template test classes using the FOG parser
-</li></ul></div></div><div class="section" title="11. Acknowledgements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="acknowledgements"></a>11. Acknowledgements</h2></div></div></div><p>TODO</p><p>ply
+</li></ul></div></div><div class="section" title="12. Acknowledgements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="acknowledgements"></a>12. Acknowledgements</h2></div></div></div><p>TODO</p><p>ply
 FOG grammar</p></div><div class="appendix" title="A. Test Assertion Examples"><h2 class="title" style="clear: both"><a id="appendix_A"></a>A. Test Assertion Examples</h2><div class="variablelist"><dl><dt><span class="term">
 <a id="ts_assert"></a> TS_ASSERT
 </span></dt><dd>

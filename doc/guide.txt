@@ -748,6 +748,199 @@ suite.
 
 
 
+[[traits]]
+Value Traits
+------------
+
+You may have noticed that <<ts_equals,TS_EQUALS>> only works for
+built-in types.  This is because CxxTest needs a way to compare
+object and to convert them to strings, in order to print them should
+the test fail.
+
+If you do want to use <<ts_equals,TS_EQUALS>> on your own data
+types, this is how you do it.
+
+==== The equality operator
+
+First of all, don't forget to implement the equality operator (`operator==()`)
+on your data types!
+
+==== Value traits
+
+Since CxxTest tries not to rely on any external library (including the standard library,
+which is not always available), conversion from arbitrary data types to strings
+is done using value traits.
+
+For example, to convert an integer to a string, CxxTest does the following actions:
+
+* `int i = _value to convert`;_
+* `CxxTest::ValueTraits<int> converter(i);`
+* `string = converter.asString();`
+
+CxxTest comes with predefined ++ValueTrait++s for `int`,
+`char`, `double` etc. in `cxxtest/ValueTraits.h` in the
+`cxxtest-selftest` archive.
+
+==== Unknown types
+
+Obviously, CxxTest doesn't ``know'' about all possible types.
+The default ValueTraits class for unknown types dumps up to 8 bytes of the value in hex format.
+
+For example, the following code
+
+[source,cpp]
+-----
+#include <cxxtest/TestSuite.h>
+
+class TestMyData : public CxxTest::TestSuite 
+{
+public:
+   struct Data
+   {
+      char data[3];
+   };
+
+   void testCompareData()
+   {
+      Data x, y;
+      memset( x.data, 0x12, sizeof(x.data) );
+      memset( y.data, 0xF6, sizeof(y.data) );
+      TS_ASSERT_EQUALS( x, y );
+   }
+};
+-----
+
+would output
+
+-----
+Running 1 test.
+TestMyData.h:16: Expected (x == y), found ({ 12 12 12 } != { F6 F6 F6 })
+Failed 1 of 1 test
+Success rate: 0%
+-----
+
+==== Enumeration traits
+
+~(v3.10.0)~ CxxTest provides a simple way to define value traits for
+your enumeration types, which is very handy for things like status
+codes.  To do this, simply use `CXXTEST_VALUE_TRAITS` as in the
+following example:
+
+[source,cpp]
+-----
+enum Status { STATUS_IDLE, STATUS_BUSY, STATUS_ERROR };
+
+CXXTEST_ENUM_TRAITS( Status,
+                     CXXTEST_ENUM_MEMBER( STATUS_IDLE )
+                     CXXTEST_ENUM_MEMBER( STATUS_BUSY )
+                     CXXTEST_ENUM_MEMBER( STATUS_ERROR ) );
+-----
+
+See `sample/EnumTraits.h` for a working sample.
+
+==== Defining new value traits
+
+Defining value traits for new (non-enumeration) types is easy.  All you
+need is to define a way to convert an object of your class to a
+string. You can use this example as a possible skeleton:
+
+[source,cpp]
+-----
+class MyClass 
+{
+   int _value;
+
+public:
+   MyClass( int value ) : _value( value ) {}
+   int value() const { return _value; }
+
+   // CxxTest requires a copy constructor
+   MyClass( const MyClass &other ) : _value( other._value ) {}
+
+   // If you want to use TS_ASSERT_EQUALS
+   bool operator== ( const MyClass &other ) const { return _value == other._value; }
+
+   // If you want to use TS_ASSERT_LESS_THAN
+   bool operator== ( const MyClass &other ) const { return _value < other._value; }
+};
+
+#ifdef CXXTEST_RUNNING
+#include <cxxtest/ValueTraits.h>
+#include <stdio.h>
+
+namespace CxxTest 
+{
+   CXXTEST_TEMPLATE_INSTANTIATION
+   class ValueTraits<MyClass> 
+   {
+      char _s[256];
+
+   public:
+      ValueTraits( const MyClass &m ) { sprintf( _s, "MyClass( %i )", m.value() ); }
+      const char *asString() const { return _s; }
+   };
+};
+#endif // CXXTEST_RUNNING
+-----
+
+===== Defining value traits for template classes
+
+A simple modification to the above scheme allows you to define value
+traits for your template classes.  Unfortunately, this syntax (partial
+template specialization) is not supported by some popular C++ compilers.
+Here is an example:
+
+[source,cpp]
+-----
+template<class T>
+class TMyClass
+{
+   T _value;
+
+public:
+   TMyClass( const T &value ) : _value( value );
+   const T &value() const { return _value; }
+
+   // CxxTest requires a copy constructor
+   TMyClass( const TMyClass<T> &other ) : _value( other._value ) {}
+   
+   // If you want to use TS_ASSERT_EQUALS
+   bool operator== ( const TMyClass<T> &other ) const { return _value == other._value; }
+};
+
+#ifdef CXXTEST_RUNNING
+#include <cxxtest/ValueTraits.h>
+#include <typeinfo>
+#include <sstream>
+
+namespace CxxTest 
+{
+   template<class T>
+   class ValueTraits< TMyClass<T> > 
+   {
+      std::ostringstream _s;
+
+   public:
+      ValueTraits( const TMyClass<T> &t ) 
+         { _s << typeid(t).name() << "( " << t.value() << " )"; }
+      const char *asString() const { return _s.str().c_str(); }
+   };
+};
+#endif // CXXTEST_RUNNING
+-----
+
+==== Overriding the default value traits
+
+~(v2.8.2)~ If you don't like the way CxxTest defines the default ++ValueTrait++s,
+you can override them by `#define`-ing `CXXTEST_USER_VALUE_TRAITS`;
+this causes CxxTest to omit the default definitions, and from there on you are
+free to implement them as you like.
+
+You can see a sample of this technique in `test/UserTraits.tpl` in
+the `cxxtest-selftest` archive.
+
+
+
 [[mock]]
 Testing with Mock Objects
 -------------------------

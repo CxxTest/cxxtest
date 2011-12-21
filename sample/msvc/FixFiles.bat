@@ -73,13 +73,13 @@ TESTS            = <TESTS>
 CXXTESTDIR       = <CXXTEST>
 
 # Check CXXTESTDIR
-!if !exist($(CXXTESTDIR)\python\scripts\cxxtestgen)
+!if !exist($(CXXTESTDIR)\bin\cxxtestgen)
 !error Please fix CXXTESTDIR
 !endif
 
 # cxxtestgen needs Python
 !if defined(PYTHON)
-CXXTESTGEN       = $(PYTHON) $(CXXTESTDIR)/python/scripts/cxxtestgen
+CXXTESTGEN       = $(PYTHON) $(CXXTESTDIR)/bin/cxxtestgen
 !else
 !error You must define PYTHON
 !endif

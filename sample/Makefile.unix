@@ -5,7 +5,7 @@
 # Change this line if you want a different compiler
 CXXC = c++ -Wall -W -Werror -I. -I..
 
-TESTGEN = ../python/scripts/cxxtestgen
+TESTGEN = ../bin/cxxtestgen
 
 # For the X11 GUI
 X11_FLAGS = -I/usr/X11R6/include -L/usr/X11R6/lib -lX11

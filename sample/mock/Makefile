@@ -19,4 +19,4 @@ test: test.o Dice.o mock_stdlib.o
 	g++ -c -o $@ $(CCFLAGS) $<
 
 test.cpp: TestDice.h
-	$(CXXTEST)/python/scripts/cxxtestgen -o $@ --error-printer $<
+	$(CXXTEST)/bin/cxxtestgen -o $@ --error-printer $<

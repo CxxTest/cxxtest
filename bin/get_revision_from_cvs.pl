@@ -133,7 +133,7 @@ open FIX, ">$fix" or fail "Cannot create file `$fix'\n";
 print FIX ":%s/INSERT_VERSION_HERE/$version/g\n";
 print FIX ":wq\n";
 close FIX;
-system( "ex -s $sourceDir/python/scripts/cxxtestgen < $fix" ) == 0 or fail "Error fixing version in Python script\n";
+system( "ex -s $sourceDir/bin/cxxtestgen < $fix" ) == 0 or fail "Error fixing version in Python script\n";
 system( "ex -s $sourceDir/cxxtest.spec < $fix" ) == 0  or fail "Error fixing version in spec file\n";
 
 cd( $workDir );

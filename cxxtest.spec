@@ -25,7 +25,7 @@ Its advantages over existing alternatives are that it:
 
 %install
 install -m 755 -d $RPM_BUILD_ROOT/usr/bin $RPM_BUILD_ROOT/usr/include/cxxtest
-install -m 755 python/scripts/cxxtestgen $RPM_BUILD_ROOT/usr/bin/
+install -m 755 bin/cxxtestgen $RPM_BUILD_ROOT/usr/bin/
 install -m 644 cxxtest/* $RPM_BUILD_ROOT/usr/include/cxxtest/
 
 %clean
