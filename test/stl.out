@@ -1,46 +1,46 @@
 Running 9 tests
 In StlTraits::test_Pair:
-test/StlTraits.h:13: Error: Test failed: <3, "Three">
-test/StlTraits.h:15: Error: Test failed: <"Four", 4.0000>
+StlTraits.h:13: Error: Test failed: <3, "Three">
+StlTraits.h:15: Error: Test failed: <"Four", 4.0000>
 In StlTraits::test_Vector:
-test/StlTraits.h:21: Trace: {}
-test/StlTraits.h:25: Error: Test failed: { 1, 2, 3 }
-test/StlTraits.h:28: Trace: {}
-test/StlTraits.h:32: Error: Test failed: { "One", "Two", "Three" }
-test/StlTraits.h:35: Trace: {}
-test/StlTraits.h:39: Error: Test failed: { <1, "One">, <2, "Two">, <3, "Three"> }
+StlTraits.h:21: Trace: {}
+StlTraits.h:25: Error: Test failed: { 1, 2, 3 }
+StlTraits.h:28: Trace: {}
+StlTraits.h:32: Error: Test failed: { "One", "Two", "Three" }
+StlTraits.h:35: Trace: {}
+StlTraits.h:39: Error: Test failed: { <1, "One">, <2, "Two">, <3, "Three"> }
 In StlTraits::test_List:
-test/StlTraits.h:45: Trace: {}
-test/StlTraits.h:49: Error: Test failed: { 1, 2, 3 }
-test/StlTraits.h:52: Trace: {}
-test/StlTraits.h:56: Error: Test failed: { "One", "Two", "Three" }
-test/StlTraits.h:59: Trace: {}
-test/StlTraits.h:63: Error: Test failed: { <1, "One">, <2, "Two">, <3, "Three"> }
+StlTraits.h:45: Trace: {}
+StlTraits.h:49: Error: Test failed: { 1, 2, 3 }
+StlTraits.h:52: Trace: {}
+StlTraits.h:56: Error: Test failed: { "One", "Two", "Three" }
+StlTraits.h:59: Trace: {}
+StlTraits.h:63: Error: Test failed: { <1, "One">, <2, "Two">, <3, "Three"> }
 In StlTraits::test_Set:
-test/StlTraits.h:69: Trace: {}
-test/StlTraits.h:73: Error: Test failed: { 1, 2, 3 }
-test/StlTraits.h:76: Trace: {}
-test/StlTraits.h:80: Error: Test failed: { "One", "Three", "Two" }
-test/StlTraits.h:83: Trace: {}
-test/StlTraits.h:87: Error: Test failed: { <1, "One">, <2, "Two">, <3, "Three"> }
+StlTraits.h:69: Trace: {}
+StlTraits.h:73: Error: Test failed: { 1, 2, 3 }
+StlTraits.h:76: Trace: {}
+StlTraits.h:80: Error: Test failed: { "One", "Three", "Two" }
+StlTraits.h:83: Trace: {}
+StlTraits.h:87: Error: Test failed: { <1, "One">, <2, "Two">, <3, "Three"> }
 In StlTraits::test_Map:
-test/StlTraits.h:93: Trace: {}
-test/StlTraits.h:99: Error: Test failed: { <"Humpty", "Dumpty">, <"Jack", "Jill">, <"Ren", "Stimpy"> }
-test/StlTraits.h:102: Trace: {}
-test/StlTraits.h:111: Error: Test failed: { <6, { 2, 3 }>, <210, { 2, 3, 5, 7 }> }
+StlTraits.h:93: Trace: {}
+StlTraits.h:99: Error: Test failed: { <"Humpty", "Dumpty">, <"Jack", "Jill">, <"Ren", "Stimpy"> }
+StlTraits.h:102: Trace: {}
+StlTraits.h:111: Error: Test failed: { <6, { 2, 3 }>, <210, { 2, 3, 5, 7 }> }
 In StlTraits::test_Deque:
-test/StlTraits.h:117: Trace: {}
-test/StlTraits.h:122: Error: Test failed: { 4, 3, 2, 1 }
+StlTraits.h:117: Trace: {}
+StlTraits.h:122: Error: Test failed: { 4, 3, 2, 1 }
 In StlTraits::test_MultiMap:
-test/StlTraits.h:128: Trace: {}
-test/StlTraits.h:132: Error: Test failed: { <"One", 1.0000>, <"Two", 2.0000> }
+StlTraits.h:128: Trace: {}
+StlTraits.h:132: Error: Test failed: { <"One", 1.0000>, <"Two", 2.0000> }
 In StlTraits::test_MultiSet:
-test/StlTraits.h:138: Trace: {}
-test/StlTraits.h:142: Error: Test failed: { 123, 456 }
+StlTraits.h:138: Trace: {}
+StlTraits.h:142: Error: Test failed: { 123, 456 }
 In StlTraits::test_Complex:
-test/StlTraits.h:148: Error: Test failed: (3.1400 + 2.7100 * i)
-test/StlTraits.h:149: Error: Test failed: (1.0000 * i)
-test/StlTraits.h:150: Error: Test failed: 1.0000
+StlTraits.h:148: Error: Test failed: (3.1400 + 2.7100 * i)
+StlTraits.h:149: Error: Test failed: (1.0000 * i)
+StlTraits.h:150: Error: Test failed: 1.0000
 Failed 9 of 9 tests
 Success rate: 0%
 Error level = 9

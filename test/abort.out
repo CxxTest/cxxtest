@@ -1,62 +1,62 @@
 Running 35 tests
 In LessThanEquals::testLessThanEquals:
-test/LessThanEquals.h:16: Error: Expected (1 <= 0), found (1 > 0)
+LessThanEquals.h:16: Error: Expected (1 <= 0), found (1 > 0)
 In Relation::testPredicate:
-test/Relation.h:19: Error: Expected MyNegative( 1 ), found !MyNegative( 1 )
+Relation.h:19: Error: Expected MyNegative( 1 ), found !MyNegative( 1 )
 In Relation::testRelation:
-test/Relation.h:29: Error: Expected MyLess<int>( 2, 1 ), found !MyLess<int>( 2, 1 )
+Relation.h:29: Error: Expected MyLess<int>( 2, 1 ), found !MyLess<int>( 2, 1 )
 In DefaultTraits::testSmallDefaultTraits:
-test/DefaultTraits.h:21: Error: Test failed: { 00 01 02 03 04 05 06 07  }
+DefaultTraits.h:21: Error: Test failed: { 00 01 02 03 04 05 06 07  }
 In DefaultTraits::testBigDefaultTraits:
-test/DefaultTraits.h:35: Error: Test failed: { 98 99 9A 9B 9C 9D 9E 9F ... }
+DefaultTraits.h:35: Error: Test failed: { 98 99 9A 9B 9C 9D 9E 9F ... }
 In DoubleCall::testAssertEqualsWithSideEffects:
-test/DoubleCall.h:21: Error: Expected (increment() == 3), found (1 != 3)
+DoubleCall.h:21: Error: Expected (increment() == 3), found (1 != 3)
 In DoubleCall::testAssertDiffersWithSideEffects:
-test/DoubleCall.h:26: Error: Expected (increment() != 1), found (1)
+DoubleCall.h:26: Error: Expected (increment() != 1), found (1)
 In DoubleCall::testAssertDeltaWithSideEffects:
-test/DoubleCall.h:31: Error: Expected (increment() == 2.0) up to 0.5 (0.5000), found (1 != 2.0000)
+DoubleCall.h:31: Error: Expected (increment() == 2.0) up to 0.5 (0.5000), found (1 != 2.0000)
 In SameData::testAssertSameData:
-test/SameData.h:23: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
-   { 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
-     differs from
-   { FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
+SameData.h:23: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
+{ 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
+differs from
+{ FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
 In SameData::testAssertMessageSameData:
-test/SameData.h:28: Error: Test failed: Not same data
-test/SameData.h:28: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
-   { 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
-     differs from
-   { FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
+SameData.h:28: Error: Test failed: Not same data
+SameData.h:28: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
+{ 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
+differs from
+{ FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
 In SameData::testSafeAssertSameData:
-test/SameData.h:33: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
-   { 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
-     differs from
-   { FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
+SameData.h:33: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
+{ 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
+differs from
+{ FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
 In SameData::testSafeAssertMessageSameData:
-test/SameData.h:38: Error: Test failed: Not same data
-test/SameData.h:38: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
-   { 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
-     differs from
-   { FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
+SameData.h:38: Error: Test failed: Not same data
+SameData.h:38: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), found:
+{ 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 14 15 16 17 }
+differs from
+{ FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC EB EA E9 E8 }
 .
 In SameFiles::testAssertFileShorter:
-test/SameFiles.h:18: Error: File 'SameFiles.h' ended before file 'SameFilesLonger.h' (line 42)
+SameFiles.h:18: Error: File 'SameFiles.h' ended before file 'SameFilesLonger.h' (line 42)
 =     }
 =  };
-= 
-< 
+=
+<
 
 In SameFiles::testAssertFileLonger:
-test/SameFiles.h:23: Error: File 'SameFiles.h' ended before file 'SameFilesLonger.h' (line 42)
+SameFiles.h:23: Error: File 'SameFiles.h' ended before file 'SameFilesLonger.h' (line 42)
 =     }
 =  };
-= 
-> 
+=
+>
 
 In SameFiles::testAssertMessageSameFiles:
-test/SameFiles.h:28: Error: Test failed: Not same files
-test/SameFiles.h:28: Error: Files 'SameFiles.h' and 'SameData.h' differ at line 4
+SameFiles.h:28: Error: Test failed: Not same files
+SameFiles.h:28: Error: Files 'SameFiles.h' and 'SameData.h' differ at line 4
 = #include <cxxtest/TestSuite.h>
-=  
+=
 = //
 < // This test suite demonstrates TS_ASSERT_SAME_ATA
 
@@ -64,48 +64,48 @@ test/SameFiles.h:28: Error: Files 'SameFiles.h' and 'SameData.h' differ at line 
 
 .
 In SameFiles::testSafeAssertMessageSameFiles:
-test/SameFiles.h:38: Error: Test failed: Not same files
-test/SameFiles.h:38: Error: Files 'SameFiles.h' and 'SameData.h' differ at line 4
+SameFiles.h:38: Error: Test failed: Not same files
+SameFiles.h:38: Error: Files 'SameFiles.h' and 'SameData.h' differ at line 4
 = #include <cxxtest/TestSuite.h>
-=  
+=
 = //
 < // This test suite demonstrates TS_ASSERT_SAME_ATA
 
 > // This test suite demonstrates TS_ASSERT_SAME_//
 
 In TestMessageMacros::testMessageMacros:
-test/Tsm.h:15: Error: Test failed: String
-test/Tsm.h:15: Error: Assertion failed: false
+Tsm.h:15: Error: Test failed: String
+Tsm.h:15: Error: Assertion failed: false
 In TraitsTest::testIntegerTraits:
-test/TraitsTest.h:13: Error: Test failed: 1
+TraitsTest.h:13: Error: Test failed: 1
 In TraitsTest::testFloatingPointTraits:
-test/TraitsTest.h:25: Error: Test failed: 0.1234
+TraitsTest.h:25: Error: Test failed: 0.1234
 In TraitsTest::testBoolTraits:
-test/TraitsTest.h:31: Error: Test failed: true
+TraitsTest.h:31: Error: Test failed: true
 In TraitsTest::testCharTraits:
-test/TraitsTest.h:37: Error: Test failed: 'A'
+TraitsTest.h:37: Error: Test failed: 'A'
 In TraitsTest::testStringTraits:
-test/TraitsTest.h:51: Error: Test failed: (char *) is displayed as-is
+TraitsTest.h:51: Error: Test failed: (char *) is displayed as-is
 
 In TraitsTest::testStdStringTraits:
-test/TraitsTest.h:57: Error: Test failed: "std::string is displayed with \"\""
+TraitsTest.h:57: Error: Test failed: "std::string is displayed with \"\""
 ..
 In MockTest::test_Unimplemented:
-test/MockTest.h:33: Error: Test failed: T::one( void ) called with no T::Base_one object
+MockTest.h:33: Error: Test failed: T::one( void ) called with no T::Base_one object
 .
 In MockTest::test_Mock_traits:
-test/MockTest.h:40: Error: Test failed: T::getOpaque( int i ) called with no T::Base_getOpaque object
+MockTest.h:40: Error: Test failed: T::getOpaque( int i ) called with no T::Base_getOpaque object
 In MockTest::test_Override:
-test/MockTest.h:33: Error: Test failed: T::one( void ) called with no T::Base_one object
+MockTest.h:33: Error: Test failed: T::one( void ) called with no T::Base_one object
 .
 In MockTest::test_Unimplemented_supply:
-test/MockTest.h:42: Error: Test failed: T::supplyOne( void ) called with no T::Base_supplyOne object
+MockTest.h:42: Error: Test failed: T::supplyOne( void ) called with no T::Base_supplyOne object
 .
 In SameZero::test_TS_ASSERT_SAME_DATA_passed_zero:
-test/SameZero.h:20: Error: Expected sizeof(data) (4) bytes to be equal at (data) and (0), found:
-   { 00 01 02 03 }
-     differs from
-   (null)
+SameZero.h:20: Error: Expected sizeof(data) (4) bytes to be equal at (data) and (0), found:
+{ 00 01 02 03 }
+differs from
+(null)
 Failed 28 of 35 tests
 Success rate: 20%
 Error level = 28

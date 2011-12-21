@@ -1,5 +1,5 @@
 Running 1 test.
 In <no suite>::<no test>:
-test/../cxxtest/RealDescriptions.cpp:5: Warning: Error tearing down world
+RealDescriptions.cpp:5: Warning: Error tearing down world
 OK!
 Error level = 0

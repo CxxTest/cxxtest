@@ -45,7 +45,7 @@ def remove_absdir(filename):
         if match:
             parts = match.groupdict()
             line = dirre.sub("", parts['path']) + parts['rest']
-        print(line, file=OUTPUT, end='')
+        print(line, file=OUTPUT)
     OUTPUT.close()
 
 def normalize_line_for_diff(line):
