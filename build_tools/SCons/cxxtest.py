@@ -256,7 +256,7 @@ def generate(env, **kwargs):
 
     # this one's not for public use - it documents where the cxxtestgen script
     # is located in the CxxTest tree normally.
-    env.SetDefault( CXXTEST_CXXTESTGEN_DEFAULT_LOCATION = bin )
+    env.SetDefault( CXXTEST_CXXTESTGEN_DEFAULT_LOCATION = 'bin' )
     # the cxxtestgen script name.
     env.SetDefault( CXXTEST_CXXTESTGEN_SCRIPT_NAME = 'cxxtestgen' )
 
