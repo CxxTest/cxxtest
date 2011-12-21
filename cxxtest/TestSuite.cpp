@@ -1,9 +1,10 @@
 #ifndef __cxxtest__TestSuite_cpp__
 #define __cxxtest__TestSuite_cpp__
 
-#include <sstream>
-#include <fstream>
 #include <cxxtest/TestSuite.h>
+#if defined(_CXXTEST_HAVE_STD)
+#include <fstream>
+#endif
 
 namespace CxxTest
 {
@@ -116,6 +117,7 @@ namespace CxxTest
         }
     }
 
+//#if defined(_CXXTEST_HAVE_STD)
     bool sameFiles( const char* file1, const char* file2, std::ostringstream& explanation)
     {
     std::string ppprev_line;
@@ -198,11 +200,13 @@ namespace CxxTest
            }
         }
     }
+//#endif
 
     void doAssertSameFiles( const char* file, unsigned line,
                             const char* file1, const char* file2,
                             const char* message)
     {
+#if defined(_CXXTEST_HAVE_STD)
         std::ostringstream explanation;
         if ( !sameFiles( file1, file2, explanation ) ) {
             if ( message )
@@ -210,6 +214,10 @@ namespace CxxTest
             tracker().failedAssertSameFiles( file, line, file1, file2, explanation.str().c_str());
             TS_ABORT();
         }
+#else
+        tracker().failedAssertSameFiles( file, line, file1, file2, "This test is only supported when --have-std is enabled");
+        TS_ABORT();
+#endif
     }
 
     void doFailAssertThrows( const char *file, unsigned line,

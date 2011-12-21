@@ -11,8 +11,9 @@
 #include <cxxtest/TestTracker.h>
 #include <cxxtest/Descriptions.h>
 #include <cxxtest/ValueTraits.h>
+#include <sstream>
 
-#ifdef _CXXTEST_HAVE_STD
+#if defined(_CXXTEST_HAVE_STD)
 #   include <stdexcept>
 #endif // _CXXTEST_HAVE_STD
 
@@ -63,11 +64,17 @@ namespace CxxTest
         }
     }
 
+    bool sameData( const void *x, const void *y, unsigned size );
+
     void doAssertSameData( const char *file, unsigned line,
                            const char *xExpr, const void *x,
                            const char *yExpr, const void *y,
                            const char *sizeExpr, unsigned size,
                            const char *message );
+
+//#if defined(_CXXTEST_HAVE_STD)
+    bool sameFiles( const char* file1, const char* file2, std::ostringstream& explanation);
+//#endif
 
     template<class X, class Y>
     struct differs {
