@@ -96,8 +96,8 @@ def parseCommandline(args):
                       action="store_true", dest="noExceptionHandling", default=False,
                       help="Do not use exception handling (even if found in tests).")
     parser.add_option("", "--longlong",
-                      dest="longlong", default="long long", metavar="TYPE",
-                      help="Use TYPE as long long.  (default: long long)")
+                      dest="longlong", default=None, metavar="TYPE",
+                      help="Use TYPE as for long long integers.  (default: not supported)")
     parser.add_option("", "--no-static-init",
                       action="store_true", dest="noStaticInit", default=False,
                       help="Do not rely on static initialization in the test runner.")
