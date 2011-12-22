@@ -1,5 +1,7 @@
 #!/bin/bash -v
 
+. GetGlobals.sh
+
 export PATH=$CXXTEST/bin:$PATH
 
 # @main:
