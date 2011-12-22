@@ -10,6 +10,11 @@ if sys.version_info < (2,7):
     import unittest2 as unittest
 else:
     import unittest
+try:
+    import ply
+    ply_available=True
+except:
+    ply_available=False
 
 currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
 sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
@@ -167,7 +172,7 @@ class BaseTestCase(object):
         cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
         #print self.fog, "CMD", cmd
         status = subprocess.call(cmd, shell=True)
-        self.assertEquals(status, 0, 'Error executing cxxtestgen')
+        self.assertEqual(status, 0, 'Error executing cxxtestgen')
         #
         files = [self.py_cpp]
         for i in [1,2]:
@@ -177,7 +182,7 @@ class BaseTestCase(object):
             cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out)
             ##print cmd
             status = subprocess.call(cmd, shell=True)
-            self.assertEquals(status, 0, 'Error executing cxxtestgen')
+            self.assertEqual(status, 0, 'Error executing cxxtestgen')
         #
         cmd = "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log)
         ##print cmd
@@ -185,7 +190,7 @@ class BaseTestCase(object):
         for file in files:
             if os.path.exists(file):
                 os.remove(file)
-        self.assertEquals(status, 0, 'Error executing command: '+cmd)
+        self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
         status = subprocess.call("%s -v > %s 2>&1" % (self.build_target, self.px_pre), shell=True)
         OUTPUT = open(self.px_pre,'a')
@@ -209,7 +214,7 @@ class BaseTestCase(object):
             else:
                 self.passed=True
                 return
-        self.assertEquals(status, 0, 'Error executing command: '+cmd)
+        self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
         if not main is None:
             # Compile with main
@@ -225,7 +230,7 @@ class BaseTestCase(object):
                 self.passed=True
                 return
         else:
-            self.assertEquals(status, 0, 'Error executing command: '+cmd)
+            self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
         if compile == '' and not output is None:
             if run is None:
@@ -578,6 +583,10 @@ class TestCppFOG(TestCpp):
 
     fog='-f'
 
+    def run(self, *args, **kwds):
+        if ply_available:
+            return TestCpp.run(self, *args, **kwds)
+
 
 class TestGpp(BaseTestCase, unittest.TestCase):
 
@@ -604,6 +613,10 @@ class TestGpp(BaseTestCase, unittest.TestCase):
 class TestGppFOG(TestGpp):
 
     fog='-f'
+
+    def run(self, *args, **kwds):
+        if ply_available:
+            return TestGpp.run(self, *args, **kwds)
 
 
 class TestClang(BaseTestCase, unittest.TestCase):
@@ -632,6 +645,10 @@ class TestClangFOG(TestClang):
 
     fog='-f'
 
+    def run(self, *args, **kwds):
+        if ply_available:
+            return TestClang.run(self, *args, **kwds)
+
 
 class TestCL(BaseTestCase, unittest.TestCase):
 
@@ -658,6 +675,10 @@ class TestCL(BaseTestCase, unittest.TestCase):
 class TestCLFOG(TestCL):
 
     fog='-f'
+
+    def run(self, *args, **kwds):
+        if ply_available:
+            return TestCL.run(self, *args, **kwds)
 
 
 if __name__ == '__main__':
