@@ -175,6 +175,26 @@ include::examples/exeRunner2.out[]
 ----
 
 
+Sample Problems
+~~~~~~~~~~~~~~~
+
+CxxTest comes with example test suites in the `cxxtest/sample` subdirectory of
+the distribution.  If you look in that directory, you will see three
+Makefiles: `Makefile.unix`, `Makefile.msvc` and
+`Makefile.bcc32` which are for Linux/Unix, MS Visual C\++ and
+Borland C\++, repectively.  These files are provided as a starting point,
+and some options may need to be tweaked in them for your system.
+
+////
+WEH - I think we should omit these command line unless they are tested...
+
+If you are running under Windows, a good guess would be to run
+`nmake -fMakefile.msvc run_win32` (you may need to run
+`VCVARS32.BAT` first).
+Under Linux, `make -fMakefile.unix run_x11` should probably work.
+////
+
+
 [[testAssertions]]
 Test Assertions
 ---------------
@@ -533,7 +553,8 @@ include::examples/BadTestSuite1.h[]
 ----
 The +cxxtestgen+ discovery mechanisms do not perform a C preprocessing
 step, since that would generally require using externally defined
-preprocessing variable definitions.  
+preprocessing variable definitions.   Additionally, preprocessor macros that act like functions will
+cause the FOG parser to fail unless they are followed by a semicolon.
 
 
 [[runner]]
@@ -624,7 +645,7 @@ CxxTest recognizes a variety of preprocessor macros that can be used to modify t
 | +CXXTEST_HAVE_STD+              | Use the standard library. 
 | +CXXTEST_HAVE_EH+               | Use exception handling.   
 | +CXXTEST_ABORT_TEST_ON_FAIL+    | Abort tests on failed asserts. 
-| +CXXTEST_USER_VALUE_TRAITS+     | Enable user-defined ValueTraits.  The default traits dump up to 8 bytes of the data as hex values. 
+| +CXXTEST_USER_VALUE_TRAITS+     | Enable user-defined value traits.  The default traits dump up to 8 bytes of the data as hex values. 
 | +CXXTEST_OLD_TEMPLATE_SYNTAX+   | Use old template syntax that is used by some compilers (e.g. Borland C++ 5). 
 | +CXXTEST_OLD_STD+               | Use old syntax for libraries where +std::+ is not recognized. 
 | +CXXTEST_MAX_DUMP_SIZE+         | The value of this macro defines the maximum number of bytes to dump if +TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit. 
@@ -1127,29 +1148,25 @@ The default namespace for mock functions is `T::`.  This namespace can be change
 `CXXTEST_MOCK_NAMESPACE` macro.
 
 
-[[samples]]
-Sample Problems
----------------
-
-CxxTest comes with some samples in the `sample/` subdirectory of
-the distribution.  If you look in that directory, you will see three
-Makefiles: `Makefile.unix`, `Makefile.msvc` and
-`Makefile.bcc32` which are for Linux/Unix, MS Visual C\++ and
-Borland C\++, repectively.  These files are provided as a starting point,
-and some options may need to be tweaked in them for your system.
-
-If you are running under Windows, a good guess would be to run
-`nmake -fMakefile.msvc run_win32` (you may need to run
-`VCVARS32.BAT` first).
-
-Under Linux, `make -fMakefile.unix run_x11` should probably work.
-
-
 [[installation]]
 Installation
 ------------
 
-TODO
+A key feature of CxxTest is that it does has virtually no installation
+process.  The +cxxtestgen+ script can be added be directly executed
+from the +cxxtest/bin+ directory, so it may be convenient to add
+this directory to a +PATH+ environment.  Beyond that, the build
+process for CxxTest simply needs to reference the +cxxtest+ root
+directory to enable proper includes while compiling test runners.
+
+////
+
+WEH - I thought about moving this section into the Getting Started
+section.  However, it makes sense to leave this here to reference
+future installations in Debian, Mac Ports, etc.  I think that that
+distribution model is very strategic for cxxtest.
+
+////
 
 
 [[discussion]]
@@ -1171,6 +1188,7 @@ changes in CxxTest reflect the focus of the developer team:
  - The CxxTest GUI is no longer supported, and the <<ts_warn,TS_WARN>> is deprecated.
  - CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
  - A new user guide is now available in PDF, HTML and Ebook formats.
+ - Updated the +cxxtestgen+ script to work with Python 2.6 through 3.2
 
 Additionally, CxxTest is now validated with continuous integration
 tests.  Yes, the CxxTest developers eat their own dog food!
@@ -1185,24 +1203,29 @@ test listener generates XML files that can be easily integrated by
 http://jenkins-ci.org/[Jenkins], which creates a visual summary of
 test results with links to drill-down into test outputs.
 
+This documentation has highlighted the commonly used test listeners.
+There are a variety of other test listeners provided by CxxTest
+that support advanced Cxxtest applications.  For example, the
++YesNoRunner+ is perhaps the simplest test listener;  it simply
+returns the number of test failures.  The +StdioFilePrinter+ is
+used by +StdioPrinter+, but it does not assume that +stdio+ is the
+default output stream.  This test listener can be used in contexts
+where a custom output stream must be specified.
+
+////
+WEH - I'd like to say more about future support for CxxTest, but I don't know more basic things like how we should plan to host CxxTest in the future.
+
 Discuss support for ...
 
  - embedded compilers...  (Macros vs templates)
  - SCONS
- - Python 3.0
-
-This documentation has highlighted the commonly used test listeners.
-There are a variety of other test listeners provided by CxxTest
-that support advanced Cxxtest applications.  For example, the +YesNoRunner+ is
-perhaps the simplest test listener;  it simply returns the number
-of test failures.  The +StdioFilePrinter+ is used by +StdioPrinter+,
-but it does not assume that +stdio+ is the default output stream.  This test listener can be used
-in contexts where a custom output stream must be specified.
 
 Future work:
 
  - ply cpp
  - ignore template test classes using the FOG parser
+
+////
 
 ////
 NOTE: we do not have test coverage for the following macros:
@@ -1218,10 +1241,33 @@ CXXTEST_LONGLONG
 Acknowledgements
 ----------------
 
-TODO
+The following developers actively contributed to the CxxTest 4.0 release:
 
-ply
-FOG grammar
+* Gašper Ažman
+* Kevin Fitch 
+* William Hart
+* John Siirola
+
+A major advancement in CxxTest's capability is the new test discovery
+mechanism that is based on a parser of the Flexible Object Language
+(FOG).  FOG generalizes the C++ syntax, which enables CxxTest to
+extract high-level class structure for test discovery.  FOG was
+developed by Edward Willink:
+[quote]
+----
+Edward D. Willink.  `Meta-Compilation for C++`, PhD Thesis, Computer Science Research Group, University of Surrey, January 2000. 
+----
+The FOG parser in CxxTest critically relies on the excellent LALR
+parser provided by Dave Beazley's `ply` Python package.  The scalable
+performance of `ply` is critical for CxxTest.
+
+The development of CxxTest has been partially supported by Sandia
+National Laboratories.  Sandia National Laboratories is a multi-program
+laboratory managed and operated by Sandia Corporation, a wholly
+owned subsidiary of Lockheed Martin Corporation, for the U.S.
+Department of Energy's National Nuclear Security Administration
+under contract DE-AC04-94AL85000.
+
 
 [appendix]
 [[appendix_A]] 
@@ -1361,31 +1407,27 @@ include::examples/.Assertions_warn.h[]
 Integrating with Your Build Environment
 ---------------------------------------
 
-It's very hard to maintain your tests if you have to generate,
-compile and run the test runner manually all the time.
-Fortunately, that's why we have build tools!
+CxxTest can be integrated into a variety of build environments to
+automate the generation, compilation and execution of test runners.
+Here is a rough breakdown of this process:
 
-=== Overview
-
-Let's assume you're developing an application.
-What I usually do is the following:
-
-* Split the application into a library and a main module that just calls
-  the library classes.
-  This way, the test runner will be able to access all your classes through
-  the library.
+* Split the application into a library and a main module that just
+  calls the library classes.  This way, the test runner will be able
+  to access all your classes through the library.
 * Create another application (or target, or project, or whatever) for the test runner.
   Make the build tool generate it automatically.
-* For extra points, make the build tool run the tests automatically.
+* Configure the build tool to run the tests automatically.
 
-=== Actually doing it
+Unfortunately, different build tools and IDEs need to setup this
+process in different ways.  The following sections provide rough guidance for doing this for some
+come use cases.
 
-Unfortunately, there are way too many different build tools and IDE's for me 
-to give ways to use CxxTest with all of them.
+[NOTE]
+These examples are not actively maintained and tested.  Please send suggestions to the CxxTest developers for updating this documentation.
 
-I will try to outline the usage for some cases.
 
-==== Using Makefiles
+Using Makefiles
+~~~~~~~~~~~~~~~
 
 Generating the tests with a makefile is pretty straightforward.
 Simply add rules to generate, compile and run the test runner.
@@ -1412,19 +1454,23 @@ runner.cpp: SimpleTest.h ComplicatedTest.h
          cxxtestgen -o $@ --error-printer $^
 -----
 
-==== Using Cons
+
+Using Cons
+~~~~~~~~~~
 
 http://dsmit.com/cons/[Cons] is a powerful and 
 versatile make replacement which uses Perl scripts instead of Makefiles.
 
-See `sample/Construct` in the CxxTest distribution for an example of building CxxTest test runners
-with Cons.
+See `cxxtest/sample/Construct` in the CxxTest distribution for an
+example of building CxxTest test runners with Cons.
 
-==== Using Microsoft Visual Studio
 
-I have tried several ways to integrate CxxTest with visual studio, none of
-which is perfect.  Take a look at `sample/msvc` in the distribution
-to see the best solution I'm aware of.  Basically, the workspace has three
+Using Microsoft Visual Studio
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See `cxxtest/sample/msvc` in the distribution
+to see a reasonable integration of CxxTest with Microsoft Visual Studio's IDE.
+Basically, the workspace has three
 projects:
 
 * The project `CxxTest_3_Generate` runs `cxxtestgen`.
@@ -1432,26 +1478,21 @@ projects:
 * The project `CxxTest_1_Run` runs the tests.
 
 This method certainly works, and the test results are conveniently
-displayed as compilation errors and warnings (for
-{ts_warn}.  However, there are still a few things missing;
-to integrate this approach with your own project, you usually need to
-work a little bit and tweak some makefiles and project options.  I have
-provided a small script in `sample/msvc/FixFiles.bat` to automate
-some of the process.
+displayed as compilation errors and warnings (for <<ts_warn,TS_WARN>>.
+However, there are still a few things missing; to integrate this
+approach with your own project, you usually need to work a little
+bit and tweak some makefiles and project options.  The script
+`sample/msvc/FixFiles.bat` can automate some of this process.
 
-==== Using Microsoft Windows DDK
 
-Unit testing for device drivers?!  Why not?
-And besides, the `build` utility can also be used to build
-user-mode application.
+Using Microsoft Windows DDK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To use CxxTest with the `build` utility, 
-you add the generated tests file as an extra dependency
-using the `NTBUILDTARGET0` macro and the `Makefile.inc`
-file.
+To use CxxTest with the `build` utility for device drivers, you add
+the generated tests file as an extra dependency using the
+`NTBUILDTARGET0` macro and the `Makefile.inc` file.  An example of
+how to do this is in the CxxTest distribution under `sample/winddk`.
 
-You can see an example of how to do this in the CxxTest distribution
-under `sample/winddk`.
 
 :leveloffset: 1
 
@@ -1498,7 +1539,9 @@ and the FOG parser.
 The +test_cxxtest.py+ script should work with versions Python 2.7
 or newer.  If you are running Python 2.6, you will need to install
 the +unittest2+ package.  If you have
-http://pypi.python.org/pypi/setuptools[setuptools] installed, then
+http://pypi.python.org/pypi/setuptools[setuptools] or
+http://pypi.python.org/pypi/distribute[distribute]
+installed, then
 you can install this package from PyPI by executing
 [source,bash]
 ----
