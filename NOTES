@@ -1,5 +1,5 @@
-Bill's Release Checklist
-------------------------
+4.0 Release Checklist
+---------------------
 
 . Update LGPL documentation in source cxxtest source files in the python and cxxtest subdirectories.
 
@@ -34,3 +34,8 @@ Bill's Release Checklist
     Note: this doesn't directly affect the release process, but I think it affects the timing
     and planning of the release.
 
+. Add a test harness for the doc/examples directory.
+    Note: the easy way to do this would be to perform file diffs
+    against the baseline files I've setup, using the PyUtilib test
+    harness logic that I've developed.  But, I'm reluctant to make
+    these tests depend on another package.  Hmmm...
