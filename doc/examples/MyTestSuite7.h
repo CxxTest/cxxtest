@@ -2,7 +2,7 @@
 
 #include <cxxtest/TestSuite.h>
 
-class TestMyData : public CxxTest::TestSuite 
+class TestMyData : public CxxTest::TestSuite
 {
 public:
    struct Data
