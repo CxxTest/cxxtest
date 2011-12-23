@@ -67,6 +67,9 @@ def parseCommandline(args):
     parser.add_option("", "--abort-on-fail",
                       action="store_true", dest="abortOnFail", default=False,
                       help="Abort tests on failed asserts (like xUnit).")
+    parser.add_option("", "--main",
+                      action="store", dest="main", default="main",
+                      help="Specify an alternative name for the main() function.")
     parser.add_option("", "--runner",
                       dest="runner", default="", metavar="CLASS",
                       help="Create a test runner that processes test events using the class CxxTest::CLASS.")
@@ -105,9 +108,6 @@ def parseCommandline(args):
     parser.add_option("", "--root",
                       action="store_true", dest="root", default=False,
                       help="Write the main() function and global data for a test runner.")
-    parser.add_option("", "--main",
-                      action="store", dest="main", default="main",
-                      help="Specify an alternative name for the main() function.")
     parser.add_option("", "--part",
                       action="store_true", dest="part", default=False,
                       help="Write the tester classes for a test runner.")
