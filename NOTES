@@ -9,13 +9,6 @@
     Q: Can we assume that the user will have write-access to the cxxtest root directory?  I would
         guess NO.
 
-. Documentation
-.. Finalize discussion of global and world fixtures.
-.. Finalize discussion of value traits
-.. Add generation of PDF and Epub formats
-.. Resolve formatting issues
-.. Remove the docs subdirectory
-
 . Upload documentation to SourceForge
     Q: Can we do this?  I don't think any of the active developers are administrators on that project.
 
