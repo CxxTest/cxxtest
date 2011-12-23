@@ -281,6 +281,7 @@ The +--include+ option defines a filename that is included in the runner before 
 The +--abort-on-fail+ option forces an abort if a test fails, rather than continuing execution
 to the next test.
 
+The +--main+ option specifies an alternate name for the +main()+ function.
 
 Test Listener Options
 ~~~~~~~~~~~~~~~~~~~~~

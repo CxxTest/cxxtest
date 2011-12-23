@@ -1191,6 +1191,7 @@ Options:
   --include=HEADER      Include file HEADER in the test runner before other
                         headers.
   --abort-on-fail       Abort tests on failed asserts (like xUnit).
+  --main=MAIN           Specify an alternative name for the main() function.
   --runner=CLASS        Create a test runner that processes test events using
                         the class CxxTest::CLASS.
   --gui=CLASS           Create a GUI test runner that processes test events
@@ -1231,6 +1232,7 @@ variable.  This option also customizes the filename used for XML output files (s
 <div class="paragraph"><p>The <tt>--include</tt> option defines a filename that is included in the runner before all other headers.</p></div>
 <div class="paragraph"><p>The <tt>--abort-on-fail</tt> option forces an abort if a test fails, rather than continuing execution
 to the next test.</p></div>
+<div class="paragraph"><p>The <tt>--main</tt> option specifies an alternate name for the <tt>main()</tt> function.</p></div>
 </div>
 <div class="sect2">
 <h3 id="_test_listener_options">4.2. Test Listener Options</h3>
@@ -3866,7 +3868,7 @@ Major internal improvements
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-12-23 10:38:20 MST
+Last updated 2011-12-23 13:34:07 MST
 </div>
 </div>
 </body>

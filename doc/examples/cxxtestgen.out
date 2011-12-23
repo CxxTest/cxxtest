@@ -10,6 +10,7 @@ Options:
   --include=HEADER      Include file HEADER in the test runner before other
                         headers.
   --abort-on-fail       Abort tests on failed asserts (like xUnit).
+  --main=MAIN           Specify an alternative name for the main() function.
   --runner=CLASS        Create a test runner that processes test events using
                         the class CxxTest::CLASS.
   --gui=CLASS           Create a GUI test runner that processes test events
