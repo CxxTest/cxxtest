@@ -105,6 +105,9 @@ def parseCommandline(args):
     parser.add_option("", "--root",
                       action="store_true", dest="root", default=False,
                       help="Write the main() function and global data for a test runner.")
+    parser.add_option("", "--main",
+                      action="store", dest="main", default="main",
+                      help="Specify an alternative name for the main() function.")
     parser.add_option("", "--part",
                       action="store_true", dest="part", default=False,
                       help="Write the tester classes for a test runner.")
@@ -280,7 +283,7 @@ def writeMain( output ):
     '''Write the main() function for the test runner'''
     if not (options.gui or options.runner):
        return
-    output.write( 'int main( int argc, char *argv[] ) {\n' )
+    output.write( 'int %s( int argc, char *argv[] ) {\n' % options.main )
     output.write( ' int status;\n' )
     if options.noStaticInit:
         output.write( ' CxxTest::initialize();\n' )
