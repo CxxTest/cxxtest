@@ -723,30 +723,40 @@ include::examples/MyTestSuite6.h[]
 Global and World Fixtures
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-TODO: review this section.
+CxxTest supports two related mechanisms for performing _global_
+setup and teardown operations.  _Global fixtures_ are classes that
+inherit from `CxxTest::GlobalFixture`, and they define `setUp` and
+`tearDown` methods.  The `setUp` method for all global fixtures is
+called before each test is executed, and the `tearDown` method for
+all global fixtures is called after each test is completed.  Thus,
+this mechanism provides a convenient way of defining setup and
+teardown operations that apply to all test suites.
 
+For example, consider the following test suite:
+[source,cpp]
+-----
+include::examples/MyTestSuite8.h[]
+-----
+This test suite defines a runner that generates the following output:
+[verbatim]
+-----
+include::examples/buildRunner18.txt[]
+-----
 
-The `setUp()` and `tearDown()` functions allow
-to have code executed before and after each test.  What if you want
-some code to be executed before all tests in _all_ test suites?
-Rather than duplicate that code, you can use 'global fixtures'.
+Note that the global fixtures are instantiated with static global
+values.  This ensures that these fixtures are created before the
+runner is initialized.  Also, note that the `setUp` methods are
+called in the same sequence that the global fixtures are instantiated,
+and the `tearDown` methods are called in the reverse sequence.
+Finally, note that the `setUp` and `tearDown` methods in global
+fixtures return a boolean value, which indicates success or failure
+of that operation.
 
-These are basically classes that inherit from
-`CxxTest::GlobalFixture`.  All objects of such classes are
-automatically notified before and after each test case.  It is best to
-create them as static objects so they get called right from the start.
-Look at `test/GlobalFixtures.h` in the `cxxtest-selftest`
-archive.
-
-Unlike `setUp()` and `tearDown()` in
-`TestSuite`, global fixtures should return a `bool` value to
-indicate success/failure.
-
-CxxTest also allows you to specify code which is executed
-once at the start of the testing process (and the corresponding cleanup
-code).  To do this, create (one or more) global fixture objects and
-implement `setUpWorld()`/`tearDownWorld()`.  For an example,
-see `test/WorldFixtures.h` in the `cxxtest-selftest` archive.
+This example also illustrates the use of _world fixtures_, which
+perform setup and teardown operations that are executed once each
+when beginning and finishing tests in each test suite.  World
+fixtures are defined with the `setUpWorld` and `tearDownWorld`
+methods in a global fixture.
 
 
 Runtime Test Customization
@@ -757,8 +767,8 @@ CxxTest defines several functions that can be called in a test suite to modify t
 [options="header"]
 |==================================
 | Test Suite Method | Description
-| +setAbortTestOnFail( bool )+ |  This function specifies whether tests abort after a failure.  The default value of the flag is +false+.  This function only has an effect if exception handling is enabled.
-| +setMaxDumpSize( unsigned )+ | This function sets the maximum number of bytes that are dumped when 
+| +setAbortTestOnFail(bool)+ |  This function specifies whether tests abort after a failure.  The default value of the flag is +false+.  This function only has an effect if exception handling is enabled.
+| +setMaxDumpSize(unsigned)+ | This function sets the maximum number of bytes that are dumped when 
 TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit.
 |=============
 
@@ -774,10 +784,27 @@ suite.
 Value Traits
 ------------
 
-CxxTest test assertions like <<ts_equals,TS_EQUALS>> work for
-built-in types, but they will not likely work for user-defined data
-types.  This is because CxxTest needs a way to compare objects and
-to convert them to strings when printing test failure summaries.
+CxxTest's test assertions like <<ts_assert_equals,TS_ASSERT_EQUALS>>
+work for built-in types, but they will not likely work for user-defined
+data types.  This is because CxxTest needs a way to compare objects
+and to convert them to strings when printing test failure summaries.
+Thus, user-defined data types need to have the `operator=` method
+defined to ensure that test assertions can be applied.
+
+For example, the following code
+[source,cpp]
+-----
+include::examples/MyTestSuite7.h[]
+-----
+defines a test runner that generates the following output
+[verbatim]
+-----
+include::examples/buildRunner17.txt[]
+-----
+The `operator=` method is required to apply
+<<ts_assert_equals,TS_ASSERT_EQUALS>> to `Data` objects.  However,
+the <<ts_assert_same_data,TS_ASSERT_SAME_DATA>> assertion can be
+applied to `Data2` objects that do not have `operator=` defined.
 
 Since CxxTest does not rely on any external library, conversion
 from arbitrary data types to strings is done using _value traits_.
@@ -790,148 +817,79 @@ const char* string = converter.asString();
 ----
 The CxxTest header file `cxxtest/ValueTraits.h` defines value traits
 for standard types like `int`, `char`, `double`, etc.  The default
-ValueTraits class for unknown types dumps up to 8 bytes of the value
+`ValueTraits` class for unknown types dumps up to 8 bytes of the value
 in hex format.
 
-For example, the following code
-[source,cpp]
------
-include::examples/MyTestSuite7.h[]
------
-defines a test runner that generates the following output
-[verbatim]
------
-TODO: THIS CURRENTLY FAILS
------
+If the macro `CXXTEST_USER_VALUE_TRAITS` is defined, then CxxTest will
+omit the default definitions for `ValueTraits`.  This allows a user to define their own trait specifications to customize the display of trait information.
 
 
-==== The equality operator
-
-First of all, don't forget to implement the equality operator (`operator==()`)
-on your data types!
 
 Enumeration Traits
 ^^^^^^^^^^^^^^^^^^
 
-CxxTest provides a simple way to define value traits for
-enumeration types.  This feature is very handy for things like status
-codes.  To do this, simply use `CXXTEST_VALUE_TRAITS` as in the
-following example:
+CxxTest provides a simple way to define value traits for enumeration
+types.  The `CXXTEST_ENUM_TRAITS` macro is used to define value
+traits for all members of an enumeration set.
+
+For example, the following code
 [source,cpp]
 -----
-enum Status { STATUS_IDLE, STATUS_BUSY, STATUS_ERROR };
-
-CXXTEST_ENUM_TRAITS( Status,
-                     CXXTEST_ENUM_MEMBER( STATUS_IDLE )
-                     CXXTEST_ENUM_MEMBER( STATUS_BUSY )
-                     CXXTEST_ENUM_MEMBER( STATUS_ERROR ) );
+include::examples/MyTestSuite9.h[]
 -----
-See `sample/EnumTraits.h` for a working sample.
+defines a test runner that generates the following output
+[verbatim]
+-----
+include::examples/buildRunner19.txt[]
+-----
+The enumeration value traits print strings that represent the elements of the enumeration, except where a numeric value is provided.
+
+Note that the `CXXTEST_ENUM_TRAITS` macros has two arguments;  the list of `CXXTEST_ENUM_MEMBER` macros is not separated by commas!  
 
 
 Defining New Value Traits
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Defining value traits for new (non-enumeration) types is easy.  All you
-need is to define a way to convert an object of your class to a
-string. You can use this example as a possible skeleton:
+Defining value traits for a new class is done by providing a class
+specialization of `ValueTraits` that converts an object of the new
+class to a string.  For example, consider the definition of the
+`MyClass` class:
 [source,cpp]
 -----
-class MyClass 
-{
-   int _value;
-
-public:
-   MyClass( int value ) : _value( value ) {}
-   int value() const { return _value; }
-
-   // CxxTest requires a copy constructor
-   MyClass( const MyClass &other ) : _value( other._value ) {}
-
-   // If you want to use TS_ASSERT_EQUALS
-   bool operator== ( const MyClass &other ) const { return _value == other._value; }
-
-   // If you want to use TS_ASSERT_LESS_THAN
-   bool operator== ( const MyClass &other ) const { return _value < other._value; }
-};
-
-#ifdef CXXTEST_RUNNING
-#include <cxxtest/ValueTraits.h>
-#include <stdio.h>
-
-namespace CxxTest 
-{
-   CXXTEST_TEMPLATE_INSTANTIATION
-   class ValueTraits<MyClass> 
-   {
-      char _s[256];
-
-   public:
-      ValueTraits( const MyClass &m ) { sprintf( _s, "MyClass( %i )", m.value() ); }
-      const char *asString() const { return _s; }
-   };
-};
-#endif // CXXTEST_RUNNING
+include::examples/MyClass.h[]
 -----
+This class includes definitions of `operator==` and `operator<`
+that support comparisons with <<ts_assert_equals,TS_ASSERT_EQUALS>>
+and <<ts_assert_less_than,TS_ASSERT_LESS_THAN>>.  Additionally,
+this header contains a specialization of `ValueTraits` (in the
+`CxxTest` namespace) that generates a string description of a `MyClass`
+instance.
+
+The following test suite illustrates how these definitions can be
+used to define a test runner:
+[source,cpp]
+-----
+include::examples/MyTestSuite10.h[]
+-----
+This runner for this test suite generates the following output:
+[verbatim]
+-----
+include::examples/buildRunner20.txt[]
+-----
+The test failure print logic uses the specialization of `ValueTraits` to create
+the string description of `MyClass` that appears in the output.
+
 
 Defining Value Traits for Template Classes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A simple modification to the above scheme allows you to define value
-traits for your template classes.  Unfortunately, this syntax (partial
-template specialization) is not supported by some popular C++ compilers.
-Here is an example:
-
+A simple modification to the above example illustrates how a trait can be defined for a
+template class:
 [source,cpp]
 -----
-template<class T>
-class TMyClass
-{
-   T _value;
-
-public:
-   TMyClass( const T &value ) : _value( value );
-   const T &value() const { return _value; }
-
-   // CxxTest requires a copy constructor
-   TMyClass( const TMyClass<T> &other ) : _value( other._value ) {}
-   
-   // If you want to use TS_ASSERT_EQUALS
-   bool operator== ( const TMyClass<T> &other ) const { return _value == other._value; }
-};
-
-#ifdef CXXTEST_RUNNING
-#include <cxxtest/ValueTraits.h>
-#include <typeinfo>
-#include <sstream>
-
-namespace CxxTest 
-{
-   template<class T>
-   class ValueTraits< TMyClass<T> > 
-   {
-      std::ostringstream _s;
-
-   public:
-      ValueTraits( const TMyClass<T> &t ) 
-         { _s << typeid(t).name() << "( " << t.value() << " )"; }
-      const char *asString() const { return _s.str().c_str(); }
-   };
-};
-#endif // CXXTEST_RUNNING
+include::examples/MyTestSuite11.h[]
 -----
-
-Overriding the Default Value Traits
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If you don't like the way CxxTest defines the default ++ValueTrait++s,
-you can override them by `#define`-ing `CXXTEST_USER_VALUE_TRAITS`;
-this causes CxxTest to omit the default definitions, and from there
-on you are free to implement them as you like.
-
-You can see a sample of this technique in `test/UserTraits.tpl` in
-the `cxxtest-selftest` archive.
-
+Unfortunately, this example employs partial template specialization, which  is not supported by all C++ compilers.
 
 
 [[mock]]
@@ -1412,18 +1370,19 @@ automate the generation, compilation and execution of test runners.
 Here is a rough breakdown of this process:
 
 * Split the application into a library and a main module that just
-  calls the library classes.  This way, the test runner will be able
-  to access all your classes through the library.
-* Create another application (or target, or project, or whatever) for the test runner.
-  Make the build tool generate it automatically.
+  calls the library classes.  This way, the test runner will be
+  able to access all your classes through the library.
+* Create another application (or target, or project, or whatever)
+  for the test runner.  Make the build tool generate it automatically.
 * Configure the build tool to run the tests automatically.
 
 Unfortunately, different build tools and IDEs need to setup this
-process in different ways.  The following sections provide rough guidance for doing this for some
-come use cases.
+process in different ways.  The following sections provide rough
+guidance for doing this for some come use cases.
 
 [NOTE]
-These examples are not actively maintained and tested.  Please send suggestions to the CxxTest developers for updating this documentation.
+These examples are not actively maintained and tested.  Please send
+suggestions to the CxxTest developers for updating this documentation.
 
 
 Using Makefiles

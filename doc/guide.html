@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt><dt><span class="section"><a href="#_sample_problems">2.3. Sample Problems</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_creating_test_runners_from_parts">4.4. Creating Test Runners from Parts</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_test_discovery_options">4.6. Test Discovery Options</a></span></dt></dl></dd><dt><span class="section"><a href="#runner">5. Test Runner Syntax</a></span></dt><dt><span class="section"><a href="#advanced">6. Advanced Testing Features</a></span></dt><dd><dl><dt><span class="section"><a href="#_preprocessor_macros">6.1. Preprocessor Macros</a></span></dt><dt><span class="section"><a href="#_customizing_test_fixtures">6.2. Customizing Test Fixtures</a></span></dt></dl></dd><dt><span class="section"><a href="#traits">7. Value Traits</a></span></dt><dd><dl><dt><span class="section"><a href="#_the_equality_operator">7.1. The equality operator</a></span></dt><dt><span class="section"><a href="#_enumeration_traits">7.2. Enumeration Traits</a></span></dt><dt><span class="section"><a href="#_defining_new_value_traits">7.3. Defining New Value Traits</a></span></dt><dt><span class="section"><a href="#_defining_value_traits_for_template_classes">7.4. Defining Value Traits for Template Classes</a></span></dt><dt><span class="section"><a href="#_overriding_the_default_value_traits">7.5. Overriding the Default Value Traits</a></span></dt></dl></dd><dt><span class="section"><a href="#mock">8. Testing with Mock Objects</a></span></dt><dd><dl><dt><span class="section"><a href="#_example_a_mock_literal_time_literal_function">8.1. Example: A Mock <code class="literal">time()</code> Function</a></span></dt><dt><span class="section"><a href="#_advanced_topics">8.2. Advanced Topics</a></span></dt></dl></dd><dt><span class="section"><a href="#installation">9. Installation</a></span></dt><dt><span class="section"><a href="#discussion">10. Status and Future Plans</a></span></dt><dt><span class="section"><a href="#acknowledgements">11. Acknowledgements</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt><dt><span class="appendix"><a href="#appendix_B">B. Integrating with Your Build Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#_using_makefiles">B.1. Using Makefiles</a></span></dt><dt><span class="section"><a href="#_using_cons">B.2. Using Cons</a></span></dt><dt><span class="section"><a href="#_using_microsoft_visual_studio">B.3. Using Microsoft Visual Studio</a></span></dt><dt><span class="section"><a href="#_using_microsoft_windows_ddk">B.4. Using Microsoft Windows DDK</a></span></dt></dl></dd><dt><span class="appendix"><a href="#appendix_C">C. CxxTest Releases</a></span></dt><dd><dl><dt><span class="section"><a href="#_version_4_0_todo">C.1. Version 4.0 (TODO)</a></span></dt><dt><span class="section"><a href="#_version_3_10_1_2004_12_01">C.2. Version 3.10.1 (2004-12-01)</a></span></dt><dt><span class="section"><a href="#_version_3_10_0_2004_11_20">C.3. Version 3.10.0 (2004-11-20)</a></span></dt><dt><span class="section"><a href="#_version_3_9_1_2004_01_19">C.4. Version 3.9.1 (2004-01-19)</a></span></dt><dt><span class="section"><a href="#_version_3_9_0_2004_01_17">C.5. Version 3.9.0 (2004-01-17)</a></span></dt><dt><span class="section"><a href="#_version_3_8_5_2004_01_08">C.6. Version 3.8.5 (2004-01-08)</a></span></dt><dt><span class="section"><a href="#_version_3_8_4_2003_12_31">C.7. Version 3.8.4 (2003-12-31)</a></span></dt><dt><span class="section"><a href="#_version_3_8_3_2003_12_24">C.8. Version 3.8.3 (2003-12-24)</a></span></dt><dt><span class="section"><a href="#_version_3_8_1_2003_12_21">C.9. Version 3.8.1 (2003-12-21)</a></span></dt><dt><span class="section"><a href="#_version_3_8_0_2003_12_13">C.10. Version 3.8.0 (2003-12-13)</a></span></dt><dt><span class="section"><a href="#_version_3_7_1_2003_09_29">C.11. Version 3.7.1 (2003-09-29)</a></span></dt><dt><span class="section"><a href="#_version_3_7_0_2003_09_20">C.12. Version 3.7.0 (2003-09-20)</a></span></dt><dt><span class="section"><a href="#_version_3_6_1_2003_09_15">C.13. Version 3.6.1 (2003-09-15)</a></span></dt><dt><span class="section"><a href="#_version_3_6_0_2003_09_04">C.14. Version 3.6.0 (2003-09-04)</a></span></dt><dt><span class="section"><a href="#_version_3_5_1_2003_09_03">C.15. Version 3.5.1 (2003-09-03)</a></span></dt><dt><span class="section"><a href="#_version_3_1_1_2003_08_27">C.16. Version 3.1.1 (2003-08-27)</a></span></dt><dt><span class="section"><a href="#_version_3_1_0_2003_08_23">C.17. Version 3.1.0 (2003-08-23)</a></span></dt><dt><span class="section"><a href="#_version_3_0_1_2003_08_07">C.18. Version 3.0.1 (2003-08-07)</a></span></dt><dt><span class="section"><a href="#_version_2_8_4_2003_07_21">C.19. Version 2.8.4 (2003-07-21)</a></span></dt><dt><span class="section"><a href="#_version_2_8_3_2003_06_30">C.20. Version 2.8.3 (2003-06-30)</a></span></dt><dt><span class="section"><a href="#_version_2_8_2_2003_06_10">C.21. Version 2.8.2 (2003-06-10)</a></span></dt><dt><span class="section"><a href="#_version_2_8_1_2003_01_16">C.22. Version 2.8.1 (2003-01-16)</a></span></dt><dt><span class="section"><a href="#_version_2_8_0_2003_01_13">C.23. Version 2.8.0 (2003-01-13)</a></span></dt><dt><span class="section"><a href="#_version_2_7_0_2002_09_29">C.24. Version 2.7.0 (2002-09-29)</a></span></dt></dl></dd><dt><span class="appendix"><a href="#appendix_D">D. Testing CxxTest</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CxxTest User Guide</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="CxxTest User Guide" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="id36136982"></a>CxxTest User Guide</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl><dt><span class="section"><a href="#_overview">1. Overview</a></span></dt><dt><span class="section"><a href="#gettingStarted">2. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#_a_first_example">2.1. A First Example</a></span></dt><dt><span class="section"><a href="#_a_second_example">2.2. A Second Example</a></span></dt><dt><span class="section"><a href="#_sample_problems">2.3. Sample Problems</a></span></dt></dl></dd><dt><span class="section"><a href="#testAssertions">3. Test Assertions</a></span></dt><dt><span class="section"><a href="#cxxtestgen">4. The CxxTestGen Command</a></span></dt><dd><dl><dt><span class="section"><a href="#_general_options">4.1. General Options</a></span></dt><dt><span class="section"><a href="#_test_listener_options">4.2. Test Listener Options</a></span></dt><dt><span class="section"><a href="#_language_options">4.3. Language Options</a></span></dt><dt><span class="section"><a href="#_creating_test_runners_from_parts">4.4. Creating Test Runners from Parts</a></span></dt><dt><span class="section"><a href="#_template_files">4.5. Template Files</a></span></dt><dt><span class="section"><a href="#_test_discovery_options">4.6. Test Discovery Options</a></span></dt></dl></dd><dt><span class="section"><a href="#runner">5. Test Runner Syntax</a></span></dt><dt><span class="section"><a href="#advanced">6. Advanced Testing Features</a></span></dt><dd><dl><dt><span class="section"><a href="#_preprocessor_macros">6.1. Preprocessor Macros</a></span></dt><dt><span class="section"><a href="#_customizing_test_fixtures">6.2. Customizing Test Fixtures</a></span></dt></dl></dd><dt><span class="section"><a href="#traits">7. Value Traits</a></span></dt><dd><dl><dt><span class="section"><a href="#_enumeration_traits">7.1. Enumeration Traits</a></span></dt><dt><span class="section"><a href="#_defining_new_value_traits">7.2. Defining New Value Traits</a></span></dt><dt><span class="section"><a href="#_defining_value_traits_for_template_classes">7.3. Defining Value Traits for Template Classes</a></span></dt></dl></dd><dt><span class="section"><a href="#mock">8. Testing with Mock Objects</a></span></dt><dd><dl><dt><span class="section"><a href="#_example_a_mock_literal_time_literal_function">8.1. Example: A Mock <code class="literal">time()</code> Function</a></span></dt><dt><span class="section"><a href="#_advanced_topics">8.2. Advanced Topics</a></span></dt></dl></dd><dt><span class="section"><a href="#installation">9. Installation</a></span></dt><dt><span class="section"><a href="#discussion">10. Status and Future Plans</a></span></dt><dt><span class="section"><a href="#acknowledgements">11. Acknowledgements</a></span></dt><dt><span class="appendix"><a href="#appendix_A">A. Test Assertion Examples</a></span></dt><dt><span class="appendix"><a href="#appendix_B">B. Integrating with Your Build Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#_using_makefiles">B.1. Using Makefiles</a></span></dt><dt><span class="section"><a href="#_using_cons">B.2. Using Cons</a></span></dt><dt><span class="section"><a href="#_using_microsoft_visual_studio">B.3. Using Microsoft Visual Studio</a></span></dt><dt><span class="section"><a href="#_using_microsoft_windows_ddk">B.4. Using Microsoft Windows DDK</a></span></dt></dl></dd><dt><span class="appendix"><a href="#appendix_C">C. CxxTest Releases</a></span></dt><dd><dl><dt><span class="section"><a href="#_version_4_0_todo">C.1. Version 4.0 (TODO)</a></span></dt><dt><span class="section"><a href="#_version_3_10_1_2004_12_01">C.2. Version 3.10.1 (2004-12-01)</a></span></dt><dt><span class="section"><a href="#_version_3_10_0_2004_11_20">C.3. Version 3.10.0 (2004-11-20)</a></span></dt><dt><span class="section"><a href="#_version_3_9_1_2004_01_19">C.4. Version 3.9.1 (2004-01-19)</a></span></dt><dt><span class="section"><a href="#_version_3_9_0_2004_01_17">C.5. Version 3.9.0 (2004-01-17)</a></span></dt><dt><span class="section"><a href="#_version_3_8_5_2004_01_08">C.6. Version 3.8.5 (2004-01-08)</a></span></dt><dt><span class="section"><a href="#_version_3_8_4_2003_12_31">C.7. Version 3.8.4 (2003-12-31)</a></span></dt><dt><span class="section"><a href="#_version_3_8_3_2003_12_24">C.8. Version 3.8.3 (2003-12-24)</a></span></dt><dt><span class="section"><a href="#_version_3_8_1_2003_12_21">C.9. Version 3.8.1 (2003-12-21)</a></span></dt><dt><span class="section"><a href="#_version_3_8_0_2003_12_13">C.10. Version 3.8.0 (2003-12-13)</a></span></dt><dt><span class="section"><a href="#_version_3_7_1_2003_09_29">C.11. Version 3.7.1 (2003-09-29)</a></span></dt><dt><span class="section"><a href="#_version_3_7_0_2003_09_20">C.12. Version 3.7.0 (2003-09-20)</a></span></dt><dt><span class="section"><a href="#_version_3_6_1_2003_09_15">C.13. Version 3.6.1 (2003-09-15)</a></span></dt><dt><span class="section"><a href="#_version_3_6_0_2003_09_04">C.14. Version 3.6.0 (2003-09-04)</a></span></dt><dt><span class="section"><a href="#_version_3_5_1_2003_09_03">C.15. Version 3.5.1 (2003-09-03)</a></span></dt><dt><span class="section"><a href="#_version_3_1_1_2003_08_27">C.16. Version 3.1.1 (2003-08-27)</a></span></dt><dt><span class="section"><a href="#_version_3_1_0_2003_08_23">C.17. Version 3.1.0 (2003-08-23)</a></span></dt><dt><span class="section"><a href="#_version_3_0_1_2003_08_07">C.18. Version 3.0.1 (2003-08-07)</a></span></dt><dt><span class="section"><a href="#_version_2_8_4_2003_07_21">C.19. Version 2.8.4 (2003-07-21)</a></span></dt><dt><span class="section"><a href="#_version_2_8_3_2003_06_30">C.20. Version 2.8.3 (2003-06-30)</a></span></dt><dt><span class="section"><a href="#_version_2_8_2_2003_06_10">C.21. Version 2.8.2 (2003-06-10)</a></span></dt><dt><span class="section"><a href="#_version_2_8_1_2003_01_16">C.22. Version 2.8.1 (2003-01-16)</a></span></dt><dt><span class="section"><a href="#_version_2_8_0_2003_01_13">C.23. Version 2.8.0 (2003-01-13)</a></span></dt><dt><span class="section"><a href="#_version_2_7_0_2002_09_29">C.24. Version 2.7.0 (2002-09-29)</a></span></dt></dl></dd><dt><span class="appendix"><a href="#appendix_D">D. Testing CxxTest</a></span></dt></dl></div><div class="abstract" title="Abstract"><a id="_abstract"></a><div class="titlepage"></div><p>CxxTest is a unit testing framework for C++ that is similar in
 spirit to <a class="ulink" href="http://junit.org/" target="_top">JUnit</a>,
 <a class="ulink" href="http://cppunit.sourceforge.net" target="_top">CppUnit</a>, and
 <a class="ulink" href="http://xprogramming.com/software.html" target="_top">xUnit</a>.  CxxTest is easy to
@@ -544,43 +544,124 @@ public:
     {
         TS_FAIL( "Nothing to test" );
     }
-};</pre></div><div class="section" title="Global and World Fixtures"><div class="titlepage"><div><div><h4 class="title"><a id="_global_and_world_fixtures"></a>Global and World Fixtures</h4></div></div></div><p>TODO: review this section.</p><p>The <code class="literal">setUp()</code> and <code class="literal">tearDown()</code> functions allow
-to have code executed before and after each test.  What if you want
-some code to be executed before all tests in <span class="emphasis"><em>all</em></span> test suites?
-Rather than duplicate that code, you can use <span class="emphasis"><em>global fixtures</em></span>.</p><p>These are basically classes that inherit from
-<code class="literal">CxxTest::GlobalFixture</code>.  All objects of such classes are
-automatically notified before and after each test case.  It is best to
-create them as static objects so they get called right from the start.
-Look at <code class="literal">test/GlobalFixtures.h</code> in the <code class="literal">cxxtest-selftest</code>
-archive.</p><p>Unlike <code class="literal">setUp()</code> and <code class="literal">tearDown()</code> in
-<code class="literal">TestSuite</code>, global fixtures should return a <code class="literal">bool</code> value to
-indicate success/failure.</p><p>CxxTest also allows you to specify code which is executed
-once at the start of the testing process (and the corresponding cleanup
-code).  To do this, create (one or more) global fixture objects and
-implement <code class="literal">setUpWorld()</code>/<code class="literal">tearDownWorld()</code>.  For an example,
-see <code class="literal">test/WorldFixtures.h</code> in the <code class="literal">cxxtest-selftest</code> archive.</p></div><div class="section" title="Runtime Test Customization"><div class="titlepage"><div><div><h4 class="title"><a id="_runtime_test_customization"></a>Runtime Test Customization</h4></div></div></div><p>CxxTest defines several functions that can be called in a test suite to modify the default behavior of CxxTest.</p><div class="informaltable"><table cellpadding="4px" style="border-collapse: collapse;border-top: 3px solid #527bbd; border-bottom: 3px solid #527bbd; border-left: 3px solid #527bbd; border-right: 3px solid #527bbd; "><colgroup><col class="col_1" /><col class="col_2" /></colgroup><thead><tr><th style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"> Test Suite Method </th><th style="border-bottom: 1px solid #527bbd; " align="left" valign="top"> Description</th></tr></thead><tbody><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setAbortTestOnFail( bool )</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>This function specifies whether tests abort after a failure.  The default value of the flag is <code class="literal">false</code>.  This function only has an effect if exception handling is enabled.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setMaxDumpSize( unsigned )</code></p></td><td style="" align="left" valign="top"><p>This function sets the maximum number of bytes that are dumped when
+};</pre></div><div class="section" title="Global and World Fixtures"><div class="titlepage"><div><div><h4 class="title"><a id="_global_and_world_fixtures"></a>Global and World Fixtures</h4></div></div></div><p>CxxTest supports two related mechanisms for performing <span class="emphasis"><em>global</em></span>
+setup and teardown operations.  <span class="emphasis"><em>Global fixtures</em></span> are classes that
+inherit from <code class="literal">CxxTest::GlobalFixture</code>, and they define <code class="literal">setUp</code> and
+<code class="literal">tearDown</code> methods.  The <code class="literal">setUp</code> method for all global fixtures is
+called before each test is executed, and the <code class="literal">tearDown</code> method for
+all global fixtures is called after each test is completed.  Thus,
+this mechanism provides a convenient way of defining setup and
+teardown operations that apply to all test suites.</p><p>For example, consider the following test suite:</p><pre class="programlisting">// MyTestSuite8.h
+#include &lt;cxxtest/TestSuite.h&gt;
+#include &lt;cxxtest/GlobalFixture.h&gt;
+
+//
+// Fixture1 counts its setUp()s and tearDown()s
+//
+class Fixture1 : public CxxTest::GlobalFixture
+{
+public:
+    unsigned setUpCount;
+    unsigned tearDownCount;
+
+    Fixture1() { setUpCount = tearDownCount = 0; }
+
+    bool setUp() { ++ setUpCount; return true; }
+    bool tearDown() { ++ tearDownCount; return true; }
+
+    bool setUpWorld() { printf( "Starting a test suite\n" ); return true;}
+    bool tearDownWorld() { printf( "Finishing a test suite\n" ); return true;}
+};
+static Fixture1 fixture1;
+
+
+//
+// Fixture2 counts its setUp()s and tearDown()s and makes sure
+// its setUp() is called after Fixture1 and its tearDown() before.
+//
+class Fixture2 : public Fixture1
+{
+public:
+    bool setUp()
+    {
+        TS_ASSERT_EQUALS(setUpCount, fixture1.setUpCount - 1);
+        TS_ASSERT_EQUALS(tearDownCount, fixture1.tearDownCount);
+        return Fixture1::setUp();
+    }
+
+    bool tearDown()
+    {
+        TS_ASSERT_EQUALS(setUpCount, fixture1.setUpCount);
+        TS_ASSERT_EQUALS(tearDownCount, fixture1.tearDownCount);
+        return Fixture1::tearDown();
+    }
+};
+static Fixture2 fixture2;
+
+
+//
+// Verify the counts for the global fixtures
+//
+class MyTestSuite8 : public CxxTest::TestSuite
+{
+public:
+    void testCountsFirstTime()
+    {
+        TS_ASSERT_EQUALS(fixture1.setUpCount,    1);
+        TS_ASSERT_EQUALS(fixture1.tearDownCount, 0);
+        TS_ASSERT_EQUALS(fixture2.setUpCount,    1);
+        TS_ASSERT_EQUALS(fixture2.tearDownCount, 0);
+    }
+
+    void testCountsSecondTime()
+    {
+        TS_ASSERT_EQUALS(fixture1.setUpCount,    2);
+        TS_ASSERT_EQUALS(fixture1.tearDownCount, 1);
+        TS_ASSERT_EQUALS(fixture2.setUpCount,    2);
+        TS_ASSERT_EQUALS(fixture2.tearDownCount, 1);
+    }
+};</pre><p>This test suite defines a runner that generates the following output:</p><pre class="screen">Running 2 testsStarting a test suite
+Starting a test suite
+..Finishing a test suite
+Finishing a test suite
+OK!</pre><p>Note that the global fixtures are instantiated with static global
+values.  This ensures that these fixtures are created before the
+runner is initialized.  Also, note that the <code class="literal">setUp</code> methods are
+called in the same sequence that the global fixtures are instantiated,
+and the <code class="literal">tearDown</code> methods are called in the reverse sequence.
+Finally, note that the <code class="literal">setUp</code> and <code class="literal">tearDown</code> methods in global
+fixtures return a boolean value, which indicates success or failure
+of that operation.</p><p>This example also illustrates the use of <span class="emphasis"><em>world fixtures</em></span>, which
+perform setup and teardown operations that are executed once each
+when beginning and finishing tests in each test suite.  World
+fixtures are defined with the <code class="literal">setUpWorld</code> and <code class="literal">tearDownWorld</code>
+methods in a global fixture.</p></div><div class="section" title="Runtime Test Customization"><div class="titlepage"><div><div><h4 class="title"><a id="_runtime_test_customization"></a>Runtime Test Customization</h4></div></div></div><p>CxxTest defines several functions that can be called in a test suite to modify the default behavior of CxxTest.</p><div class="informaltable"><table cellpadding="4px" style="border-collapse: collapse;border-top: 3px solid #527bbd; border-bottom: 3px solid #527bbd; border-left: 3px solid #527bbd; border-right: 3px solid #527bbd; "><colgroup><col class="col_1" /><col class="col_2" /></colgroup><thead><tr><th style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"> Test Suite Method </th><th style="border-bottom: 1px solid #527bbd; " align="left" valign="top"> Description</th></tr></thead><tbody><tr><td style="border-right: 1px solid #527bbd; border-bottom: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setAbortTestOnFail(bool)</code></p></td><td style="border-bottom: 1px solid #527bbd; " align="left" valign="top"><p>This function specifies whether tests abort after a failure.  The default value of the flag is <code class="literal">false</code>.  This function only has an effect if exception handling is enabled.</p></td></tr><tr><td style="border-right: 1px solid #527bbd; " align="left" valign="top"><p><code class="literal">setMaxDumpSize(unsigned)</code></p></td><td style="" align="left" valign="top"><p>This function sets the maximum number of bytes that are dumped when
 TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit.</p></td></tr></tbody></table></div><p>Note that the the configuration parameters are reset to their default
 values after each test is executed (more precisely, after <code class="literal">tearDown()</code>
 is called).  Consequently, calling these functions in the <code class="literal">setUp()</code>
 function has the effect of setting that value for the entire test
-suite.</p></div></div></div><div class="section" title="7. Value Traits"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="traits"></a>7. Value Traits</h2></div></div></div><p>CxxTest test assertions like <a class="link" href="#">TS_EQUALS</a> work for
-built-in types, but they will not likely work for user-defined data
-types.  This is because CxxTest needs a way to compare objects and
-to convert them to strings when printing test failure summaries.</p><p>Since CxxTest does not rely on any external library, conversion
-from arbitrary data types to strings is done using <span class="emphasis"><em>value traits</em></span>.
-For example, to convert an integer to a string, CxxTest does the following:</p><pre class="programlisting">int i = 10;
-CxxTest::ValueTraits&lt;int&gt; converter(i);
-const char* string = converter.asString();</pre><p>The CxxTest header file <code class="literal">cxxtest/ValueTraits.h</code> defines value traits
-for standard types like <code class="literal">int</code>, <code class="literal">char</code>, <code class="literal">double</code>, etc.  The default
-ValueTraits class for unknown types dumps up to 8 bytes of the value
-in hex format.</p><p>For example, the following code</p><pre class="programlisting">// MyTestSuite7.h
-
+suite.</p></div></div></div><div class="section" title="7. Value Traits"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="traits"></a>7. Value Traits</h2></div></div></div><p>CxxTest’s test assertions like <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>
+work for built-in types, but they will not likely work for user-defined
+data types.  This is because CxxTest needs a way to compare objects
+and to convert them to strings when printing test failure summaries.
+Thus, user-defined data types need to have the <code class="literal">operator=</code> method
+defined to ensure that test assertions can be applied.</p><p>For example, the following code</p><pre class="programlisting">// MyTestSuite7.h
 #include &lt;cxxtest/TestSuite.h&gt;
+#include &lt;iostream&gt;
 
-class TestMyData : public CxxTest::TestSuite
+class MyTestSuite7 : public CxxTest::TestSuite
 {
 public:
+
    struct Data
+   {
+      char data[3];
+      bool operator==(Data o) {
+          return (memcmp(this, &amp;o, sizeof(o)) == 0);
+      }
+   };
+
+   struct Data2
    {
       char data[3];
    };
@@ -591,37 +672,99 @@ public:
       memset( x.data, 0x12, sizeof(x.data) );
       memset( y.data, 0xF6, sizeof(y.data) );
       TS_ASSERT_EQUALS( x, y );
+
+      Data2 z, w;
+      memset( z.data, 0x12, sizeof(x.data) );
+      memset( w.data, 0xF6, sizeof(y.data) );
+      TS_ASSERT_SAME_DATA( &amp;z, &amp;w, sizeof(z) )
    }
-};</pre><p>defines a test runner that generates the following output</p><pre class="screen">TODO: THIS CURRENTLY FAILS</pre><div class="section" title="7.1. The equality operator"><div class="titlepage"><div><div><h3 class="title"><a id="_the_equality_operator"></a>7.1. The equality operator</h3></div></div></div><p>First of all, don’t forget to implement the equality operator (<code class="literal">operator==()</code>)
-on your data types!</p></div><div class="section" title="7.2. Enumeration Traits"><div class="titlepage"><div><div><h3 class="title"><a id="_enumeration_traits"></a>7.2. Enumeration Traits</h3></div></div></div><p>CxxTest provides a simple way to define value traits for
-enumeration types.  This feature is very handy for things like status
-codes.  To do this, simply use <code class="literal">CXXTEST_VALUE_TRAITS</code> as in the
-following example:</p><pre class="programlisting">enum Status { STATUS_IDLE, STATUS_BUSY, STATUS_ERROR };
+};</pre><p>defines a test runner that generates the following output</p><pre class="screen">Running 1 test
+In TestMyData::testCompareData:
+MyTestSuite7.h:27: Error: Expected (x == y), found ({ 12 12 12  } != { F6 F6 F6  })
+MyTestSuite7.h:32: Error: Expected sizeof(z) (3) bytes to be equal at (&amp;z) and (&amp;w), found:
+   { 12 12 12 }
+     differs from
+   { F6 F6 F6 }
+Failed 1 of 1 test
+Success rate: 0%</pre><p>The <code class="literal">operator=</code> method is required to apply
+<a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a> to <code class="literal">Data</code> objects.  However,
+the <a class="link" href="#ts_assert_same_data">TS_ASSERT_SAME_DATA</a> assertion can be
+applied to <code class="literal">Data2</code> objects that do not have <code class="literal">operator=</code> defined.</p><p>Since CxxTest does not rely on any external library, conversion
+from arbitrary data types to strings is done using <span class="emphasis"><em>value traits</em></span>.
+For example, to convert an integer to a string, CxxTest does the following:</p><pre class="programlisting">int i = 10;
+CxxTest::ValueTraits&lt;int&gt; converter(i);
+const char* string = converter.asString();</pre><p>The CxxTest header file <code class="literal">cxxtest/ValueTraits.h</code> defines value traits
+for standard types like <code class="literal">int</code>, <code class="literal">char</code>, <code class="literal">double</code>, etc.  The default
+<code class="literal">ValueTraits</code> class for unknown types dumps up to 8 bytes of the value
+in hex format.</p><p>If the macro <code class="literal">CXXTEST_USER_VALUE_TRAITS</code> is defined, then CxxTest will
+omit the default definitions for <code class="literal">ValueTraits</code>.  This allows a user to define their own trait specifications to customize the display of trait information.</p><div class="section" title="7.1. Enumeration Traits"><div class="titlepage"><div><div><h3 class="title"><a id="_enumeration_traits"></a>7.1. Enumeration Traits</h3></div></div></div><p>CxxTest provides a simple way to define value traits for enumeration
+types.  The <code class="literal">CXXTEST_ENUM_TRAITS</code> macro is used to define value
+traits for all members of an enumeration set.</p><p>For example, the following code</p><pre class="programlisting">// MyTestSuite9.h
+#include &lt;cxxtest/TestSuite.h&gt;
 
-CXXTEST_ENUM_TRAITS( Status,
-                     CXXTEST_ENUM_MEMBER( STATUS_IDLE )
-                     CXXTEST_ENUM_MEMBER( STATUS_BUSY )
-                     CXXTEST_ENUM_MEMBER( STATUS_ERROR ) );</pre><p>See <code class="literal">sample/EnumTraits.h</code> for a working sample.</p></div><div class="section" title="7.3. Defining New Value Traits"><div class="titlepage"><div><div><h3 class="title"><a id="_defining_new_value_traits"></a>7.3. Defining New Value Traits</h3></div></div></div><p>Defining value traits for new (non-enumeration) types is easy.  All you
-need is to define a way to convert an object of your class to a
-string. You can use this example as a possible skeleton:</p><pre class="programlisting">class MyClass
+enum Answer {
+    Yes,
+    No,
+    Maybe,
+    DontKnow,
+    DontCare
+};
+
+// Declare value traits for the Answer enumeration
+CXXTEST_ENUM_TRAITS( Answer,
+                     CXXTEST_ENUM_MEMBER( Yes )
+                     CXXTEST_ENUM_MEMBER( No )
+                     CXXTEST_ENUM_MEMBER( Maybe )
+                     CXXTEST_ENUM_MEMBER( DontKnow )
+                     CXXTEST_ENUM_MEMBER( DontCare ) );
+
+// Test the trait values
+class EnumTraits : public CxxTest::TestSuite
 {
-   int _value;
-
 public:
-   MyClass( int value ) : _value( value ) {}
-   int value() const { return _value; }
+    void test_Enum_traits()
+    {
+        TS_FAIL( Yes );
+        TS_FAIL( No );
+        TS_FAIL( Maybe );
+        TS_FAIL( DontKnow );
+        TS_FAIL( DontCare );
+        TS_FAIL( (Answer)1000 );
+    }
+};</pre><p>defines a test runner that generates the following output</p><pre class="screen">Running 1 test
+In EnumTraits::test_Enum_traits:
+MyTestSuite9.h:26: Error: Test failed: Yes
+MyTestSuite9.h:27: Error: Test failed: No
+MyTestSuite9.h:28: Error: Test failed: Maybe
+MyTestSuite9.h:29: Error: Test failed: DontKnow
+MyTestSuite9.h:30: Error: Test failed: DontCare
+MyTestSuite9.h:31: Error: Test failed: (Answer)1000
+Failed 1 of 1 test
+Success rate: 0%</pre><p>The enumeration value traits print strings that represent the elements of the enumeration, except where a numeric value is provided.</p><p>Note that the <code class="literal">CXXTEST_ENUM_TRAITS</code> macros has two arguments;  the list of <code class="literal">CXXTEST_ENUM_MEMBER</code> macros is not separated by commas!</p></div><div class="section" title="7.2. Defining New Value Traits"><div class="titlepage"><div><div><h3 class="title"><a id="_defining_new_value_traits"></a>7.2. Defining New Value Traits</h3></div></div></div><p>Defining value traits for a new class is done by providing a class
+specialization of <code class="literal">ValueTraits</code> that converts an object of the new
+class to a string.  For example, consider the definition of the
+<code class="literal">MyClass</code> class:</p><pre class="programlisting">// MyClass.h
+
+class MyClass
+{
+public:
+
+   int value;
+
+   MyClass(int value_) : value(value_) {}
 
    // CxxTest requires a copy constructor
-   MyClass( const MyClass &amp;other ) : _value( other._value ) {}
+   MyClass(const MyClass&amp; other) : value(other.value) {}
 
-   // If you want to use TS_ASSERT_EQUALS
-   bool operator== ( const MyClass &amp;other ) const { return _value == other._value; }
+   // This is required if you want to use TS_ASSERT_EQUALS
+   bool operator==(const MyClass&amp; other) const { return value == other.value; }
 
    // If you want to use TS_ASSERT_LESS_THAN
-   bool operator== ( const MyClass &amp;other ) const { return _value &lt; other._value; }
+   bool operator&lt;(const MyClass&amp; other) const { return value &lt; other.value; }
 };
 
 #ifdef CXXTEST_RUNNING
+// This declaration is only activated when building a CxxTest test suite
 #include &lt;cxxtest/ValueTraits.h&gt;
 #include &lt;stdio.h&gt;
 
@@ -633,52 +776,59 @@ namespace CxxTest
       char _s[256];
 
    public:
-      ValueTraits( const MyClass &amp;m ) { sprintf( _s, "MyClass( %i )", m.value() ); }
+      ValueTraits( const MyClass&amp; m ) { sprintf( _s, "MyClass( %i )", m.value ); }
       const char *asString() const { return _s; }
    };
 };
-#endif // CXXTEST_RUNNING</pre></div><div class="section" title="7.4. Defining Value Traits for Template Classes"><div class="titlepage"><div><div><h3 class="title"><a id="_defining_value_traits_for_template_classes"></a>7.4. Defining Value Traits for Template Classes</h3></div></div></div><p>A simple modification to the above scheme allows you to define value
-traits for your template classes.  Unfortunately, this syntax (partial
-template specialization) is not supported by some popular C++ compilers.
-Here is an example:</p><pre class="programlisting">template&lt;class T&gt;
-class TMyClass
-{
-   T _value;
+#endif // CXXTEST_RUNNING</pre><p>This class includes definitions of <code class="literal">operator==</code> and <code class="literal">operator&lt;</code>
+that support comparisons with <a class="link" href="#ts_assert_equals">TS_ASSERT_EQUALS</a>
+and <a class="link" href="#ts_assert_less_than">TS_ASSERT_LESS_THAN</a>.  Additionally,
+this header contains a specialization of <code class="literal">ValueTraits</code> (in the
+<code class="literal">CxxTest</code> namespace) that generates a string description of a <code class="literal">MyClass</code>
+instance.</p><p>The following test suite illustrates how these definitions can be
+used to define a test runner:</p><pre class="programlisting">// MyTestSuite10.h
+#include &lt;cxxtest/TestSuite.h&gt;
+#include &lt;MyClass.h&gt;
 
+class MyTestSuite10 : public CxxTest::TestSuite
+{
 public:
-   TMyClass( const T &amp;value ) : _value( value );
-   const T &amp;value() const { return _value; }
-
-   // CxxTest requires a copy constructor
-   TMyClass( const TMyClass&lt;T&gt; &amp;other ) : _value( other._value ) {}
-
-   // If you want to use TS_ASSERT_EQUALS
-   bool operator== ( const TMyClass&lt;T&gt; &amp;other ) const { return _value == other._value; }
-};
-
-#ifdef CXXTEST_RUNNING
-#include &lt;cxxtest/ValueTraits.h&gt;
-#include &lt;typeinfo&gt;
-#include &lt;sstream&gt;
-
-namespace CxxTest
-{
-   template&lt;class T&gt;
-   class ValueTraits&lt; TMyClass&lt;T&gt; &gt;
+   void test_le()
    {
-      std::ostringstream _s;
+      MyClass x(1), y(2);
+      TS_ASSERT_LESS_THAN( x, y );
+   }
 
-   public:
-      ValueTraits( const TMyClass&lt;T&gt; &amp;t )
-         { _s &lt;&lt; typeid(t).name() &lt;&lt; "( " &lt;&lt; t.value() &lt;&lt; " )"; }
-      const char *asString() const { return _s.str().c_str(); }
-   };
-};
-#endif // CXXTEST_RUNNING</pre></div><div class="section" title="7.5. Overriding the Default Value Traits"><div class="titlepage"><div><div><h3 class="title"><a id="_overriding_the_default_value_traits"></a>7.5. Overriding the Default Value Traits</h3></div></div></div><p>If you don’t like the way CxxTest defines the default <code class="literal">ValueTrait</code>s,
-you can override them by <code class="literal">#define</code>-ing <code class="literal">CXXTEST_USER_VALUE_TRAITS</code>;
-this causes CxxTest to omit the default definitions, and from there
-on you are free to implement them as you like.</p><p>You can see a sample of this technique in <code class="literal">test/UserTraits.tpl</code> in
-the <code class="literal">cxxtest-selftest</code> archive.</p></div></div><div class="section" title="8. Testing with Mock Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="mock"></a>8. Testing with Mock Objects</h2></div></div></div><p>Mock Objects are a very useful concept for testing complex software.
+   void test_eq()
+   {
+      MyClass x(1), y(2);
+      TS_ASSERT_EQUALS( x, y );
+   }
+};</pre><p>This runner for this test suite generates the following output:</p><pre class="screen">Running 2 tests.
+In MyTestSuite10::test_eq:
+MyTestSuite10.h:17: Error: Expected (x == y), found (MyClass( 1 ) != MyClass( 2 ))
+Failed 1 of 2 tests
+Success rate: 50%</pre><p>The test failure print logic uses the specialization of <code class="literal">ValueTraits</code> to create
+the string description of <code class="literal">MyClass</code> that appears in the output.</p></div><div class="section" title="7.3. Defining Value Traits for Template Classes"><div class="titlepage"><div><div><h3 class="title"><a id="_defining_value_traits_for_template_classes"></a>7.3. Defining Value Traits for Template Classes</h3></div></div></div><p>A simple modification to the above example illustrates how a trait can be defined for a
+template class:</p><pre class="programlisting">// MyTestSuite11.h
+#include &lt;cxxtest/TestSuite.h&gt;
+#include &lt;TMyClass.h&gt;
+
+class MyTestSuite11 : public CxxTest::TestSuite
+{
+public:
+   void test_le()
+   {
+      TMyClass&lt;int&gt; x(1), y(2);
+      TS_ASSERT_LESS_THAN( x, y );
+   }
+
+   void test_eq()
+   {
+      TMyClass&lt;int&gt; x(1), y(2);
+      TS_ASSERT_EQUALS( x, y );
+   }
+};</pre><p>Unfortunately, this example employs partial template specialization, which  is not supported by all C++ compilers.</p></div></div><div class="section" title="8. Testing with Mock Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="mock"></a>8. Testing with Mock Objects</h2></div></div></div><p>Mock Objects are a very useful concept for testing complex software.
 The key idea is to pass special objects to tested code that facilitates
 the testing process.  For instance, a class that implements a
 protocol over TCP might rely on an abstract <code class="literal">ISocket</code> interface.
@@ -1005,16 +1155,17 @@ This function prints a message as a warning:
 automate the generation, compilation and execution of test runners.
 Here is a rough breakdown of this process:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
 Split the application into a library and a main module that just
-  calls the library classes.  This way, the test runner will be able
-  to access all your classes through the library.
+  calls the library classes.  This way, the test runner will be
+  able to access all your classes through the library.
 </li><li class="listitem">
-Create another application (or target, or project, or whatever) for the test runner.
-  Make the build tool generate it automatically.
+Create another application (or target, or project, or whatever)
+  for the test runner.  Make the build tool generate it automatically.
 </li><li class="listitem">
 Configure the build tool to run the tests automatically.
 </li></ul></div><p>Unfortunately, different build tools and IDEs need to setup this
-process in different ways.  The following sections provide rough guidance for doing this for some
-come use cases.</p><div class="note" title="Note" style="margin-left: 0; margin-right: 10%;"><h3 class="title">Note</h3><p>These examples are not actively maintained and tested.  Please send suggestions to the CxxTest developers for updating this documentation.</p></div><div class="section" title="B.1. Using Makefiles"><div class="titlepage"><div><div><h3 class="title"><a id="_using_makefiles"></a>B.1. Using Makefiles</h3></div></div></div><p>Generating the tests with a makefile is pretty straightforward.
+process in different ways.  The following sections provide rough
+guidance for doing this for some come use cases.</p><div class="note" title="Note" style="margin-left: 0; margin-right: 10%;"><h3 class="title">Note</h3><p>These examples are not actively maintained and tested.  Please send
+suggestions to the CxxTest developers for updating this documentation.</p></div><div class="section" title="B.1. Using Makefiles"><div class="titlepage"><div><div><h3 class="title"><a id="_using_makefiles"></a>B.1. Using Makefiles</h3></div></div></div><p>Generating the tests with a makefile is pretty straightforward.
 Simply add rules to generate, compile and run the test runner.</p><pre class="programlisting">all: lib run_tests app
 
 # Rules to build your targets

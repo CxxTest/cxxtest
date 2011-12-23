@@ -1,0 +1,5 @@
+Running 2 tests.
+In MyTestSuite10::test_eq:
+MyTestSuite10.h:17: Error: Expected (x == y), found (MyClass( 1 ) != MyClass( 2 ))
+Failed 1 of 2 tests
+Success rate: 50%

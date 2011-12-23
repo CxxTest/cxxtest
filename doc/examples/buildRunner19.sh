@@ -4,7 +4,7 @@
 export PATH=$CXXTEST/bin:$PATH
 
 # @main:
-cxxtestgen --error-printer -o runner.cpp MyTestSuite7.h
+cxxtestgen --error-printer -o runner.cpp MyTestSuite9.h
 # @:main
 
 # @compile:

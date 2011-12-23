@@ -1,11 +1,11 @@
 // MyTestSuite7.h
-
 #include <cxxtest/TestSuite.h>
 #include <iostream>
 
-class TestMyData : public CxxTest::TestSuite
+class MyTestSuite7 : public CxxTest::TestSuite
 {
 public:
+
    struct Data
    {
       char data[3];
