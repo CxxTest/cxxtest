@@ -496,6 +496,11 @@ namespace CxxTest
             return _o;
         }
 
+        OutputStream *outputFileStream() const
+        {
+            return _ostr;
+        }
+
     private:
         XmlFormatter( const XmlFormatter & );
         XmlFormatter &operator=( const XmlFormatter & );

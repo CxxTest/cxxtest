@@ -30,7 +30,12 @@ namespace CxxTest
     public:
         XmlPrinter( CXXTEST_STD(ostream) &o = CXXTEST_STD(cout), const char* /*preLine*/ = ":", const char* /*postLine*/ = "" ) :
             XmlFormatter( new Adapter(o), new Adapter(ostr), &ostr ) {}
-        virtual ~XmlPrinter() { delete outputStream(); }
+
+        virtual ~XmlPrinter() 
+        {
+            delete outputStream(); 
+            delete outputFileStream(); 
+        }
 
     private:
 
