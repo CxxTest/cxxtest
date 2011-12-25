@@ -1526,6 +1526,7 @@ you can install this package from PyPI by executing
 ----
 easy_install unittest2
 ----
+Similarly, the tests for this document rely on the `PyUtilib` Python package.
 
 The FOG parser requires two Python packages:
 
