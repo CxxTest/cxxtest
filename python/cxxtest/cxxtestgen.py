@@ -115,9 +115,9 @@ def parseCommandline(args):
     parser.add_option("", "--part",
                       action="store_true", dest="part", default=False,
                       help="Write the tester classes for a test runner.")
-    parser.add_option("", "--factor",
-                      action="store_true", dest="factor", default=False,
-                      help="Declare the _CXXTEST_FACTOR macro.  (deprecated)")
+    #parser.add_option("", "--factor",
+                      #action="store_true", dest="factor", default=False,
+                      #help="Declare the _CXXTEST_FACTOR macro.  (deprecated)")
     if imported_fog:
         fog_help = "Use new FOG C++ parser"
     else:
@@ -274,8 +274,8 @@ def writePreamble( output ):
         output.write( "#define _CXXTEST_ABORT_TEST_ON_FAIL\n" )
     if options.longlong:
         output.write( "#define _CXXTEST_LONGLONG %s\n" % options.longlong )
-    if options.factor:
-        output.write( "#define _CXXTEST_FACTOR\n" )
+    #if options.factor:
+        #output.write( "#define _CXXTEST_FACTOR\n" )
     for header in options.headers:
         output.write( "#include \"%s\"\n" % header )
     output.write( "#include <cxxtest/TestListener.h>\n" )
