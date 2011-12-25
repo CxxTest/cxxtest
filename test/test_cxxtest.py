@@ -28,6 +28,11 @@ xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
 samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
 guiInputs=currdir+'../sample/gui/GreenYellowRed.h'
 target_suffix = '.exe' if sys.platform.startswith('win') else ''
+# Create a file with the list of sample files
+OUTPUT = open(currdir+'Samples.txt','w')
+for line in sorted(glob.glob(sampledir+'*.h')):
+    print(line, file=OUTPUT)
+OUTPUT.close()
 
 def available(compiler, exe_option):
     cmd = "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log')
@@ -287,6 +292,10 @@ class BaseTestCase(object):
     def test_no_static_init(self):
         """No static init"""
         self.compile(prefix='no_static_init', args="--error-printer --no-static-init "+samples, output="error.out")
+
+    def test_samples_file(self):
+        """Samples file"""
+        self.compile(prefix='samples_file', args="--error-printer --headers Samples.txt", output="error.out")
 
     def test_have_std(self):
         """Have Std"""

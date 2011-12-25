@@ -6,6 +6,7 @@ from __future__ import division
 __all__ = ['main']
 
 from . import __release__
+import os
 import sys
 import re
 import glob
@@ -52,7 +53,7 @@ def parseCommandline(args):
     '''Analyze command line arguments'''
     global imported_fog
     global options
-    parser = OptionParser("%prog [options] <filename> [<filename> ...]")
+    parser = OptionParser("%prog [options] [<filename> ...]")
     parser.add_option("--version",
                       action="store_true", dest="version", default=False,
                       help="Write the CxxTest version.")
@@ -70,6 +71,9 @@ def parseCommandline(args):
     parser.add_option("", "--main",
                       action="store", dest="main", default="main",
                       help="Specify an alternative name for the main() function.")
+    parser.add_option("", "--headers",
+                      action="store", dest="header_filename", default=None,
+                      help="Specify a filename that contains a list of header files that are processed to generate a test runner.")
     parser.add_option("", "--runner",
                       dest="runner", default="", metavar="CLASS",
                       help="Create a test runner that processes test events using the class CxxTest::CLASS.")
@@ -126,6 +130,13 @@ def parseCommandline(args):
                         )
 
     (options, args) = parser.parse_args(args=args)
+    if not options.header_filename is None:
+        if not os.path.exists(options.header_filename):
+            abort( "ERROR: the file '%s' does not exist!" % options.header_filename )
+        INPUT = open(options.header_filename)
+        headers = [line.strip() for line in INPUT]
+        args.extend( headers )
+        INPUT.close()
 
     if options.fog and not imported_fog:
         abort( "Cannot use the FOG parser.  Check that the 'ply' package is installed.  The 'ordereddict' package is also required if running Python 2.6")
