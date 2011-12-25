@@ -419,6 +419,10 @@ class BaseTestCase(object):
         """GF:SUW fails"""
         self.compile(prefix='gf_suw_fails', args="--error-printer SetUpWorldFails.h", output="suwf.out")
 
+    def test_gf_suw_error(self):
+        """GF:SUW error"""
+        self.compile(prefix='gf_suw_error', args="--error-printer SetUpWorldError.h", output="suwe.out")
+
     def test_gf_suw_throws(self):
         """GF:SUW throws"""
         self.compile(prefix='gf_suw_throws', args="--error-printer SetUpWorldThrows.h", output="suwt.out")
