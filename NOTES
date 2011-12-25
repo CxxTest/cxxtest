@@ -12,28 +12,20 @@
 . Add a CMAKE build harness
     This is a 4.1 ticket
 
+. Add valgrind tests
+    This is a 4.1 ticket
+
 . Upload documentation to SourceForge
     Q: Can we do this?  I don't think any of the active developers are administrators on that project.
 
 . Evaluate status of the build_tools
     Gasper will update the guide.txt file with documentation for SCons
 
-. Delete the bin/get_revision_from_cvs.pl script
-    Q: We're not using this, right?
-
-. Figure out what to do with cxxtest.spec
-    Q: What is this for?  Mac Ports?
-
 . Remove the www directory after moving from tigris
+    Bill will do this
 
 . Cleanup resolved tickets
 
 . Resolve CxxTest project planning concerns
     Note: this doesn't directly affect the release process, but I think it affects the timing
     and planning of the release.
-
-. Add a test harness for the doc/examples directory.
-    Note: the easy way to do this would be to perform file diffs
-    against the baseline files I've setup, using the PyUtilib test
-    harness logic that I've developed.  But, I'm reluctant to make
-    these tests depend on another package.  Hmmm...
