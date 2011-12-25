@@ -12,6 +12,7 @@ namespace CxxTest
     {
         if ( !_created ) {
             initialize();
+            setListener( 0 );
             _created = true;
         }
     }
@@ -33,7 +34,6 @@ namespace CxxTest
         _testFailedAsserts = 0;
         _suiteFailedTests = 0;
         _failedSuites = 0;
-        setListener( 0 );
         _world = 0;
         _suite = 0;
         _test = 0;

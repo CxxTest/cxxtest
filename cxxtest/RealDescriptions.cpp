@@ -265,7 +265,13 @@ namespace CxxTest
     {
         for ( GlobalFixture *gf = GlobalFixture::firstGlobalFixture(); gf != 0; gf = gf->nextGlobalFixture() ) {
             bool ok;
-            _TS_TRY { ok = gf->setUpWorld(); }
+            _TS_TRY { 
+                ok = gf->setUpWorld(); 
+                if (tracker().testFailed()) {
+                    tracker().initialize();
+                    ok = false;
+                    }
+                }
             _TS_LAST_CATCH( { ok = false; } );
 
             if ( !ok ) {

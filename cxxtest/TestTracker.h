@@ -80,6 +80,8 @@ namespace CxxTest
         void failedAssertThrowsNot( const char *file, unsigned line, const char *expression );
         void failedAssertSameFiles( const char* file, unsigned line, const char* file1, const char* file2, const char* explanation);
         
+        void initialize();
+
     private:
         TestTracker( const TestTracker & );
         TestTracker &operator=( const TestTracker & );
@@ -106,7 +108,6 @@ namespace CxxTest
         friend class TestRunner;
         
         TestTracker();
-        void initialize();
         void setListener( TestListener *l );
     };
 
