@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 
 . GetGlobals.sh
 export PATH=$CXXTEST/bin:$PATH

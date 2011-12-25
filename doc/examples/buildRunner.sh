@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 
 . GetGlobals.sh
 export PATH=$CXXTEST/bin:$PATH
@@ -10,3 +10,5 @@ cxxtestgen --error-printer -o runner.cpp MyTestSuite1.h
 # @compile:
 g++ -o runner -I$CXXTEST runner.cpp
 # @:compile
+
+./runner

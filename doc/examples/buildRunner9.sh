@@ -17,3 +17,5 @@ g++ -o runner -I$CXXTEST runner.cpp MyTestSuite1.cpp MyTestSuite2.cpp
 # @:compile
 
 ./runner
+
+rm -f MyTestSuite1.cpp MyTestSuite2.cpp

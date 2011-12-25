@@ -1,5 +1,5 @@
 Running 2 tests.
-In MyTestSuite::testMultiplication:
-MyTestSuite2.h:15: Error: Expected (2 * 2 == 5), found (4 != 5)
+In MyTestSuite2::testMultiplication:
+MyTestSuite2.h:16: Error: Expected (2 * 2 == 5), found (4 != 5)
 Failed 1 of 2 tests
 Success rate: 50%
