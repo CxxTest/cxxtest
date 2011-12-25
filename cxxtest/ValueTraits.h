@@ -18,6 +18,12 @@
 #   define CXXTEST_TEMPLATE_INSTANTIATION template<>
 #endif // _CXXTEST_OLD_TEMPLATE_SYNTAX
 
+#ifdef _CXXTEST_HAVE_STD
+#include <cmath>
+#else
+#include <math.h>
+#endif
+
 namespace CxxTest 
 {
     //
@@ -312,8 +318,12 @@ namespace CxxTest
     public:
         ValueTraits( double t ) 
         {
-            ( requiredDigitsOnLeft( t ) > MAX_DIGITS_ON_LEFT ) ?
-                hugeNumber( t ) :
+            //if ( ( t != t ) || ( t >= 1.0/0.0 ) || ( t == -1.0/0.0 ) )
+            if ( ( t != t ) || ( t >= HUGE_VAL ) || ( t == -HUGE_VAL ) )
+                nonFiniteNumber( t );
+            else if ( requiredDigitsOnLeft( t ) > MAX_DIGITS_ON_LEFT )
+                hugeNumber( t );
+            else
                 normalNumber( t );
         }
 
@@ -327,6 +337,7 @@ namespace CxxTest
         char *doNegative( double &t );
         void hugeNumber( double t );
         void normalNumber( double t );
+        void nonFiniteNumber( double t );
         char *doubleToString( double t, char *s, unsigned skip = 0, unsigned max = (unsigned)-1 );
     };
 

@@ -355,6 +355,10 @@ class BaseTestCase(object):
         """No errors"""
         self.compile(prefix='no_errors', args="--error-printer GoodSuite.h", output="good.out")
 
+    def test_infinite_values(self):
+        """Infinite values"""
+        self.compile(prefix='infinite_values', args="--error-printer --have-std TestNonFinite.h", output="infinite.out")
+
     def test_max_dump_size(self):
         """Max dump size"""
         self.compile(prefix='max_dump_size', args="--error-printer --include=MaxDump.h DynamicMax.h SameData.h", output='max.out')
@@ -364,9 +368,9 @@ class BaseTestCase(object):
         self.check_if_supported('wchar.cpp', "The file wchar.cpp is not supported.")
         self.compile(prefix='wide_char', args="--error-printer WideCharTest.h", output="wchar.out")
 
-    def test_factor(self):
-        """Factor"""
-        self.compile(prefix='factor', args="--error-printer --factor Factor.h", output="factor.out")
+    #def test_factor(self):
+        #"""Factor"""
+        #self.compile(prefix='factor', args="--error-printer --factor Factor.h", output="factor.out")
 
     def test_user_traits(self):
         """User traits"""
