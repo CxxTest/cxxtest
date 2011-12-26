@@ -5,7 +5,7 @@ namespace CxxTest
     DummyTestDescription::DummyTestDescription() {}
         
     const char *DummyTestDescription::file() const { return "<no file>"; }
-    unsigned DummyTestDescription::line() const { return 0; }
+    int DummyTestDescription::line() const { return 0; }
     const char *DummyTestDescription::testName() const { return "<no test>"; }
     const char *DummyTestDescription::suiteName() const { return "<no suite>"; }
     bool DummyTestDescription::setUp() { return true;}
@@ -18,7 +18,7 @@ namespace CxxTest
     DummySuiteDescription::DummySuiteDescription() : _test() {}
         
     const char *DummySuiteDescription::file() const { return "<no file>"; }
-    unsigned DummySuiteDescription::line() const { return 0; }
+    int DummySuiteDescription::line() const { return 0; }
     const char *DummySuiteDescription::suiteName() const { return "<no suite>"; }
     TestSuite *DummySuiteDescription::suite() const { return 0; }
     unsigned DummySuiteDescription::numTests() const { return 0; }

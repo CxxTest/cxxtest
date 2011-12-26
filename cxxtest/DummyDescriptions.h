@@ -15,7 +15,7 @@ namespace CxxTest
         DummyTestDescription();
         
         const char *file() const;
-        unsigned line() const;
+        int line() const;
         const char *testName() const;
         const char *suiteName() const;
         bool setUp();
@@ -32,7 +32,7 @@ namespace CxxTest
         DummySuiteDescription();
         
         const char *file() const;
-        unsigned line() const;
+        int line() const;
         const char *suiteName() const;
         TestSuite *suite() const;
         unsigned numTests() const;

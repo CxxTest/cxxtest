@@ -18,7 +18,7 @@ namespace CxxTest
         virtual ~TestDescription();
         
         virtual const char *file() const = 0;
-        virtual unsigned line() const = 0;
+        virtual int line() const = 0;
         virtual const char *testName() const = 0;
         virtual const char *suiteName() const = 0;
         
@@ -36,7 +36,7 @@ namespace CxxTest
         virtual ~SuiteDescription();
         
         virtual const char *file() const = 0;
-        virtual unsigned line() const = 0;
+        virtual int line() const = 0;
         virtual const char *suiteName() const = 0;
         virtual TestSuite *suite() const = 0;
         

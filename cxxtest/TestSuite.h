@@ -37,10 +37,10 @@ namespace CxxTest
     unsigned maxDumpSize();
     void setMaxDumpSize( unsigned value = CXXTEST_MAX_DUMP_SIZE );
 
-    void doTrace( const char *file, unsigned line, const char *message );
-    void doWarn( const char *file, unsigned line, const char *message );
-    void doFailTest( const char *file, unsigned line, const char *message );
-    void doFailAssert( const char *file, unsigned line, const char *expression, const char *message );
+    void doTrace( const char *file, int line, const char *message );
+    void doWarn( const char *file, int line, const char *message );
+    void doFailTest( const char *file, int line, const char *message );
+    void doFailAssert( const char *file, int line, const char *expression, const char *message );
 
     template<class X, class Y>
     struct equals {
@@ -51,7 +51,7 @@ namespace CxxTest
     };
 
     template<class X, class Y>
-    void doAssertEquals( const char *file, unsigned line,
+    void doAssertEquals( const char *file, int line,
                          const char *xExpr, X x,
                          const char *yExpr, Y y,
                          const char *message )
@@ -66,7 +66,7 @@ namespace CxxTest
 
     bool sameData( const void *x, const void *y, unsigned size );
 
-    void doAssertSameData( const char *file, unsigned line,
+    void doAssertSameData( const char *file, int line,
                            const char *xExpr, const void *x,
                            const char *yExpr, const void *y,
                            const char *sizeExpr, unsigned size,
@@ -85,7 +85,7 @@ namespace CxxTest
     };
 
     template<class X, class Y>
-    void doAssertDiffers( const char *file, unsigned line,
+    void doAssertDiffers( const char *file, int line,
                           const char *xExpr, X x,
                           const char *yExpr, Y y,
                           const char *message )
@@ -107,7 +107,7 @@ namespace CxxTest
     };
 
     template<class X, class Y>
-    void doAssertLessThan( const char *file, unsigned line,
+    void doAssertLessThan( const char *file, int line,
                            const char *xExpr, X x,
                            const char *yExpr, Y y,
                            const char *message )
@@ -129,7 +129,7 @@ namespace CxxTest
     };
 
     template<class X, class Y>
-    void doAssertLessThanEquals( const char *file, unsigned line,
+    void doAssertLessThanEquals( const char *file, int line,
                                  const char *xExpr, X x,
                                  const char *yExpr, Y y,
                                  const char *message )
@@ -143,7 +143,7 @@ namespace CxxTest
     }
 
     template<class X, class P>
-    void doAssertPredicate( const char *file, unsigned line,
+    void doAssertPredicate( const char *file, int line,
                             const char *pExpr, const P &p,
                             const char *xExpr, X x,
                             const char *message )
@@ -157,7 +157,7 @@ namespace CxxTest
     }
 
     template<class X, class Y, class R>
-    void doAssertRelation( const char *file, unsigned line,
+    void doAssertRelation( const char *file, int line,
                            const char *rExpr, const R &r, 
                            const char *xExpr, X x,
                            const char *yExpr, Y y,
@@ -189,7 +189,7 @@ namespace CxxTest
     };
 
     template<class X, class Y, class D>
-    void doAssertDelta( const char *file, unsigned line,
+    void doAssertDelta( const char *file, int line,
                         const char *xExpr, X x,
                         const char *yExpr, Y y,
                         const char *dExpr, D d,
@@ -205,17 +205,17 @@ namespace CxxTest
         }
     }
 
-    void doFailAssertThrows( const char *file, unsigned line,
+    void doFailAssertThrows( const char *file, int line,
                              const char *expr, const char *type,
                              bool otherThrown,
                              const char *message,
                              const char *exception = 0 );
     
-    void doFailAssertThrowsNot( const char *file, unsigned line,
+    void doFailAssertThrowsNot( const char *file, int line,
                                 const char *expression, const char *message,
                                 const char *exception = 0 );
 
-    void doAssertSameFiles( const char* file, unsigned line,
+    void doAssertSameFiles( const char* file, int line,
                             const char* file1, const char* file2,
                             const char* message);
 

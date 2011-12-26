@@ -56,25 +56,25 @@ namespace CxxTest
     //
     // Some non-template functions
     //
-    void doTrace( const char *file, unsigned line, const char *message )
+    void doTrace( const char *file, int line, const char *message )
     {
         if (tracker().print_tracing) {
            tracker().trace( file, line, message );
            }
     }
 
-    void doWarn( const char *file, unsigned line, const char *message )
+    void doWarn( const char *file, int line, const char *message )
     {
         tracker().warning( file, line, message );
     }
 
-    void doFailTest( const char *file, unsigned line, const char *message )
+    void doFailTest( const char *file, int line, const char *message )
     {
         tracker().failedTest( file, line, message );
         TS_ABORT();
     }
 
-    void doFailAssert( const char *file, unsigned line,
+    void doFailAssert( const char *file, int line,
                        const char *expression, const char *message )
     {
         if ( message )
@@ -103,7 +103,7 @@ namespace CxxTest
         return true;
     }
 
-    void doAssertSameData( const char *file, unsigned line,
+    void doAssertSameData( const char *file, int line,
                            const char *xExpr, const void *x,
                            const char *yExpr, const void *y,
                            const char *sizeExpr, unsigned size,
@@ -202,7 +202,7 @@ namespace CxxTest
     }
 //#endif
 
-    void doAssertSameFiles( const char* file, unsigned line,
+    void doAssertSameFiles( const char* file, int line,
                             const char* file1, const char* file2,
                             const char* message)
     {
@@ -220,7 +220,7 @@ namespace CxxTest
 #endif
     }
 
-    void doFailAssertThrows( const char *file, unsigned line,
+    void doFailAssertThrows( const char *file, int line,
                              const char *expr, const char *type,
                              bool otherThrown,
                              const char *message,
@@ -235,7 +235,7 @@ namespace CxxTest
         TS_ABORT();
     }
 
-    void doFailAssertThrowsNot( const char *file, unsigned line,
+    void doFailAssertThrowsNot( const char *file, int line,
                                 const char *expression, const char *message,
                                 const char *exception )
     {

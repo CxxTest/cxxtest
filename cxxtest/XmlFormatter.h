@@ -359,32 +359,32 @@ namespace CxxTest
                 _o->flush();
         }
 
-        void trace( const char* /*file*/, unsigned line, const char *expression )
+        void trace( const char* /*file*/, int line, const char *expression )
         {
             element_t elt = testcase->add_element("trace");
             elt->add("line",line);
             elt->value << expression;
         }
 
-        void warning( const char* /*file*/, unsigned line, const char *expression )
+        void warning( const char* /*file*/, int line, const char *expression )
         {
             element_t elt = testcase->add_element("warning");
             elt->add("line",line);
             elt->value << expression;
         }
 
-        void failedTest( const char* file, unsigned line, const char* expression )
+        void failedTest( const char* file, int line, const char* expression )
         {
             testFailure( file, line, "failure") << "Test failed: " << expression;
         }
 
-        void failedAssert( const char *file, unsigned line, const char *expression )
+        void failedAssert( const char *file, int line, const char *expression )
         {
             testFailure( file, line, "failedAssert" ) 
                << "Assertion failed: " << expression;
         }
 
-        void failedAssertEquals( const char *file, unsigned line,
+        void failedAssertEquals( const char *file, int line,
                                  const char* xStr, const char* yStr,
                                  const char *x, const char *y )
         {
@@ -394,7 +394,7 @@ namespace CxxTest
                << x << " != " << y << ")";
         }
 
-        void failedAssertSameData( const char *file, unsigned line,
+        void failedAssertSameData( const char *file, int line,
                                    const char *xStr, const char *yStr, const char *sizeStr,
                                    const void* /*x*/, const void* /*y*/, unsigned size )
         {
@@ -404,7 +404,7 @@ namespace CxxTest
                << xStr << ") and (" << yStr << "), found";
         }
 
-        void failedAssertSameFiles( const char *file, unsigned line,
+        void failedAssertSameFiles( const char *file, int line,
                                    const char *, const char *,
                                    const char* explanation
                                    )
@@ -413,7 +413,7 @@ namespace CxxTest
                << "Error: " << explanation;
         }
 
-        void failedAssertDelta( const char *file, unsigned line,
+        void failedAssertDelta( const char *file, int line,
                                 const char *xStr, const char *yStr, const char *dStr,
                                 const char *x, const char *y, const char *d )
         {
@@ -424,7 +424,7 @@ namespace CxxTest
                << x << " != " << y << ")";
         }
 
-        void failedAssertDiffers( const char *file, unsigned line,
+        void failedAssertDiffers( const char *file, int line,
                                   const char *xStr, const char *yStr,
                                   const char *value )
         {
@@ -434,7 +434,7 @@ namespace CxxTest
                << value << ")";
         }
 
-        void failedAssertLessThan( const char *file, unsigned line,
+        void failedAssertLessThan( const char *file, int line,
                                    const char *xStr, const char *yStr,
                                    const char *x, const char *y )
         {
@@ -444,7 +444,7 @@ namespace CxxTest
                x << " >= " << y << ")";
         }
 
-        void failedAssertLessThanEquals( const char *file, unsigned line,
+        void failedAssertLessThanEquals( const char *file, int line,
                                          const char *xStr, const char *yStr,
                                          const char *x, const char *y )
         {
@@ -454,7 +454,7 @@ namespace CxxTest
                x << " > " << y << ")";
         }
 
-        void failedAssertRelation( const char *file, unsigned line,
+        void failedAssertRelation( const char *file, int line,
                                    const char *relation, const char *xStr, const char *yStr,
                                    const char *x, const char *y )
         {
@@ -464,7 +464,7 @@ namespace CxxTest
                << "( " << x << ", " << y << " )";
         }
 
-        void failedAssertPredicate( const char *file, unsigned line,
+        void failedAssertPredicate( const char *file, int line,
                                     const char *predicate, const char *xStr, const char *x )
         {
             testFailure( file, line, "failedAssertPredicate" )
@@ -472,7 +472,7 @@ namespace CxxTest
                xStr << " ), found !" << predicate << "( " << x << " )";
         }
 
-        void failedAssertThrows( const char *file, unsigned line,
+        void failedAssertThrows( const char *file, int line,
                                  const char *expression, const char *type,
                                  bool otherThrown )
         {
@@ -482,7 +482,7 @@ namespace CxxTest
                << (otherThrown ? "threw something else" : "didn't throw");
         }
 
-        void failedAssertThrowsNot( const char *file, unsigned line, const char *expression )
+        void failedAssertThrowsNot( const char *file, int line, const char *expression )
         {
             testFailure( file, line, "failedAssertThrowsNot" )
                << "Error: Expected (" << expression 
@@ -505,7 +505,7 @@ namespace CxxTest
         XmlFormatter( const XmlFormatter & );
         XmlFormatter &operator=( const XmlFormatter & );
 
-       std::stringstream& testFailure( const char* file, unsigned line, const char *failureType)
+       std::stringstream& testFailure( const char* file, int line, const char *failureType)
         {
             testcase->fail=true;
             element_t elt = testcase->update_element("failure");

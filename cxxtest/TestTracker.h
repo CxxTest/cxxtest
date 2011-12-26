@@ -46,39 +46,39 @@ namespace CxxTest
         void leaveTest( const TestDescription &td );
         void leaveSuite( const SuiteDescription &sd );
         void leaveWorld( const WorldDescription &wd );
-        void trace( const char *file, unsigned line, const char *expression );
-        void warning( const char *file, unsigned line, const char *expression );
-        void failedTest( const char *file, unsigned line, const char *expression );
-        void failedAssert( const char *file, unsigned line, const char *expression );
-        void failedAssertEquals( const char *file, unsigned line,
+        void trace( const char *file, int line, const char *expression );
+        void warning( const char *file, int line, const char *expression );
+        void failedTest( const char *file, int line, const char *expression );
+        void failedAssert( const char *file, int line, const char *expression );
+        void failedAssertEquals( const char *file, int line,
                                  const char *xStr, const char *yStr,
                                  const char *x, const char *y );
-        void failedAssertSameData( const char *file, unsigned line,
+        void failedAssertSameData( const char *file, int line,
                                    const char *xStr, const char *yStr,
                                    const char *sizeStr, const void *x,
                                    const void *y, unsigned size );
-        void failedAssertDelta( const char *file, unsigned line,
+        void failedAssertDelta( const char *file, int line,
                                 const char *xStr, const char *yStr, const char *dStr,
                                 const char *x, const char *y, const char *d );
-        void failedAssertDiffers( const char *file, unsigned line,
+        void failedAssertDiffers( const char *file, int line,
                                   const char *xStr, const char *yStr,
                                   const char *value );
-        void failedAssertLessThan( const char *file, unsigned line,
+        void failedAssertLessThan( const char *file, int line,
                                    const char *xStr, const char *yStr,
                                    const char *x, const char *y );
-        void failedAssertLessThanEquals( const char *file, unsigned line,
+        void failedAssertLessThanEquals( const char *file, int line,
                                          const char *xStr, const char *yStr,
                                          const char *x, const char *y );
-        void failedAssertPredicate( const char *file, unsigned line,
+        void failedAssertPredicate( const char *file, int line,
                                     const char *predicate, const char *xStr, const char *x );
-        void failedAssertRelation( const char *file, unsigned line,
+        void failedAssertRelation( const char *file, int line,
                                    const char *relation, const char *xStr, const char *yStr,
                                    const char *x, const char *y );
-        void failedAssertThrows( const char *file, unsigned line,
+        void failedAssertThrows( const char *file, int line,
                                  const char *expression, const char *type,
                                  bool otherThrown );
-        void failedAssertThrowsNot( const char *file, unsigned line, const char *expression );
-        void failedAssertSameFiles( const char* file, unsigned line, const char* file1, const char* file2, const char* explanation);
+        void failedAssertThrowsNot( const char *file, int line, const char *expression );
+        void failedAssertSameFiles( const char* file, int line, const char* file1, const char* file2, const char* explanation);
         
         void initialize();
 

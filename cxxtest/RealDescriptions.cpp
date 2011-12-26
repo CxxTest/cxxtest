@@ -84,7 +84,7 @@ namespace CxxTest
     }
 
     const char *RealTestDescription::file() const { return _suite->file(); }
-    unsigned RealTestDescription::line() const { return _line; }
+    int RealTestDescription::line() const { return _line; }
     const char *RealTestDescription::testName() const { return _testName; }
     const char *RealTestDescription::suiteName() const { return _suite->suiteName(); }
 
@@ -123,7 +123,7 @@ namespace CxxTest
     }
 
     const char *RealSuiteDescription::file() const { return _file; }
-    unsigned RealSuiteDescription::line() const { return _line; }
+    int RealSuiteDescription::line() const { return _line; }
     const char *RealSuiteDescription::suiteName() const { return _suiteName; }
 
     TestDescription *RealSuiteDescription::firstTest() { return (RealTestDescription *)_tests->head(); }
