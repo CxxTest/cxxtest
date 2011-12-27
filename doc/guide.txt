@@ -51,10 +51,11 @@ CxxTest is available under the http://www.gnu.org/copyleft/lesser.html[GNU
 Lesser General Public] license.
 The following are key online resources for CxxTest:
 
- - http://cxxtest.tigris.org[CxxTest home page]
- - http://cxxtest.tigris.org/servlets/ProjectDocumentListR[Release downloads]
- - http://cxxtest.tigris.org/guide.html[HTML user guide]
- - http://cxxtest.tigris.org/guide.pdf[PDF user guide]
+ - http://cxxtest.sourceforge.net[CxxTest home page]
+ - https://sourceforge.net/projects/cxxtest/files/[Release downloads]
+ - http://cxxtest.sourceforge.net/guide.html[HTML user guide]
+ - http://cxxtest.sourceforge.net/guide.pdf[PDF user guide]
+ - http://cxxtest.sourceforge.net/guide.epub[EPub user guide]
 
 The CxxTest User Guide provides the following documentation:
 

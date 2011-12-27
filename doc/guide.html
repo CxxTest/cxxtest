@@ -779,22 +779,27 @@ The following are key online resources for CxxTest:</p></div>
 <div class="ulist"><ul>
 <li>
 <p>
-<a href="http://cxxtest.tigris.org">CxxTest home page</a>
+<a href="http://cxxtest.sourceforge.net">CxxTest home page</a>
 </p>
 </li>
 <li>
 <p>
-<a href="http://cxxtest.tigris.org/servlets/ProjectDocumentListR">Release downloads</a>
+<a href="https://sourceforge.net/projects/cxxtest/files/">Release downloads</a>
 </p>
 </li>
 <li>
 <p>
-<a href="http://cxxtest.tigris.org/guide.html">HTML user guide</a>
+<a href="http://cxxtest.sourceforge.net/guide.html">HTML user guide</a>
 </p>
 </li>
 <li>
 <p>
-<a href="http://cxxtest.tigris.org/guide.pdf">PDF user guide</a>
+<a href="http://cxxtest.sourceforge.net/guide.pdf">PDF user guide</a>
+</p>
+</li>
+<li>
+<p>
+<a href="http://cxxtest.sourceforge.net/guide.epub">EPub user guide</a>
 </p>
 </li>
 </ul></div>
@@ -1183,7 +1188,7 @@ inherit from the class <tt>CxxTest::TestSuite</tt>.</p></div>
 <div class="paragraph"><p>The <tt>--help</tt> option generates the following summary of the <tt>cxxtestgen</tt> command line options:</p></div>
 <div class="listingblock">
 <div class="content">
-<pre><tt>Usage: cxxtestgen [options] &lt;filename&gt; [&lt;filename&gt; ...]
+<pre><tt>Usage: cxxtestgen [options] [&lt;filename&gt; ...]
 
 Options:
   -h, --help            show this help message and exit
@@ -1196,6 +1201,9 @@ Options:
                         headers.
   --abort-on-fail       Abort tests on failed asserts (like xUnit).
   --main=MAIN           Specify an alternative name for the main() function.
+  --headers=HEADER_FILENAME
+                        Specify a filename that contains a list of header
+                        files that are processed to generate a test runner.
   --runner=CLASS        Create a test runner that processes test events using
                         the class CxxTest::CLASS.
   --gui=CLASS           Create a GUI test runner that processes test events
@@ -1222,7 +1230,6 @@ Options:
   --root                Write the main() function and global data for a test
                         runner.
   --part                Write the tester classes for a test runner.
-  --factor              Declare the _CXXTEST_FACTOR macro.  (deprecated)
   -f, --fog-parser      Use new FOG C++ parser</tt></pre>
 </div></div>
 <div class="paragraph"><p>The following section describe illustrate the use of these command line options.</p></div>
@@ -3873,7 +3880,7 @@ Major internal improvements
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-12-24 23:04:16 MST
+Last updated 2011-12-26 22:26:56 MST
 </div>
 </div>
 </body>

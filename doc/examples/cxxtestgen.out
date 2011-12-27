@@ -1,4 +1,4 @@
-Usage: cxxtestgen [options] <filename> [<filename> ...]
+Usage: cxxtestgen [options] [<filename> ...]
 
 Options:
   -h, --help            show this help message and exit
@@ -11,6 +11,9 @@ Options:
                         headers.
   --abort-on-fail       Abort tests on failed asserts (like xUnit).
   --main=MAIN           Specify an alternative name for the main() function.
+  --headers=HEADER_FILENAME
+                        Specify a filename that contains a list of header
+                        files that are processed to generate a test runner.
   --runner=CLASS        Create a test runner that processes test events using
                         the class CxxTest::CLASS.
   --gui=CLASS           Create a GUI test runner that processes test events
@@ -37,5 +40,4 @@ Options:
   --root                Write the main() function and global data for a test
                         runner.
   --part                Write the tester classes for a test runner.
-  --factor              Declare the _CXXTEST_FACTOR macro.  (deprecated)
   -f, --fog-parser      Use new FOG C++ parser
