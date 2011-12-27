@@ -53,9 +53,9 @@ The following are key online resources for CxxTest:
 
  - http://cxxtest.sourceforge.net[CxxTest home page]
  - https://sourceforge.net/projects/cxxtest/files/[Release downloads]
- - http://cxxtest.sourceforge.net/guide.html[HTML user guide]
- - http://cxxtest.sourceforge.net/guide.pdf[PDF user guide]
- - http://cxxtest.sourceforge.net/guide.epub[EPub user guide]
+ - http://cxxtest.sourceforge.net/cxxtest/doc/guide.html[HTML user guide]
+ - http://cxxtest.sourceforge.net/cxxtest/doc/guide.pdf[PDF user guide]
+ - http://cxxtest.sourceforge.net/cxxtest/doc/guide.epub[EPub user guide]
 
 The CxxTest User Guide provides the following documentation:
 
