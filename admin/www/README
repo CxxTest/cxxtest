@@ -1,0 +1,6 @@
+After updating this file, you need to update the SourceForge htdocs directory:
+
+  ssh -t USERNAME,cxxtest@shell.sourceforge.net create
+  cd /home/project-web/cxxtest/htdocs
+  svn update cxxtest
+
