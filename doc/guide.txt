@@ -1485,7 +1485,7 @@ how to do this is in the CxxTest distribution under `sample/winddk`.
 
 
 [appendix]
-[[appendix_D]] 
+[[appendix_C]] 
 Testing CxxTest
 ---------------
 
@@ -1537,16 +1537,9 @@ The FOG parser requires two Python packages:
 If these packages are not available, then +test_cxxtest.py+ will skip the FOG tests.
 
 
-:leveloffset: 2
-
 [appendix]
-[[appendix_C]] 
+[[appendix_D]] 
 include::../Versions[]
-
-////
-:leveloffset: 0
-////
-
 
 // vim: set syntax=asciidoc:
 

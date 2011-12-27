@@ -3,10 +3,10 @@ html: guide.txt anchors outputs
 	asciidoc -v -b html -d article -n -a toc guide.txt
 
 pdf: guide.txt anchors outputs
-	a2x -a toc -a docinfo -L -d article -f pdf -v --dblatex-opts "-P latex.output.revhistory=0 -P doc.collab.show=1 -P toc.section.depth=2" guide.txt
+	a2x -a toc -L -d article -f pdf -v --dblatex-opts "-P latex.output.revhistory=0 -P doc.collab.show=1 -P toc.section.depth=2" guide.txt
 
 epub: guide.txt anchors outputs
-	export XML_CATALOG_FILES=export XML_CATALOG_FILES="catalog.xml"; a2x -L -a docinfo -f epub -d article --verbose --xsltproc-opts "--stringparam toc.section.depth 2 --stringparam generate.section.toc.level 1" guide.txt
+	export XML_CATALOG_FILES=export XML_CATALOG_FILES="catalog.xml"; a2x -L -f epub -d article --verbose --xsltproc-opts "--stringparam toc.section.depth 2 --stringparam generate.section.toc.level 1" guide.txt
 
 all: html pdf epub
 
