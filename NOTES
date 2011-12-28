@@ -1,10 +1,6 @@
 4.0 Release Checklist
 ---------------------
 
-. Update LGPL documentation in source cxxtest source files in the python and cxxtest subdirectories.
-
-. Update Sandia copyright documentation in source files as well.
-
 . Evaluate status of the build_tools
     Gasper will update the guide.txt file with documentation for SCons
 
