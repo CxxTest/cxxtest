@@ -24,6 +24,7 @@
 #include <cxxtest/TestListener.h>
 #include <cxxtest/TestTracker.h>
 #include <cxxtest/ValueTraits.h>
+#include <cstdio>
 
 namespace CxxTest
 {
