@@ -12,3 +12,4 @@ cxxtestgen --gui=X11Gui -o runner.cpp MyTestSuite2.h ../../sample/gui/GreenYello
 # @:compile
 
 ./runner
+\rm -f runner runner.cpp

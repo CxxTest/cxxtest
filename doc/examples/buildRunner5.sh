@@ -12,5 +12,6 @@ g++ -o runner -I$CXXTEST runner.cpp
 # @:compile
 
 ./runner
-
 echo $?
+
+\rm -f runner runner.cpp

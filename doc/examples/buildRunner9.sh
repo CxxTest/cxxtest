@@ -18,4 +18,4 @@ g++ -o runner9 -I$CXXTEST runner9.cpp MyTestSuite1.cpp MyTestSuite2.cpp
 
 ./runner9
 
-#rm -f MyTestSuite1.cpp MyTestSuite2.cpp
+#rm -f MyTestSuite1.cpp MyTestSuite2.cpp runner.cpp runner

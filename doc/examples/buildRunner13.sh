@@ -36,4 +36,5 @@ g++ -o runner -I$CXXTEST runner.cpp
 # @:testMultiplicationVerbose
 ./runner -v MyTestSuite2 testMultiplication &> runner13.testMultiplicationVerbose.txt
 
+\rm -f runner runner.cpp
 

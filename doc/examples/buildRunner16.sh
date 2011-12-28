@@ -12,3 +12,4 @@ g++ -o runner -I. -I$CXXTEST runner.cpp time_mock.cpp rand_example.cpp
 # @:compile
 
 ./runner
+\rm -f runner runner.cpp
