@@ -9,13 +9,13 @@ cxxtestgen --part --error-printer -o MyTestSuite2.cpp MyTestSuite2.h
 # @:part
 
 # @root:
-cxxtestgen --root --error-printer -o runner.cpp
+cxxtestgen --root --error-printer -o runner9.cpp
 # @:root
 
 # @compile:
-g++ -o runner -I$CXXTEST runner.cpp MyTestSuite1.cpp MyTestSuite2.cpp
+g++ -o runner9 -I$CXXTEST runner9.cpp MyTestSuite1.cpp MyTestSuite2.cpp
 # @:compile
 
 ./runner
 
-rm -f MyTestSuite1.cpp MyTestSuite2.cpp
+#rm -f MyTestSuite1.cpp MyTestSuite2.cpp
