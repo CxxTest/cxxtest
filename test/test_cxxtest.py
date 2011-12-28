@@ -211,7 +211,7 @@ class BaseTestCase(object):
         self.init(prefix)
         #
         cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
-        print "HERE", cmd
+        print ("HERE "+cmd)
         status = subprocess.call(cmd, shell=True)
         if failGen:
             if status == 0:
