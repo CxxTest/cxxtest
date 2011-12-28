@@ -16,6 +16,6 @@ cxxtestgen --root --error-printer -o runner9.cpp
 g++ -o runner9 -I$CXXTEST runner9.cpp MyTestSuite1.cpp MyTestSuite2.cpp
 # @:compile
 
-./runner9
+./runner9 -v
 
 #rm -f MyTestSuite1.cpp MyTestSuite2.cpp runner.cpp runner
