@@ -174,7 +174,7 @@ class BaseTestCase(object):
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
-        cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        cmd = "cd %s; %s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (currdir, sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
         #print self.fog, "CMD", cmd
         status = subprocess.call(cmd, shell=True)
         self.assertEqual(status, 0, 'Error executing cxxtestgen')
@@ -184,12 +184,12 @@ class BaseTestCase(object):
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
-            cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out)
+            cmd = "cd %s; %s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (currdir, sys.executable, currdir, self.fog, file, args, self.py_out)
             ##print cmd
             status = subprocess.call(cmd, shell=True)
             self.assertEqual(status, 0, 'Error executing cxxtestgen')
         #
-        cmd = "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log)
+        cmd = "cd %s; %s %s %s %s. %s%s../ %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log)
         ##print cmd
         status = subprocess.call(cmd, shell=True)
         for file in files:
@@ -197,7 +197,7 @@ class BaseTestCase(object):
                 os.remove(file)
         self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
-        status = subprocess.call("%s -v > %s 2>&1" % (self.build_target, self.px_pre), shell=True)
+        status = subprocess.call("cd %s; %s -v > %s 2>&1" % (currdir, self.build_target, self.px_pre), shell=True)
         OUTPUT = open(self.px_pre,'a')
         print('Error level = '+str(status), file=OUTPUT)
         OUTPUT.close()
@@ -210,7 +210,7 @@ class BaseTestCase(object):
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False):
         self.init(prefix)
         #
-        cmd = "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        cmd = "cd %s; %s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (currdir, sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
         print ("HERE "+cmd)
         status = subprocess.call(cmd, shell=True)
         if failGen:
@@ -223,10 +223,10 @@ class BaseTestCase(object):
         #
         if not main is None:
             # Compile with main
-            cmd = "%s %s %s %s. %s%s../ %s main.cpp %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
+            cmd = "cd %s; %s %s %s %s. %s%s../ %s main.cpp %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
         else:
             # Compile without main
-            cmd = "%s %s %s %s. %s%s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
+            cmd = "cd %s; %s %s %s %s. %s%s../ %s %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
         status = subprocess.call(cmd, shell=True)
         if failBuild:
             if status == 0:
@@ -239,7 +239,7 @@ class BaseTestCase(object):
         #
         if compile == '' and not output is None:
             if run is None:
-                cmd = "%s -v > %s 2>&1" % (self.build_target, self.px_pre)
+                cmd = "cd %s; %s -v > %s 2>&1" % (currdir, self.build_target, self.px_pre)
             else:
                 cmd = run % (self.build_target, self.px_pre)
             status = subprocess.call(cmd, shell=True)
@@ -341,7 +341,7 @@ class BaseTestCase(object):
 
     def test_have_std_tpl(self):
         """Have Std - Template"""
-        self.compile(prefix='have_std_tpl', args="--template="+currdir+"HaveStd.tpl HaveStd.h", output="std.out")
+        self.compile(prefix='have_std_tpl', args="--template="+currdir+"HaveStd.tpl "+currdir+"HaveStd.h", output="std.out")
 
     def test_exceptions_tpl(self):
         """Exceptions - Template"""
