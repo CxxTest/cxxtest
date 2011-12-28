@@ -20,7 +20,7 @@ if not sys.platform.startswith('win'):
         bname = basename(file)
         name=bname.split('.')[0]
         if os.path.exists(datadir+name+'.txt'):
-            Test.add_baseline_test(cwd=datadir, cmd=file,  baseline=datadir+name+'.txt',     name=name, filter=filter)
+            Test.add_baseline_test(cwd=datadir, cmd=file, baseline=datadir+name+'.txt', name=name, filter=filter)
 
 # Execute the tests
 if __name__ == '__main__':
