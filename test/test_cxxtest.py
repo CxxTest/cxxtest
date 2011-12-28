@@ -201,7 +201,7 @@ class BaseTestCase(object):
         OUTPUT = open(self.px_pre,'a')
         print('Error level = '+str(status), file=OUTPUT)
         OUTPUT.close()
-        diffstr = file_diff(self.px_pre, output)
+        diffstr = file_diff(self.px_pre, currdir+output)
         if not diffstr == '':
             self.fail("Unexpected differences in output:\n"+diffstr)
         #
@@ -248,9 +248,9 @@ class BaseTestCase(object):
             print('Error level = '+str(status), file=OUTPUT)
             OUTPUT.close()
             if logfile is None:
-                diffstr = file_diff(self.px_pre, output)
+                diffstr = file_diff(self.px_pre, currdir+output)
             else:
-                diffstr = file_diff(currdir+logfile, output)
+                diffstr = file_diff(currdir+logfile, currdir+output)
             if not diffstr == '':
                 self.fail("Unexpected differences in output:\n"+diffstr)
             if not logfile is None:
