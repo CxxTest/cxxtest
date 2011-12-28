@@ -275,7 +275,7 @@ class BaseTestCase(object):
 
     def test_wildcard(self):
         """Wildcard input"""
-        self.compile(prefix='wildcard', args=currdir+'../sample/*.h', main=True, output="wildcard.out")
+        self.compile(prefix='wildcard', args='../sample/*.h', main=True, output="wildcard.out")
 
     def test_stdio_printer(self):
         """Stdio printer"""
@@ -295,29 +295,29 @@ class BaseTestCase(object):
 
     def test_samples_file(self):
         """Samples file"""
-        self.compile(prefix='samples_file', args="--error-printer --headers "+currdir+"Samples.txt", output="error.out")
+        self.compile(prefix='samples_file', args="--error-printer --headers Samples.txt", output="error.out")
 
     def test_have_std(self):
         """Have Std"""
-        self.compile(prefix='have_std', args="--runner=StdioPrinter --have-std "+currdir+"HaveStd.h", output="std.out")
+        self.compile(prefix='have_std', args="--runner=StdioPrinter --have-std HaveStd.h", output="std.out")
 
     def test_comments(self):
         """Comments"""
-        self.compile(prefix='comments', args="--error-printer "+currdir+"Comments.h", output="comments.out")
+        self.compile(prefix='comments', args="--error-printer Comments.h", output="comments.out")
 
     def test_longlong(self):
         """Long long"""
         self.check_if_supported('longlong.cpp', "Long long is not supported by this compiler")
-        self.compile(prefix='longlong', args="--error-printer --longlong='long long' "+currdir+"LongLong.h", output="longlong.out")
+        self.compile(prefix='longlong', args="--error-printer --longlong='long long' LongLong.h", output="longlong.out")
 
     def test_int64(self):
         """Int64"""
         self.check_if_supported('int64.cpp', "64-bit integers are not supported by this compiler")
-        self.compile(prefix='int64', args="--error-printer --longlong=__int64 "+currdir+"Int64.h", output="int64.out")
+        self.compile(prefix='int64', args="--error-printer --longlong=__int64 Int64.h", output="int64.out")
 
     def test_include(self):
         """Include"""
-        self.compile(prefix='include', args="--include="+currdir+"VoidTraits.h --include="+currdir+"LongTraits.h --error-printer "+currdir+"IncludeTest.h", output="include.out")
+        self.compile(prefix='include', args="--include=VoidTraits.h --include=LongTraits.h --error-printer IncludeTest.h", output="include.out")
 
     #
     # Template file tests
@@ -325,11 +325,11 @@ class BaseTestCase(object):
 
     def test_preamble(self):
         """Preamble"""
-        self.compile(prefix='preamble', args="--template="+currdir+"preamble.tpl "+samples, output="preamble.out")
+        self.compile(prefix='preamble', args="--template=preamble.tpl "+samples, output="preamble.out")
 
     def test_activate_all(self):
         """Activate all"""
-        self.compile(prefix='activate_all', args="--template="+currdir+"activate.tpl "+samples, output="error.out")
+        self.compile(prefix='activate_all', args="--template=activate.tpl "+samples, output="error.out")
 
     def test_only_suite(self):
         """Only Suite"""
@@ -341,11 +341,11 @@ class BaseTestCase(object):
 
     def test_have_std_tpl(self):
         """Have Std - Template"""
-        self.compile(prefix='have_std_tpl', args="--template="+currdir+"HaveStd.tpl "+currdir+"HaveStd.h", output="std.out")
+        self.compile(prefix='have_std_tpl', args="--template=HaveStd.tpl HaveStd.h", output="std.out")
 
     def test_exceptions_tpl(self):
         """Exceptions - Template"""
-        self.compile(prefix='exceptions_tpl', args="--template="+currdir+"HaveEH.tpl "+self.ehNormals, output="eh_normals.out")
+        self.compile(prefix='exceptions_tpl', args="--template=HaveEH.tpl "+self.ehNormals, output="eh_normals.out")
 
     #
     # Test cases which do not require exception handling
@@ -353,20 +353,20 @@ class BaseTestCase(object):
 
     def test_no_errors(self):
         """No errors"""
-        self.compile(prefix='no_errors', args="--error-printer "+currdir+"GoodSuite.h", output="good.out")
+        self.compile(prefix='no_errors', args="--error-printer GoodSuite.h", output="good.out")
 
     def test_infinite_values(self):
         """Infinite values"""
-        self.compile(prefix='infinite_values', args="--error-printer --have-std "+currdir+"TestNonFinite.h", output="infinite.out")
+        self.compile(prefix='infinite_values', args="--error-printer --have-std TestNonFinite.h", output="infinite.out")
 
     def test_max_dump_size(self):
         """Max dump size"""
-        self.compile(prefix='max_dump_size', args="--error-printer --include="+currdir+"MaxDump.h "+currdir+"DynamicMax.h "+currdir+"SameData.h", output='max.out')
+        self.compile(prefix='max_dump_size', args="--error-printer --include=MaxDump.h DynamicMax.h SameData.h", output='max.out')
 
     def test_wide_char(self):
         """Wide char"""
         self.check_if_supported('wchar.cpp', "The file wchar.cpp is not supported.")
-        self.compile(prefix='wide_char', args="--error-printer "+currdir+"WideCharTest.h", output="wchar.out")
+        self.compile(prefix='wide_char', args="--error-printer WideCharTest.h", output="wchar.out")
 
     #def test_factor(self):
         #"""Factor"""
@@ -393,16 +393,16 @@ class BaseTestCase(object):
     def test_stl_traits(self):
         """STL Traits"""
         self.check_if_supported('stpltpl.cpp', "The file stpltpl.cpp is not supported.")
-        self.compile(prefix='stl_traits', args="--error-printer "+currdir+"StlTraits.h", output="stl.out")
+        self.compile(prefix='stl_traits', args="--error-printer StlTraits.h", output="stl.out")
 
     #
     # Test cases which do require exception handling
     #
     def test_throw_wo_std(self):
         """Throw w/o Std"""
-        self.compile(prefix='test_throw_wo_std', args="--template="+currdir+"ThrowNoStd.tpl "+currdir+"ThrowNoStd.h", output='throw.out')
+        self.compile(prefix='test_throw_wo_std', args="--template=ThrowNoStd.tpl ThrowNoStd.h", output='throw.out')
 
-    ehNormals = currdir+"Exceptions.h "+currdir+"DynamicAbort.h"
+    ehNormals = "Exceptions.h DynamicAbort.h"
 
     def test_exceptions(self):
         """Exceptions"""
@@ -410,15 +410,15 @@ class BaseTestCase(object):
 
     def test_exceptions_plus_abort(self):
         """Exceptions plus abort"""
-        self.compile(prefix='exceptions', args="--error-printer --abort-on-fail --have-eh "+currdir+"DynamicAbort.h "+currdir+"DeepAbort.h "+currdir+"ThrowsAssert.h", output="eh_plus_abort.out")
+        self.compile(prefix='exceptions', args="--error-printer --abort-on-fail --have-eh DynamicAbort.h DeepAbort.h ThrowsAssert.h", output="eh_plus_abort.out")
 
     def test_default_abort(self):
         """Default abort"""
-        self.compile(prefix='default_abort', args="--error-printer --include="+currdir+"DefaultAbort.h "+self.ehNormals+ " "+currdir+"DeepAbort.h "+currdir+"ThrowsAssert.h", output="default_abort.out")
+        self.compile(prefix='default_abort', args="--error-printer --include=DefaultAbort.h "+self.ehNormals+ " DeepAbort.h ThrowsAssert.h", output="default_abort.out")
 
     def test_default_no_abort(self):
         """Default no abort"""
-        self.compile(prefix='default_no_abort', args="--error-printer "+self.ehNormals+" "+currdir+"DeepAbort.h "+currdir+"ThrowsAssert.h", output="default_abort.out")
+        self.compile(prefix='default_no_abort', args="--error-printer "+self.ehNormals+" DeepAbort.h ThrowsAssert.h", output="default_abort.out")
 
     #
     # Global Fixtures
@@ -426,43 +426,43 @@ class BaseTestCase(object):
 
     def test_global_fixtures(self):
         """Global fixtures"""
-        self.compile(prefix='global_fixtures', args="--error-printer "+currdir+"GlobalFixtures.h "+currdir+"WorldFixtures.h", output="gfxs.out")
+        self.compile(prefix='global_fixtures', args="--error-printer GlobalFixtures.h WorldFixtures.h", output="gfxs.out")
 
     def test_gf_suw_fails(self):
         """GF:SUW fails"""
-        self.compile(prefix='gf_suw_fails', args="--error-printer "+currdir+"SetUpWorldFails.h", output="suwf.out")
+        self.compile(prefix='gf_suw_fails', args="--error-printer SetUpWorldFails.h", output="suwf.out")
 
     def test_gf_suw_error(self):
         """GF:SUW error"""
-        self.compile(prefix='gf_suw_error', args="--error-printer "+currdir+"SetUpWorldError.h", output="suwe.out")
+        self.compile(prefix='gf_suw_error', args="--error-printer SetUpWorldError.h", output="suwe.out")
 
     def test_gf_suw_throws(self):
         """GF:SUW throws"""
-        self.compile(prefix='gf_suw_throws', args="--error-printer "+currdir+"SetUpWorldThrows.h", output="suwt.out")
+        self.compile(prefix='gf_suw_throws', args="--error-printer SetUpWorldThrows.h", output="suwt.out")
 
     def test_gf_su_fails(self):
         """GF:SU fails"""
-        self.compile(prefix='gf_su_fails', args="--error-printer "+currdir+"GfSetUpFails.h", output="gfsuf.out")
+        self.compile(prefix='gf_su_fails', args="--error-printer GfSetUpFails.h", output="gfsuf.out")
 
     def test_gf_su_throws(self):
         """GF:SU throws"""
-        self.compile(prefix='gf_su_throws', args="--error-printer "+currdir+"GfSetUpThrows.h", output="gfsut.out")
+        self.compile(prefix='gf_su_throws', args="--error-printer GfSetUpThrows.h", output="gfsut.out")
 
     def test_gf_td_fails(self):
         """GF:TD fails"""
-        self.compile(prefix='gf_td_fails', args="--error-printer "+currdir+"GfTearDownFails.h", output="gftdf.out")
+        self.compile(prefix='gf_td_fails', args="--error-printer GfTearDownFails.h", output="gftdf.out")
 
     def test_gf_td_throws(self):
         """GF:TD throws"""
-        self.compile(prefix='gf_td_throws', args="--error-printer "+currdir+"GfTearDownThrows.h", output="gftdt.out")
+        self.compile(prefix='gf_td_throws', args="--error-printer GfTearDownThrows.h", output="gftdt.out")
 
     def test_gf_tdw_fails(self):
         """GF:TDW fails"""
-        self.compile(prefix='gf_tdw_fails', args="--error-printer "+currdir+"TearDownWorldFails.h", output="tdwf.out")
+        self.compile(prefix='gf_tdw_fails', args="--error-printer TearDownWorldFails.h", output="tdwf.out")
 
     def test_gf_tdw_throws(self):
         """GF:TDW throws"""
-        self.compile(prefix='gf_tdw_throws', args="--error-printer "+currdir+"TearDownWorldThrows.h", output="tdwt.out")
+        self.compile(prefix='gf_tdw_throws', args="--error-printer TearDownWorldThrows.h", output="tdwt.out")
 
     #
     # GUI
@@ -478,20 +478,20 @@ class BaseTestCase(object):
 
     def test_qt_gui(self):
         """QT GUI"""
-        self.compile(prefix='qt_gui', args="--gui=QtGui "+currdir+"GoodSuite.h", compile=self.qtFlags)
+        self.compile(prefix='qt_gui', args="--gui=QtGui GoodSuite.h", compile=self.qtFlags)
 
     def test_win32_gui(self):
         """Win32 GUI"""
-        self.compile(prefix='win32_gui', args="--gui=Win32Gui "+currdir+"GoodSuite.h", compile=self.w32Flags)
+        self.compile(prefix='win32_gui', args="--gui=Win32Gui GoodSuite.h", compile=self.w32Flags)
 
     def test_win32_unicode(self):
         """Win32 Unicode"""
-        self.compile(prefix='win32_unicode', args="--gui=Win32Gui "+currdir+"GoodSuite.h", compile=self.w32Flags+' -DUNICODE')
+        self.compile(prefix='win32_unicode', args="--gui=Win32Gui GoodSuite.h", compile=self.w32Flags+' -DUNICODE')
 
     def test_x11_gui(self):
         """X11 GUI"""
         self.check_if_supported('wchar.cpp', "Cannot compile wchar.cpp")
-        self.compile(prefix='x11_gui', args="--gui=X11Gui "+currdir+"GoodSuite.h", compile=self.x11Flags)
+        self.compile(prefix='x11_gui', args="--gui=X11Gui GoodSuite.h", compile=self.x11Flags)
 
 
     #
@@ -502,13 +502,13 @@ class BaseTestCase(object):
         """No exceptions"""
         if self.no_eh_option is None:
             self.skipTest("This compiler does not have an exception handling option")
-        self.compile(prefix='no_exceptions', args='--runner=StdioPrinter '+currdir+'NoEh.h', output="no_eh.out", compile=self.no_eh_option)
+        self.compile(prefix='no_exceptions', args='--runner=StdioPrinter NoEh.h', output="no_eh.out", compile=self.no_eh_option)
 
     def test_force_no_eh(self):
         """Force no EH"""
         if self.no_eh_option is None:
             self.skipTest("This compiler does not have an exception handling option")
-        self.compile(prefix="force_no_eh", args="--runner=StdioPrinter --no-eh "+currdir+"ForceNoEh.h", output="no_eh.out", compile=self.no_eh_option)
+        self.compile(prefix="force_no_eh", args="--runner=StdioPrinter --no-eh ForceNoEh.h", output="no_eh.out", compile=self.no_eh_option)
 
     #
     # Invalid input to cxxtestgen
@@ -516,19 +516,19 @@ class BaseTestCase(object):
 
     def test_no_tests(self):
         """No tests"""
-        self.compile(prefix='no_tests', args=currdir+'EmptySuite.h', failGen=True)
+        self.compile(prefix='no_tests', args='EmptySuite.h', failGen=True)
 
     def test_missing_input(self):
         """Missing input"""
-        self.compile(prefix='missing_input', args='--template='+currdir+'NoSuchFile.h', failGen=True)
+        self.compile(prefix='missing_input', args='--template=NoSuchFile.h', failGen=True)
 
     def test_missing_template(self):
         """Missing template"""
-        self.compile(prefix='missing_template', args='--template='+currdir+'NoSuchFile.h '+samples, failGen=True)
+        self.compile(prefix='missing_template', args='--template=NoSuchFile.h '+samples, failGen=True)
 
     def test_inheritance(self):
         """Test relying on inheritance"""
-        self.compile(prefix='inheritance', args='--error-printer '+currdir+'InheritedTest.h', output='inheritance_old.out')
+        self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', output='inheritance_old.out')
 
     #
     # Tests that illustrate differences between the different C++ parsers
@@ -537,41 +537,41 @@ class BaseTestCase(object):
     def test_inheritance(self):
         """Test relying on inheritance"""
         if self.fog == '':
-            self.compile(prefix='inheritance', args='--error-printer '+currdir+'InheritedTest.h', failGen=True)
+            self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', failGen=True)
         else:
-            self.compile(prefix='inheritance', args='--error-printer '+currdir+'InheritedTest.h', output='inheritance.out')
+            self.compile(prefix='inheritance', args='--error-printer InheritedTest.h', output='inheritance.out')
 
     def test_simple_inheritance(self):
         """Test relying on simple inheritance"""
-        self.compile(prefix='simple_inheritance', args='--error-printer '+currdir+'SimpleInheritedTest.h', output='simple_inheritance.out')
+        self.compile(prefix='simple_inheritance', args='--error-printer SimpleInheritedTest.h', output='simple_inheritance.out')
 
     def test_simple_inheritance2(self):
         """Test relying on simple inheritance (2)"""
         if self.fog == '':
-            self.compile(prefix='simple_inheritance2', args='--error-printer '+currdir+'SimpleInheritedTest2.h', failGen=True)
+            self.compile(prefix='simple_inheritance2', args='--error-printer SimpleInheritedTest2.h', failGen=True)
         else:
-            self.compile(prefix='simple_inheritance2', args='--error-printer '+currdir+'SimpleInheritedTest2.h', output='simple_inheritance2.out')
+            self.compile(prefix='simple_inheritance2', args='--error-printer SimpleInheritedTest2.h', output='simple_inheritance2.out')
 
     def test_comments2(self):
         """Comments2"""
         if self.fog == '':
-            self.compile(prefix='comments2', args="--error-printer "+currdir+"Comments2.h", failBuild=True)
+            self.compile(prefix='comments2', args="--error-printer Comments2.h", failBuild=True)
         else:
-            self.compile(prefix='comments2', args="--error-printer "+currdir+"Comments2.h", output='comments2.out')
+            self.compile(prefix='comments2', args="--error-printer Comments2.h", output='comments2.out')
 
     def test_cpp_template1(self):
         """C++ Templates"""
         if self.fog == '':
-            self.compile(prefix='cpp_template1', args="--error-printer "+currdir+"CppTemplateTest.h", failGen=True)
+            self.compile(prefix='cpp_template1', args="--error-printer CppTemplateTest.h", failGen=True)
         else:
-            self.compile(prefix='cpp_template1', args="--error-printer "+currdir+"CppTemplateTest.h", output='template.out')
+            self.compile(prefix='cpp_template1', args="--error-printer CppTemplateTest.h", output='template.out')
 
     def test_bad1(self):
         """BadTest1"""
         if self.fog == '':
-            self.compile(prefix='bad1', args="--error-printer "+currdir+"BadTest.h", failGen=True)
+            self.compile(prefix='bad1', args="--error-printer BadTest.h", failGen=True)
         else:
-            self.compile(prefix='bad1', args="--error-printer "+currdir+"BadTest.h", output='bad.out')
+            self.compile(prefix='bad1', args="--error-printer BadTest.h", output='bad.out')
 
 
 class TestCpp(BaseTestCase, unittest.TestCase):
