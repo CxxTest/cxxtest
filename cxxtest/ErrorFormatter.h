@@ -87,7 +87,9 @@ namespace CxxTest
         void leaveTest( const TestDescription & )
         {
             if ( !tracker().testFailed() ) {
-                ((*_o) << ".").flush();
+                (*_o) << ".";
+                _o->flush();
+                fflush(stdout);
                 _dotting = true;
             }
         }
