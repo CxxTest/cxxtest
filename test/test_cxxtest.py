@@ -153,7 +153,7 @@ class BaseTestCase(object):
     def check_if_supported(self, filename, msg):
         target=currdir+'check'+'px'+target_suffix
         log=currdir+'check'+'_build.log'
-        cmd = "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, target, self.include_option, self.include_option, currdir, filename, log)
+        cmd = "cd %s; %s %s %s %s. %s%s../ %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, target, self.include_option, self.include_option, currdir, filename, log)
         ##print cmd
         status = subprocess.call(cmd, shell=True)
         os.remove(log)
