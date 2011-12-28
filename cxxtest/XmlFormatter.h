@@ -44,6 +44,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include <cstdio>
 
 namespace CxxTest
 {

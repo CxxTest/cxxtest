@@ -1,4 +1,5 @@
 // MyTestSuite8.h
+#include <cstdio>
 #include <cxxtest/TestSuite.h>
 #include <cxxtest/GlobalFixture.h>
 

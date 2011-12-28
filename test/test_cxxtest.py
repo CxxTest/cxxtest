@@ -325,11 +325,11 @@ class BaseTestCase(object):
 
     def test_preamble(self):
         """Preamble"""
-        self.compile(prefix='preamble', args="--template=preamble.tpl "+samples, output="preamble.out")
+        self.compile(prefix='preamble', args="--template="+currdir+"preamble.tpl "+samples, output="preamble.out")
 
     def test_activate_all(self):
         """Activate all"""
-        self.compile(prefix='activate_all', args="--template=activate.tpl "+samples, output="error.out")
+        self.compile(prefix='activate_all', args="--template="+currdir+"activate.tpl "+samples, output="error.out")
 
     def test_only_suite(self):
         """Only Suite"""
@@ -341,11 +341,11 @@ class BaseTestCase(object):
 
     def test_have_std_tpl(self):
         """Have Std - Template"""
-        self.compile(prefix='have_std_tpl', args="--template=HaveStd.tpl HaveStd.h", output="std.out")
+        self.compile(prefix='have_std_tpl', args="--template="+currdir+"HaveStd.tpl HaveStd.h", output="std.out")
 
     def test_exceptions_tpl(self):
         """Exceptions - Template"""
-        self.compile(prefix='exceptions_tpl', args="--template=HaveEH.tpl "+self.ehNormals, output="eh_normals.out")
+        self.compile(prefix='exceptions_tpl', args="--template="+currdir+"HaveEH.tpl "+self.ehNormals, output="eh_normals.out")
 
     #
     # Test cases which do not require exception handling
@@ -353,20 +353,20 @@ class BaseTestCase(object):
 
     def test_no_errors(self):
         """No errors"""
-        self.compile(prefix='no_errors', args="--error-printer GoodSuite.h", output="good.out")
+        self.compile(prefix='no_errors', args="--error-printer "+currdir+"GoodSuite.h", output="good.out")
 
     def test_infinite_values(self):
         """Infinite values"""
-        self.compile(prefix='infinite_values', args="--error-printer --have-std TestNonFinite.h", output="infinite.out")
+        self.compile(prefix='infinite_values', args="--error-printer --have-std "+currdir+"TestNonFinite.h", output="infinite.out")
 
     def test_max_dump_size(self):
         """Max dump size"""
-        self.compile(prefix='max_dump_size', args="--error-printer --include=MaxDump.h DynamicMax.h SameData.h", output='max.out')
+        self.compile(prefix='max_dump_size', args="--error-printer --include="+currdir+"MaxDump.h "+currdir+"DynamicMax.h "+currdir+"SameData.h", output='max.out')
 
     def test_wide_char(self):
         """Wide char"""
         self.check_if_supported('wchar.cpp', "The file wchar.cpp is not supported.")
-        self.compile(prefix='wide_char', args="--error-printer WideCharTest.h", output="wchar.out")
+        self.compile(prefix='wide_char', args="--error-printer "+currdir+"WideCharTest.h", output="wchar.out")
 
     #def test_factor(self):
         #"""Factor"""
@@ -376,7 +376,7 @@ class BaseTestCase(object):
         """User traits"""
         self.compile(prefix='user_traits', args="--template=UserTraits.tpl UserTraits.h", output='user.out')
 
-    normals = "LessThanEquals.h Relation.h DefaultTraits.h DoubleCall.h SameData.h SameFiles.h Tsm.h TraitsTest.h MockTest.h SameZero.h"
+    normals = " ".join(currdir+file for file in ["LessThanEquals.h","Relation.h","DefaultTraits.h","DoubleCall.h","SameData.h","SameFiles.h","Tsm.h","TraitsTest.h","MockTest.h","SameZero.h"])
 
     def test_normal_behavior_xunit(self):
         """Normal Behavior with XUnit Output"""
