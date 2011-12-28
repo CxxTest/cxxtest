@@ -295,29 +295,29 @@ class BaseTestCase(object):
 
     def test_samples_file(self):
         """Samples file"""
-        self.compile(prefix='samples_file', args="--error-printer --headers Samples.txt", output="error.out")
+        self.compile(prefix='samples_file', args="--error-printer --headers "+currdir+"Samples.txt", output="error.out")
 
     def test_have_std(self):
         """Have Std"""
-        self.compile(prefix='have_std', args="--runner=StdioPrinter --have-std HaveStd.h", output="std.out")
+        self.compile(prefix='have_std', args="--runner=StdioPrinter --have-std "+currdir+"HaveStd.h", output="std.out")
 
     def test_comments(self):
         """Comments"""
-        self.compile(prefix='comments', args="--error-printer Comments.h", output="comments.out")
+        self.compile(prefix='comments', args="--error-printer "+currdir+"Comments.h", output="comments.out")
 
     def test_longlong(self):
         """Long long"""
         self.check_if_supported('longlong.cpp', "Long long is not supported by this compiler")
-        self.compile(prefix='longlong', args="--error-printer --longlong='long long' LongLong.h", output="longlong.out")
+        self.compile(prefix='longlong', args="--error-printer --longlong='long long' "+currdir+"LongLong.h", output="longlong.out")
 
     def test_int64(self):
         """Int64"""
         self.check_if_supported('int64.cpp', "64-bit integers are not supported by this compiler")
-        self.compile(prefix='int64', args="--error-printer --longlong=__int64 Int64.h", output="int64.out")
+        self.compile(prefix='int64', args="--error-printer --longlong=__int64 "+currdir+"Int64.h", output="int64.out")
 
     def test_include(self):
         """Include"""
-        self.compile(prefix='include', args="--include=VoidTraits.h --include=LongTraits.h --error-printer IncludeTest.h", output="include.out")
+        self.compile(prefix='include', args="--include="+currdir+"VoidTraits.h --include="+currdir+"LongTraits.h --error-printer "+currdir+"IncludeTest.h", output="include.out")
 
     #
     # Template file tests
@@ -402,7 +402,7 @@ class BaseTestCase(object):
         """Throw w/o Std"""
         self.compile(prefix='test_throw_wo_std', args="--template="+currdir+"ThrowNoStd.tpl "+currdir+"ThrowNoStd.h", output='throw.out')
 
-    ehNormals = "Exceptions.h DynamicAbort.h"
+    ehNormals = currdir+"Exceptions.h "+currdir+"DynamicAbort.h"
 
     def test_exceptions(self):
         """Exceptions"""
@@ -414,7 +414,7 @@ class BaseTestCase(object):
 
     def test_default_abort(self):
         """Default abort"""
-        self.compile(prefix='default_abort', args="--error-printer --include="+currdir+"DefaultAbort.h "+self.ehNormals+ " DeepAbort.h ThrowsAssert.h", output="default_abort.out")
+        self.compile(prefix='default_abort', args="--error-printer --include="+currdir+"DefaultAbort.h "+self.ehNormals+ " "+currdir+"DeepAbort.h "+currdir+"ThrowsAssert.h", output="default_abort.out")
 
     def test_default_no_abort(self):
         """Default no abort"""
