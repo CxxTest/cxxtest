@@ -35,7 +35,7 @@ for line in sorted(glob.glob(sampledir+'*.h')):
 OUTPUT.close()
 
 def available(compiler, exe_option):
-    cmd = "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log')
+    cmd = "cd %s; %s %s %s %s > %s 2>&1" % (currdir, compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log')
     ##print cmd
     status = subprocess.call(cmd, shell=True)
     flag = status == 0 and os.path.exists(currdir+'anything')
