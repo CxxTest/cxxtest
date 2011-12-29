@@ -14,6 +14,10 @@
     Note: this doesn't directly affect the release process, but I think it affects the timing
     and planning of the release.
 
+. Migrate CxxTest branches
+    cxx_tests       - Testing files for FOG parser
+    pythonrefactor  - Refactoring Python code
+
 ---- 4.1 Issues ----
 
 . Change FOG parser to put temporary parsetab.py files someplace other than the current directory.
