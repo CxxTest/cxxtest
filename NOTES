@@ -14,8 +14,6 @@
     Note: this doesn't directly affect the release process, but I think it affects the timing
     and planning of the release.
 
-. Get Jenkins tests working for documentation.
-
 ---- 4.1 Issues ----
 
 . Change FOG parser to put temporary parsetab.py files someplace other than the current directory.
@@ -30,4 +28,7 @@
 
 . Add static analyzer
     This is a 4.1 ticket
+
+. Standardize test execution when linking static components together
+    This is a 4.x ticket
 
