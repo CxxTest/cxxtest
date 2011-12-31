@@ -1230,13 +1230,21 @@ CXXTEST_LONGLONG
 Acknowledgements
 ----------------
 
-CxxTest was originally developed by Erez Volk.
-The following developers actively contributed to the CxxTest 4.0 release:
+CxxTest was originally developed by Erez Volk.  The following
+developers actively contributed to the CxxTest 4.0 release:
 
 * Gašper Ažman
 * Kevin Fitch 
 * William Hart
 * John Siirola
+
+The CxxTest documentation is generated using
+http://www.methods.co.nz/asciidoc/[AsciiDoc].  The following people
+have contributed to the CxxTest User Manual:
+
+* William Hart
+* Lionel Orry
+* Erez Volk
 
 A major advancement in CxxTest's capability is the new test discovery
 mechanism that is based on a parser of the Flexible Object Language
