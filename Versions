@@ -2,7 +2,14 @@
 CxxTest Releases
 ----------------
 
-* Version 4.0 (TODO)
+* Version 4.0.2 (2012-01-02)
+ - Bug fix to enable installation of cxxtestgen without the 'setuptools' package
+
+* Version 4.0.1 (2012-01-01)
+ - Documentation updates
+ - Bug fix for installation of cxxtestgen script
+
+* Version 4.0 (2011-12-28)
  - Perl is no longer used to support CxxTest scripts.  Python is now the only scripting language used by      CxxTest.
  - The testing scripts have been rewritten using the PyUnit framework.
  - The installation process for CxxTest now leverages and integrates with the system Python installation.

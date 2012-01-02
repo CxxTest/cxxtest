@@ -34,9 +34,13 @@ setup(name="cxxtest",
       long_description = "\n".join(doclines[2:]),
       packages=['cxxtest'],
       keywords=['utility'],
-      entry_points="""
-        [console_scripts]
-        cxxtestgen = cxxtest.cxxtestgen:main
-      """
+      scripts=['scripts/cxxtestgen']
+      #
+      # The entry_points option is not supported by distutils.core
+      #
+      #entry_points="""
+        #[console_scripts]
+        #cxxtestgen = cxxtest.cxxtestgen:main
+      #"""
       )
 
