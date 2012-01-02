@@ -11,18 +11,11 @@
 
 .. _CxxTest: http://cxxtest.tigris.org/
 
-The _CxxTest testing framework is focussed on being a lightweight
-framework that is well suited for integration into embedded systems
-development projects.
-
-CxxTest's advantages over existing alternatives are that it:
-
-* Doesn't require RTTI
-* Doesn't require member template functions
-* Doesn't require exception handling
-* Doesn't require any external libraries (including memory management, file/console I/O, graphics libraries)
-* Is distributed entirely as a set of header files (and a python script).
-* Doesn't require the user to manually register tests and test suites 
+CxxTest is a unit testing framework for C++ that is similar in
+spirit to JUnit, CppUnit, and xUnit. CxxTest is easy to use because
+it does not require precompiling a CxxTest testing library, it
+employs no advanced features of C++ (e.g. RTTI) and it supports a
+very flexible form of test discovery.
 
 The cxxtest Python package includes capabilities for parsing C/C++ source files and generating
 CxxTest drivers.
@@ -32,9 +25,8 @@ from cxxtest.__release__ import __version__, __date__
 __date__
 __version__
 
-__maintainer__ = "TODO"
-__maintainer_email__ = "TODO"
-__copyright__ = "TODO"
+__maintainer__ = "William E. Hart"
+__maintainer_email__ = "whart222@gmail.com"
 __license__ = "LGPL"
 __url__ = "http://cxxtest.tigris.org/"
 
