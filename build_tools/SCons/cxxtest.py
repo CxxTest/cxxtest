@@ -198,7 +198,8 @@ def findCxxTestHeaders(env):
 
     default_path = Dir(envget(env,'CXXTEST_INSTALL_DIR')).abspath
 
-    alt_path = Dir(File(env['CXXTEST']).abspath[:-cxxtestgen_pathlen]).abspath
+    os_cxxtestgen = os.path.realpath(File(env['CXXTEST']).abspath)
+    alt_path = os_cxxtestgen[:-cxxtestgen_pathlen]
 
     searchpaths = [default_path, alt_path]
     for p in searchpaths:
