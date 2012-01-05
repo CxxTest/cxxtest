@@ -15,16 +15,16 @@ from __future__ import division
 
 __all__ = ['main']
 
-from . import __release__
+import __release__
 import os
 import sys
 import re
 import glob
 from optparse import OptionParser
-from . import cxxtest_parser
+import cxxtest_parser
 
 try:
-    from . import cxxtest_fog
+    import cxxtest_fog
     imported_fog=True
 except ImportError:
     imported_fog=False
