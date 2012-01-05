@@ -31,13 +31,6 @@ def scanInputFiles(files, _options):
     global suites
     if len(suites) is 0 and not options.root:
         abort( 'No tests defined' )
-
-    #print("INFO\n")
-    #for suite in suites:
-        #for key in suite:
-            #print(key,suite[key])
-        #print("")
-
     return [options,suites]
 
 lineCont_re = re.compile('(.*)\\\s*$')
