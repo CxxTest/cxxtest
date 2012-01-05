@@ -13,7 +13,7 @@ python/bin/easy_install ordereddict
 python/bin/easy_install gcovr
 python/bin/easy_install pyutilib.th
 cd cxxtest/python
-../../python/bin/python setup.py develop
+../../python/bin/python setup.py install
 
 # Cleanup test directory
 cd ../test
