@@ -132,7 +132,7 @@ suites_re = { re.compile( general_suite + testsuite ) : None }
 generatedSuite_re = re.compile( r'\bCXXTEST_SUITE\s*\(\s*(\w*)\s*\)' )
 def scanLineForSuiteStart( fileName, lineNo, line ):
     '''Check if current line starts a new test suite'''
-    for i in suites_re.items():
+    for i in list(suites_re.items()):
         m = i[0].search( line )
         if m:
             suite = startSuite( m.group(1), fileName, lineNo, 0 )

@@ -130,7 +130,7 @@ class CppInfo(object):
             cname = self.find_class(key,scope)
             if cname is None:
                 if not quiet:
-                    print("Defined classes: ",self.index.keys())
+                    print("Defined classes: ",list(self.index.keys()))
                     print("WARNING: Unknown class "+key)
             else:
                 fns += self.get_functions(cname,quiet)
@@ -172,7 +172,7 @@ class CppInfo(object):
 
     def __str__(self):
         ans=""
-        keys = self.index.keys()
+        keys = list(self.index.keys())
         keys.sort()
         for key in keys:
             scope = self.index[key]
