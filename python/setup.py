@@ -13,6 +13,11 @@ Programming Language :: Python
 Topic :: Software Development :: Libraries :: Python Modules
 """
 
+import os
+import sys
+if sys.version_info >= (3,0):
+    os.chdir('python3')
+
 import cxxtest
 
 try:
