@@ -29,7 +29,7 @@ try:
 except ImportError:
     imported_fog=False
 
-from cxxtest.cxxtest_misc import abort
+from cxxtest_misc import abort
 
 options = []
 suites = []

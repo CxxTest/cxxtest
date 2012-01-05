@@ -49,7 +49,7 @@ def scanInputFiles(files, _options):
         if not parse_info.noExceptionLogic:
             _options.haveExceptionHandling=1
         #
-        keys = parse_info.index.keys()
+        keys = list(parse_info.index.keys())
         tpat = re.compile("[Tt][Ee][Ss][Tt]")
         for key in keys:
             if parse_info.index[key].scope_t == "class" and parse_info.is_baseclass(key,"CxxTest::TestSuite"):
