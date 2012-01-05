@@ -26,7 +26,7 @@ python/bin/nosetests -v -v --with-xunit --xunit-file=$WORKSPACE/TEST-cxxtest.xml
 
 # Generate code coverage
 cd cxxtest
-../python/bin/gcovr -v -r $WORKSPACE/cxxtest -x -o $WORKSPACE/cxxtest/test/coverage.xml --gcov-filter '.*#test#\.\.#cxxtest#.*gcov'
+../python/bin/gcovr -v -r $WORKSPACE/cxxtest -x -o $WORKSPACE/cxxtest/test/coverage.xml --gcov-filter '.*#test#(\.\.|^)#cxxtest#.*gcov'
 
 echo "DONE"
 
