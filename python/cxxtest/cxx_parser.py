@@ -47,7 +47,7 @@
 # TODO: document usage of this file
 #
 
-from __future__ import print_function, division
+from __future__ import division
 
 import os
 import ply.lex as lex
