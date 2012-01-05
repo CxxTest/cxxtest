@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sys
 import os
 import os.path
@@ -27,11 +26,14 @@ xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
 # Headers from the cxxtest/sample directory
 samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
 guiInputs=currdir+'../sample/gui/GreenYellowRed.h'
-target_suffix = '.exe' if sys.platform.startswith('win') else ''
+if sys.platform.startswith('win'):
+    target_suffix = '.exe'
+else:
+    target_suffix = ''
 # Create a file with the list of sample files
 OUTPUT = open(currdir+'Samples.txt','w')
 for line in sorted(glob.glob(sampledir+'*.h')):
-    print(line, file=OUTPUT)
+    OUTPUT.write(line+'\n')
 OUTPUT.close()
 
 def available(compiler, exe_option):
@@ -55,7 +57,7 @@ def remove_absdir(filename):
         if match:
             parts = match.groupdict()
             line = dirre.sub("", parts['path']) + parts['rest']
-        print(line, file=OUTPUT)
+        OUTPUT.write(line+'\n')
     OUTPUT.close()
 
 def normalize_line_for_diff(line):
@@ -199,7 +201,7 @@ class BaseTestCase(object):
         #
         status = subprocess.call("cd %s; %s -v > %s 2>&1" % (currdir, self.build_target, self.px_pre), shell=True)
         OUTPUT = open(self.px_pre,'a')
-        print('Error level = '+str(status), file=OUTPUT)
+        OUTPUT.write('Error level = '+str(status)+'\n')
         OUTPUT.close()
         diffstr = file_diff(self.px_pre, currdir+output)
         if not diffstr == '':
@@ -245,7 +247,7 @@ class BaseTestCase(object):
             status = subprocess.call(cmd, shell=True)
             #print "HERE-status",status
             OUTPUT = open(self.px_pre,'a')
-            print('Error level = '+str(status), file=OUTPUT)
+            OUTPUT.write('Error level = '+str(status)+'\n')
             OUTPUT.close()
             if logfile is None:
                 diffstr = file_diff(self.px_pre, currdir+output)
