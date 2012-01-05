@@ -31,10 +31,10 @@ cd cxxtest
 echo "DONE"
 
 # Cleanup old gcov files
-cd $WORKSPACE
-\rm -f *.gcov cxxtest/*.gcov doc/*.gcov doc/examples/*.gcov
-\rm -f *.gcno cxxtest/*.gcno doc/*.gcno doc/examples/*.gcno
-\rm -f *.gcda cxxtest/*.gcda doc/*.gcda doc/examples/*.gcda
-cd $WORKSPACE/cxxtest/test
-make clean
+##cd $WORKSPACE
+##\rm -f *.gcov cxxtest/*.gcov doc/*.gcov doc/examples/*.gcov
+##\rm -f *.gcno cxxtest/*.gcno doc/*.gcno doc/examples/*.gcno
+##\rm -f *.gcda cxxtest/*.gcda doc/*.gcda doc/examples/*.gcda
+##cd $WORKSPACE/cxxtest/test
+##make clean
 
