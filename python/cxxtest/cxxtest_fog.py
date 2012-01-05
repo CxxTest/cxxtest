@@ -32,14 +32,14 @@ def scanInputFiles(files, _options):
     suites=[]
     for file in files:
         try:
-            print("Parsing file "+file,)
+            print "Parsing file "+file,
             sys.stdout.flush()
             parse_info = cxx_parser.parse_cpp(filename=file,optimize=1)
         except IOError, err:
-            print(" error.")
-            print(str(err))
+            print " error."
+            print str(err)
             continue
-        print("done.")
+        print "done." 
         sys.stdout.flush()
         #
         # WEH: see if it really makes sense to use parse information to
@@ -85,15 +85,8 @@ def scanInputFiles(files, _options):
                     suite['tests'].append(test)
                 suites.append(suite)
 
-    #print("INFO\n")
-    #for suite in suites:
-        #for key in suite:
-            #print(key,suite[key])
-        #print("")
-
     if not _options.root:
         ntests = 0
-        #print(suites)
         for suite in suites:
             ntests += len(suite['tests'])
         if ntests == 0:

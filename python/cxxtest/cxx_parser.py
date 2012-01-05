@@ -101,14 +101,14 @@ class CppInfo(object):
     def push_scope(self,ns,scope_t,base_classes=[]):
         name = self.scopes[-1]+"::"+ns
         if self.verbose>=2:
-            print("-- Starting "+scope_t+" "+name)
+            print "-- Starting "+scope_t+" "+name
         self.scopes.append(name)
         self.index[name] = Scope(ns,name,scope_t,base_classes,scope_lineno-1)
 
     def pop_scope(self):
         scope = self.scopes.pop()
         if self.verbose>=2:
-            print("-- Stopping "+scope)
+            print "-- Stopping "+scope
         return scope
 
     def add_function(self, fn):
@@ -117,9 +117,9 @@ class CppInfo(object):
             self.index[self.scopes[-1]].function.append((fn, identifier_lineno.get(fn,lexer.lineno-1)))
             tmp = self.scopes[-1]+"::"+fn
             if self.verbose==2:
-                print("-- Function declaration "+fn+"  "+tmp)
+                print "-- Function declaration "+fn+"  "+tmp
             elif self.verbose==1:
-                print("-- Function declaration "+tmp)
+                print "-- Function declaration "+tmp
 
     def get_functions(self,name,quiet=False):
         if name == "::":
@@ -130,8 +130,8 @@ class CppInfo(object):
             cname = self.find_class(key,scope)
             if cname is None:
                 if not quiet:
-                    print("Defined classes: ",list(self.index.keys()))
-                    print("WARNING: Unknown class "+key)
+                    print "Defined classes: ",list(self.index.keys())
+                    print "WARNING: Unknown class "+key
             else:
                 fns += self.get_functions(cname,quiet)
         return fns
@@ -382,7 +382,7 @@ def t_Identifier(t):
 
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print "Illegal character '%s'" % t.value[0]
     #raise IOError, "Parse error"
     #t.lexer.skip()
 
@@ -2101,7 +2101,7 @@ def p_error(p):
 #
 def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func_filter=None):
     if debug > 0:
-        print("Debugging parse_cpp!")
+        print "Debugging parse_cpp!"
         #
         # Always remove the parser.out file, which is generated to create debugging
         #
@@ -2175,7 +2175,7 @@ if __name__ == '__main__':
     for arg in sys.argv[1:]:
         if arg == "-v":
             continue
-        print("Parsing file '"+arg+"'")
+        print "Parsing file '"+arg+"'"
         if '-v' in sys.argv:
             parse_cpp(filename=arg,debug=2,verbose=2)
         else:
@@ -2185,5 +2185,5 @@ if __name__ == '__main__':
         # This illustrates how class inheritance can be used to 
         # deduce class members.
         # 
-        print(str(_parse_info))
+        print str(_parse_info)
 
