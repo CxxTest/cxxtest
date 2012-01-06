@@ -9,27 +9,27 @@
 
 # vim: fileencoding=utf-8
 
-from __future__ import division
+
 # the above import important for forward-compatibility with python3,
 # which is already the default in archlinux!
 
 __all__ = ['main']
 
-import __release__
+from . import __release__
 import os
 import sys
 import re
 import glob
 from optparse import OptionParser
-import cxxtest_parser
+from . import cxxtest_parser
 
 try:
-    import cxxtest_fog
+    from . import cxxtest_fog
     imported_fog=True
 except ImportError:
     imported_fog=False
 
-from cxxtest_misc import abort
+from .cxxtest_misc import abort
 
 options = []
 suites = []
