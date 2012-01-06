@@ -13,6 +13,13 @@ Programming Language :: Python
 Topic :: Software Development :: Libraries :: Python Modules
 """
 
+import os
+import sys
+from os.path import realpath, dirname
+if sys.version_info >= (3,0):
+    sys.path.insert(0, dirname(realpath(__file__))+os.sep+'python3')
+    os.chdir('python3')
+
 import cxxtest
 
 try:
