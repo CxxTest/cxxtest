@@ -1152,6 +1152,7 @@ distribution model is very strategic for cxxtest.
 ////
 
 
+
 [[discussion]]
 Status and Future Plans
 -----------------------
@@ -1420,8 +1421,207 @@ process in different ways.  The following sections provide rough
 guidance for doing this for some come use cases.
 
 [NOTE]
-These examples are not actively maintained and tested.  Please send
-suggestions to the CxxTest developers for updating this documentation.
+These examples (except for the SCons ones) are not actively maintained and
+tested. Please send suggestions to the CxxTest developers for updating this
+documentation.
+
+[[scons]]
+SCons
+~~~~~
+
+CxxTest provides built-in support for the SCons build system. This part
+documents this feature.
+
+[[installation]]
+Installation
+^^^^^^^^^^^^
+
+The script is located at +build_tools/SCons/cxxtest.py+.
+You need SCons to be able to find this file, so do one of the following:
+
+- add the file to your project site_tools directory (default: +#/site_scons/site_tools/+)
+- link the file to your project site_tools directory
+- add +build_tools/SCons/cxxtest.py+ to your SCons toolpath.
+
+[NOTE]
+'#' means the project root, using the SCons convention of marking it that way.
+
+Preparing the tests for use with the builder
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This builder assumes that tests have a different suffix than other files in your
+project (by default: +.t.h+, configure via 'CXXTEST_SUFFIX'). This isn't a bad
+idea to begin with, since test "header files" are not really header files in the
+traditional sense. This is how it separates files it should run through
+cxxtestgen from the ones it should not.
+
+[NOTE]
+Test header files' filenames should end with +.t.h+.
+
+Compiling and Running the Tests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+By default, you build and run the tests by issuing the following command:
+
+.Building and running the tests in the shell
+===================
+[source,bash]
+scons check
+===================
+
+Of course, the actual name of the target is configurable (+CXXTEST_TARGET+).
+
+Using the Builder
+^^^^^^^^^^^^^^^^^
+
+This section describes what you do in your SConstruct file in order to be able
+to use the builder.
+
+First, you must tell the environment that you want to use the 'cxxtest' tool and
+how it should set itself up.
+
+The easiest way to set the environment up is to pray the defaults are ok.
+The builder does some autodetection and tries its best to figure everything out.
+In the event this works, setting up the environment is as easy as telling SCons
+it should use the 'cxxtest' tool.
+
+.Configuring the environment if defaults are ok
+===================
+[source,python]
+env = Environment(tools = ['default', 'cxxtest'])
+===================
+
+If this doesn't work, the builder tries its best to tell you what went wrong. In
+most cases, it just wasn't able to find where you installed cxxtest. You can fix
+this like so (assuming you have CxxTest in +#/extern_libs/cxxtest/+):
+
+.Configuring the environment: telling the builder where CxxTest is installed
+===================
+[source,python]
+env = Environment(tools = [
+        'default',
+         ('cxxtest', {'CXXTEST_INSTALL_DIR' : '#/extern_libs/cxxtest/'})
+      ])
+===================
+
+[NOTE]
+If you want to pass other options to the builder, just append them to the
+dictionary.
+
+It is advisable to pass most options to the builder at creation time, although
+the 'CxxTest' call can also accept most of them if you need to do some weird
+thing with a particular test.
+
+You can use the builder the same way you would the 'Program' builder.
+
+.Setting up tests with SCons and the cxxtest builder
+===================
+[source,python]
+---------------------------------------------------------------------------
+# ... set up the environment as above, with your favorite options
+# and then tell the builder to build some tests
+env.CxxTest('my_test_suite', source='mytests.t.h')                      #<1>
+env.CxxTest('the_other_suite', ['test_header.t.h', '../utilities.cpp']) #<2>
+env.CxxTest('the_third_suite',
+                 ['testsuite1.t.h', 'testsuite2.t.h',
+                  'testsuite3.t.h', 'required_libs.cpp'])               #<3>
+env.CxxTest('the_fourth_suite',
+                 ['reginold_never_checks_for_warnings.t.h'],
+                 CXXFLAGS='-Wall -Wextra -Weffc++ -pedantic')           #<4>
+---------------------------------------------------------------------------
+
+<1> Normal, 1-source file tests
+<2> This is how a single testsuite needing implementations is compilied
+<3> If you want multiple testsuites in a single runner, this is how it's done
+<4> unrecognised options are passed through to the Program builder unchanged
+
+===================
+
+Configuration Options
+^^^^^^^^^^^^^^^^^^^^^
+
+===== +CXXTEST_RUNNER+
+
+Default: "ErrorPrinter".
+
+This is what is passed to the +--runner+ option of +cxxtestgen+. See the section
+about runners to see what the other options are.
+
+===== +CXXTEST_OPTS+
+
+Default: empty.
+
+Any other commandline options to pass to +cxxtestgen+.
+
+Do not pass +--runner+, +--error-printer+ and friends, and +--root+ or +--part+
+here.
+
+===== +CXXTEST_SUFFIX+
+
+Default: ".t.h"
+
+The suffix test suite files have. Should be different from other header files.
+If you never mean to pass any header files that are not test suites to the
+builder, you can set this to ".h" and use plain ".h" files.
+
+===== +CXXTEST_TARGET+
+
+Default: "check"
+
+This is the target that scons tests are added to in order to run them. If you
+want something else, this is the place.
+
+===== +CXXTEST_INSTALL_DIR+
+
+Default: autodetect
+
+If cxxtest isn't found automatically, you need to set this. Normal SCons path
+expansion rules apply.
+
+===== +CXXTEST_CPPPATH+
+
+Default: autodetect
+
+If you don't want to clutter your normal +CPPPATH+ with CxxTest headers and this
+isn't autodetected even after you set +CXXTEST_INSTALL_DIR+, then set this.
+
+===== +CXXTEST+
+
+Default: autodetect
+
+If +cxxtestgen+ isn't found even after you set +CXXTEST_INSTALL_DIR+, then set
+this to the path of the +cxxtestgen+ script.
+
+===== +CXXTEST_SKIP_ERRORS+
+
+Default: False
+
+When running tests with +scons check+, if you want to continue even if tests
+fail, set this to True.
+
+===== +CXXTEST_PYTHON+
+
+Default: the same python interpreter that is running scons.
+
+If you want to use a particular python interpreter to run +cxxtestgen+, set its
+path here.
+
+===== +CXXTEST_CXXFLAGS_REMOVE+
+
+Default: a list of flags with which no test compiles. Changes as we fix bugs.
+
+Do you want your tests to compile without some flags and don't want gymnastics
+to get them out for tests only? This is the way. Just add them to here and they
+will be stripped. (This is a list, by the way, not a string.)
+
+===== +CXXTEST_CCFLAGS_REMOVE+
+
+Same as above, but for +CCFLAGS+.
+
+===== +CXXTEST_CXXTESTGEN_SCRIPT_NAME+
+
+If you are crazy and have changed the name of the cxxtestgen executable and want
+autodetection to work otherwise, set this to the new name.
 
 
 Using Makefiles
@@ -1549,5 +1749,4 @@ If these packages are not available, then +test_cxxtest.py+ will skip the FOG te
 [[appendix_D]] 
 include::../Versions[]
 
-// vim: set syntax=asciidoc:
-
+// vim: set syntax=asciidoc
