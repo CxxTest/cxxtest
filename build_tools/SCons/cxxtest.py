@@ -4,8 +4,7 @@
 # Authors of this script are in the Authors file in the same directory as this
 # script.
 #
-# please send bugreports/praise/comments/criticism to
-# gasper.azman at gmail.com or the cxxtest mailing list (dev at cxxtest.tigris.org)
+# Maintainer: Gašper Ažman <gasper.azman@gmail.com>
 #
 # This file is maintained as a part of the CxxTest test suite.
 # 
