@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.5" />
+<meta name="generator" content="AsciiDoc 8.6.6" />
 <title>CxxTest User Guide</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -179,7 +179,7 @@ div.quoteblock, div.verseblock {
   margin-left: 1.0em;
   margin-right: 10%;
   border-left: 5px solid #f0f0f0;
-  color: #777777;
+  color: #888;
 }
 
 div.quoteblock > div.attribution {
@@ -514,6 +514,29 @@ th.tableblock.valign-middle, td.tableblock.valign-middle {
 th.tableblock.valign-bottom, td.tableblock.valign-bottom {
   vertical-align: bottom;
 }
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
 </style>
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -587,7 +610,7 @@ toc: function (toclevels) {
   var i;
   for (i = 0; i < toc.childNodes.length; i++) {
     var entry = toc.childNodes[i];
-    if (entry.nodeName == 'DIV'
+    if (entry.nodeName == 'div'
      && entry.getAttribute("class")
      && entry.getAttribute("class").match(/^toclevel/))
       tocEntriesToRemove.push(entry);
@@ -633,7 +656,7 @@ footnotes: function () {
   var entriesToRemove = [];
   for (i = 0; i < noteholder.childNodes.length; i++) {
     var entry = noteholder.childNodes[i];
-    if (entry.nodeName == 'DIV' && entry.getAttribute("class") == "footnote")
+    if (entry.nodeName == 'div' && entry.getAttribute("class") == "footnote")
       entriesToRemove.push(entry);
   }
   for (i = 0; i < entriesToRemove.length; i++) {
@@ -941,7 +964,7 @@ method is run after each test is executed.</p></div>
 <div class="paragraph"><p>The following is a simple example of a
 test suite with a single test, <tt>testAddition</tt>, which perform two test assertions:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -959,14 +982,14 @@ http://www.gnu.org/software/src-highlite -->
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span></tt></pre></div></div>
 <div class="paragraph"><p>You use the <tt>cxxtestgen</tt> script to generate a <em>test runner</em> for test suites in C++ header files:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>cxxtestgen --error-printer -o runner<span style="color: #990000">.</span>cpp MyTestSuite1<span style="color: #990000">.</span>h</tt></pre></div></div>
 <div class="paragraph"><p>This command generates the file <tt>runner.cpp</tt>, which can be compiled.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -975,7 +998,7 @@ http://www.gnu.org/software/src-highlite -->
 and libraries that are used during testing.</p></div>
 <div class="paragraph"><p>This runner can be executed to perform the specified tests:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -995,7 +1018,7 @@ Success rate: 66%</tt></pre>
 <div class="paragraph"><p>The following header file extends the previous example to
 include a test that generates an error:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1304,7 +1327,7 @@ in the test runner.  The <tt>ErrorPrinter</tt> test listener prints dots
 to summarize test execution, along with a summary of the test
 results.  For example, the command</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1324,7 +1347,7 @@ Success rate: 66%</tt></pre>
 <div class="paragraph"><p>If your compiler does not support <tt>std::cout</tt>, then the <tt>ErrorPrinter</tt> test listener cannot be used.
 In this case, the <tt>StdioPrinter</tt> test listener can be used;  it provides the same output as <tt>ErrorPrinter</tt> but it uses the <tt>printf</tt> function. For example, the command line:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1343,7 +1366,7 @@ Success rate: 50%</tt></pre>
 <h4 id="_parenprinter">4.2.3. ParenPrinter</h4>
 <div class="paragraph"><p>The <tt>--runner=ParenPrinter</tt> option creates a similar test runner:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1363,7 +1386,7 @@ Success rate: 50%</tt></pre>
 <h4 id="_xmlprinter">4.2.4. XmlPrinter</h4>
 <div class="paragraph"><p>The <tt>--runner=XmlPrinter</tt> option creates a test runner whose output is an XML summary of the test results.  For example, the command:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1389,7 +1412,7 @@ user to interactively view a simple test summary, while simultaneously
 generating an XML summary of the test results.  The <tt>--xunit-printer</tt>
 option specifies the use of <tt>XUnitPrinter</tt>:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1439,7 +1462,7 @@ allow test suites to be processes separately and then linked together.  The <tt>
 support this logic.  For example, suppose that we wish to define a test runner for tests in the headers
 MyTestSuite1.h+ and <tt>MyTestSuite2.h</tt>.  We execute <tt>cxxtestgen</tt> with the <tt>--part</tt> option to generate source files for each of the test suites:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1447,14 +1470,14 @@ http://www.gnu.org/software/src-highlite -->
 cxxtestgen --part --error-printer -o MyTestSuite2<span style="color: #990000">.</span>cpp MyTestSuite2<span style="color: #990000">.</span>h</tt></pre></div></div>
 <div class="paragraph"><p>Similarly, we execute <tt>cxxtestgen</tt> with the <tt>--root</tt> opiton to generate the <tt>main()</tt> routine:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>cxxtestgen --root --error-printer -o runner<span style="color: #990000">.</span>cpp</tt></pre></div></div>
 <div class="paragraph"><p>Finally, the test runner is built by compiling all of these source files together:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1470,14 +1493,14 @@ with the embedded declaration <tt>&lt;CxxTest world&gt;</tt>, which tells
 cxxtestgen+ to insert the world definition at that point.</p></div>
 <div class="paragraph"><p>The <tt>--template</tt> option is used to specify the use of a template file:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>cxxtestgen -o runner<span style="color: #990000">.</span>cpp --template runner10<span style="color: #990000">.</span>tpl MyTestSuite2<span style="color: #990000">.</span>h</tt></pre></div></div>
 <div class="paragraph"><p>For example, consider the following template file:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1535,7 +1558,7 @@ of the input files, which can easily fail when test classes are not
 formated in a standard manner.  For example, consider the following
 test suite:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1565,7 +1588,7 @@ The process of test discovery makes adding tests very easy.  However,
 disabling tests is somewhat more complicated.  Consider the following
 header file, which defines four tests (three of which are disabled):</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1611,7 +1634,7 @@ all three.  The FOG parser performs a complex, multi-line parse of
 the source file, so it can identify multi-line C-style comments.</p></div>
 <div class="paragraph"><p>Note, however, that the use of C macros will not work:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1651,7 +1674,7 @@ However, CxxTest test runners process command line options that
 allow individual tests and test suites to be selected.</p></div>
 <div class="paragraph"><p>For example, consider a test runner defined as follows:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1673,7 +1696,7 @@ http://www.gnu.org/software/src-highlite -->
 </div></div>
 <div class="paragraph"><p>The <tt>--help-tests</tt> option is used to list all test suites that are defined in a test runner.  The command</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1691,7 +1714,7 @@ MyTestSuite4 testAddition</tt></pre>
 <div class="paragraph"><p>The first column is the test suite name, and the second column is the test name.</p></div>
 <div class="paragraph"><p>All tests in a test suite can be executed by simply specifying the test suite name.  For example</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1707,7 +1730,7 @@ Success rate: 50%</tt></pre>
 </div></div>
 <div class="paragraph"><p>Similarly, a single test can be executed by specifying the test suite followed by the test name.  For example</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1725,7 +1748,7 @@ Success rate: 0%</tt></pre>
 by the <tt>TS_TRACE</tt> function.  For example, the <tt>testMultiplication</tt> test contains trace declarations
 before and after the multiplication test.  Thus, the command</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1807,7 +1830,7 @@ files are included in the test runner.  For example, the following
 template file defines <tt>CXXTEST_HAVE_EH</tt> and <tt>CXXTEST_ABORT_TEST_ON_FAIL</tt>
 before other headers are included:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1852,7 +1875,7 @@ is called after each test.</p></div>
 <div class="paragraph"><p>For example, the following test suite employs <tt>setUp()</tt> and <tt>tearDown()</tt> methods to
 allocate and deallocate memory for a string buffer:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1907,7 +1930,7 @@ test suite checks to see if it is being compiled with Microsoft
 Visual Studio.  If not, the <tt>createSuite()</tt> returns a null pointer,
 indicating that the test suite was not created.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1948,7 +1971,7 @@ this mechanism provides a convenient way of defining setup and
 teardown operations that apply to all test suites.</p></div>
 <div class="paragraph"><p>For example, consider the following test suite:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2095,7 +2118,7 @@ Thus, user-defined data types need to have the <tt>operator=</tt> method
 defined to ensure that test assertions can be applied.</p></div>
 <div class="paragraph"><p>For example, the following code</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2155,7 +2178,7 @@ applied to <tt>Data2</tt> objects that do not have <tt>operator=</tt> defined.</
 from arbitrary data types to strings is done using <em>value traits</em>.
 For example, to convert an integer to a string, CxxTest does the following:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2175,7 +2198,7 @@ types.  The <tt>CXXTEST_ENUM_TRAITS</tt> macro is used to define value
 traits for all members of an enumeration set.</p></div>
 <div class="paragraph"><p>For example, the following code</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2236,7 +2259,7 @@ specialization of <tt>ValueTraits</tt> that converts an object of the new
 class to a string.  For example, consider the definition of the
 <tt>MyClass</tt> class:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2287,7 +2310,7 @@ instance.</p></div>
 <div class="paragraph"><p>The following test suite illustrates how these definitions can be
 used to define a test runner:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2328,7 +2351,7 @@ the string description of <tt>MyClass</tt> that appears in the output.</p></div>
 <div class="paragraph"><p>A simple modification to the above example illustrates how a trait can be defined for a
 template class:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2389,7 +2412,7 @@ following steps.</p></div>
 <div class="paragraph"><p>The <tt>CXXTEST_MOCK_GLOBAL</tt> macro is used to declare mock global functions.  It is often convenient to include
 these declarations in a header file, which is used in both the test suite as well as the code that is being tested:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2409,7 +2432,7 @@ You access mock functions in the <tt>T</tt> (for <em>Test</em>) namespace, so th
 <tt>time()</tt>. This is the equivalent of using abstract interfaces
 instead of concrete classes.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2427,7 +2450,7 @@ http://www.gnu.org/software/src-highlite -->
 calling the real global function.  This definition is performed automatically by
 defining <tt>CXXTEST_MOCK_REAL_SOURCE_FILE</tt> before the header file is defined:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2438,7 +2461,7 @@ http://www.gnu.org/software/src-highlite -->
 <div class="paragraph"><p>Similarly, a source file needs to be defined that implements <tt>T::time()</tt> by calling the mock
 global function.  This definition is performed automatically by defining <tt>CXXTEST_MOCK_TEST_SOURCE_FILE</tt> before the header file is defined:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2454,7 +2477,7 @@ API is the same as the global <tt>time()</tt> function.  Thus, this method can b
 whatever behavior is desired during testing.  For example, the following example defines a
 mock object that increments a counter to define an incremental value for <tt>time()</tt>.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2492,14 +2515,14 @@ needs to be instantiated prior to the call to <tt>T::time()</tt>.</p></div>
 <h4 id="_building_the_test_runner">8.1.5. Building the Test Runner</h4>
 <div class="paragraph"><p>The <tt>cxxtestgen</tt> command is used to create a test runner with mock functions in a normal manner:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>cxxtestgen --error-printer -o runner<span style="color: #990000">.</span>cpp MockTestSuite<span style="color: #990000">.</span>h</tt></pre></div></div>
 <div class="paragraph"><p>The test runner source file, <tt>runner.cpp</tt>, needs to be compiled an linked to the mock function definition, <tt>time_mock.cpp</tt>, as well as the code being tested, <tt>rand_example.cpp</tt>:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2538,7 +2561,7 @@ test runner.  CxxTest can provide mock global function definitions
 for the test code while using the original functions in the tested code.</p></div>
 <div class="paragraph"><p>The <tt>CXXTEST_SUPPLY_GLOBAL</tt> and <tt>CXXTEST_SUPPLY_VOID_GLOBAL</tt> macros are used to provide mock global function definitions.  For example, the following declaration creates a mock global function for the Win32 kernel function <tt>IoCallDriver</tt>:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2564,7 +2587,7 @@ String &amp;name )</tt>;  the namespace <tt>Files</tt> contains the function
 <tt>FileExists</tt>.  The mock class will be called <tt>T::Base_Files_FileExists</tt>
 and the function to implemented would be <tt>fileExists</tt>.  The <tt>CXXTEST_MOCK</tt> macro declares this mock global function as follows:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2577,7 +2600,7 @@ http://www.gnu.org/software/src-highlite -->
 <div class="paragraph"><p>Similarly, the <tt>CXXTEST_MOCK_VOID</tt> macro is used to declare a mock global function that returns <tt>void</tt>.</p></div>
 <div class="paragraph"><p>The <tt>CXXTEST_SUPPLY</tt> and <tt>CXXTEST_SUPPLY_VOID</tt> macros are used to provide mock global function definitions for nonexistent functions.  For example:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2637,7 +2660,7 @@ If you have
 installed, then
 you can install these packages from PyPI by executing</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2657,7 +2680,7 @@ CxxTest is a major driver for the 4.0 release.</p></div>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
-<div class="title">Note</div>
+<img src="./images/icons/note.png" alt="Note" />
 </td>
 <td class="content">TODO: Say more here about webresources for hosting, mailing lists, testinging and project management</td>
 </tr></table>
@@ -2811,7 +2834,7 @@ This is the most basic test assertion, which simply verifies that the <tt>expr</
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2830,7 +2853,7 @@ This test assertion verifies two floating point values are within a specified ab
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2849,7 +2872,7 @@ This test assertion verifies that the two arguments are not equal:
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2868,7 +2891,7 @@ http://www.gnu.org/software/src-highlite -->
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2888,7 +2911,7 @@ This test assertion verifies that the first argument is strictly less than the s
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2907,7 +2930,7 @@ This test assertion verifies that the first argument is less than or equal to th
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2926,7 +2949,7 @@ This test assertion takes as an argument the name of a class, similar to a STL <
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2953,7 +2976,7 @@ It takes as an argument the name of a class, similar to a STL <tt>binary_functio
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2975,7 +2998,7 @@ except that it compares the contents of two buffers in memory:
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -2998,7 +3021,7 @@ This test assertion verifies that the specified exception is thrown when the fir
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3022,7 +3045,7 @@ This test assertion verifies that <em>some</em> exception is thrown when the fir
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3042,7 +3065,7 @@ exception value:
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3067,7 +3090,7 @@ This test assertion verifies that an exception is thrown when executing the firs
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3086,7 +3109,7 @@ This test assertion verifies that an exception is <em>not</em> thrown when execu
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3108,7 +3131,7 @@ This function triggers a test failure with an associated message:
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3127,7 +3150,7 @@ This function prints an informational message:
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3146,7 +3169,7 @@ This function prints a message as a warning:
 </dd>
 </dl></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3188,18 +3211,243 @@ guidance for doing this for some come use cases.</p></div>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
-<div class="title">Note</div>
+<img src="./images/icons/note.png" alt="Note" />
 </td>
-<td class="content">These examples are not actively maintained and tested.  Please send
-suggestions to the CxxTest developers for updating this documentation.</td>
+<td class="content">These examples (except for the SCons ones) are not actively maintained and
+tested. Please send suggestions to the CxxTest developers for updating this
+documentation.</td>
 </tr></table>
+</div>
+<div class="sect2">
+<h3 id="scons">SCons</h3>
+<div class="paragraph"><p>CxxTest provides built-in support for the SCons build system. This part
+documents this feature.</p></div>
+<div class="sect3">
+<h4 id="installation">Installation</h4>
+<div class="paragraph"><p>The script is located at <tt>build_tools/SCons/cxxtest.py</tt>.
+You need SCons to be able to find this file, so do one of the following:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+add the file to your project site_tools directory (default: <tt>#/site_scons/site_tools/</tt>)
+</p>
+</li>
+<li>
+<p>
+link the file to your project site_tools directory
+</p>
+</li>
+<li>
+<p>
+add <tt>build_tools/SCons/cxxtest.py</tt> to your SCons toolpath.
+</p>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note" />
+</td>
+<td class="content"><em>#</em> means the project root, using the SCons convention of marking it that way.</td>
+</tr></table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_preparing_the_tests_for_use_with_the_builder">Preparing the tests for use with the builder</h4>
+<div class="paragraph"><p>This builder assumes that tests have a different suffix than other files in your
+project (by default: <tt>.t.h</tt>, configure via <em>CXXTEST_SUFFIX</em>). This isn&#8217;t a bad
+idea to begin with, since test "header files" are not really header files in the
+traditional sense. This is how it separates files it should run through
+cxxtestgen from the ones it should not.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note" />
+</td>
+<td class="content">Test header files' filenames should end with <tt>.t.h</tt>.</td>
+</tr></table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_compiling_and_running_the_tests">Compiling and Running the Tests</h4>
+<div class="paragraph"><p>By default, you build and run the tests by issuing the following command:</p></div>
+<div class="exampleblock">
+<div class="title">Example 1. Building and running the tests in the shell</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>scons check</tt></pre></div></div>
+</div></div>
+<div class="paragraph"><p>Of course, the actual name of the target is configurable (<tt>CXXTEST_TARGET</tt>).</p></div>
+</div>
+<div class="sect3">
+<h4 id="_using_the_builder">Using the Builder</h4>
+<div class="paragraph"><p>This section describes what you do in your SConstruct file in order to be able
+to use the builder.</p></div>
+<div class="paragraph"><p>First, you must tell the environment that you want to use the <em>cxxtest</em> tool and
+how it should set itself up.</p></div>
+<div class="paragraph"><p>The easiest way to set the environment up is to pray the defaults are ok.
+The builder does some autodetection and tries its best to figure everything out.
+In the event this works, setting up the environment is as easy as telling SCons
+it should use the <em>cxxtest</em> tool.</p></div>
+<div class="exampleblock">
+<div class="title">Example 2. Configuring the environment if defaults are ok</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>env <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">Environment</span></span><span style="color: #990000">(</span>tools <span style="color: #990000">=</span> <span style="color: #990000">[</span><span style="color: #FF0000">'default'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'cxxtest'</span><span style="color: #990000">])</span></tt></pre></div></div>
+</div></div>
+<div class="paragraph"><p>If this doesn&#8217;t work, the builder tries its best to tell you what went wrong. In
+most cases, it just wasn&#8217;t able to find where you installed cxxtest. You can fix
+this like so (assuming you have CxxTest in <tt>#/extern_libs/cxxtest/</tt>):</p></div>
+<div class="exampleblock">
+<div class="title">Example 3. Configuring the environment: telling the builder where CxxTest is installed</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>env <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">Environment</span></span><span style="color: #990000">(</span>tools <span style="color: #990000">=</span> <span style="color: #990000">[</span>
+        <span style="color: #FF0000">'default'</span><span style="color: #990000">,</span>
+         <span style="color: #990000">(</span><span style="color: #FF0000">'cxxtest'</span><span style="color: #990000">,</span> <span style="color: #990000">{</span><span style="color: #FF0000">'CXXTEST_INSTALL_DIR'</span> <span style="color: #990000">:</span> <span style="color: #FF0000">'#/extern_libs/cxxtest/'</span><span style="color: #990000">})</span>
+      <span style="color: #990000">])</span></tt></pre></div></div>
+</div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note" />
+</td>
+<td class="content">If you want to pass other options to the builder, just append them to the
+dictionary.</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>It is advisable to pass most options to the builder at creation time, although
+the <em>CxxTest</em> call can also accept most of them if you need to do some weird
+thing with a particular test.</p></div>
+<div class="paragraph"><p>You can use the builder the same way you would the <em>Program</em> builder.</p></div>
+<div class="exampleblock">
+<div class="title">Example 4. Setting up tests with SCons and the cxxtest builder</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-style: italic"><span style="color: #9A1900"># ... set up the environment as above, with your favorite options</span></span>
+<span style="font-style: italic"><span style="color: #9A1900"># and then tell the builder to build some tests</span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'my_test_suite'</span><span style="color: #990000">,</span> source<span style="color: #990000">=</span><span style="color: #FF0000">'mytests.t.h'</span><span style="color: #990000">)</span>                      <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/1.png" alt="1" /></span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'the_other_suite'</span><span style="color: #990000">,</span> <span style="color: #990000">[</span><span style="color: #FF0000">'test_header.t.h'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'../utilities.cpp'</span><span style="color: #990000">])</span> <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/2.png" alt="2" /></span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'the_third_suite'</span><span style="color: #990000">,</span>
+                 <span style="color: #990000">[</span><span style="color: #FF0000">'testsuite1.t.h'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'testsuite2.t.h'</span><span style="color: #990000">,</span>
+                  <span style="color: #FF0000">'testsuite3.t.h'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'required_libs.cpp'</span><span style="color: #990000">])</span>               <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/3.png" alt="3" /></span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'the_fourth_suite'</span><span style="color: #990000">,</span>
+                 <span style="color: #990000">[</span><span style="color: #FF0000">'reginold_never_checks_for_warnings.t.h'</span><span style="color: #990000">],</span>
+                 CXXFLAGS<span style="color: #990000">=</span><span style="color: #FF0000">'-Wall -Wextra -Weffc++ -pedantic'</span><span style="color: #990000">)</span>           <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/4.png" alt="4" /></span></span></tt></pre></div></div>
+<div class="colist arabic"><table>
+<tr><td><img src="./images/icons/callouts/1.png" alt="1" /></td><td>
+Normal, 1-source file tests
+</td></tr>
+<tr><td><img src="./images/icons/callouts/2.png" alt="2" /></td><td>
+This is how a single testsuite needing implementations is compilied
+</td></tr>
+<tr><td><img src="./images/icons/callouts/3.png" alt="3" /></td><td>
+If you want multiple testsuites in a single runner, this is how it&#8217;s done
+</td></tr>
+<tr><td><img src="./images/icons/callouts/4.png" alt="4" /></td><td>
+unrecognised options are passed through to the Program builder unchanged
+</td></tr>
+</table></div>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_configuration_options">Configuration Options</h4>
+<div class="sect4">
+<h5 id="_tt_cxxtest_runner_tt"><tt>CXXTEST_RUNNER</tt></h5>
+<div class="paragraph"><p>Default: "ErrorPrinter".</p></div>
+<div class="paragraph"><p>This is what is passed to the <tt>--runner</tt> option of <tt>cxxtestgen</tt>. See the section
+about runners to see what the other options are.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_opts_tt"><tt>CXXTEST_OPTS</tt></h5>
+<div class="paragraph"><p>Default: empty.</p></div>
+<div class="paragraph"><p>Any other commandline options to pass to <tt>cxxtestgen</tt>.</p></div>
+<div class="paragraph"><p>Do not pass <tt>--runner</tt>, <tt>--error-printer</tt> and friends, and <tt>--root</tt> or <tt>--part</tt>
+here.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_suffix_tt"><tt>CXXTEST_SUFFIX</tt></h5>
+<div class="paragraph"><p>Default: ".t.h"</p></div>
+<div class="paragraph"><p>The suffix test suite files have. Should be different from other header files.
+If you never mean to pass any header files that are not test suites to the
+builder, you can set this to ".h" and use plain ".h" files.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_target_tt"><tt>CXXTEST_TARGET</tt></h5>
+<div class="paragraph"><p>Default: "check"</p></div>
+<div class="paragraph"><p>This is the target that scons tests are added to in order to run them. If you
+want something else, this is the place.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_install_dir_tt"><tt>CXXTEST_INSTALL_DIR</tt></h5>
+<div class="paragraph"><p>Default: autodetect</p></div>
+<div class="paragraph"><p>If cxxtest isn&#8217;t found automatically, you need to set this. Normal SCons path
+expansion rules apply.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_cpppath_tt"><tt>CXXTEST_CPPPATH</tt></h5>
+<div class="paragraph"><p>Default: autodetect</p></div>
+<div class="paragraph"><p>If you don&#8217;t want to clutter your normal <tt>CPPPATH</tt> with CxxTest headers and this
+isn&#8217;t autodetected even after you set <tt>CXXTEST_INSTALL_DIR</tt>, then set this.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_tt"><tt>CXXTEST</tt></h5>
+<div class="paragraph"><p>Default: autodetect</p></div>
+<div class="paragraph"><p>If <tt>cxxtestgen</tt> isn&#8217;t found even after you set <tt>CXXTEST_INSTALL_DIR</tt>, then set
+this to the path of the <tt>cxxtestgen</tt> script.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_skip_errors_tt"><tt>CXXTEST_SKIP_ERRORS</tt></h5>
+<div class="paragraph"><p>Default: False</p></div>
+<div class="paragraph"><p>When running tests with <tt>scons check</tt>, if you want to continue even if tests
+fail, set this to True.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_python_tt"><tt>CXXTEST_PYTHON</tt></h5>
+<div class="paragraph"><p>Default: the same python interpreter that is running scons.</p></div>
+<div class="paragraph"><p>If you want to use a particular python interpreter to run <tt>cxxtestgen</tt>, set its
+path here.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_cxxflags_remove_tt"><tt>CXXTEST_CXXFLAGS_REMOVE</tt></h5>
+<div class="paragraph"><p>Default: a list of flags with which no test compiles. Changes as we fix bugs.</p></div>
+<div class="paragraph"><p>Do you want your tests to compile without some flags and don&#8217;t want gymnastics
+to get them out for tests only? This is the way. Just add them to here and they
+will be stripped. (This is a list, by the way, not a string.)</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_ccflags_remove_tt"><tt>CXXTEST_CCFLAGS_REMOVE</tt></h5>
+<div class="paragraph"><p>Same as above, but for <tt>CCFLAGS</tt>.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_cxxtestgen_script_name_tt"><tt>CXXTEST_CXXTESTGEN_SCRIPT_NAME</tt></h5>
+<div class="paragraph"><p>If you are crazy and have changed the name of the cxxtestgen executable and want
+autodetection to work otherwise, set this to the new name.</p></div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_using_makefiles">Using Makefiles</h3>
 <div class="paragraph"><p>Generating the tests with a makefile is pretty straightforward.
 Simply add rules to generate, compile and run the test runner.</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3273,7 +3521,7 @@ how to do this is in the CxxTest distribution under <tt>sample/winddk</tt>.</p><
 <div class="sectionbody">
 <div class="paragraph"><p>In the <tt>cxxtest/test</tt> directory, you can execute</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3287,7 +3535,7 @@ the new FOG parser.</p></div>
 <div class="paragraph"><p>You can execute a specific test suite by giving its name as an
 argument to this test script.  For example, the command</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3295,7 +3543,7 @@ http://www.gnu.org/software/src-highlite -->
 <div class="paragraph"><p>executes the <tt>TestGpp</tt> test suite, which tests CxxTest with the
 <tt>g++</tt> compiler.  Similarly, the command</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3310,7 +3558,7 @@ the <tt>unittest2</tt> package.  If you have
 installed, then
 you can install this package from PyPI by executing</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+<div class="content"><!-- Generator: GNU source-highlight 3.1.6
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -3336,6 +3584,18 @@ http://www.gnu.org/software/src-highlite -->
 <h2 id="appendix_D">Appendix D: CxxTest Releases</h2>
 <div class="sectionbody">
 <div class="ulist"><ul>
+<li>
+<p>
+Version 4.0.2 (2012-01-02)
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Bug fix to enable installation of cxxtestgen without the <em>setuptools</em> package
+</p>
+</li>
+</ul></div>
+</li>
 <li>
 <p>
 Version 4.0.1 (2012-01-01)
@@ -3385,7 +3645,7 @@ The CxxTest GUI is no longer supported, and the <a href="#ts_warn">TS_WARN</a> i
 </li>
 <li>
 <p>
-CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
+CxxTest runners now have a command-line interface that facilitates interactive use of the test runner.
 </p>
 </li>
 <li>
@@ -3968,7 +4228,7 @@ Major internal improvements
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-12-31 11:50:56 MST
+Last updated 2012-01-06 12:43:40 CET
 </div>
 </div>
 </body>
