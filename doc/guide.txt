@@ -1446,7 +1446,7 @@ run_tests: runner
 
 # How to build the test runner
 runner: runner.cpp lib
-        g++ -o $@ $^
+        g++ -o $@ $<
 
 # How to generate the test runner
 runner.cpp: SimpleTest.h ComplicatedTest.h
