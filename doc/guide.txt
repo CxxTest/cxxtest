@@ -1146,7 +1146,7 @@ easy_install ordereddict
 The +cxxtestgen+ script has been tested with many different versions
 of Python:  2.4 - 3.2.  Note that this script has only been tested
 with the CPython implementation.  CxxTest 4.0 has been tested on
-Linux and Mac platforms using the G++ and CLang++ compilers.
+Linux and Mac platforms using the `g++` and `clang++` compilers.
 
 
 ////
