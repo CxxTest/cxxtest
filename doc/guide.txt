@@ -1749,4 +1749,4 @@ If these packages are not available, then +test_cxxtest.py+ will skip the FOG te
 [[appendix_D]] 
 include::../Versions[]
 
-// vim: set syntax=asciidoc
+// vim: ft=asciidoc
