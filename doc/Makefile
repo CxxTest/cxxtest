@@ -14,7 +14,7 @@ anchors:
 	python include_anchors.py guide.txt 
 
 outputs:
-	lbin ../bin/cxxtestgen -h > examples/cxxtestgen.out
+	../bin/cxxtestgen -h > examples/cxxtestgen.out
 
 clean:
 	- \rm -f guide.xml
