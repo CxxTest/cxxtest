@@ -12,15 +12,15 @@
 # TODO: add test function names
 #
 
-from __future__ import division
+
 
 import sys
 import re
 #from os.path import abspath, dirname
 #sys.path.insert(0, dirname(dirname(abspath(__file__))))
 #sys.path.insert(0, dirname(dirname(abspath(__file__)))+"/cxx_parse")
-from cxxtest_misc import abort
-import cxx_parser
+from .cxxtest_misc import abort
+from . import cxx_parser
 import re
 
 def cstr( str ):
@@ -32,14 +32,14 @@ def scanInputFiles(files, _options):
     suites=[]
     for file in files:
         try:
-            print "Parsing file "+file,
+            print("Parsing file "+file, end=' ')
             sys.stdout.flush()
             parse_info = cxx_parser.parse_cpp(filename=file,optimize=1)
-        except IOError, err:
-            print " error."
-            print str(err)
+        except IOError as err:
+            print(" error.")
+            print(str(err))
             continue
-        print "done." 
+        print("done.") 
         sys.stdout.flush()
         #
         # WEH: see if it really makes sense to use parse information to
