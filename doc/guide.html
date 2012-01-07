@@ -2593,13 +2593,13 @@ referenced in a test suite.</p></div>
 <h2 id="installation">9. Installation</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>A key feature of CxxTest is that it does has virtually no installation
-process.  The <tt>cxxtestgen</tt> script can be added be directly executed
-from the <tt>cxxtest/bin</tt> directory, so it may be convenient to add
-this directory to a <tt>PATH</tt> environment.  Beyond that, the build
-process for CxxTest simply needs to reference the <tt>cxxtest</tt> root
-directory to enable proper includes while compiling test runners.</p></div>
-<div class="paragraph"><p>The <tt>cxxtestgen</tt> script script should work with versions Python 2.6
-or newer.  The FOG parser requires two Python packages:</p></div>
+process.  The <tt>cxxtestgen</tt> script can be directly executed from the
+<tt>cxxtest/bin</tt> directory.  Simply adding this directory to the PATH
+environment of a command shell is sufficient for many applications.
+Beyond that, the build process for test runners simply needs to
+reference the <tt>cxxtest</tt> root directory to enable proper includes
+during compilation.</p></div>
+<div class="paragraph"><p>The FOG parser requires two Python packages:</p></div>
 <div class="ulist"><ul>
 <li>
 <p>
@@ -2608,7 +2608,7 @@ or newer.  The FOG parser requires two Python packages:</p></div>
 </li>
 <li>
 <p>
-<tt>ordereddict</tt> (This is only needed when running Python 2.6)
+<tt>ordereddict</tt> (This is needed when running Python 2.4, 2.5 or 2.6)
 </p>
 </li>
 </ul></div>
@@ -2626,6 +2626,10 @@ http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt>easy_install ply
 easy_install ordereddict</tt></pre></div></div>
+<div class="paragraph"><p>The <tt>cxxtestgen</tt> script has been tested with many different versions
+of Python:  2.4 - 3.2.  Note that this script has only been tested
+with the CPython implementation.  CxxTest 4.0 has been tested on
+Linux and Mac platforms using the G<tt> and CLang</tt> compilers.</p></div>
 </div>
 </div>
 <div class="sect1">
@@ -3970,7 +3974,7 @@ Major internal improvements
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2012-01-05 23:08:40 MST
+Last updated 2012-01-07 08:51:08 MST
 </div>
 </div>
 </body>

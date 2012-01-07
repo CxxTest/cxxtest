@@ -1118,17 +1118,17 @@ Installation
 ------------
 
 A key feature of CxxTest is that it does has virtually no installation
-process.  The +cxxtestgen+ script can be added be directly executed
-from the +cxxtest/bin+ directory, so it may be convenient to add
-this directory to a +PATH+ environment.  Beyond that, the build
-process for CxxTest simply needs to reference the +cxxtest+ root
-directory to enable proper includes while compiling test runners.
+process.  The +cxxtestgen+ script can be directly executed from the
++cxxtest/bin+ directory.  Simply adding this directory to the PATH
+environment of a command shell is sufficient for many applications.
+Beyond that, the build process for test runners simply needs to
+reference the +cxxtest+ root directory to enable proper includes
+during compilation.
 
-The +cxxtestgen+ script script should work with versions Python 2.6
-or newer.  The FOG parser requires two Python packages:
+The FOG parser requires two Python packages:
 
  - +ply+
- - +ordereddict+ (This is only needed when running Python 2.6)
+ - +ordereddict+ (This is needed when running Python 2.4, 2.5 or 2.6)
 
 If these packages are not available, then +cxxtestgen+ will generate an error when the 
 FOG parser option is selected.
@@ -1142,6 +1142,11 @@ you can install these packages from PyPI by executing
 easy_install ply
 easy_install ordereddict
 ----
+
+The +cxxtestgen+ script has been tested with many different versions
+of Python:  2.4 - 3.2.  Note that this script has only been tested
+with the CPython implementation.  CxxTest 4.0 has been tested on
+Linux and Mac platforms using the G++ and CLang++ compilers.
 
 
 ////
