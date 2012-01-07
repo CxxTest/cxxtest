@@ -47,15 +47,19 @@ generate a test runner.  Thus, CxxTest is somewhat easier to use
 than alternative C++ testing frameworks, since you do not need to
 _register_ tests.
 
-CxxTest is available under the http://www.gnu.org/copyleft/lesser.html[GNU
-Lesser General Public] license.
-The following are key online resources for CxxTest:
-
- - http://cxxtest.sourceforge.net[CxxTest home page]
- - https://sourceforge.net/projects/cxxtest/files/[Release downloads]
- - http://cxxtest.sourceforge.net/cxxtest/doc/guide.html[HTML user guide]
- - http://cxxtest.sourceforge.net/cxxtest/doc/guide.pdf[PDF user guide]
- - http://cxxtest.sourceforge.net/cxxtest/doc/guide.epub[EPub user guide]
+The http://cxxtest.com[CxxTest Home Page] is
+http://cxxtest.com[http://cxxtest.com].  This webpage contains links
+for https://sourceforge.net/projects/cxxtest/files/[release downloads],
+the https://groups.google.com/forum/?hl=en#!forum/cxxtest-forum[CxxTest
+discussion list], and documentation in
+http://cxxtest.com/cxxtest/doc/guide.html[HTML],
+http://cxxtest.com/cxxtest/doc/guide.pdf[PDF], and
+http://cxxtest.comm/cxxtest/doc/guide.epub[EPUB] formats.  The
+http://cxxtest.com[CxxTest Home Page] also includes developer
+resources (e.g. https://software.sandia.gov/hudson/view/CxxTest/[automated
+test results]).  CxxTest is available under the
+http://www.gnu.org/copyleft/lesser.html[GNU Lesser General Public]
+license.
 
 The CxxTest User Guide provides the following documentation:
 
@@ -68,8 +72,6 @@ The CxxTest User Guide provides the following documentation:
  - <<mock,Testing with Mock Objects>>: How to test with mock global functions
  - <<installation,Installation>>: How to install CxxTest
  - <<discussion,Status and Future Plans>>: Comments on the past, present and future of CxxTest
-
-
 
 
 
@@ -1162,11 +1164,7 @@ and focus of CxxTest.  The 4.0 release is the first release of
 CxxTest in over seven years, and virtually all of the initial
 developers have moved on to other projects.  CxxTest is heavily
 used at Sandia National Laboratories, and Sandia's ongoing use of
-CxxTest is a major driver for the 4.0 release.  
-
-[NOTE]
-TODO: Say more here about webresources for hosting, mailing lists, testinging and project management
-
+CxxTest is a major driver for the 4.0 release.
 
 Similarly, major
 changes in CxxTest reflect the focus of the developer team:
@@ -1259,12 +1257,15 @@ The FOG parser in CxxTest critically relies on the excellent LALR
 parser provided by Dave Beazley's `ply` Python package.  The scalable
 performance of `ply` is critical for CxxTest.
 
-The development of CxxTest has been partially supported by Sandia
-National Laboratories.  Sandia National Laboratories is a multi-program
-laboratory managed and operated by Sandia Corporation, a wholly
-owned subsidiary of Lockheed Martin Corporation, for the U.S.
-Department of Energy's National Nuclear Security Administration
-under contract DE-AC04-94AL85000.
+CxxTest has greatly benefited from the support of the open source
+community.  We would like to thank the following organizations for
+providing web hosting and computing resources: GitHub, SourceForge,
+Tigris.org, Sandia National Laboratories, Google and COIN-OR.  The development
+of CxxTest has been partially supported by Sandia National Laboratories.
+Sandia National Laboratories is a multi-program laboratory managed
+and operated by Sandia Corporation, a wholly owned subsidiary of
+Lockheed Martin Corporation, for the U.S.  Department of Energy's
+National Nuclear Security Administration under contract DE-AC04-94AL85000.
 
 
 [appendix]
