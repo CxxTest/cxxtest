@@ -496,7 +496,7 @@ There are many limitations to this simple process for test discovery,
 and in CxxTest 4.0 a new test discovery mechanism was added based
 on the a parser for the
 http://www.computing.surrey.ac.uk/research/dsrg/fog/[Flexible Object
-Generator (FOG)] language, which is a superset of C\++.  The grammar
+Generator (FOG)] language, which is a superset of C+\+.  The grammar
 for the FOG language was adapted to parse C++ header files to
 identify class definitions and class inheritance relationships,
 class and namespace nesting of declarations, and class methods.
