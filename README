@@ -37,6 +37,6 @@ MyTest.h:
 
 3. Compile and run!
 
-  # g++ -o main main.cpp tests.cpp
+  # g++ -o main tests.cpp
   # ./main
   Running 1 test(s).OK!
