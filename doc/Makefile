@@ -8,11 +8,12 @@ pdf: guide.txt anchors outputs
 epub: guide.txt anchors outputs
 	export XML_CATALOG_FILES=export XML_CATALOG_FILES="catalog.xml"; a2x -L -f epub -d article --verbose --xsltproc-opts "--stringparam toc.section.depth 2 --stringparam generate.section.toc.level 1" guide.txt
 
-man: 
-	./create_manpage
-	asciidoc -v -d manpage ./cxxtestgen.1.txt
+manpages: 
+	cd man; ./create_manpage;
+	cd man; asciidoc -v -d manpage ./cxxtestgen.1.txt
+	cd man; a2x -d manpage -f manpage ./cxxtestgen.1.txt
 
-all: html pdf epub man
+all: html pdf epub manpages
 
 anchors:
 	python include_anchors.py guide.txt 

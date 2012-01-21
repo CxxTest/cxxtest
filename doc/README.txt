@@ -33,11 +33,11 @@ used, which configures asciidoc to use the docbook XML data in the
 around a limitation of the MacPorts installation of asciidoc.
 
 
-MAN
+MANPAGES
 
 The command
 
-    make man
+    make manpages
 
 creates CxxTest man pages in the doc/man directory.
 
