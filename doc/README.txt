@@ -32,3 +32,12 @@ used, which configures asciidoc to use the docbook XML data in the
 `epub` directory.  This is a bit of a hack.  It apparently works
 around a limitation of the MacPorts installation of asciidoc.
 
+
+MAN
+
+The command
+
+    make man
+
+creates CxxTest man pages in the doc/man directory.
+
