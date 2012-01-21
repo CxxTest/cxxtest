@@ -42,7 +42,7 @@ def find(filename, executable=False, isfile=True,  validate=None):
     # Use the PATH environment if it is defined and not empty
     #
     if "PATH" in os.environ and os.environ["PATH"] != "":
-        search_path = string.split(os.environ["PATH"], os.pathsep)
+        search_path = os.environ['PATH'].split(os.pathsep)
     else:
         search_path = os.defpath.split(os.pathsep)
     for path in search_path:
