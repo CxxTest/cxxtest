@@ -13,7 +13,9 @@ public:
    }
 
    void tearDown()
-        { }
+   {
+        delete this->cache;
+   }
 
    void test_size()
    {
