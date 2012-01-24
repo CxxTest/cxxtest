@@ -1,2 +1,5 @@
 *.pyc
 *~
+
+/test/*.obj
+/test/Samples.txt
