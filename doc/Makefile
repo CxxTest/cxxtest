@@ -16,6 +16,12 @@ A2X_OPTS      := -a toc -a icons -L -d article -v --xsltproc-opts "$(XSLTPROC_OP
 # Ignore errors
 %.epub: %.txt anchors outputs
 	- a2x -f epub $(A2X_OPTS) $<
+manpages: 
+	cd man; ./create_manpage;
+	cd man; asciidoc -v -d manpage ./cxxtestgen.1.txt
+	cd man; a2x -d manpage -f manpage ./cxxtestgen.1.txt
+
+all: html pdf epub manpages
 
 all: guide.html guide.pdf guide.epub
 

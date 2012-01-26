@@ -5,6 +5,7 @@ import glob
 import difflib
 import subprocess
 import re
+import string
 if sys.version_info < (2,7):
     import unittest2 as unittest
 else:
@@ -35,6 +36,22 @@ OUTPUT = open(currdir+'Samples.txt','w')
 for line in sorted(glob.glob(sampledir+'*.h')):
     OUTPUT.write(line+'\n')
 OUTPUT.close()
+
+def find(filename, executable=False, isfile=True,  validate=None):
+    #
+    # Use the PATH environment if it is defined and not empty
+    #
+    if "PATH" in os.environ and os.environ["PATH"] != "":
+        search_path = os.environ['PATH'].split(os.pathsep)
+    else:
+        search_path = os.defpath.split(os.pathsep)
+    for path in search_path:
+            test_fname = os.path.join(path, filename)
+            if os.path.exists(test_fname) \
+                   and (not isfile or os.path.isfile(test_fname)) \
+                   and (not executable or os.access(test_fname, os.X_OK)):
+                return os.path.abspath(test_fname)
+    return None
 
 def available(compiler, exe_option):
     cmd = "cd %s; %s %s %s %s > %s 2>&1" % (currdir, compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log')
@@ -114,8 +131,8 @@ def file_diff(filename1, filename2):
     lines2 = INPUT.readlines()
     INPUT.close()
     #
-    lines1cmp = [normalize_line_for_diff(line) for line in lines1]
-    lines2cmp = [normalize_line_for_diff(line) for line in lines2]
+    lines1cmp = [normalize_line_for_diff(line) for line in lines1 if not line.startswith('==')]
+    lines2cmp = [normalize_line_for_diff(line) for line in lines2 if not line.startswith('==')]
     diff = list(difflib.unified_diff(lines2cmp, lines1cmp,
         fromfile=filename2, tofile=filename1))
     if diff: make_diff_readable(diff)
@@ -125,6 +142,7 @@ def file_diff(filename1, filename2):
 class BaseTestCase(object):
 
     fog=''
+    valgrind=''
 
     def setUp(self):
         self.passed=False
@@ -199,13 +217,15 @@ class BaseTestCase(object):
                 os.remove(file)
         self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
-        status = subprocess.call("cd %s; %s -v > %s 2>&1" % (currdir, self.build_target, self.px_pre), shell=True)
+        status = subprocess.call("cd %s; %s %s -v > %s 2>&1" % (currdir, self.valgrind, self.build_target, self.px_pre), shell=True)
         OUTPUT = open(self.px_pre,'a')
         OUTPUT.write('Error level = '+str(status)+'\n')
         OUTPUT.close()
         diffstr = file_diff(self.px_pre, currdir+output)
         if not diffstr == '':
             self.fail("Unexpected differences in output:\n"+diffstr)
+        if self.valgrind != '':
+            self.parse_valgrind(self.px_pre)
         #
         self.passed=True
 
@@ -241,9 +261,9 @@ class BaseTestCase(object):
         #
         if compile == '' and not output is None:
             if run is None:
-                cmd = "cd %s; %s -v > %s 2>&1" % (currdir, self.build_target, self.px_pre)
+                cmd = "cd %s; %s %s -v > %s 2>&1" % (currdir, self.valgrind, self.build_target, self.px_pre)
             else:
-                cmd = run % (self.build_target, self.px_pre)
+                cmd = run % (self.valgrind, self.build_target, self.px_pre)
             status = subprocess.call(cmd, shell=True)
             #print "HERE-status",status
             OUTPUT = open(self.px_pre,'a')
@@ -255,6 +275,8 @@ class BaseTestCase(object):
                 diffstr = file_diff(currdir+logfile, currdir+output)
             if not diffstr == '':
                 self.fail("Unexpected differences in output:\n"+diffstr)
+            if self.valgrind != '':
+                self.parse_valgrind(self.px_pre)
             if not logfile is None:
                 os.remove(currdir+logfile)
         #
@@ -335,11 +357,11 @@ class BaseTestCase(object):
 
     def test_only_suite(self):
         """Only Suite"""
-        self.compile(prefix='only_suite', args="--template=%s../sample/only.tpl %s" % (currdir, samples), run="%s SimpleTest > %s 2>&1", output="suite.out")
+        self.compile(prefix='only_suite', args="--template=%s../sample/only.tpl %s" % (currdir, samples), run="%s %s SimpleTest > %s 2>&1", output="suite.out")
 
     def test_only_test(self):
         """Only Test"""
-        self.compile(prefix='only_test', args="--template=%s../sample/only.tpl %s" % (currdir, samples), run="%s SimpleTest testAddition > %s 2>&1", output="suite_test.out")
+        self.compile(prefix='only_test', args="--template=%s../sample/only.tpl %s" % (currdir, samples), run="%s %s SimpleTest testAddition > %s 2>&1", output="suite_test.out")
 
     def test_have_std_tpl(self):
         """Have Std - Template"""
@@ -636,6 +658,47 @@ class TestGppFOG(TestGpp):
     def run(self, *args, **kwds):
         if ply_available:
             return TestGpp.run(self, *args, **kwds)
+
+
+class TestGppValgrind(TestGpp):
+
+    valgrind='valgrind --leak-check=yes'
+
+    def run(self, *args, **kwds):
+        if find('valgrind') is None:
+            return
+        return TestGpp.run(self, *args, **kwds)
+
+    def parse_valgrind(self, fname):
+        # There is a well-known leak on Mac OSX platforms...
+        if sys.platform == 'darwin':
+            min_leak = 16
+        else:
+            min_leak = 0
+        #
+        INPUT = open(fname, 'r')
+        for line in INPUT:
+            if not line.startswith('=='):
+                continue
+            tokens = re.split('[ \t]+', line)
+            if len(tokens) < 4:
+                continue
+            if tokens[1] == 'definitely' and tokens[2] == 'lost:':
+                if eval(tokens[3]) > min_leak:
+                    self.fail("Valgrind Error: "+ ' '.join(tokens[1:]))
+            if tokens[1] == 'possibly' and tokens[2] == 'lost:':
+                if eval(tokens[3]) > min_leak:
+                    self.fail("Valgrind Error: "+ ' '.join(tokens[1:]))
+            
+
+
+class TestGppFOGValgrind(TestGppValgrind):
+
+    fog='-f'
+
+    def run(self, *args, **kwds):
+        if ply_available:
+            return TestGppValgrind.run(self, *args, **kwds)
 
 
 class TestClang(BaseTestCase, unittest.TestCase):

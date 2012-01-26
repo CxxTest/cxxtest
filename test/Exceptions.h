@@ -32,7 +32,7 @@ class ThrowDestroy : public CxxTest::TestSuite
 {
 public:
     static ThrowDestroy *createSuite() { return new ThrowDestroy; }
-    static void destroySuite( ThrowDestroy * ) { throw 42; }
+    static void destroySuite( ThrowDestroy *suite ) { delete suite; throw 42; }
     
     void testNothing() {}
 };

@@ -12,7 +12,7 @@ public:
    }
 
    void tearDown()
-   { }
+   { delete this->cache; }
 
    void test_size()
    {
@@ -33,6 +33,6 @@ class InheritedTests : public Tests, public CxxTest::TestSuite
 public:
 
     void setUp() { Tests::setUp();}
-    void tearDown() { Tests::setUp();}
+    void tearDown() { Tests::tearDown();}
 };
 
