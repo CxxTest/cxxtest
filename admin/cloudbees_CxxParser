@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export PATH=$WORKSPACE/vpython/bin:$PATH
+g++ --version
+
+# Setup virtual Python environment
+\rm -Rf vpython
+python cxxtest/admin/virtualenv.py vpython
+#vpy/scripts/vpy_install
+vpython/bin/easy_install nose
+vpython/bin/easy_install unittest2
+vpython/bin/easy_install ply
+vpython/bin/easy_install ordereddict
+vpython/bin/easy_install gcovr
+vpython/bin/easy_install pyutilib.th
+cd cxxtest/python
+../../vpython/bin/python setup.py install
+
+# Cleanup test directory
+cd ../test
+make clean
+cd ../..
+
+# Run tests
+vpython/bin/nosetests -v -v --with-xunit --xunit-file=$WORKSPACE/TEST-cxxtest.xml -w $WORKSPACE/cxxtest/test
+
+echo "DONE"
+
+cd $WORKSPACE
+
