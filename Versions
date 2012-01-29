@@ -20,7 +20,7 @@ CxxTest Releases
  - The installation process for CxxTest now leverages and integrates with the system Python installation.
  - A more comprehensive C++ parser is now available, which supports testing of templates.
  - The CxxTest GUI is no longer supported, and the <<ts_warn,TS_WARN>> is deprecated.
- - CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
+ - CxxTest runners now have a command-line interface that facilitates interactive use of the test runner.
  - A new user guide is now available in PDF, HTML and Ebook formats.
 
 * Version 3.10.1 (2004-12-01)
