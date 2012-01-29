@@ -514,6 +514,39 @@ th.tableblock.valign-middle, td.tableblock.valign-middle {
 th.tableblock.valign-bottom, td.tableblock.valign-bottom {
   vertical-align: bottom;
 }
+@media screen {
+  body {
+    max-width: 50em; /* approximately 80 characters wide */
+    margin-left: 16em;
+  }
+
+  #toc {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 13em;
+    padding: 0.5em;
+    padding-bottom: 1.5em;
+    margin: 0;
+    overflow: auto;
+    border-right: 3px solid #f8f8f8;
+  }
+
+  #toc .toclevel1 {
+    margin-top: 0.5em;
+  }
+
+  #toc .toclevel2 {
+    margin-top: 0.25em;
+    display: list-item;
+    color: #aaaaaa;
+  }
+
+  #toctitle {
+    margin-top: 0.5em;
+  }
+}
 </style>
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -1172,6 +1205,9 @@ inherit from the class <tt>CxxTest::TestSuite</tt>.</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>Usage: cxxtestgen [options] [&lt;filename&gt; ...]
+
+The 'cxxtestgen' command processes C++ header files to perform test discovery,
+and then it creates files for the 'CxxTest' test runner.
 
 Options:
   -h, --help            show this help message and exit
@@ -3170,11 +3206,236 @@ guidance for doing this for some come use cases.</p></div>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
-<div class="title">Note</div>
+<img src="./images/icons/note.png" alt="Note" />
 </td>
-<td class="content">These examples are not actively maintained and tested.  Please send
-suggestions to the CxxTest developers for updating this documentation.</td>
+<td class="content">These examples (except for the SCons ones) are not actively maintained and
+tested. Please send suggestions to the CxxTest developers for updating this
+documentation.</td>
 </tr></table>
+</div>
+<div class="sect2">
+<h3 id="scons">SCons</h3>
+<div class="paragraph"><p>CxxTest provides built-in support for the SCons build system. This part
+documents this feature.</p></div>
+<div class="sect3">
+<h4 id="installation">Installation</h4>
+<div class="paragraph"><p>The script is located at <tt>build_tools/SCons/cxxtest.py</tt>.
+You need SCons to be able to find this file, so do one of the following:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+add the file to your project site_tools directory (default: <tt>#/site_scons/site_tools/</tt>)
+</p>
+</li>
+<li>
+<p>
+link the file to your project site_tools directory
+</p>
+</li>
+<li>
+<p>
+add <tt>build_tools/SCons/cxxtest.py</tt> to your SCons toolpath.
+</p>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note" />
+</td>
+<td class="content"><em>#</em> means the project root, using the SCons convention of marking it that way.</td>
+</tr></table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_preparing_the_tests_for_use_with_the_builder">Preparing the tests for use with the builder</h4>
+<div class="paragraph"><p>This builder assumes that tests have a different suffix than other files in your
+project (by default: <tt>.t.h</tt>, configure via <em>CXXTEST_SUFFIX</em>). This isn&#8217;t a bad
+idea to begin with, since test "header files" are not really header files in the
+traditional sense. This is how it separates files it should run through
+cxxtestgen from the ones it should not.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note" />
+</td>
+<td class="content">Test header files' filenames should end with <tt>.t.h</tt>.</td>
+</tr></table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_compiling_and_running_the_tests">Compiling and Running the Tests</h4>
+<div class="paragraph"><p>By default, you build and run the tests by issuing the following command:</p></div>
+<div class="exampleblock">
+<div class="title">Example 1. Building and running the tests in the shell</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>scons check</tt></pre></div></div>
+</div></div>
+<div class="paragraph"><p>Of course, the actual name of the target is configurable (<tt>CXXTEST_TARGET</tt>).</p></div>
+</div>
+<div class="sect3">
+<h4 id="_using_the_builder">Using the Builder</h4>
+<div class="paragraph"><p>This section describes what you do in your SConstruct file in order to be able
+to use the builder.</p></div>
+<div class="paragraph"><p>First, you must tell the environment that you want to use the <em>cxxtest</em> tool and
+how it should set itself up.</p></div>
+<div class="paragraph"><p>The easiest way to set the environment up is to pray the defaults are ok.
+The builder does some autodetection and tries its best to figure everything out.
+In the event this works, setting up the environment is as easy as telling SCons
+it should use the <em>cxxtest</em> tool.</p></div>
+<div class="exampleblock">
+<div class="title">Example 2. Configuring the environment if defaults are ok</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>env <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">Environment</span></span><span style="color: #990000">(</span>tools <span style="color: #990000">=</span> <span style="color: #990000">[</span><span style="color: #FF0000">'default'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'cxxtest'</span><span style="color: #990000">])</span></tt></pre></div></div>
+</div></div>
+<div class="paragraph"><p>If this doesn&#8217;t work, the builder tries its best to tell you what went wrong. In
+most cases, it just wasn&#8217;t able to find where you installed cxxtest. You can fix
+this like so (assuming you have CxxTest in <tt>#/extern_libs/cxxtest/</tt>):</p></div>
+<div class="exampleblock">
+<div class="title">Example 3. Configuring the environment: telling the builder where CxxTest is installed</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>env <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">Environment</span></span><span style="color: #990000">(</span>tools <span style="color: #990000">=</span> <span style="color: #990000">[</span>
+        <span style="color: #FF0000">'default'</span><span style="color: #990000">,</span>
+         <span style="color: #990000">(</span><span style="color: #FF0000">'cxxtest'</span><span style="color: #990000">,</span> <span style="color: #990000">{</span><span style="color: #FF0000">'CXXTEST_INSTALL_DIR'</span> <span style="color: #990000">:</span> <span style="color: #FF0000">'#/extern_libs/cxxtest/'</span><span style="color: #990000">})</span>
+      <span style="color: #990000">])</span></tt></pre></div></div>
+</div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<img src="./images/icons/note.png" alt="Note" />
+</td>
+<td class="content">If you want to pass other options to the builder, just append them to the
+dictionary.</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>It is advisable to pass most options to the builder at creation time, although
+the <em>CxxTest</em> call can also accept most of them if you need to do some weird
+thing with a particular test.</p></div>
+<div class="paragraph"><p>You can use the builder the same way you would the <em>Program</em> builder.</p></div>
+<div class="exampleblock">
+<div class="title">Example 4. Setting up tests with SCons and the cxxtest builder</div>
+<div class="content">
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.4
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-style: italic"><span style="color: #9A1900"># ... set up the environment as above, with your favorite options</span></span>
+<span style="font-style: italic"><span style="color: #9A1900"># and then tell the builder to build some tests</span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'my_test_suite'</span><span style="color: #990000">,</span> source<span style="color: #990000">=</span><span style="color: #FF0000">'mytests.t.h'</span><span style="color: #990000">)</span>                      <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/1.png" alt="1" /></span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'the_other_suite'</span><span style="color: #990000">,</span> <span style="color: #990000">[</span><span style="color: #FF0000">'test_header.t.h'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'../utilities.cpp'</span><span style="color: #990000">])</span> <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/2.png" alt="2" /></span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'the_third_suite'</span><span style="color: #990000">,</span>
+                 <span style="color: #990000">[</span><span style="color: #FF0000">'testsuite1.t.h'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'testsuite2.t.h'</span><span style="color: #990000">,</span>
+                  <span style="color: #FF0000">'testsuite3.t.h'</span><span style="color: #990000">,</span> <span style="color: #FF0000">'required_libs.cpp'</span><span style="color: #990000">])</span>               <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/3.png" alt="3" /></span></span>
+env<span style="color: #990000">.</span><span style="font-weight: bold"><span style="color: #000000">CxxTest</span></span><span style="color: #990000">(</span><span style="color: #FF0000">'the_fourth_suite'</span><span style="color: #990000">,</span>
+                 <span style="color: #990000">[</span><span style="color: #FF0000">'reginold_never_checks_for_warnings.t.h'</span><span style="color: #990000">],</span>
+                 CXXFLAGS<span style="color: #990000">=</span><span style="color: #FF0000">'-Wall -Wextra -Weffc++ -pedantic'</span><span style="color: #990000">)</span>           <span style="font-style: italic"><span style="color: #9A1900">#<img src="./images/icons/callouts/4.png" alt="4" /></span></span></tt></pre></div></div>
+<div class="colist arabic"><table>
+<tr><td><img src="./images/icons/callouts/1.png" alt="1" /></td><td>
+Normal, 1-source file tests
+</td></tr>
+<tr><td><img src="./images/icons/callouts/2.png" alt="2" /></td><td>
+This is how a single testsuite needing implementations is compilied
+</td></tr>
+<tr><td><img src="./images/icons/callouts/3.png" alt="3" /></td><td>
+If you want multiple testsuites in a single runner, this is how it&#8217;s done
+</td></tr>
+<tr><td><img src="./images/icons/callouts/4.png" alt="4" /></td><td>
+unrecognised options are passed through to the Program builder unchanged
+</td></tr>
+</table></div>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_configuration_options">Configuration Options</h4>
+<div class="sect4">
+<h5 id="_tt_cxxtest_runner_tt"><tt>CXXTEST_RUNNER</tt></h5>
+<div class="paragraph"><p>Default: "ErrorPrinter".</p></div>
+<div class="paragraph"><p>This is what is passed to the <tt>--runner</tt> option of <tt>cxxtestgen</tt>. See the section
+about runners to see what the other options are.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_opts_tt"><tt>CXXTEST_OPTS</tt></h5>
+<div class="paragraph"><p>Default: empty.</p></div>
+<div class="paragraph"><p>Any other commandline options to pass to <tt>cxxtestgen</tt>.</p></div>
+<div class="paragraph"><p>Do not pass <tt>--runner</tt>, <tt>--error-printer</tt> and friends, and <tt>--root</tt> or <tt>--part</tt>
+here.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_suffix_tt"><tt>CXXTEST_SUFFIX</tt></h5>
+<div class="paragraph"><p>Default: ".t.h"</p></div>
+<div class="paragraph"><p>The suffix test suite files have. Should be different from other header files.
+If you never mean to pass any header files that are not test suites to the
+builder, you can set this to ".h" and use plain ".h" files.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_target_tt"><tt>CXXTEST_TARGET</tt></h5>
+<div class="paragraph"><p>Default: "check"</p></div>
+<div class="paragraph"><p>This is the target that scons tests are added to in order to run them. If you
+want something else, this is the place.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_install_dir_tt"><tt>CXXTEST_INSTALL_DIR</tt></h5>
+<div class="paragraph"><p>Default: autodetect</p></div>
+<div class="paragraph"><p>If cxxtest isn&#8217;t found automatically, you need to set this. Normal SCons path
+expansion rules apply.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_cpppath_tt"><tt>CXXTEST_CPPPATH</tt></h5>
+<div class="paragraph"><p>Default: autodetect</p></div>
+<div class="paragraph"><p>If you don&#8217;t want to clutter your normal <tt>CPPPATH</tt> with CxxTest headers and this
+isn&#8217;t autodetected even after you set <tt>CXXTEST_INSTALL_DIR</tt>, then set this.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_tt"><tt>CXXTEST</tt></h5>
+<div class="paragraph"><p>Default: autodetect</p></div>
+<div class="paragraph"><p>If <tt>cxxtestgen</tt> isn&#8217;t found even after you set <tt>CXXTEST_INSTALL_DIR</tt>, then set
+this to the path of the <tt>cxxtestgen</tt> script.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_skip_errors_tt"><tt>CXXTEST_SKIP_ERRORS</tt></h5>
+<div class="paragraph"><p>Default: False</p></div>
+<div class="paragraph"><p>When running tests with <tt>scons check</tt>, if you want to continue even if tests
+fail, set this to True.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_python_tt"><tt>CXXTEST_PYTHON</tt></h5>
+<div class="paragraph"><p>Default: the same python interpreter that is running scons.</p></div>
+<div class="paragraph"><p>If you want to use a particular python interpreter to run <tt>cxxtestgen</tt>, set its
+path here.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_cxxflags_remove_tt"><tt>CXXTEST_CXXFLAGS_REMOVE</tt></h5>
+<div class="paragraph"><p>Default: a list of flags with which no test compiles. Changes as we fix bugs.</p></div>
+<div class="paragraph"><p>Do you want your tests to compile without some flags and don&#8217;t want gymnastics
+to get them out for tests only? This is the way. Just add them to here and they
+will be stripped. (This is a list, by the way, not a string.)</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_ccflags_remove_tt"><tt>CXXTEST_CCFLAGS_REMOVE</tt></h5>
+<div class="paragraph"><p>Same as above, but for <tt>CCFLAGS</tt>.</p></div>
+</div>
+<div class="sect4">
+<h5 id="_tt_cxxtest_cxxtestgen_script_name_tt"><tt>CXXTEST_CXXTESTGEN_SCRIPT_NAME</tt></h5>
+<div class="paragraph"><p>If you are crazy and have changed the name of the cxxtestgen executable and want
+autodetection to work otherwise, set this to the new name.</p></div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_using_makefiles">Using Makefiles</h3>
@@ -3198,7 +3459,7 @@ http://www.gnu.org/software/src-highlite -->
 
 <span style="font-style: italic"><span style="color: #9A1900"># How to build the test runner</span></span>
 <span style="color: #990000">runner:</span> runner.cpp lib
-        g<span style="color: #990000">++</span> -o <span style="color: #009900">$@</span> <span style="color: #009900">$^</span>
+        <span style="color: #009900">$(CXX)</span> -o <span style="color: #009900">$@</span> <span style="color: #009900">$&lt;</span>
 
 <span style="font-style: italic"><span style="color: #9A1900"># How to generate the test runner</span></span>
 <span style="color: #990000">runner.cpp:</span> SimpleTest.h ComplicatedTest.h
@@ -3401,7 +3662,7 @@ The CxxTest GUI is no longer supported, and the <a href="#ts_warn">TS_WARN</a> i
 </li>
 <li>
 <p>
-CxxTest runners now have a command-line interface that facilitates interative use of the test runner.
+CxxTest runners now have a command-line interface that facilitates interactive use of the test runner.
 </p>
 </li>
 <li>
@@ -3984,7 +4245,7 @@ Major internal improvements
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2012-01-07 21:40:31 MST
+Last updated 2012-01-28 22:18:51 MST
 </div>
 </div>
 </body>
