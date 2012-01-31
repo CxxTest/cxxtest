@@ -39,8 +39,10 @@ namespace CxxTest
     class ErrorPrinter : public ErrorFormatter
     {
     public:
-        ErrorPrinter( CXXTEST_STD(ostream) &o = CXXTEST_STD(cout), const char *preLine = ":", const char *postLine = "" ) :
-            ErrorFormatter( new Adapter(o), preLine, postLine ) {}
+        ErrorPrinter( CXXTEST_STD(ostream) &o = CXXTEST_STD(cout), const char *preLine = ":", const char *postLine = "",
+                      const char *errorString = "Error",
+                      const char *warningString = "Warning" ) :
+            ErrorFormatter( new Adapter(o), preLine, postLine, errorString, warningString ) {}
         virtual ~ErrorPrinter() { delete outputStream(); }
 
     private:
