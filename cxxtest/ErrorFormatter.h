@@ -45,12 +45,16 @@ namespace CxxTest
     class ErrorFormatter : public TestListener
     {
     public:
-        ErrorFormatter( OutputStream *o, const char *preLine = ":", const char *postLine = "" ) :
+        ErrorFormatter( OutputStream *o, const char *preLine = ":", const char *postLine = "",
+                        const char *errorString = "Error",
+                        const char *warningString = "Warning") :
             _dotting( true ),
             _reported( false ),
             _o(o),
             _preLine(preLine),
-            _postLine(postLine)
+            _postLine(postLine),
+            _errorString(errorString),
+            _warningString(warningString)
         {
         }
 
@@ -115,19 +119,19 @@ namespace CxxTest
 
         void warning( const char *file, int line, const char *expression )
         {
-            stop( file, line ) << "Warning: " <<
+            stop( file, line ) << _warningString << ": " <<
                 expression << endl;
         }
 
         void failedTest( const char *file, int line, const char *expression )
         {
-            stop( file, line ) << "Error: Test failed: " <<
+            stop( file, line ) << _errorString << ": Test failed: " <<
                 expression << endl;
         }
 
         void failedAssert( const char *file, int line, const char *expression )
         {
-            stop( file, line ) << "Error: Assertion failed: " <<
+            stop( file, line ) << _errorString << ": Assertion failed: " <<
                 expression << endl;
         }
 
@@ -135,7 +139,7 @@ namespace CxxTest
                                  const char *xStr, const char *yStr,
                                  const char *x, const char *y )
         {
-            stop( file, line ) << "Error: Expected (" <<
+            stop( file, line ) << _errorString << ": Expected (" <<
                 xStr << " == " << yStr << "), found (" <<
                 x << " != " << y << ")" << endl;
         }
@@ -145,7 +149,7 @@ namespace CxxTest
                                    const char *sizeStr, const void *x,
                                    const void *y, unsigned size )
         {
-            stop( file, line ) << "Error: Expected " << sizeStr << " (" << size << ") bytes to be equal at (" <<
+            stop( file, line ) << _errorString << ": Expected " << sizeStr << " (" << size << ") bytes to be equal at (" <<
                 xStr << ") and (" << yStr << "), found:" << endl;
             dump( x, size );
             (*_o) << "     differs from" << endl;
@@ -157,14 +161,14 @@ namespace CxxTest
                                    const char* explanation
                                    )
         {
-            stop( file, line ) << "Error: " << explanation << endl;
+            stop( file, line ) << _errorString << ": " << explanation << endl;
         }
 
         void failedAssertDelta( const char *file, int line,
                                 const char *xStr, const char *yStr, const char *dStr,
                                 const char *x, const char *y, const char *d )
         {
-            stop( file, line ) << "Error: Expected (" <<
+            stop( file, line ) << _errorString << ": Expected (" <<
                 xStr << " == " << yStr << ") up to " << dStr << " (" << d << "), found (" <<
                 x << " != " << y << ")" << endl;
         }
@@ -173,7 +177,7 @@ namespace CxxTest
                                   const char *xStr, const char *yStr,
                                   const char *value )
         {
-            stop( file, line ) << "Error: Expected (" <<
+            stop( file, line ) << _errorString << ": Expected (" <<
                 xStr << " != " << yStr << "), found (" <<
                 value << ")" << endl;
         }
@@ -182,7 +186,7 @@ namespace CxxTest
                                    const char *xStr, const char *yStr,
                                    const char *x, const char *y )
         {
-            stop( file, line ) << "Error: Expected (" <<
+            stop( file, line ) << _errorString << ": Expected (" <<
                 xStr << " < " << yStr << "), found (" <<
                 x << " >= " << y << ")" << endl;
         }
@@ -191,7 +195,7 @@ namespace CxxTest
                                          const char *xStr, const char *yStr,
                                          const char *x, const char *y )
         {
-            stop( file, line ) << "Error: Expected (" <<
+            stop( file, line ) << _errorString << ": Expected (" <<
                 xStr << " <= " << yStr << "), found (" <<
                 x << " > " << y << ")" << endl;
         }
@@ -200,14 +204,14 @@ namespace CxxTest
                                    const char *relation, const char *xStr, const char *yStr,
                                    const char *x, const char *y )
         {
-            stop( file, line ) << "Error: Expected " << relation << "( " <<
+            stop( file, line ) << _errorString << ": Expected " << relation << "( " <<
                 xStr << ", " << yStr << " ), found !" << relation << "( " << x << ", " << y << " )" << endl;
         }
 
         void failedAssertPredicate( const char *file, int line,
                                     const char *predicate, const char *xStr, const char *x )
         {
-            stop( file, line ) << "Error: Expected " << predicate << "( " <<
+            stop( file, line ) << _errorString << ": Expected " << predicate << "( " <<
                 xStr << " ), found !" << predicate << "( " << x << " )" << endl;
         }
 
@@ -215,14 +219,14 @@ namespace CxxTest
                                  const char *expression, const char *type,
                                  bool otherThrown )
         {
-            stop( file, line ) << "Error: Expected (" << expression << ") to throw (" <<
+            stop( file, line ) << _errorString << ": Expected (" << expression << ") to throw (" <<
                 type << ") but it " << (otherThrown ? "threw something else" : "didn't throw") <<
                 endl;
         }
 
         void failedAssertThrowsNot( const char *file, int line, const char *expression )
         {
-            stop( file, line ) << "Error: Expected (" << expression << ") not to throw, but it did" <<
+            stop( file, line ) << _errorString << ": Expected (" << expression << ") not to throw, but it did" <<
                 endl;
         }
 
@@ -297,6 +301,8 @@ namespace CxxTest
         OutputStream *_o;
         const char *_preLine;
         const char *_postLine;
+        const char *_errorString;
+        const char *_warningString;
     };
 }
 

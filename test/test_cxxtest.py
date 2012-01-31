@@ -21,7 +21,7 @@ sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
 cxxtestdir = os.path.dirname(os.path.dirname(currdir))+os.sep
 
 compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:[0-9]+:.*)$")
-dirre      = re.compile("^([^"+os.sep+"]*/)*")
+dirre      = re.compile("^([^%s]*/)*" % re.escape(os.sep))
 xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
 
 # Headers from the cxxtest/sample directory
@@ -29,8 +29,14 @@ samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
 guiInputs=currdir+'../sample/gui/GreenYellowRed.h'
 if sys.platform.startswith('win'):
     target_suffix = '.exe'
+    command_separator = ' && '
+    cxxtestdir = '/'.join(cxxtestdir.split('\\'))
+    remove_extra_path_prefixes_on_windows = True
 else:
     target_suffix = ''
+    command_separator = '; '
+    remove_extra_path_prefixes_on_windows = False
+    
 # Create a file with the list of sample files
 OUTPUT = open(currdir+'Samples.txt','w')
 for line in sorted(glob.glob(sampledir+'*.h')):
@@ -53,14 +59,19 @@ def find(filename, executable=False, isfile=True,  validate=None):
                 return os.path.abspath(test_fname)
     return None
 
+def join_commands(command_one, command_two):
+    return command_separator.join([command_one, command_two])
+
 def available(compiler, exe_option):
-    cmd = "cd %s; %s %s %s %s > %s 2>&1" % (currdir, compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log')
+    cmd = join_commands("cd %s" % currdir,
+                        "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log'))
     ##print cmd
     status = subprocess.call(cmd, shell=True)
-    flag = status == 0 and os.path.exists(currdir+'anything')
+    executable = currdir+'anything'+target_suffix
+    flag = status == 0 and os.path.exists(executable)
     os.remove(currdir+'anything.log')
-    if os.path.exists(currdir+'anything'):
-        os.remove(currdir+'anything')
+    if os.path.exists(executable):
+        os.remove(executable)
     return flag
 
 def remove_absdir(filename):
@@ -91,9 +102,18 @@ def normalize_line_for_diff(line):
     # remove spaces around "="
     line = re.sub(" ?= ?", "=", line)
 
-
     # remove all absolute path prefixes
     line = ''.join(line.split(cxxtestdir))
+
+    if remove_extra_path_prefixes_on_windows:
+        # Take care of inconsistent path prefixes like
+        # "e:\path\to\cxxtest\test", "E:/path/to/cxxtest/test" etc
+        # in output.
+        line = ''.join(line.split(os.path.normcase(cxxtestdir)))
+        line = ''.join(line.split(os.path.normpath(cxxtestdir)))
+        # And some extra relative paths left behind
+        line= re.sub(r'^.*[\\/]([^\\/]+\.(h|cpp))', r'\1', line)
+
     # for xml, remove prefixes from everything that looks like a 
     # file path inside ""
     line = xmlre.sub(
@@ -173,7 +193,8 @@ class BaseTestCase(object):
     def check_if_supported(self, filename, msg):
         target=currdir+'check'+'px'+target_suffix
         log=currdir+'check'+'_build.log'
-        cmd = "cd %s; %s %s %s %s. %s%s../ %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, target, self.include_option, self.include_option, currdir, filename, log)
+        cmd = join_commands("cd %s" % currdir,
+                            "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, target, self.include_option, self.include_option, currdir, filename, log))
         ##print cmd
         status = subprocess.call(cmd, shell=True)
         os.remove(log)
@@ -194,7 +215,8 @@ class BaseTestCase(object):
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
-        cmd = "cd %s; %s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (currdir, sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        cmd = join_commands("cd %s" % currdir,
+                            "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
         #print self.fog, "CMD", cmd
         status = subprocess.call(cmd, shell=True)
         self.assertEqual(status, 0, 'Error executing cxxtestgen')
@@ -204,12 +226,14 @@ class BaseTestCase(object):
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
-            cmd = "cd %s; %s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (currdir, sys.executable, currdir, self.fog, file, args, self.py_out)
+            cmd = join_commands("cd %s" % currdir,
+                                "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
             ##print cmd
             status = subprocess.call(cmd, shell=True)
             self.assertEqual(status, 0, 'Error executing cxxtestgen')
         #
-        cmd = "cd %s; %s %s %s %s. %s%s../ %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log)
+        cmd = join_commands("cd %s" % currdir,
+                            "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log))
         ##print cmd
         status = subprocess.call(cmd, shell=True)
         for file in files:
@@ -217,7 +241,9 @@ class BaseTestCase(object):
                 os.remove(file)
         self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
-        status = subprocess.call("cd %s; %s %s -v > %s 2>&1" % (currdir, self.valgrind, self.build_target, self.px_pre), shell=True)
+        cmd = join_commands("cd %s" % currdir,
+                            "%s %s -v > %s 2>&1" % (self.valgrind, self.build_target, self.px_pre))
+        status = subprocess.call(cmd, shell=True)
         OUTPUT = open(self.px_pre,'a')
         OUTPUT.write('Error level = '+str(status)+'\n')
         OUTPUT.close()
@@ -232,7 +258,8 @@ class BaseTestCase(object):
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False):
         self.init(prefix)
         #
-        cmd = "cd %s; %s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (currdir, sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out)
+        cmd = join_commands("cd %s" % currdir,
+                            "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
         #print ("HERE "+cmd)
         status = subprocess.call(cmd, shell=True)
         if failGen:
@@ -245,10 +272,12 @@ class BaseTestCase(object):
         #
         if not main is None:
             # Compile with main
-            cmd = "cd %s; %s %s %s %s. %s%s../ %s main.cpp %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
+            cmd = join_commands("cd %s" % currdir,
+                                "%s %s %s %s. %s%s../ %s main.cpp %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log))
         else:
             # Compile without main
-            cmd = "cd %s; %s %s %s %s. %s%s../ %s %s > %s 2>&1" % (currdir, self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log)
+            cmd = join_commands("cd %s" % currdir,
+                                "%s %s %s %s. %s%s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log))
         status = subprocess.call(cmd, shell=True)
         if failBuild:
             if status == 0:
@@ -261,7 +290,8 @@ class BaseTestCase(object):
         #
         if compile == '' and not output is None:
             if run is None:
-                cmd = "cd %s; %s %s -v > %s 2>&1" % (currdir, self.valgrind, self.build_target, self.px_pre)
+                cmd = join_commands("cd %s" % currdir,
+                                    "%s %s -v > %s 2>&1" % (self.valgrind, self.build_target, self.px_pre))
             else:
                 cmd = run % (self.valgrind, self.build_target, self.px_pre)
             status = subprocess.call(cmd, shell=True)
@@ -332,7 +362,7 @@ class BaseTestCase(object):
     def test_longlong(self):
         """Long long"""
         self.check_if_supported('longlong.cpp', "Long long is not supported by this compiler")
-        self.compile(prefix='longlong', args="--error-printer --longlong='long long' LongLong.h", output="longlong.out")
+        self.compile(prefix='longlong', args="--error-printer --longlong=\"long long\" LongLong.h", output="longlong.out")
 
     def test_int64(self):
         """Int64"""
@@ -737,7 +767,7 @@ class TestCL(BaseTestCase, unittest.TestCase):
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='cl -nologo -GX -W4 -WX'
+    compiler='cl -nologo -GX -W4'# -WX'
     no_eh_option = '-GX-'
     qtFlags='-Ifake'
     x11Flags='-Ifake'
