@@ -9,7 +9,7 @@ class IncludesTest : public CxxTest::TestSuite
 public:
     void testTraits()
     {
-        TS_WARN( (void *)0 );
-        TS_WARN( (long *)0 );
+        TS_WARN((void *)0);
+        TS_WARN((long *)0);
     }
 };

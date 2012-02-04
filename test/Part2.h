@@ -9,7 +9,7 @@ class Part2 : public CxxTest::TestSuite
 public:
     void testSomething()
     {
-        TS_ASSERT_THROWS_NOTHING( throwNothing() );
+        TS_ASSERT_THROWS_NOTHING(throwNothing());
     }
 
     void throwNothing()

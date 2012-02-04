@@ -1,5 +1,8 @@
 Usage: cxxtestgen [options] [<filename> ...]
 
+The 'cxxtestgen' command processes C++ header files to perform test discovery,
+and then it creates files for the 'CxxTest' test runner.
+
 Options:
   -h, --help            show this help message and exit
   --version             Write the CxxTest version.

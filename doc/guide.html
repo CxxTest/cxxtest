@@ -1206,6 +1206,9 @@ inherit from the class <tt>CxxTest::TestSuite</tt>.</p></div>
 <div class="content">
 <pre><tt>Usage: cxxtestgen [options] [&lt;filename&gt; ...]
 
+The 'cxxtestgen' command processes C++ header files to perform test discovery,
+and then it creates files for the 'CxxTest' test runner.
+
 Options:
   -h, --help            show this help message and exit
   --version             Write the CxxTest version.
@@ -1603,13 +1606,13 @@ http://www.gnu.org/software/src-highlite -->
 <span style="font-style: italic"><span style="color: #9A1900">//      TS_ASSERT_EQUALS( 1 * 1, 2 );</span></span>
 <span style="font-style: italic"><span style="color: #9A1900">//   }</span></span>
 
-<span style="font-style: italic"><span style="color: #9A1900">/*</span></span>
-<span style="font-style: italic"><span style="color: #9A1900">     void testSubtraction( void )</span></span>
-<span style="font-style: italic"><span style="color: #9A1900">     {</span></span>
-<span style="font-style: italic"><span style="color: #9A1900">        TS_ASSERT( 1 - 1 &lt; 1 );</span></span>
-<span style="font-style: italic"><span style="color: #9A1900">        TS_ASSERT_EQUALS( 1 - 1, 0 );</span></span>
-<span style="font-style: italic"><span style="color: #9A1900">     }</span></span>
-<span style="font-style: italic"><span style="color: #9A1900">*/</span></span>
+    <span style="font-style: italic"><span style="color: #9A1900">/*</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">         void testSubtraction( void )</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">         {</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">            TS_ASSERT( 1 - 1 &lt; 1 );</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">            TS_ASSERT_EQUALS( 1 - 1, 0 );</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">         }</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">    */</span></span>
 
     <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">XtestDivision</span></span><span style="color: #990000">(</span><span style="color: #009900">void</span><span style="color: #990000">)</span>
     <span style="color: #FF0000">{</span>
@@ -1936,19 +1939,19 @@ http://www.gnu.org/software/src-highlite -->
 
     <span style="font-weight: bold"><span style="color: #0000FF">static</span></span> MyTestSuite6<span style="color: #990000">*</span> <span style="font-weight: bold"><span style="color: #000000">createSuite</span></span><span style="color: #990000">()</span>
     <span style="color: #FF0000">{</span>
-<span style="font-weight: bold"><span style="color: #000080">    #ifdef</span></span> _MSC_VER
-    <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">new</span></span> <span style="font-weight: bold"><span style="color: #000000">MyTestSuite6</span></span><span style="color: #990000">();</span>
-<span style="font-weight: bold"><span style="color: #000080">    #else</span></span>
-    <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="color: #993399">0</span><span style="color: #990000">;</span>
-<span style="font-weight: bold"><span style="color: #000080">    #endif</span></span>
+<span style="font-weight: bold"><span style="color: #000080">#ifdef</span></span> _MSC_VER
+        <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">new</span></span> <span style="font-weight: bold"><span style="color: #000000">MyTestSuite6</span></span><span style="color: #990000">();</span>
+<span style="font-weight: bold"><span style="color: #000080">#else</span></span>
+        <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="color: #993399">0</span><span style="color: #990000">;</span>
+<span style="font-weight: bold"><span style="color: #000080">#endif</span></span>
     <span style="color: #FF0000">}</span>
 
-    <span style="font-weight: bold"><span style="color: #0000FF">static</span></span> <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">destroySuite</span></span><span style="color: #990000">(</span> MyTestSuite6<span style="color: #990000">*</span> suite <span style="color: #990000">)</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">static</span></span> <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">destroySuite</span></span><span style="color: #990000">(</span>MyTestSuite6<span style="color: #990000">*</span> suite<span style="color: #990000">)</span>
     <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">delete</span></span> suite<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
 
     <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_nothing</span></span><span style="color: #990000">()</span>
     <span style="color: #FF0000">{</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span> <span style="color: #FF0000">"Nothing to test"</span> <span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"Nothing to test"</span><span style="color: #990000">);</span>
     <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span></tt></pre></div></div>
 </div>
@@ -1987,8 +1990,8 @@ http://www.gnu.org/software/src-highlite -->
     <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #000000">setUp</span></span><span style="color: #990000">()</span> <span style="color: #FF0000">{</span> <span style="color: #990000">++</span> setUpCount<span style="color: #990000">;</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">true</span></span><span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
     <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #000000">tearDown</span></span><span style="color: #990000">()</span> <span style="color: #FF0000">{</span> <span style="color: #990000">++</span> tearDownCount<span style="color: #990000">;</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">true</span></span><span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
 
-    <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #000000">setUpWorld</span></span><span style="color: #990000">()</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #000000">printf</span></span><span style="color: #990000">(</span> <span style="color: #FF0000">"Starting a test suite</span><span style="color: #CC33CC">\n</span><span style="color: #FF0000">"</span> <span style="color: #990000">);</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">true</span></span><span style="color: #990000">;</span><span style="color: #FF0000">}</span>
-    <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #000000">tearDownWorld</span></span><span style="color: #990000">()</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #000000">printf</span></span><span style="color: #990000">(</span> <span style="color: #FF0000">"Finishing a test suite</span><span style="color: #CC33CC">\n</span><span style="color: #FF0000">"</span> <span style="color: #990000">);</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">true</span></span><span style="color: #990000">;</span><span style="color: #FF0000">}</span>
+    <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #000000">setUpWorld</span></span><span style="color: #990000">()</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #000000">printf</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"Starting a test suite</span><span style="color: #CC33CC">\n</span><span style="color: #FF0000">"</span><span style="color: #990000">);</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">true</span></span><span style="color: #990000">;</span><span style="color: #FF0000">}</span>
+    <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #000000">tearDownWorld</span></span><span style="color: #990000">()</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #000000">printf</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"Finishing a test suite</span><span style="color: #CC33CC">\n</span><span style="color: #FF0000">"</span><span style="color: #990000">);</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="font-weight: bold"><span style="color: #0000FF">true</span></span><span style="color: #990000">;</span><span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 <span style="font-weight: bold"><span style="color: #0000FF">static</span></span> <span style="color: #008080">Fixture1</span> fixture1<span style="color: #990000">;</span>
 
@@ -2123,31 +2126,32 @@ http://www.gnu.org/software/src-highlite -->
 <span style="color: #FF0000">{</span>
 <span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
 
-   <span style="font-weight: bold"><span style="color: #0000FF">struct</span></span> <span style="color: #008080">Data</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #009900">char</span> data<span style="color: #990000">[</span><span style="color: #993399">3</span><span style="color: #990000">];</span>
-      <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #0000FF">operator</span></span><span style="color: #990000">==(</span><span style="color: #008080">Data</span> o<span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
-          <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">memcmp</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">this</span></span><span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>o<span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>o<span style="color: #990000">))</span> <span style="color: #990000">==</span> <span style="color: #993399">0</span><span style="color: #990000">);</span>
-      <span style="color: #FF0000">}</span>
-   <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">struct</span></span> <span style="color: #008080">Data</span>
+    <span style="color: #FF0000">{</span>
+        <span style="color: #009900">char</span> data<span style="color: #990000">[</span><span style="color: #993399">3</span><span style="color: #990000">];</span>
+        <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #0000FF">operator</span></span><span style="color: #990000">==(</span><span style="color: #008080">Data</span> o<span style="color: #990000">)</span>
+        <span style="color: #FF0000">{</span>
+            <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">memcmp</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">this</span></span><span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>o<span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>o<span style="color: #990000">))</span> <span style="color: #990000">==</span> <span style="color: #993399">0</span><span style="color: #990000">);</span>
+        <span style="color: #FF0000">}</span>
+    <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 
-   <span style="font-weight: bold"><span style="color: #0000FF">struct</span></span> <span style="color: #008080">Data2</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #009900">char</span> data<span style="color: #990000">[</span><span style="color: #993399">3</span><span style="color: #990000">];</span>
-   <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">struct</span></span> <span style="color: #008080">Data2</span>
+    <span style="color: #FF0000">{</span>
+        <span style="color: #009900">char</span> data<span style="color: #990000">[</span><span style="color: #993399">3</span><span style="color: #990000">];</span>
+    <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 
-   <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">testCompareData</span></span><span style="color: #990000">()</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #008080">Data</span> x<span style="color: #990000">,</span> y<span style="color: #990000">;</span>
-      <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span> x<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0x12</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>x<span style="color: #990000">.</span>data<span style="color: #990000">)</span> <span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span> y<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0xF6</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>y<span style="color: #990000">.</span>data<span style="color: #990000">)</span> <span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span> x<span style="color: #990000">,</span> y <span style="color: #990000">);</span>
+    <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">testCompareData</span></span><span style="color: #990000">()</span>
+    <span style="color: #FF0000">{</span>
+        <span style="color: #008080">Data</span> x<span style="color: #990000">,</span> y<span style="color: #990000">;</span>
+        <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span>x<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0x12</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>x<span style="color: #990000">.</span>data<span style="color: #990000">));</span>
+        <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span>y<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0xF6</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>y<span style="color: #990000">.</span>data<span style="color: #990000">));</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span>x<span style="color: #990000">,</span> y<span style="color: #990000">);</span>
 
-      <span style="color: #008080">Data2</span> z<span style="color: #990000">,</span> w<span style="color: #990000">;</span>
-      <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span> z<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0x12</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>x<span style="color: #990000">.</span>data<span style="color: #990000">)</span> <span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span> w<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0xF6</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>y<span style="color: #990000">.</span>data<span style="color: #990000">)</span> <span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_SAME_DATA</span></span><span style="color: #990000">(</span> <span style="color: #990000">&amp;</span>z<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>w<span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>z<span style="color: #990000">)</span> <span style="color: #990000">)</span>
-   <span style="color: #FF0000">}</span>
+        <span style="color: #008080">Data2</span> z<span style="color: #990000">,</span> w<span style="color: #990000">;</span>
+        <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span>z<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0x12</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>x<span style="color: #990000">.</span>data<span style="color: #990000">));</span>
+        <span style="font-weight: bold"><span style="color: #000000">memset</span></span><span style="color: #990000">(</span>w<span style="color: #990000">.</span>data<span style="color: #990000">,</span> <span style="color: #993399">0xF6</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>y<span style="color: #990000">.</span>data<span style="color: #990000">));</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_SAME_DATA</span></span><span style="color: #990000">(&amp;</span>z<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>w<span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">sizeof</span></span><span style="color: #990000">(</span>z<span style="color: #990000">))</span>
+    <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 </tt></pre></div></div>
 <div class="paragraph"><p>defines a test runner that generates the following output</p></div>
@@ -2198,7 +2202,8 @@ http://www.gnu.org/software/src-highlite -->
 <pre><tt><span style="font-style: italic"><span style="color: #9A1900">// MyTestSuite9.h</span></span>
 <span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;cxxtest/TestSuite.h&gt;</span>
 
-<span style="font-weight: bold"><span style="color: #0000FF">enum</span></span> Answer <span style="color: #FF0000">{</span>
+<span style="font-weight: bold"><span style="color: #0000FF">enum</span></span> Answer
+<span style="color: #FF0000">{</span>
     Yes<span style="color: #990000">,</span>
     No<span style="color: #990000">,</span>
     Maybe<span style="color: #990000">,</span>
@@ -2207,12 +2212,12 @@ http://www.gnu.org/software/src-highlite -->
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 
 <span style="font-style: italic"><span style="color: #9A1900">// Declare value traits for the Answer enumeration</span></span>
-<span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_TRAITS</span></span><span style="color: #990000">(</span> Answer<span style="color: #990000">,</span>
-                     <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span> Yes <span style="color: #990000">)</span>
-                     <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span> No <span style="color: #990000">)</span>
-                     <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span> Maybe <span style="color: #990000">)</span>
-                     <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span> DontKnow <span style="color: #990000">)</span>
-                     <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span> DontCare <span style="color: #990000">)</span> <span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_TRAITS</span></span><span style="color: #990000">(</span>Answer<span style="color: #990000">,</span>
+                    <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span>Yes<span style="color: #990000">)</span>
+                    <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span>No<span style="color: #990000">)</span>
+                    <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span>Maybe<span style="color: #990000">)</span>
+                    <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span>DontKnow<span style="color: #990000">)</span>
+                    <span style="font-weight: bold"><span style="color: #000000">CXXTEST_ENUM_MEMBER</span></span><span style="color: #990000">(</span>DontCare<span style="color: #990000">));</span>
 
 <span style="font-style: italic"><span style="color: #9A1900">// Test the trait values</span></span>
 <span style="font-weight: bold"><span style="color: #0000FF">class</span></span> <span style="color: #008080">EnumTraits</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #0000FF">public</span></span> CxxTest<span style="color: #990000">::</span>TestSuite
@@ -2220,12 +2225,12 @@ http://www.gnu.org/software/src-highlite -->
 <span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
     <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_Enum_traits</span></span><span style="color: #990000">()</span>
     <span style="color: #FF0000">{</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span> Yes <span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span> No <span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span> Maybe <span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span> DontKnow <span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span> DontCare <span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span> <span style="color: #990000">(</span>Answer<span style="color: #990000">)</span><span style="color: #993399">1000</span> <span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span>Yes<span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span>No<span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span>Maybe<span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span>DontKnow<span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">(</span>DontCare<span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_FAIL</span></span><span style="color: #990000">((</span>Answer<span style="color: #990000">)</span><span style="color: #993399">1000</span><span style="color: #990000">);</span>
     <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span></tt></pre></div></div>
 <div class="paragraph"><p>defines a test runner that generates the following output</p></div>
@@ -2262,18 +2267,18 @@ http://www.gnu.org/software/src-highlite -->
 <span style="color: #FF0000">{</span>
 <span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
 
-   <span style="color: #009900">int</span> value<span style="color: #990000">;</span>
+    <span style="color: #009900">int</span> value<span style="color: #990000">;</span>
 
-   <span style="font-weight: bold"><span style="color: #000000">MyClass</span></span><span style="color: #990000">(</span><span style="color: #009900">int</span> value_<span style="color: #990000">)</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #000000">value</span></span><span style="color: #990000">(</span>value_<span style="color: #990000">)</span> <span style="color: #FF0000">{}</span>
+    <span style="font-weight: bold"><span style="color: #000000">MyClass</span></span><span style="color: #990000">(</span><span style="color: #009900">int</span> value_<span style="color: #990000">)</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #000000">value</span></span><span style="color: #990000">(</span>value_<span style="color: #990000">)</span> <span style="color: #FF0000">{}</span>
 
-   <span style="font-style: italic"><span style="color: #9A1900">// CxxTest requires a copy constructor</span></span>
-   <span style="font-weight: bold"><span style="color: #000000">MyClass</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> other<span style="color: #990000">)</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #000000">value</span></span><span style="color: #990000">(</span>other<span style="color: #990000">.</span>value<span style="color: #990000">)</span> <span style="color: #FF0000">{}</span>
+    <span style="font-style: italic"><span style="color: #9A1900">// CxxTest requires a copy constructor</span></span>
+    <span style="font-weight: bold"><span style="color: #000000">MyClass</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> other<span style="color: #990000">)</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #000000">value</span></span><span style="color: #990000">(</span>other<span style="color: #990000">.</span>value<span style="color: #990000">)</span> <span style="color: #FF0000">{}</span>
 
-   <span style="font-style: italic"><span style="color: #9A1900">// This is required if you want to use TS_ASSERT_EQUALS</span></span>
-   <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #0000FF">operator</span></span><span style="color: #990000">==(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> other<span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> value <span style="color: #990000">==</span> other<span style="color: #990000">.</span>value<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
+    <span style="font-style: italic"><span style="color: #9A1900">// This is required if you want to use TS_ASSERT_EQUALS</span></span>
+    <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #0000FF">operator</span></span><span style="color: #990000">==(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> other<span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> value <span style="color: #990000">==</span> other<span style="color: #990000">.</span>value<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
 
-   <span style="font-style: italic"><span style="color: #9A1900">// If you want to use TS_ASSERT_LESS_THAN</span></span>
-   <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #0000FF">operator</span></span><span style="color: #990000">&lt;(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> other<span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> value <span style="color: #990000">&lt;</span> other<span style="color: #990000">.</span>value<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
+    <span style="font-style: italic"><span style="color: #9A1900">// If you want to use TS_ASSERT_LESS_THAN</span></span>
+    <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #0000FF">operator</span></span><span style="color: #990000">&lt;(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> other<span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> value <span style="color: #990000">&lt;</span> other<span style="color: #990000">.</span>value<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 
 <span style="font-weight: bold"><span style="color: #000080">#ifdef</span></span> CXXTEST_RUNNING
@@ -2283,15 +2288,15 @@ http://www.gnu.org/software/src-highlite -->
 
 <span style="font-weight: bold"><span style="color: #0000FF">namespace</span></span> CxxTest
 <span style="color: #FF0000">{</span>
-   CXXTEST_TEMPLATE_INSTANTIATION
-   <span style="font-weight: bold"><span style="color: #0000FF">class</span></span> <span style="color: #008080">ValueTraits</span><span style="color: #990000">&lt;</span>MyClass<span style="color: #990000">&gt;</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #009900">char</span> _s<span style="color: #990000">[</span><span style="color: #993399">256</span><span style="color: #990000">];</span>
+CXXTEST_TEMPLATE_INSTANTIATION
+<span style="font-weight: bold"><span style="color: #0000FF">class</span></span> <span style="color: #008080">ValueTraits</span><span style="color: #990000">&lt;</span>MyClass<span style="color: #990000">&gt;</span>
+<span style="color: #FF0000">{</span>
+    <span style="color: #009900">char</span> _s<span style="color: #990000">[</span><span style="color: #993399">256</span><span style="color: #990000">];</span>
 
-   <span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
-      <span style="font-weight: bold"><span style="color: #000000">ValueTraits</span></span><span style="color: #990000">(</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> m <span style="color: #990000">)</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #000000">sprintf</span></span><span style="color: #990000">(</span> _s<span style="color: #990000">,</span> <span style="color: #FF0000">"MyClass( %i )"</span><span style="color: #990000">,</span> m<span style="color: #990000">.</span>value <span style="color: #990000">);</span> <span style="color: #FF0000">}</span>
-      <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #009900">char</span> <span style="color: #990000">*</span><span style="font-weight: bold"><span style="color: #000000">asString</span></span><span style="color: #990000">()</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> _s<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
-   <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
+<span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
+    <span style="font-weight: bold"><span style="color: #000000">ValueTraits</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> MyClass<span style="color: #990000">&amp;</span> m<span style="color: #990000">)</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #000000">sprintf</span></span><span style="color: #990000">(</span>_s<span style="color: #990000">,</span> <span style="color: #FF0000">"MyClass( %i )"</span><span style="color: #990000">,</span> m<span style="color: #990000">.</span>value<span style="color: #990000">);</span> <span style="color: #FF0000">}</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #009900">char</span> <span style="color: #990000">*</span><span style="font-weight: bold"><span style="color: #000000">asString</span></span><span style="color: #990000">()</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> _s<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
+<span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 <span style="font-weight: bold"><span style="color: #000080">#endif</span></span> <span style="font-style: italic"><span style="color: #9A1900">// CXXTEST_RUNNING</span></span></tt></pre></div></div>
 <div class="paragraph"><p>This class includes definitions of <tt>operator==</tt> and <tt>operator&lt;</tt>
@@ -2314,17 +2319,17 @@ http://www.gnu.org/software/src-highlite -->
 <span style="font-weight: bold"><span style="color: #0000FF">class</span></span> <span style="color: #008080">MyTestSuite10</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #0000FF">public</span></span> CxxTest<span style="color: #990000">::</span>TestSuite
 <span style="color: #FF0000">{</span>
 <span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
-   <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_le</span></span><span style="color: #990000">()</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #008080">MyClass</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_LESS_THAN</span></span><span style="color: #990000">(</span> x<span style="color: #990000">,</span> y <span style="color: #990000">);</span>
-   <span style="color: #FF0000">}</span>
+    <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_le</span></span><span style="color: #990000">()</span>
+    <span style="color: #FF0000">{</span>
+        <span style="color: #008080">MyClass</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_LESS_THAN</span></span><span style="color: #990000">(</span>x<span style="color: #990000">,</span> y<span style="color: #990000">);</span>
+    <span style="color: #FF0000">}</span>
 
-   <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_eq</span></span><span style="color: #990000">()</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #008080">MyClass</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span> x<span style="color: #990000">,</span> y <span style="color: #990000">);</span>
-   <span style="color: #FF0000">}</span>
+    <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_eq</span></span><span style="color: #990000">()</span>
+    <span style="color: #FF0000">{</span>
+        <span style="color: #008080">MyClass</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span>x<span style="color: #990000">,</span> y<span style="color: #990000">);</span>
+    <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 </tt></pre></div></div>
 <div class="paragraph"><p>This runner for this test suite generates the following output:</p></div>
@@ -2355,17 +2360,17 @@ http://www.gnu.org/software/src-highlite -->
 <span style="font-weight: bold"><span style="color: #0000FF">class</span></span> <span style="color: #008080">MyTestSuite11</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #0000FF">public</span></span> CxxTest<span style="color: #990000">::</span>TestSuite
 <span style="color: #FF0000">{</span>
 <span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
-   <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_le</span></span><span style="color: #990000">()</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #008080">TMyClass&lt;int&gt;</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_LESS_THAN</span></span><span style="color: #990000">(</span> x<span style="color: #990000">,</span> y <span style="color: #990000">);</span>
-   <span style="color: #FF0000">}</span>
+    <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_le</span></span><span style="color: #990000">()</span>
+    <span style="color: #FF0000">{</span>
+        <span style="color: #008080">TMyClass&lt;int&gt;</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_LESS_THAN</span></span><span style="color: #990000">(</span>x<span style="color: #990000">,</span> y<span style="color: #990000">);</span>
+    <span style="color: #FF0000">}</span>
 
-   <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_eq</span></span><span style="color: #990000">()</span>
-   <span style="color: #FF0000">{</span>
-      <span style="color: #008080">TMyClass&lt;int&gt;</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
-      <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span> x<span style="color: #990000">,</span> y <span style="color: #990000">);</span>
-   <span style="color: #FF0000">}</span>
+    <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_eq</span></span><span style="color: #990000">()</span>
+    <span style="color: #FF0000">{</span>
+        <span style="color: #008080">TMyClass&lt;int&gt;</span> <span style="font-weight: bold"><span style="color: #000000">x</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">),</span> <span style="font-weight: bold"><span style="color: #000000">y</span></span><span style="color: #990000">(</span><span style="color: #993399">2</span><span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span>x<span style="color: #990000">,</span> y<span style="color: #990000">);</span>
+    <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 </tt></pre></div></div>
 <div class="paragraph"><p>Unfortunately, this example employs partial template specialization, which  is not supported by all C++ compilers.</p></div>
@@ -2413,10 +2418,10 @@ http://www.gnu.org/software/src-highlite -->
 <span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;time.h&gt;</span>
 <span style="font-weight: bold"><span style="color: #000080">#include</span></span> <span style="color: #FF0000">&lt;cxxtest/Mock.h&gt;</span>
 
-<span style="font-weight: bold"><span style="color: #000000">CXXTEST_MOCK_GLOBAL</span></span><span style="color: #990000">(</span> time_t<span style="color: #990000">,</span>        <span style="font-style: italic"><span style="color: #9A1900">/* Return type          */</span></span>
-                     time<span style="color: #990000">,</span>          <span style="font-style: italic"><span style="color: #9A1900">/* Name of the function */</span></span>
-                     <span style="color: #990000">(</span> <span style="color: #008080">time_t</span> <span style="color: #990000">*</span>t <span style="color: #990000">),</span> <span style="font-style: italic"><span style="color: #9A1900">/* Prototype            */</span></span>
-                     <span style="color: #990000">(</span> t <span style="color: #990000">)</span>          <span style="font-style: italic"><span style="color: #9A1900">/* Argument list        */</span></span> <span style="color: #990000">);</span></tt></pre></div></div>
+<span style="font-weight: bold"><span style="color: #000000">CXXTEST_MOCK_GLOBAL</span></span><span style="color: #990000">(</span>time_t<span style="color: #990000">,</span>         <span style="font-style: italic"><span style="color: #9A1900">/* Return type          */</span></span>
+                    time<span style="color: #990000">,</span>          <span style="font-style: italic"><span style="color: #9A1900">/* Name of the function */</span></span>
+                    <span style="color: #990000">(</span><span style="color: #008080">time_t</span> <span style="color: #990000">*</span>t<span style="color: #990000">),</span>   <span style="font-style: italic"><span style="color: #9A1900">/* Prototype            */</span></span>
+                    <span style="color: #990000">(</span>t<span style="color: #990000">)</span>          <span style="font-style: italic"><span style="color: #9A1900">/* Argument list        */</span></span><span style="color: #990000">);</span></tt></pre></div></div>
 </div>
 <div class="sect3">
 <h4 id="_mock_functions_in_tested_code">8.1.2. Mock Functions in Tested Code</h4>
@@ -2434,7 +2439,7 @@ http://www.gnu.org/software/src-highlite -->
 
 <span style="color: #009900">int</span> <span style="font-weight: bold"><span style="color: #000000">generateRandomNumber</span></span><span style="color: #990000">()</span>
 <span style="color: #FF0000">{</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> T<span style="color: #990000">::</span><span style="font-weight: bold"><span style="color: #000000">time</span></span><span style="color: #990000">(</span> NULL <span style="color: #990000">)</span> <span style="color: #990000">*</span> <span style="color: #993399">3</span><span style="color: #990000">;</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> T<span style="color: #990000">::</span><span style="font-weight: bold"><span style="color: #000000">time</span></span><span style="color: #990000">(</span>NULL<span style="color: #990000">)</span> <span style="color: #990000">*</span> <span style="color: #993399">3</span><span style="color: #990000">;</span>
 <span style="color: #FF0000">}</span></tt></pre></div></div>
 </div>
 <div class="sect3">
@@ -2486,7 +2491,7 @@ http://www.gnu.org/software/src-highlite -->
 <span style="font-weight: bold"><span style="color: #0000FF">public</span></span><span style="color: #990000">:</span>
     <span style="font-weight: bold"><span style="color: #000000">MockObject</span></span><span style="color: #990000">(</span><span style="color: #009900">int</span> initial<span style="color: #990000">)</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #000000">counter</span></span><span style="color: #990000">(</span>initial<span style="color: #990000">)</span> <span style="color: #FF0000">{}</span>
     <span style="color: #009900">int</span> counter<span style="color: #990000">;</span>
-    <span style="color: #008080">time_t</span> <span style="font-weight: bold"><span style="color: #000000">time</span></span><span style="color: #990000">(</span> time_t <span style="color: #990000">*</span> <span style="color: #990000">)</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> counter<span style="color: #990000">++;</span> <span style="color: #FF0000">}</span>
+    <span style="color: #008080">time_t</span> <span style="font-weight: bold"><span style="color: #000000">time</span></span><span style="color: #990000">(</span>time_t <span style="color: #990000">*)</span> <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> counter<span style="color: #990000">++;</span> <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span>
 
 <span style="font-weight: bold"><span style="color: #0000FF">class</span></span> <span style="color: #008080">TestRandom</span> <span style="color: #990000">:</span> <span style="font-weight: bold"><span style="color: #0000FF">public</span></span> CxxTest<span style="color: #990000">::</span>TestSuite
@@ -2495,9 +2500,9 @@ http://www.gnu.org/software/src-highlite -->
     <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">test_generateRandomNumber</span></span><span style="color: #990000">()</span>
     <span style="color: #FF0000">{</span>
         <span style="color: #008080">MockObject</span> <span style="font-weight: bold"><span style="color: #000000">t</span></span><span style="color: #990000">(</span><span style="color: #993399">1</span><span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span> <span style="font-weight: bold"><span style="color: #000000">generateRandomNumber</span></span><span style="color: #990000">(),</span> <span style="color: #993399">3</span> <span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span> <span style="font-weight: bold"><span style="color: #000000">generateRandomNumber</span></span><span style="color: #990000">(),</span> <span style="color: #993399">6</span> <span style="color: #990000">);</span>
-        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span> <span style="font-weight: bold"><span style="color: #000000">generateRandomNumber</span></span><span style="color: #990000">(),</span> <span style="color: #993399">9</span> <span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">generateRandomNumber</span></span><span style="color: #990000">(),</span> <span style="color: #993399">3</span><span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">generateRandomNumber</span></span><span style="color: #990000">(),</span> <span style="color: #993399">6</span><span style="color: #990000">);</span>
+        <span style="font-weight: bold"><span style="color: #000000">TS_ASSERT_EQUALS</span></span><span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">generateRandomNumber</span></span><span style="color: #990000">(),</span> <span style="color: #993399">9</span><span style="color: #990000">);</span>
     <span style="color: #FF0000">}</span>
 <span style="color: #FF0000">}</span><span style="color: #990000">;</span></tt></pre></div></div>
 <div class="paragraph"><p>Note that CxxTest uses global data to associate calls made with <tt>T::time()</tt>
@@ -4242,7 +4247,7 @@ Major internal improvements
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2012-01-07 21:40:31 MST
+Last updated 2012-02-04 10:01:01 MST
 </div>
 </div>
 </body>

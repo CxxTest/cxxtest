@@ -6,12 +6,12 @@ class QString
 {
 public:
     QString() {}
-    QString( const char * ) {}
-    bool operator==( const QString & ) { return false; }
+    QString(const char *) {}
+    bool operator==(const QString &) { return false; }
 
-    static QString number( int ) { return QString(); }
+    static QString number(int) { return QString(); }
 };
 
-inline QString operator+( const QString &, const QString & ) { return QString(); }
+inline QString operator+(const QString &, const QString &) { return QString(); }
 
 #endif // __FAKE__QSTRING_H

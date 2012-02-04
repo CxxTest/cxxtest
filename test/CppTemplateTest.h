@@ -5,28 +5,28 @@ class Tests
 {
 public:
 
-   CXXTEST_STD(list)<T>* cache;
+    CXXTEST_STD(list)<T>* cache;
 
-   void setUp()
-   {
+    void setUp()
+    {
         this->cache = new CXXTEST_STD(list)<T>();
-   }
+    }
 
-   void tearDown()
-   {
+    void tearDown()
+    {
         delete this->cache;
-   }
+    }
 
-   void test_size()
-   {
-      TS_ASSERT_EQUALS(cache->size(), 0);
-   }
+    void test_size()
+    {
+        TS_ASSERT_EQUALS(cache->size(), 0);
+    }
 
-   void test_insert()
-   {
-      this->cache->push_back(1);
-      TS_ASSERT_EQUALS(cache->size(), 1);
-   }
+    void test_insert()
+    {
+        this->cache->push_back(1);
+        TS_ASSERT_EQUALS(cache->size(), 1);
+    }
 
 };
 

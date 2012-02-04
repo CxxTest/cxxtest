@@ -5,6 +5,6 @@
 class QLabel
 {
 public:
-    QLabel( void * ) {}
-    void setText( const QString & ) {}
+    QLabel(void *) {}
+    void setText(const QString &) {}
 };

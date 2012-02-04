@@ -15,14 +15,14 @@ class SummaryPrinter : public CxxTest::TestListener
 public:
     void run()
     {
-        CxxTest::TestRunner::runAllTests( *this );
+        CxxTest::TestRunner::runAllTests(*this);
     }
-    
-    void leaveWorld( const CxxTest::WorldDescription &wd )
+
+    void leaveWorld(const CxxTest::WorldDescription &wd)
     {
-        printf( "Number of suites: %u\n", wd.numSuites() );
-        printf( "Number of tests: %u\n", wd.numTotalTests() );
-        printf( "Number of failed tests: %u\n", TestTracker::tracker().failedTests() );
+        printf("Number of suites: %u\n", wd.numSuites());
+        printf("Number of tests: %u\n", wd.numTotalTests());
+        printf("Number of failed tests: %u\n", TestTracker::tracker().failedTests());
     }
 };
 

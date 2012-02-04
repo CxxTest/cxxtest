@@ -5,6 +5,6 @@ class ThrowNoStd : public CxxTest::TestSuite
 public:
     void testThrowNoStd()
     {
-        TS_ASSERT_THROWS( { throw 1; }, int );
+        TS_ASSERT_THROWS( { throw 1; }, int);
     }
 };

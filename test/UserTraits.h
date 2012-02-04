@@ -16,14 +16,14 @@
 
 namespace CxxTest
 {
-    CXXTEST_TEMPLATE_INSTANTIATION
-    class ValueTraits<int>
-    {
-        char _asString[128]; // Crude, but it should be enough
-    public:
-        ValueTraits( int i ) { sprintf( _asString, "0x%X", i ); }
-        const char *asString( void ) { return _asString; }
-    };
+CXXTEST_TEMPLATE_INSTANTIATION
+class ValueTraits<int>
+{
+    char _asString[128]; // Crude, but it should be enough
+public:
+    ValueTraits(int i) { sprintf(_asString, "0x%X", i); }
+    const char *asString(void) { return _asString; }
+};
 }
 
 class TestUserTraits : public CxxTest::TestSuite
@@ -31,6 +31,6 @@ class TestUserTraits : public CxxTest::TestSuite
 public:
     void testUserTraits()
     {
-        TS_FAIL( 127 );
+        TS_FAIL(127);
     }
 };

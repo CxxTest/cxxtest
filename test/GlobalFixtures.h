@@ -12,7 +12,7 @@ class Fixture1 : public CxxTest::GlobalFixture
 {
     unsigned _setUpCount;
     unsigned _tearDownCount;
-    
+
 public:
     Fixture1() { _setUpCount = _tearDownCount = 0; }
     bool setUp() { ++ _setUpCount; return true; }

@@ -17,8 +17,8 @@ public:
     bool setUp() { ++ setUpCount; return true; }
     bool tearDown() { ++ tearDownCount; return true; }
 
-    bool setUpWorld() { printf( "Starting a test suite\n" ); return true;}
-    bool tearDownWorld() { printf( "Finishing a test suite\n" ); return true;}
+    bool setUpWorld() { printf("Starting a test suite\n"); return true;}
+    bool tearDownWorld() { printf("Finishing a test suite\n"); return true;}
 };
 static Fixture1 fixture1;
 

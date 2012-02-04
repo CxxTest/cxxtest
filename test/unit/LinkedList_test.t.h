@@ -5,7 +5,7 @@
 
 class TestLink : public CxxTest::Link
 {
-    public:
+public:
     bool setUp() { return true; }
     bool tearDown() { return true; }
 };

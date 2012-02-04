@@ -3,5 +3,5 @@
 
 int generateRandomNumber()
 {
-    return T::time( NULL ) * 3;
+    return T::time(NULL) * 3;
 }

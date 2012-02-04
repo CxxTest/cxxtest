@@ -34,41 +34,36 @@
 #   include <iostream>
 #endif // _CXXTEST_OLD_STD
 
-namespace CxxTest
-{
-    class XmlPrinter : public XmlFormatter
-    {
+namespace CxxTest {
+class XmlPrinter : public XmlFormatter {
+public:
+    XmlPrinter(CXXTEST_STD(ostream) &o = CXXTEST_STD(cout), const char* /*preLine*/ = ":", const char* /*postLine*/ = "") :
+        XmlFormatter(new Adapter(o), new Adapter(ostr), &ostr) {}
+
+    virtual ~XmlPrinter() {
+        delete outputStream();
+        delete outputFileStream();
+    }
+
+private:
+
+    std::ostringstream ostr;
+
+    class Adapter : public OutputStream {
+        CXXTEST_STD(ostream) &_o;
     public:
-        XmlPrinter( CXXTEST_STD(ostream) &o = CXXTEST_STD(cout), const char* /*preLine*/ = ":", const char* /*postLine*/ = "" ) :
-            XmlFormatter( new Adapter(o), new Adapter(ostr), &ostr ) {}
-
-        virtual ~XmlPrinter() 
-        {
-            delete outputStream(); 
-            delete outputFileStream(); 
+        Adapter(CXXTEST_STD(ostream) &o) : _o(o) {}
+        void flush() { _o.flush(); }
+        OutputStream &operator<<(const char *s) { _o << s; return *this; }
+        OutputStream &operator<<(Manipulator m) { return OutputStream::operator<<(m); }
+        OutputStream &operator<<(unsigned i) {
+            char s[1 + 3 * sizeof(unsigned)];
+            numberToString(i, s);
+            _o << s;
+            return *this;
         }
-
-    private:
-
-        std::ostringstream ostr;
-
-        class Adapter : public OutputStream
-        {
-            CXXTEST_STD(ostream) &_o;
-        public:
-            Adapter( CXXTEST_STD(ostream) &o ) : _o(o) {}
-            void flush() { _o.flush(); }
-            OutputStream &operator<<( const char *s ) { _o << s; return *this; }
-            OutputStream &operator<<( Manipulator m ) { return OutputStream::operator<<( m ); }
-            OutputStream &operator<<( unsigned i )
-            {
-                char s[1 + 3 * sizeof(unsigned)];
-                numberToString( i, s );
-                _o << s;
-                return *this;
-            }
-        };
     };
+};
 }
 
 #endif // __cxxtest__XmlPrinter_h__

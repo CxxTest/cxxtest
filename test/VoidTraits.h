@@ -8,13 +8,13 @@
 
 namespace CxxTest
 {
-    CXXTEST_TEMPLATE_INSTANTIATION
-    class ValueTraits<void *>
-    {
-    public:
-        ValueTraits( void * ) {}
-        const char *asString( void ) { return "(void *)"; }
-    };
+CXXTEST_TEMPLATE_INSTANTIATION
+class ValueTraits<void *>
+{
+public:
+    ValueTraits(void *) {}
+    const char *asString(void) { return "(void *)"; }
+};
 }
 
 #endif

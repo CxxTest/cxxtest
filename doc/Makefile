@@ -21,7 +21,11 @@ manpages:
 	cd man; asciidoc -v -d manpage ./cxxtestgen.1.txt
 	cd man; a2x -d manpage -f manpage ./cxxtestgen.1.txt
 
-all: html pdf epub manpages
+html: guide.html
+
+pdf: guide.pdf
+
+epub: guide.epub
 
 all: guide.html guide.pdf guide.epub
 
