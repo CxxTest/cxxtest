@@ -44,8 +44,9 @@ namespace CxxTest
     void doAbortTest()
     {
 #   if defined(_CXXTEST_HAVE_EH)
-        if ( currentAbortTestOnFail )
+        if ( currentAbortTestOnFail ) {
             throw AbortTest();
+        }
 #   endif // _CXXTEST_HAVE_EH
     }
 
@@ -88,28 +89,34 @@ namespace CxxTest
     void doFailAssert( const char *file, int line,
                        const char *expression, const char *message )
     {
-        if ( message )
+        if ( message ) {
             tracker().failedTest( file, line, message );
+        }
         tracker().failedAssert( file, line, expression );
         TS_ABORT();
     }
 
     bool sameData( const void *x, const void *y, unsigned size )
     {
-        if ( size == 0 )
+        if ( size == 0 ) {
             return true;
+        }
         
-        if ( x == y )
+        if ( x == y ) {
             return true;
+        }
 
-        if ( !x || !y )
+        if ( !x || !y ) {
             return false;
+        }
 
         const char *cx = (const char *)x;
         const char *cy = (const char *)y;
-        while ( size -- )
-            if ( *cx++ != *cy++ )
+        while ( size -- ) {
+            if ( *cx++ != *cy++ ) {
                 return false;
+            }
+        }
 
         return true;
     }
@@ -121,8 +128,9 @@ namespace CxxTest
                            const char *message )
     {
         if ( !sameData( x, y, size ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertSameData( file, line, xExpr, yExpr, sizeExpr, x, y, size );
             TS_ABORT();
         }
@@ -154,7 +162,7 @@ namespace CxxTest
     while (1) {
         is1.get(c1);
         is2.get(c2);
-        if (!is1 && !is2) return true;
+        if (!is1 && !is2) { return true; }
         if (!is1) {
                 explanation << "File '" << file1 << "' ended before file '" << file2 << "' (line " << nline << ")";
                 explanation << std::endl << "= " << ppprev_line << std::endl << "=  " << pprev_line << std::endl << "= " << prev_line << std::endl << "< " << curr_line;
@@ -220,8 +228,9 @@ namespace CxxTest
 #if defined(_CXXTEST_HAVE_STD)
         std::ostringstream explanation;
         if ( !sameFiles( file1, file2, explanation ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertSameFiles( file, line, file1, file2, explanation.str().c_str());
             TS_ABORT();
         }
@@ -237,10 +246,12 @@ namespace CxxTest
                              const char *message,
                              const char *exception )
     {
-        if ( exception )
+        if ( exception ) {
             tracker().failedTest( file, line, exception );
-        if ( message )
+        }
+        if ( message ) {
             tracker().failedTest( file, line, message );
+        }
         
         tracker().failedAssertThrows( file, line, expr, type, otherThrown );
         TS_ABORT();
@@ -250,10 +261,12 @@ namespace CxxTest
                                 const char *expression, const char *message,
                                 const char *exception )
     {
-        if ( exception )
+        if ( exception ) {
             tracker().failedTest( file, line, exception );
-        if ( message )
+        }
+        if ( message ) {
             tracker().failedTest( file, line, message );
+        }
         
         tracker().failedAssertThrowsNot( file, line, expression );
         TS_ABORT();

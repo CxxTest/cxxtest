@@ -110,8 +110,9 @@ namespace CxxTest
         s << "{ ";
         while ( first != last ) {
             s << TS_AS_STRING(*first);
-            if ( ++ first != last )
+            if ( ++ first != last ) {
                 s << ", ";
+            }
         }
         s << " }";
     }
@@ -230,12 +231,15 @@ namespace CxxTest
     public:
         ValueTraits( const CXXTEST_STD(complex)<Number> &c )
         {
-            if ( !c.imag() )
+            if ( !c.imag() ) {
                 *this << TS_AS_STRING(c.real());
-            else if ( !c.real() )
+            }
+            else if ( !c.real() ) {
                 *this << "(" << TS_AS_STRING(c.imag()) << " * i)";
-            else
+            }
+            else {
                 *this << "(" << TS_AS_STRING(c.real()) << " + " << TS_AS_STRING(c.imag()) << " * i)";
+            }
         }
     };
 #endif // _CXXTEST_PARTIAL_TEMPLATE_SPECIALIZATION

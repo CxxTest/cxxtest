@@ -22,10 +22,12 @@ namespace CxxTest
     
     char digitToChar( unsigned digit )
     {
-        if ( digit < 10 )
+        if ( digit < 10 ) {
             return (char)('0' + digit);
-        if ( digit <= 10 + 'Z' - 'A' )
+        }
+        if ( digit <= 10 + 'Z' - 'A' ) {
             return (char)('A' + digit - 10);
+        }
         return '?';
     }
 
@@ -50,9 +52,11 @@ namespace CxxTest
     bool stringsEqual( const char *s1, const char *s2 )
     {
         char c;
-        while ( (c = *s1++) == *s2++ )
-            if ( c == '\0' )
+        while ( (c = *s1++) == *s2++ ) {
+            if ( c == '\0' ) {
                 return true;
+            }
+        }
         return false;
     }
 
@@ -93,14 +97,17 @@ namespace CxxTest
     char *bytesToString( const unsigned char *bytes, unsigned numBytes, unsigned maxBytes, char *s )
     {
         bool truncate = (numBytes > maxBytes);
-        if ( truncate )
+        if ( truncate ) {
             numBytes = maxBytes;
+        }
         
         s = copyString( s, "{ " );
-        for ( unsigned i = 0; i < numBytes; ++ i, ++ bytes )
+        for ( unsigned i = 0; i < numBytes; ++ i, ++ bytes ) {
             s = copyString( copyString( s, byteToHex( *bytes ) ), " " );
-        if ( truncate )
+        }
+        if ( truncate ) {
             s = copyString( s, "..." );
+        }
         return copyString( s, " }" );
     }
 
@@ -108,15 +115,17 @@ namespace CxxTest
     unsigned ValueTraits<const double>::requiredDigitsOnLeft( double t )
     {
         unsigned digits = 1;
-        for ( t = (t < 0.0) ? -t : t; t > 1.0; t /= BASE )
+        for ( t = (t < 0.0) ? -t : t; t > 1.0; t /= BASE ) {
             ++ digits;
+        }
         return digits;
     }
 
     char *ValueTraits<const double>::doNegative( double &t )
     {
-        if ( t >= 0 )
+        if ( t >= 0 ) {
             return _asString;
+        }
         _asString[0] = '-';
         t = -t;
         return _asString + 1;
@@ -137,21 +146,25 @@ namespace CxxTest
         char *s = doNegative( t );
         s = doubleToString( t, s );
         s = copyString( s, "." );
-        for ( unsigned i = 0; i < DIGITS_ON_RIGHT; ++ i )
+        for ( unsigned i = 0; i < DIGITS_ON_RIGHT; ++ i ) {
             s = numberToString( (unsigned)(t *= BASE) % BASE, s );
+        }
     }
 
     void ValueTraits<const double>::nonFiniteNumber( double t )
     {
         char *s = _asString;
-        if ( t != t )
+        if ( t != t ) {
             s = copyString( s, "nan" );
+        }
         //else if ( t == 1.0/0.0 )
-        else if ( t >= HUGE_VAL )
+        else if ( t >= HUGE_VAL ) {
             s = copyString( s, "-inf" );
-        else if ( t <= -HUGE_VAL )
+        }
+        else if ( t <= -HUGE_VAL ) {
         //else if ( t == -1.0/0.0 )
             s = copyString( s, "inf" );
+        }
     }
 
     char *ValueTraits<const double>::doubleToString( double t, char *s, unsigned skip, unsigned max )

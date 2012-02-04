@@ -77,8 +77,9 @@ namespace CxxTest
         
         void redBar()
         {
-            if ( _startMinimized && _mainWindow->isMinimized() )
+            if ( _startMinimized && _mainWindow->isMinimized() ) {
                 showNormal();
+            }
             setColor( 255, 0, 0 );
             setIcon( QMessageBox::Critical );
             getTotalTests();
@@ -114,12 +115,15 @@ namespace CxxTest
             
             for ( int i = 1; i < argc; ++ i ) {
                 QString arg( argv[i] );
-                if ( arg == "-minimized" )
+                if ( arg == "-minimized" ) {
                     _startMinimized = true;
-                else if ( arg == "-keep" )
+                }
+                else if ( arg == "-keep" ) {
                     _keep = true;
-                else if ( arg == "-title" && (i + 1 < argc) )
+                }
+                else if ( arg == "-title" && (i + 1 < argc) ) {
                     _title = argv[++i];
+                }
             }
         }
 
@@ -135,10 +139,12 @@ namespace CxxTest
             createProgressBar();
             createStatusBar();
             setMainWidget();
-            if ( _startMinimized )
+            if ( _startMinimized ) {
                 showMinimized();
-            else
+            }
+            else {
                 showNormal();
+            }
         }
 
         void getTotalTests()
@@ -255,20 +261,24 @@ namespace CxxTest
 
         bool keep()
         {
-            if ( !_keep )
+            if ( !_keep ) {
                 return false;
-            if ( !_startMinimized )
+            }
+            if ( !_startMinimized ) {
                 return true;
+            }
             return (_mainWindow == _application->activeWindow());
         }
 
         void showSummary()
         {
             QString summary = _strTotalTests + (_numTotalTests == 1 ? " test" : " tests");
-            if ( tracker().failedTests() )
+            if ( tracker().failedTests() ) {
                 summary = "Failed " + asString( tracker().failedTests() ) + " of " + summary;
-            else
+            }
+            else {
                 summary = summary + " passed";
+            }
 
             _mainWindow->setCaption( _title + " - " + summary );
 

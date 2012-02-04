@@ -68,8 +68,9 @@ namespace CxxTest
                          const char *message )
     {
         if ( !equals<X,Y>::test( x, y ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertEquals( file, line, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y) );
             TS_ABORT();
         }
@@ -102,8 +103,9 @@ namespace CxxTest
                           const char *message )
     {
         if ( !differs<X,Y>::test( x, y ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertDiffers( file, line, xExpr, yExpr, TS_AS_STRING(x) );
             TS_ABORT();
         }
@@ -124,8 +126,9 @@ namespace CxxTest
                            const char *message )
     {
         if ( !lessThan<X,Y>::test(x, y) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertLessThan( file, line, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y) );
             TS_ABORT();
         }
@@ -146,8 +149,9 @@ namespace CxxTest
                                  const char *message )
     {
         if ( !lessThanEquals<X,Y>::test( x, y ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertLessThanEquals( file, line, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y) );
             TS_ABORT();
         }
@@ -160,8 +164,9 @@ namespace CxxTest
                             const char *message )
     {
         if ( !p( x ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertPredicate( file, line, pExpr, xExpr, TS_AS_STRING(x) );
             TS_ABORT();
         }
@@ -175,8 +180,9 @@ namespace CxxTest
                            const char *message )
     {
         if ( !r( x, y ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             tracker().failedAssertRelation( file, line, rExpr, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y) );
             TS_ABORT();
         }
@@ -207,8 +213,9 @@ namespace CxxTest
                         const char *message )
     {
         if ( !delta<X,Y,D>::test( x, y, d ) ) {
-            if ( message )
+            if ( message ) {
                 tracker().failedTest( file, line, message );
+            }
             
             tracker().failedAssertDelta( file, line, xExpr, yExpr, dExpr,
                                          TS_AS_STRING(x), TS_AS_STRING(y), TS_AS_STRING(d) );
@@ -274,7 +281,7 @@ namespace CxxTest
 #   define TS_FAIL(e) _TS_FAIL( __FILE__, __LINE__, e )
 
     // TS_ASSERT
-#   define ___ETS_ASSERT(f,l,e,m) { if ( !(e) ) CxxTest::doFailAssert( (f), (l), #e, (m) ); }
+#   define ___ETS_ASSERT(f,l,e,m) { if ( !(e) ) { CxxTest::doFailAssert( (f), (l), #e, (m) ); } }
 #   define ___TS_ASSERT(f,l,e,m) { _TS_TRY { ___ETS_ASSERT(f,l,e,m); } __TS_CATCH(f,l) }
     
 #   define _ETS_ASSERT(f,l,e) ___ETS_ASSERT(f,l,e,0)

@@ -123,20 +123,27 @@ namespace CxxTest
             _redName = "Red";
 
             for ( int i = 1; i + 1 < argc; ++ i ) {
-                if ( !strcmp( argv[i], "-title" ) )
+                if ( !strcmp( argv[i], "-title" ) ) {
                     _programName = argv[++ i];
-                else if ( !strcmp( argv[i], "-fn" ) || !strcmp( argv[i], "-font" ) )
+                }
+                else if ( !strcmp( argv[i], "-fn" ) || !strcmp( argv[i], "-font" ) ) {
                     _fontName = argv[++ i];
-                else if ( !strcmp( argv[i], "-fg" ) || !strcmp( argv[i], "-foreground" ) )
+                }
+                else if ( !strcmp( argv[i], "-fg" ) || !strcmp( argv[i], "-foreground" ) ) {
                     _foregroundName = argv[++ i];
-                else if ( !strcmp( argv[i], "-bg" ) || !strcmp( argv[i], "-background" ) )
+                }
+                else if ( !strcmp( argv[i], "-bg" ) || !strcmp( argv[i], "-background" ) ) {
                     _backgroundName = argv[++ i];
-                else if ( !strcmp( argv[i], "-green" ) )
+                }
+                else if ( !strcmp( argv[i], "-green" ) ) {
                     _greenName = argv[++ i];
-                else if ( !strcmp( argv[i], "-yellow" ) )
+                }
+                else if ( !strcmp( argv[i], "-yellow" ) ) {
                     _yellowName = argv[++ i];
-                else if ( !strcmp( argv[i], "-red" ) )
+                }
+                else if ( !strcmp( argv[i], "-red" ) ) {
                     _redName = argv[++ i];
+                }
             }
         }
 
@@ -172,8 +179,9 @@ namespace CxxTest
 
         void createFont()
         {
-            if ( !loadFont() )
+            if ( !loadFont() ) {
                 useDefaultFont();
+            }
             getFontInfo();
             _textHeight = _fontInfo->ascent + _fontInfo->descent;
             _textDescent = _fontInfo->descent;
@@ -181,8 +189,9 @@ namespace CxxTest
 
         bool loadFont()
         {
-            if ( !_fontName )
+            if ( !_fontName ) {
                 return false;
+            }
             _fontId = XLoadFont( _display, _fontName );
             return (XSetFont( _display, _gc, _fontId ) == Success);
         }
@@ -247,8 +256,9 @@ namespace CxxTest
             redraw();
             
             XEvent event;
-            while( XCheckMaskEvent( _display, _eventMask, &event ) )
+            while( XCheckMaskEvent( _display, _eventMask, &event ) ) {
                 redraw();
+            }
         }
 
         void setWindowName( const char *suiteName, const char *testName )
@@ -290,8 +300,9 @@ namespace CxxTest
 
         void drawDividers()
         {
-            if(_width / _numTotalTests < 5)
+            if (_width / _numTotalTests < 5) {
                 return;
+            }
             for ( unsigned i = 1; i < _testsDone; ++ i ) {
                 int x = (_width * i) / _numTotalTests;
                 XDrawLine( _display, _window, _gc, x, 0, x, _height);

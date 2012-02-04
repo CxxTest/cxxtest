@@ -168,13 +168,16 @@ namespace CxxTest
         }
     
         N digit = 1;
-        while ( digit <= (n / base) )
+        while ( digit <= (n / base) ) {
             digit *= base;
+        }
         N digitValue;
-        for ( ; digit >= 1 && skipDigits; n -= digit * digitValue, digit /= base, -- skipDigits )
+        for ( ; digit >= 1 && skipDigits; n -= digit * digitValue, digit /= base, -- skipDigits ) {
             digitValue = (unsigned)(n / digit);
-        for ( ; digit >= 1 && maxDigits; n -= digit * digitValue, digit /= base, -- maxDigits )
+        }
+        for ( ; digit >= 1 && maxDigits; n -= digit * digitValue, digit /= base, -- maxDigits ) {
             *s++ = digitToChar( (unsigned)(digitValue = (unsigned)(n / digit)) );
+        }
 
         *s = '\0';
         return s;
@@ -329,13 +332,15 @@ namespace CxxTest
     public:
         ValueTraits( double t ) 
         {
-            //if ( ( t != t ) || ( t >= 1.0/0.0 ) || ( t == -1.0/0.0 ) )
-            if ( ( t != t ) || ( t >= HUGE_VAL ) || ( t == -HUGE_VAL ) )
+            if ( ( t != t ) || ( t >= HUGE_VAL ) || ( t == -HUGE_VAL ) ) {
                 nonFiniteNumber( t );
-            else if ( requiredDigitsOnLeft( t ) > MAX_DIGITS_ON_LEFT )
+            }
+            else if ( requiredDigitsOnLeft( t ) > MAX_DIGITS_ON_LEFT ) {
                 hugeNumber( t );
-            else
+            }
+            else {
                 normalNumber( t );
+            }
         }
 
         const char *asString( void ) const { return _asString; }

@@ -257,18 +257,21 @@ namespace CxxTest
 
         void reportTest( void )
         {
-            if( _reported )
+            if ( _reported ) {
                 return;
+            }
             (*_o) << "In " << tracker().suite().suiteName() << "::" << tracker().test().testName() << ":" << endl;
             _reported = true;
         }
 
         void dump( const void *buffer, unsigned size )
         {
-            if ( !buffer )
+            if ( !buffer ) {
                 dumpNull();
-            else
+            }
+            else {
                 dumpBuffer( buffer, size );
+            }
         }
 
         void dumpNull()
@@ -279,15 +282,18 @@ namespace CxxTest
         void dumpBuffer( const void *buffer, unsigned size )
         {
             unsigned dumpSize = size;
-            if ( maxDumpSize() && dumpSize > maxDumpSize() )
+            if ( maxDumpSize() && dumpSize > maxDumpSize() ) {
                 dumpSize = maxDumpSize();
+            }
 
             const unsigned char *p = (const unsigned char *)buffer;
             (*_o) << "   { ";
-            for ( unsigned i = 0; i < dumpSize; ++ i )
+            for ( unsigned i = 0; i < dumpSize; ++ i ) {
                 (*_o) << byteToHex( *p++ ) << " ";
-            if ( dumpSize < size )
+            }
+            if ( dumpSize < size ) {
                 (*_o) << "... ";
+            }
             (*_o) << "}" << endl;
         }
 

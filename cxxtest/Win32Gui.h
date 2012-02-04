@@ -75,8 +75,9 @@ namespace CxxTest
         
         void redBar()
         {
-            if ( _startMinimized )
+            if ( _startMinimized ) {
                 showMainWindow( SW_SHOWNORMAL );
+            }
 	    setColor( 255, 0, 0 );
 	    setIcon( IDI_ERROR );
             getTotalTests();
@@ -121,12 +122,15 @@ namespace CxxTest
             
             for ( int i = 1; i < argc; ++ i )
             {
-                if ( !lstrcmpA( argv[i], "-minimized" ) )
+                if ( !lstrcmpA( argv[i], "-minimized" ) ) {
                     _startMinimized = true;
-                else if ( !lstrcmpA( argv[i], "-keep" ) )
+                }
+                else if ( !lstrcmpA( argv[i], "-keep" ) ) {
                     _keep = true;
-                else if ( !lstrcmpA( argv[i], "-title" ) && (i + 1 < argc) )
+                }
+                else if ( !lstrcmpA( argv[i], "-title" ) && (i + 1 < argc) ) {
                     _title = argv[++i];
+                }
             }
         }
         
@@ -196,15 +200,12 @@ namespace CxxTest
         void initCommonControls()
         {
             HMODULE dll = LoadLibraryA( "comctl32.dll" );
-            if ( !dll )
-		return;
+            if ( !dll ) { return; }
 		
-	    typedef void (WINAPI *FUNC)( void );
-	    FUNC func = (FUNC)GetProcAddress( dll, "InitCommonControls" );
-	    if ( !func )
-                return;
-
-	    func();
+	        typedef void (WINAPI *FUNC)( void );
+	        FUNC func = (FUNC)GetProcAddress( dll, "InitCommonControls" );
+	        if ( !func ) { return; }
+	        func();
         }
 
         void createProgressBar()
@@ -266,8 +267,9 @@ namespace CxxTest
             LONG windowWidth = (screenWidth * 4) / 5;
             LONG windowHeight = screenHeight / 10;
             LONG minimumHeight = 2 * (GetSystemMetrics( SM_CYCAPTION ) + GetSystemMetrics( SM_CYFRAME ));
-            if ( windowHeight < minimumHeight )
+            if ( windowHeight < minimumHeight ) {
                 windowHeight = minimumHeight;
+            }
 
             SetWindowPos( _mainWindow, HWND_TOP,
                           xCenter - (windowWidth / 2), yCenter - (windowHeight / 2),
@@ -276,8 +278,9 @@ namespace CxxTest
 
         void getScreenArea( RECT &area )
         {
-            if ( !getScreenAreaWithoutTaskbar( area ) )
+            if ( !getScreenAreaWithoutTaskbar( area ) ) {
                 getWholeScreenArea( area );
+            }
         }
 
         bool getScreenAreaWithoutTaskbar( RECT &area )
@@ -326,15 +329,18 @@ namespace CxxTest
         void messageLoop()
         {
             MSG message;
-            while ( BOOL haveMessage = GetMessage( &message, NULL, 0, 0 ) )
-                if ( haveMessage != -1 )
+            while ( BOOL haveMessage = GetMessage( &message, NULL, 0, 0 ) ) {
+                if ( haveMessage != -1 ) {
                     DispatchMessage( &message );
+                }
+            }
         }
 
         static LRESULT CALLBACK windowProcedure( HWND window, UINT message, WPARAM wParam, LPARAM lParam )
         {
-            if ( message == WM_CREATE )
+            if ( message == WM_CREATE ) {
                 setUp( window, (LPCREATESTRUCT)lParam );
+            }
 
             Win32Gui *that = (Win32Gui *)GetWindowLong( window, GWL_USERDATA );
             return that->handle( window, message, wParam, lParam );
@@ -382,8 +388,9 @@ namespace CxxTest
 
         void setStatusParts( LONG width )
         {
-            for ( unsigned i = 0; i < STATUS_TOTAL_PARTS; ++ i )
+            for ( unsigned i = 0; i < STATUS_TOTAL_PARTS; ++ i ) {
                 _statusWidths[i] = (width * _statusOffsets[i]) / _statusTotal;
+            }
 
             statusBarMessage( SB_SETPARTS, STATUS_TOTAL_PARTS, _statusWidths );
         }
@@ -472,20 +479,24 @@ namespace CxxTest
             unsigned minutes = (total / 60) % 60;
             unsigned seconds = total % 60;
 
-            if ( hours )
+            if ( hours ) {
                 wsprintfA( _timeString, "%u:%02u:%02u", hours, minutes, seconds );
-            else
+            }
+            else {
                 wsprintfA( _timeString, "%02u:%02u", minutes, seconds );
+            }
 
             setStatusPart( part, _timeString );
         }
 
         bool keep()
         {
-            if ( !_keep )
+            if ( !_keep ) {
                 return false;
-            if ( !_startMinimized )
+            }
+            if ( !_startMinimized ) {
                 return true;
+            }
             return (_mainWindow == GetForegroundWindow());
         }
 
@@ -513,11 +524,13 @@ namespace CxxTest
             resizeControls();
         
             const char *tests = (_numTotalTests == 1) ? "test" : "tests";
-            if ( tracker().failedTests() )
+            if ( tracker().failedTests() ) {
                 wsprintfA( _statusTestsDone, "Failed %u of %s %s",
                           tracker().failedTests(), _strTotalTests, tests );
-            else
+            }
+            else {
                 wsprintfA( _statusTestsDone, "%s %s passed", _strTotalTests, tests );
+            }
 
             setStatusPart( STATUS_TESTS_DONE, _statusTestsDone );
         }

@@ -46,8 +46,9 @@ namespace CxxTest
         
     bool RealTestDescription::setUp()
     {
-        if ( !suite() )
+        if ( !suite() ) {
             return false;
+        }
 
         for ( GlobalFixture *gf = GlobalFixture::firstGlobalFixture(); gf != 0; gf = gf->nextGlobalFixture() ) {
             bool ok;
@@ -63,7 +64,7 @@ namespace CxxTest
         _TS_TRY {
             bool ok = false;
             _TSM_ASSERT_THROWS_NOTHING( file(), line(), "Exception thrown from setUp()", suite()->setUp(); ok=true );
-            if (ok == false) return ok;
+            if (ok == false) { return ok; }
         }
         _TS_CATCH_ABORT( { return false; } );
 
@@ -72,8 +73,9 @@ namespace CxxTest
 
     bool RealTestDescription::tearDown()
     {
-        if ( !suite() )
+        if ( !suite() ) {
             return false;
+        }
 
         _TS_TRY {
             _TSM_ASSERT_THROWS_NOTHING( file(), line(), "Exception thrown from tearDown()", suite()->tearDown() );
@@ -231,8 +233,9 @@ namespace CxxTest
     unsigned RealWorldDescription::numTotalTests( void ) const
     {
         unsigned count = 0;
-        for ( const SuiteDescription *sd = firstSuite(); sd != 0; sd = sd->next() )
+        for ( const SuiteDescription *sd = firstSuite(); sd != 0; sd = sd->next() ) {
             count += sd->numTests();
+        }
         return count;
     }
         
@@ -254,17 +257,20 @@ namespace CxxTest
     void RealWorldDescription::activateAllTests()
     {
         suites().activateAll();
-        for ( SuiteDescription *sd = firstSuite(); sd != 0; sd = sd->next() )
+        for ( SuiteDescription *sd = firstSuite(); sd != 0; sd = sd->next() ) {
             sd->activateAllTests();
+        }
     }
 
     bool RealWorldDescription::leaveOnly( const char *suiteName, const char *testName )
     {
         for ( SuiteDescription *sd = firstSuite(); sd != 0; sd = sd->next() ) {
             if ( stringsEqual( sd->suiteName(), suiteName ) ) {
-                if ( testName )
-                    if ( !sd->leaveOnly( testName ) )
+                if ( testName ) {
+                    if ( !sd->leaveOnly( testName ) ) {
                         return false;
+                    }
+                }
                 suites().leaveOnly( *sd );
                 return true;
             }

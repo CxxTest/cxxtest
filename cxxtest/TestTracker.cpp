@@ -257,8 +257,9 @@ namespace CxxTest
     {
         if ( ++ _testFailedAsserts == 1 ) {
             ++ _failedTests;
-            if ( ++ _suiteFailedTests == 1 )
+            if ( ++ _suiteFailedTests == 1 ) {
                 ++ _failedSuites;
+            }
         }
     }
 }

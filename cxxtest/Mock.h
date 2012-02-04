@@ -139,8 +139,9 @@ namespace dummy_mock_ns {}
          \
         Base_##MOCK &Base_##MOCK::current() \
         { \
-            if ( _list.empty() ) \
+            if ( _list.empty() ) { \
                 static _Unimplemented_##MOCK unimplemented; \
+            } \
             return *(Base_##MOCK *)_list.tail(); \
         } \
     }
@@ -155,8 +156,9 @@ namespace dummy_mock_ns {}
          \
         TYPE _Unimplemented_##MOCK::NAME ARGS \
         { \
-            while ( false ) \
+            while ( false ) {\
                 return NAME CALL; \
+            } \
             __CXXTEST_MOCK_UNIMPLEMENTED( NAME, ARGS ); \
             return MockTraits<TYPE>::defaultValue(); \
         } \
@@ -177,8 +179,9 @@ namespace dummy_mock_ns {}
          \
         void _Unimplemented_##MOCK::NAME ARGS \
         { \
-            while ( false ) \
+            while ( false ) { \
                 NAME CALL; \
+            } \
             __CXXTEST_MOCK_UNIMPLEMENTED( NAME, ARGS ); \
         } \
          \
@@ -193,8 +196,9 @@ namespace dummy_mock_ns {}
     namespace CXXTEST_MOCK_NAMESPACE { \
         TYPE _Unimplemented_##MOCK::NAME ARGS \
         { \
-            while ( false ) \
+            while ( false ) { \
                 return NAME CALL; \
+            } \
             __CXXTEST_MOCK_UNIMPLEMENTED( NAME, ARGS ); \
             return MockTraits<TYPE>::defaultValue(); \
         } \
@@ -210,8 +214,9 @@ namespace dummy_mock_ns {}
     namespace CXXTEST_MOCK_NAMESPACE { \
         void _Unimplemented_##MOCK::NAME ARGS \
         { \
-            while ( false ) \
+            while ( false ) { \
                 NAME CALL; \
+            } \
             __CXXTEST_MOCK_UNIMPLEMENTED( NAME, ARGS ); \
         } \
     } \
