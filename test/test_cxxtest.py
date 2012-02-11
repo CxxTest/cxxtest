@@ -349,7 +349,7 @@ class BaseTestCase(object):
             OUTPUT.write(line+'\n')
         OUTPUT.close()
         self.compile(prefix='samples_file', args="--error-printer --headers Samples.txt", output="error.out")
-        os.remove('Samples.txt')
+        os.remove(currdir+'Samples.txt')
 
     def test_have_std(self):
         """Have Std"""
