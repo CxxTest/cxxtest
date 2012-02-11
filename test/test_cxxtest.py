@@ -20,7 +20,7 @@ currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
 sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
 cxxtestdir = os.path.dirname(os.path.dirname(currdir))+os.sep
 
-compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:[0-9]+:.*)$")
+compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:.*)$")
 dirre      = re.compile("^([^%s]*/)*" % re.escape(os.sep))
 xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
 
@@ -37,12 +37,6 @@ else:
     command_separator = '; '
     remove_extra_path_prefixes_on_windows = False
     
-# Create a file with the list of sample files
-OUTPUT = open(currdir+'Samples.txt','w')
-for line in sorted(glob.glob(sampledir+'*.h')):
-    OUTPUT.write(line+'\n')
-OUTPUT.close()
-
 def find(filename, executable=False, isfile=True,  validate=None):
     #
     # Use the PATH environment if it is defined and not empty
@@ -349,7 +343,13 @@ class BaseTestCase(object):
 
     def test_samples_file(self):
         """Samples file"""
+        # Create a file with the list of sample files
+        OUTPUT = open(currdir+'Samples.txt','w')
+        for line in sorted(glob.glob(sampledir+'*.h')):
+            OUTPUT.write(line+'\n')
+        OUTPUT.close()
         self.compile(prefix='samples_file', args="--error-printer --headers Samples.txt", output="error.out")
+        os.remove('Samples.txt')
 
     def test_have_std(self):
         """Have Std"""
