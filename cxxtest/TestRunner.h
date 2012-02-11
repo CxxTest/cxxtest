@@ -26,6 +26,11 @@
 namespace CxxTest {
 class TestRunner {
 public:
+
+    static void setListener( TestListener* listener ) {
+        tracker().setListener(listener);
+    }
+
     static void runAllTests(TestListener &listener) {
         tracker().setListener(&listener);
         _TS_TRY { TestRunner().runWorld(); }
