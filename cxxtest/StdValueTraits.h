@@ -54,13 +54,44 @@ private:
 //
 CXXTEST_TEMPLATE_INSTANTIATION
 class ValueTraits<const CXXTEST_STD(string)> : public StdTraitsBase {
+    static bool mb_partial (char ch) {
+        return ch & 0x80;
+    }
+    static bool mb_start (char ch) {
+        return (ch & 0xC0) == 0xC0;
+    }
+    static size_t mb_length (char ch) {
+        size_t numBytes = 1;
+        while((ch & (1 << (7-numBytes))) && numBytes < 6)
+            ++numBytes;
+        return numBytes;
+    }
+    static bool is_mb ( const CXXTEST_STD(string) &s, unsigned i ) {
+        if( !mb_start(s[i]) || i + mb_length(s[i]) > s.length() )
+            return false;
+        for ( unsigned len = mb_length(s[i]); len > 0; -- len, ++ i ) {
+            if ( !mb_partial(s[i]) )
+                return false;
+        }
+        return true;
+    }
+
 public:
     ValueTraits(const CXXTEST_STD(string) &s) {
         *this << "\"";
-        for (unsigned i = 0; i < s.length(); ++ i) {
-            char c[sizeof("\\xXX")];
-            charToString(s[i], c);
-            *this << c;
+        for ( unsigned i = 0; i < s.length(); ++ i ) {
+            if(is_mb(s, i)) {
+                for ( unsigned len = mb_length(s[i]); len > 0; -- len, ++ i ) {
+                    char c[2] = { s[i], '\0' };
+                    *this << c;
+                }
+                -- i;
+            }
+            else {
+                char c[sizeof("\\xXX")];
+                charToString( s[i], c );
+                *this << c;
+            }
         }
         *this << "\"";
     }
