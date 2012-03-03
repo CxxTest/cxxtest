@@ -147,7 +147,7 @@ include::examples/.buildRunner_main.sh[]
 This command generates the file +runner.cpp+, which can be compiled.
 [source,bash]
 ----
-include::examples/.buildRunner_main.sh[]
+include::examples/.buildRunner_compile.sh[]
 ----
 Note that additional compiler flags may be needed to include headers
 and libraries that are used during testing.
