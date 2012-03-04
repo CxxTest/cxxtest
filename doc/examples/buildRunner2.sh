@@ -11,5 +11,6 @@ cxxtestgen --error-printer -o runner.cpp MyTestSuite2.h
 g++ -o runner -I$CXXTEST runner.cpp
 # @:compile
 
-./runner
+./runner > buildRunner2.log
+cat buildRunner2.log
 \rm -f runner runner.cpp
