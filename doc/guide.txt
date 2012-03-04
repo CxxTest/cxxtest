@@ -156,7 +156,7 @@ and libraries that are used during testing.
 This runner can be executed to perform the specified tests:
 [source,bash]
 ----
-include::examples/.exeRunner_main.sh[]
+include::examples/.buildRunner_run.sh[]
 ----
 which generates the following output:
 ----

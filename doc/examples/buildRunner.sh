@@ -12,5 +12,7 @@ g++ -o runner -I$CXXTEST runner.cpp
 # @:compile
 
 ./runner > buildRunner.log
-cat buildRunner.log
+# @run:
+./runner
+# @:run
 \rm -f runner runner.cpp
