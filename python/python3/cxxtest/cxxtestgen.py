@@ -38,6 +38,7 @@ wrotePreamble = 0
 wroteWorld = 0
 lastIncluded = ''
 
+
 def main(args=sys.argv):
     '''The main program'''
     #
@@ -362,6 +363,9 @@ def writeInclude(output, file):
     '''Add #include "file" statement'''
     global lastIncluded
     if file == lastIncluded: return
+    if options.outputFileName:
+        dirname = os.path.split(options.outputFileName)[0]
+        file = os.path.relpath(file, dirname)
     output.writelines( [ '#include "', file, '"\n\n' ] )
     lastIncluded = file
 
