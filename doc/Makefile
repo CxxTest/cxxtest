@@ -1,7 +1,7 @@
 .PHONY: all anchors outputs clean
 
 export XML_CATALOG_FILES = catalog.xml
-PY = python2
+PY = python
 XSLTPROC_OPTS := --stringparam toc.section.depth 2 --stringparam generate.section.toc.level 1
 DBLATEX_OPTS  := -P latex.output.revhistory=0 -P doc.collab.show=1 -P toc.section.depth=2
 A2X_OPTS      := -a toc -a icons -L -d article -v --xsltproc-opts "$(XSLTPROC_OPTS)" --dblatex-opts "$(DBLATEX_OPTS)"
@@ -16,16 +16,24 @@ A2X_OPTS      := -a toc -a icons -L -d article -v --xsltproc-opts "$(XSLTPROC_OP
 # Ignore errors
 %.epub: %.txt anchors outputs
 	- a2x -f epub $(A2X_OPTS) $<
+manpages: 
+	cd man; ./create_manpage;
+	cd man; asciidoc -v -d manpage ./cxxtestgen.1.txt
+	cd man; a2x -d manpage -f manpage ./cxxtestgen.1.txt
+
+html: guide.html
+
+pdf: guide.pdf
+
+epub: guide.epub
 
 all: guide.html guide.pdf guide.epub
 
 anchors: guide.txt
 	$(PY) include_anchors.py $<
 
-outputs: examples/cxxtestgen.out
-
-examples/cxxtestgen.out: ../bin/cxxtestgen
-	- $< -h && $< -h > $@
+outputs:
+	../bin/cxxtestgen -h > examples/cxxtestgen.out
 
 clean:
 	- \rm -f guide.xml

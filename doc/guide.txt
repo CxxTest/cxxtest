@@ -147,7 +147,7 @@ include::examples/.buildRunner_main.sh[]
 This command generates the file +runner.cpp+, which can be compiled.
 [source,bash]
 ----
-include::examples/.buildRunner_main.sh[]
+include::examples/.buildRunner_compile.sh[]
 ----
 Note that additional compiler flags may be needed to include headers
 and libraries that are used during testing.
@@ -496,7 +496,7 @@ There are many limitations to this simple process for test discovery,
 and in CxxTest 4.0 a new test discovery mechanism was added based
 on the a parser for the
 http://www.computing.surrey.ac.uk/research/dsrg/fog/[Flexible Object
-Generator (FOG)] language, which is a superset of C\++.  The grammar
+Generator (FOG)] language, which is a superset of C+\+.  The grammar
 for the FOG language was adapted to parse C++ header files to
 identify class definitions and class inheritance relationships,
 class and namespace nesting of declarations, and class methods.
@@ -1118,17 +1118,17 @@ Installation
 ------------
 
 A key feature of CxxTest is that it does has virtually no installation
-process.  The +cxxtestgen+ script can be added be directly executed
-from the +cxxtest/bin+ directory, so it may be convenient to add
-this directory to a +PATH+ environment.  Beyond that, the build
-process for CxxTest simply needs to reference the +cxxtest+ root
-directory to enable proper includes while compiling test runners.
+process.  The +cxxtestgen+ script can be directly executed from the
++cxxtest/bin+ directory.  Simply adding this directory to the PATH
+environment of a command shell is sufficient for many applications.
+Beyond that, the build process for test runners simply needs to
+reference the +cxxtest+ root directory to enable proper includes
+during compilation.
 
-The +cxxtestgen+ script script should work with versions Python 2.6
-or newer.  The FOG parser requires two Python packages:
+The FOG parser requires two Python packages:
 
  - +ply+
- - +ordereddict+ (This is only needed when running Python 2.6)
+ - +ordereddict+ (This is needed when running Python 2.4, 2.5 or 2.6)
 
 If these packages are not available, then +cxxtestgen+ will generate an error when the 
 FOG parser option is selected.
@@ -1142,6 +1142,11 @@ you can install these packages from PyPI by executing
 easy_install ply
 easy_install ordereddict
 ----
+
+The +cxxtestgen+ script has been tested with many different versions
+of Python:  2.4 - 3.2.  Note that this script has only been tested
+with the CPython implementation.  CxxTest 4.0 has been tested on
+Linux and Mac platforms using the `g++` and `clang++` compilers.
 
 
 ////

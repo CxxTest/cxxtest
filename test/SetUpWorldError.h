@@ -17,18 +17,18 @@ public:
 // and declare this global variable in the header file.
 //
 static Fixture fixture;
- 
+
 class Suite : public CxxTest::TestSuite
 {
 public:
 
     void testOne()
     {
-        TS_FAIL( "Shouldn't get here at all" );
+        TS_FAIL("Shouldn't get here at all");
     }
 
     void testTwo()
     {
-        TS_FAIL( "Shouldn't get here at all" );
+        TS_FAIL("Shouldn't get here at all");
     }
 };

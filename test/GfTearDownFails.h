@@ -17,10 +17,10 @@ public:
 // and declare this global variable in the header file.
 //
 static Fixture fixture;
- 
+
 class Suite : public CxxTest::TestSuite
 {
 public:
     void testOne() {}
-    void testTwo() { TS_WARN( "Testing should go on!" ); }
+    void testTwo() { TS_WARN("Testing should go on!"); }
 };

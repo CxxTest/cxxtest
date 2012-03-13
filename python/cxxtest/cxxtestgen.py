@@ -13,7 +13,7 @@ from __future__ import division
 # the above import important for forward-compatibility with python3,
 # which is already the default in archlinux!
 
-__all__ = ['main']
+__all__ = ['main', 'create_manpage']
 
 import __release__
 import os
@@ -22,6 +22,7 @@ import re
 import glob
 from optparse import OptionParser
 import cxxtest_parser
+from string import Template
 
 try:
     import cxxtest_fog
@@ -60,11 +61,13 @@ def main(args=sys.argv):
         [options,suites] = cxxtest_parser.scanInputFiles( files, options )
     writeOutput()
 
-def parseCommandline(args):
-    '''Analyze command line arguments'''
-    global imported_fog
-    global options
-    parser = OptionParser("%prog [options] [<filename> ...]")
+def create_parser(asciidoc=False):
+    parser = OptionParser("cxxtestgen [options] [<filename> ...]")
+    if asciidoc:
+        parser.description="The cxxtestgen command processes C++ header files to perform test discovery, and then it creates files for the CxxTest test runner."
+    else:
+        parser.description="The 'cxxtestgen' command processes C++ header files to perform test discovery, and then it creates files for the 'CxxTest' test runner."
+
     parser.add_option("--version",
                       action="store_true", dest="version", default=False,
                       help="Write the CxxTest version.")
@@ -139,7 +142,14 @@ def parseCommandline(args):
                         default=False,
                         help=fog_help
                         )
+    return parser
 
+def parseCommandline(args):
+    '''Analyze command line arguments'''
+    global imported_fog
+    global options
+
+    parser = create_parser()
     (options, args) = parser.parse_args(args=args)
     if not options.header_filename is None:
         if not os.path.exists(options.header_filename):
@@ -481,4 +491,87 @@ def writeInitialize(output):
 
     output.write( ' }\n' )
     output.write( '}\n' )
+
+man_template=Template("""CXXTESTGEN(1)
+=============
+:doctype: manpage
+
+
+NAME
+----
+cxxtestgen - performs test discovery to create a CxxTest test runner
+
+
+SYNOPSIS
+--------
+${usage}
+
+
+DESCRIPTION
+-----------
+${description}
+
+
+OPTIONS
+-------
+${options}
+
+
+EXIT STATUS
+-----------
+*0*::
+   Success
+
+*1*::
+   Failure (syntax or usage error; configuration error; document
+   processing failure; unexpected error).
+
+
+BUGS
+----
+See the CxxTest Home Page for the link to the CxxTest ticket repository.
+
+
+AUTHOR
+------
+CxxTest was originally written by Erez Volk. Many people have
+contributed to it.
+
+
+RESOURCES
+---------
+Home page: <http://cxxtest.com/>
+
+CxxTest User Guide: <http://cxxtest.com/cxxtest/doc/guide.html>
+
+
+
+COPYING
+-------
+Copyright (c) 2008 Sandia Corporation.  This software is distributed
+under the Lesser GNU General Public License (LGPL) v2.1
+""")
+
+def create_manpage():
+    """Write ASCIIDOC manpage file"""
+    parser = create_parser(asciidoc=True)
+    #
+    usage = parser.usage
+    description = parser.description
+    options=""
+    for opt in parser.option_list:
+        opts = opt._short_opts + opt._long_opts
+        optstr = '*' + ', '.join(opts) + '*'
+        if not opt.metavar is None:
+            optstr += "='%s'" % opt.metavar
+        optstr += '::\n'
+        options += optstr
+        #
+        options += opt.help
+        options += '\n\n'
+    #
+    OUTPUT = open('cxxtestgen.1.txt','w')
+    OUTPUT.write( man_template.substitute(usage=usage, description=description, options=options) )
+    OUTPUT.close()
+
 

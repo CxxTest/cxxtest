@@ -6,11 +6,11 @@
 
 namespace CxxTest
 {
-    CXXTEST_TEMPLATE_INSTANTIATION
-    class ValueTraits<long *>
-    {
-    public:
-        ValueTraits( long * ) {}
-        const char *asString() { return "(long *)"; }
-    };
+CXXTEST_TEMPLATE_INSTANTIATION
+class ValueTraits<long *>
+{
+public:
+    ValueTraits(long *) {}
+    const char *asString() { return "(long *)"; }
+};
 }

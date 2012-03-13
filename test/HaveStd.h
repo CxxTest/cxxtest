@@ -10,6 +10,6 @@ class HaveStd : public CxxTest::TestSuite
 public:
     void testHaveStd()
     {
-        TS_ASSERT_EQUALS( something(), "Something" );
+        TS_ASSERT_EQUALS(something(), "Something");
     }
 };

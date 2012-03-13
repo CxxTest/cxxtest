@@ -15,20 +15,20 @@ public:
     {
         i = 0;
     }
-    
+
     void testAssertEqualsWithSideEffects()
     {
-        TS_ASSERT_EQUALS( increment(), 3 );
+        TS_ASSERT_EQUALS(increment(), 3);
     }
 
     void testAssertDiffersWithSideEffects()
     {
-        TS_ASSERT_DIFFERS( increment(), 1 );
+        TS_ASSERT_DIFFERS(increment(), 1);
     }
 
     void testAssertDeltaWithSideEffects()
     {
-        TS_ASSERT_DELTA( increment(), 2.0, 0.5 );
+        TS_ASSERT_DELTA(increment(), 2.0, 0.5);
     }
 
     int increment()

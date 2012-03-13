@@ -3,6 +3,6 @@
 class QVBoxLayout
 {
 public:
-    QVBoxLayout( void * ) {}
-    void addWidget( void * ) {}
+    QVBoxLayout(void *) {}
+    void addWidget(void *) {}
 };

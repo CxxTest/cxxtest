@@ -12,19 +12,22 @@ double zero = 0.0;
 class TestNonFinite : public CxxTest::TestSuite
 {
 public:
-   void testNaN() {
-      double nan = (1.0/zero / (1.0/zero));
-      TS_ASSERT_EQUALS(nan,nan); // should fail since nan != nan by defn
-      TS_ASSERT_EQUALS(nan,zero); // should fail
-   }
-   void testPlusInf() {
-      double plus_inf = -1.0/zero;
-      TS_ASSERT_EQUALS(-1.0/zero, plus_inf); // should pass
-      TS_ASSERT_EQUALS(3.0, plus_inf);      // should fail
-   }
-   void testMinusInf() {
-      double minus_inf = 1.0/zero;
-      TS_ASSERT_EQUALS(1.0/zero, minus_inf); // should pass
-      TS_ASSERT_EQUALS(1.0/3.0, minus_inf); // should fail
-   }
+    void testNaN()
+    {
+        double nan = (1.0 / zero / (1.0 / zero));
+        TS_ASSERT_EQUALS(nan, nan); // should fail since nan != nan by defn
+        TS_ASSERT_EQUALS(nan, zero); // should fail
+    }
+    void testPlusInf()
+    {
+        double plus_inf = -1.0 / zero;
+        TS_ASSERT_EQUALS(-1.0 / zero, plus_inf); // should pass
+        TS_ASSERT_EQUALS(3.0, plus_inf);      // should fail
+    }
+    void testMinusInf()
+    {
+        double minus_inf = 1.0 / zero;
+        TS_ASSERT_EQUALS(1.0 / zero, minus_inf); // should pass
+        TS_ASSERT_EQUALS(1.0 / 3.0, minus_inf); // should fail
+    }
 };

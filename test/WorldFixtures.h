@@ -9,10 +9,10 @@
 class PrintingFixture : public CxxTest::GlobalFixture
 {
 public:
-    bool setUpWorld() { printf( "<world>" ); return true; }
-    bool tearDownWorld() { printf( "</world>" ); return true; }
-    bool setUp() { printf( "<test>" ); return true; }
-    bool tearDown() { printf( "</test>" ); return true; }
+    bool setUpWorld() { printf("<world>"); return true; }
+    bool tearDownWorld() { printf("</world>"); return true; }
+    bool setUp() { printf("<test>"); return true; }
+    bool tearDown() { printf("</test>"); return true; }
 };
 
 //
@@ -20,10 +20,10 @@ public:
 // and declare this global variable in the header file.
 //
 static PrintingFixture printingFixture;
- 
+
 //
 // Now define some tests
-// 
+//
 
 class FirstSuite : public CxxTest::TestSuite
 {
