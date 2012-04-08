@@ -692,7 +692,7 @@ class TestGppFOG(TestGpp):
 
 class TestGppValgrind(TestGpp):
 
-    valgrind='valgrind --leak-check=yes'
+    valgrind='valgrind --tool=memcheck --leak-check=yes'
 
     def run(self, *args, **kwds):
         if find('valgrind') is None:
