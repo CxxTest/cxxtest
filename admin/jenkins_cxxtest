@@ -6,14 +6,40 @@ if test -z "$WORKSPACE"; then
 fi
 
 export PATH="$WORKSPACE/vpython/bin:$PATH"
-g++ --version
+
+echo
+echo "Building on `hostname`:"
+echo
+echo "  Workspace: ${WORKSPACE}"
+echo
+echo "  Package: ${PACKAGE}"
+echo
+echo "  Environment:"
+/usr/bin/env 2>&1 | sort | sed 's/^/    /'
+echo
+echo "  Python:"
+python -c 'import sys; sys.stdout.write(sys.version+"\n")' 2>&1 \
+    | sed 's/^/    /'
+PYTHON_VER=`python -c 'import sys; sys.stdout.write(str(sys.version_info[0]))'`
+echo
+# The following executables are required (missing app yields build failure)
+for app in gcc; do
+echo "  $app:"
+$app --version 2>&1 | grep -v '^$' | sed 's/^/    /' || exit 1
+echo
+done
+
 
 # Setup virtual Python environment
 \rm -Rf vpython
 python cxxtest/admin/virtualenv.py vpython
 #vpy/scripts/vpy_install
 vpython/bin/easy_install nose
-vpython/bin/easy_install unittest2
+if test "$PYTHON_VER" -gt 2; then
+    vpython/bin/easy_install unittest2py3k
+else
+    vpython/bin/easy_install unittest2
+fi
 vpython/bin/easy_install ply
 vpython/bin/easy_install ordereddict
 vpython/bin/easy_install gcovr
