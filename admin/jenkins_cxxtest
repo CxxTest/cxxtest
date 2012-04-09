@@ -66,7 +66,3 @@ cd "$WORKSPACE"/cxxtest
 
 echo "DONE"
 
-# Cleanup old test files
-cd $WORKSPACE/cxxtest/test
-make clean
-
