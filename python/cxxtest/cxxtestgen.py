@@ -32,6 +32,11 @@ except ImportError:
 
 from cxxtest_misc import abort
 
+try:
+    from os.path import relpath
+except ImportError:
+    from cxxtest_misc import relpath
+
 options = []
 suites = []
 
@@ -375,7 +380,7 @@ def writeInclude(output, file):
     if file == lastIncluded: return
     if options.outputFileName:
         dirname = os.path.split(options.outputFileName)[0]
-        file = os.path.relpath(file, dirname)
+        file = relpath(file, dirname)
     output.writelines( [ '#include "', file, '"\n\n' ] )
     lastIncluded = file
 
