@@ -133,23 +133,24 @@ def make_diff_readable(diff):
                     break
         i+=1
 
-def file_diff(filename1, filename2):
+
+def file_diff(filename1, filename2, filtered_reader):
     remove_absdir(filename1)
     remove_absdir(filename2)
     #
     INPUT=open(filename1, 'r')
-    lines1 = INPUT.readlines()
+    lines1 = list(filtered_reader(INPUT))
     INPUT.close()
     #
     INPUT=open(filename2, 'r')
-    lines2 = INPUT.readlines()
+    lines2 = list(filtered_reader(INPUT))
     INPUT.close()
     #
-    lines1cmp = [normalize_line_for_diff(line) for line in lines1 if not line.startswith('==')]
-    lines2cmp = [normalize_line_for_diff(line) for line in lines2 if not line.startswith('==')]
-    diff = list(difflib.unified_diff(lines2cmp, lines1cmp,
+    diff = list(difflib.unified_diff(lines2, lines1,
         fromfile=filename2, tofile=filename1))
-    if diff: make_diff_readable(diff)
+    if diff:
+        make_diff_readable(diff)
+        raise Exception("ERROR: \n\n%s\n\n%s\n\n" % (lines1, lines2))
     diff = '\n'.join(diff)
     return diff
 
@@ -183,6 +184,13 @@ class BaseTestCase(object):
             os.remove(self.build_log)
         if os.path.exists(self.build_target) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
             os.remove(self.build_target)
+
+
+    # This is a "generator" that just reads a file and normalizes the lines
+    def file_filter(self, file):
+        for line in file:
+            yield normalize_line_for_diff(line)
+
 
     def check_if_supported(self, filename, msg):
         target=currdir+'check'+'px'+target_suffix
@@ -241,7 +249,7 @@ class BaseTestCase(object):
         OUTPUT = open(self.px_pre,'a')
         OUTPUT.write('Error level = '+str(status)+'\n')
         OUTPUT.close()
-        diffstr = file_diff(self.px_pre, currdir+output)
+        diffstr = file_diff(self.px_pre, currdir+output, self.file_filter)
         if not diffstr == '':
             self.fail("Unexpected differences in output:\n"+diffstr)
         if self.valgrind != '':
@@ -294,9 +302,9 @@ class BaseTestCase(object):
             OUTPUT.write('Error level = '+str(status)+'\n')
             OUTPUT.close()
             if logfile is None:
-                diffstr = file_diff(self.px_pre, currdir+output)
+                diffstr = file_diff(self.px_pre, currdir+output, self.file_filter)
             else:
-                diffstr = file_diff(currdir+logfile, currdir+output)
+                diffstr = file_diff(currdir+logfile, currdir+output, self.file_filter)
             if not diffstr == '':
                 self.fail("Unexpected differences in output:\n"+diffstr)
             if self.valgrind != '':
@@ -693,6 +701,17 @@ class TestGppFOG(TestGpp):
 class TestGppValgrind(TestGpp):
 
     valgrind='valgrind --tool=memcheck --leak-check=yes'
+
+    def file_filter(self, file):
+        for line in file:
+            if line.startswith('=='):
+                continue
+            # Some *very* old versions of valgrind produce lines like:
+            #   free: in use at exit: 0 bytes in 0 blocks.
+            #   free: 2 allocs, 2 frees, 360 bytes allocated.
+            if line.startswith('free: '):
+                continue
+            yield normalize_line_for_diff(line)
 
     def run(self, *args, **kwds):
         if find('valgrind') is None:
