@@ -1,4 +1,5 @@
-include(FindCxxTest.cmake)
+
+include("${CMAKE_CURRENT_LIST_DIR}/FindCxxTest.cmake")
 
 function(cxx_test target source)
     string(REGEX REPLACE "hpp$" "cpp" CPP_FILE_NAME ${source})
