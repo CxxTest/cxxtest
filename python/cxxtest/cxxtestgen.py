@@ -358,12 +358,13 @@ def writeSuites(output):
         writeInclude( output, suite['file'] )
         if isGenerated(suite):
             generateSuite( output, suite )
-        if isDynamic(suite):
-            writeSuitePointer( output, suite )
-        else:
-            writeSuiteObject( output, suite )
-        writeTestList( output, suite )
-        writeSuiteDescription( output, suite )
+        if not options.noStaticInit:
+            if isDynamic(suite):
+                writeSuitePointer( output, suite )
+            else:
+                writeSuiteObject( output, suite )
+            writeTestList( output, suite )
+            writeSuiteDescription( output, suite )
         writeTestDescriptions( output, suite )
 
 def isGenerated(suite):
@@ -424,13 +425,24 @@ def writeTestDescriptions( output, suite ):
 
 def writeTestDescription( output, suite, test ):
     '''Write test description object'''
-    output.write( 'static class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
+    if not options.noStaticInit:
+        output.write( 'static class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
+    else:
+        output.write( 'class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
+       
     output.write( 'public:\n' )
     if not options.noStaticInit:
         output.write( ' %s() : CxxTest::RealTestDescription( %s, %s, %s, "%s" ) {}\n' %
                       (test['class'], suite['tlist'], suite['dobject'], test['line'], test['name']) )
     output.write( ' void runTest() { %s }\n' % runBody( suite, test ) )
-    output.write( '} %s;\n\n' % test['object'] )
+    if options.noStaticInit:
+        output.write( ' %s(%s &%s) : %s(%s) { }\n' %
+                      (test['class'], suite['name'], suite['object'], suite['object'], suite['object']) )
+        output.write( ' %s &%s;\n' % (suite['name'], suite['object']) )
+    if not options.noStaticInit:
+        output.write( '} %s;\n\n' % test['object'] )
+    else:
+        output.write( '};\n\n' )
 
 def runBody( suite, test ):
     '''Body of TestDescription::run()'''
@@ -479,6 +491,10 @@ def writeInitialize(output):
     output.write( ' void initialize()\n' )
     output.write( ' {\n' )
     for suite in suites:
+        writeTestList( output, suite )
+        writeSuiteObject( output, suite )
+        output.write( ' static ')
+        writeSuiteDescription( output, suite )
         output.write( '  %s.initialize();\n' % suite['tlist'] )
         if isDynamic(suite):
             output.write( '  %s = 0;\n' % suite['object'] )
@@ -491,6 +507,8 @@ def writeInitialize(output):
                            suite['object'], suite['tlist']) )
 
         for test in suite['tests']:
+            output.write( '  static %s %s(%s);\n' %
+                          (test['class'], test['object'], suite['object']) )
             output.write( '  %s.initialize( %s, %s, %s, "%s" );\n' %
                           (test['object'], suite['tlist'], suite['dobject'], test['line'], test['name']) )
 
