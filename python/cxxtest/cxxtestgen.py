@@ -378,10 +378,8 @@ def isDynamic(suite):
 def writeInclude(output, file):
     '''Add #include "file" statement'''
     global lastIncluded
+    file = os.path.abspath(file)
     if file == lastIncluded: return
-    if options.outputFileName:
-        dirname = os.path.split(options.outputFileName)[0]
-        file = relpath(file, dirname)
     output.writelines( [ '#include "', file, '"\n\n' ] )
     lastIncluded = file
 
