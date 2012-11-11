@@ -429,16 +429,22 @@ def writeTestDescription( output, suite, test ):
         output.write( 'static class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
     else:
         output.write( 'class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
-       
+    #   
     output.write( 'public:\n' )
     if not options.noStaticInit:
         output.write( ' %s() : CxxTest::RealTestDescription( %s, %s, %s, "%s" ) {}\n' %
                       (test['class'], suite['tlist'], suite['dobject'], test['line'], test['name']) )
-    output.write( ' void runTest() { %s }\n' % runBody( suite, test ) )
-    if options.noStaticInit:
-        output.write( ' %s(%s &%s) : %s(%s) { }\n' %
+    else:
+        if isDynamic(suite):
+            output.write( ' %s(%s* _%s) : %s(_%s) { }\n' %
                       (test['class'], suite['name'], suite['object'], suite['object'], suite['object']) )
-        output.write( ' %s &%s;\n' % (suite['name'], suite['object']) )
+            output.write( ' %s* %s;\n' % (suite['name'], suite['object']) )
+        else:
+            output.write( ' %s(%s &_%s) : %s(_%s) { }\n' %
+                      (test['class'], suite['name'], suite['object'], suite['object'], suite['object']) )
+            output.write( ' %s& %s;\n' % (suite['name'], suite['object']) )
+    output.write( ' void runTest() { %s }\n' % runBody( suite, test ) )
+    #   
     if not options.noStaticInit:
         output.write( '} %s;\n\n' % test['object'] )
     else:
@@ -491,16 +497,23 @@ def writeInitialize(output):
     output.write( ' void initialize()\n' )
     output.write( ' {\n' )
     for suite in suites:
+        print "HERE", suite
         writeTestList( output, suite )
-        writeSuiteObject( output, suite )
+        output.write( '  %s.initialize();\n' % suite['tlist'] )
+        #writeSuiteObject( output, suite )
+        if isDynamic(suite):
+            writeSuitePointer( output, suite )
+            output.write( '  %s = 0;\n' % suite['object'])
+        else:
+            writeSuiteObject( output, suite )
         output.write( ' static ')
         writeSuiteDescription( output, suite )
-        output.write( '  %s.initialize();\n' % suite['tlist'] )
         if isDynamic(suite):
-            output.write( '  %s = 0;\n' % suite['object'] )
+            #output.write( '  %s = %s.suite();\n' % (suite['object'],suite['dobject']) )
             output.write( '  %s.initialize( %s, %s, "%s", %s, %s, %s, %s );\n' %
                           (suite['dobject'], suite['cfile'], suite['line'], suite['name'],
                            suite['tlist'], suite['object'], suite['create'], suite['destroy']) )
+            output.write( '  %s.setUp();\n' % suite['dobject'])
         else:
             output.write( '  %s.initialize( %s, %s, "%s", %s, %s );\n' %
                           (suite['dobject'], suite['cfile'], suite['line'], suite['name'],
