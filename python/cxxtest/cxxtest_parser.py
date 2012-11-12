@@ -47,7 +47,11 @@ def scanInputFile(fileName):
     lineNo = 0
     contNo = 0
     while 1:
-        line = file.readline()
+        try:
+            line = file.readline()
+        except UnicodeDecodeError:
+            sys.stderr.write("Could not decode unicode character at %s:%s\n" % (fileName, lineNo + 1));
+            raise
         if not line:
             break
         lineNo += 1
