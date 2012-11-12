@@ -4,12 +4,31 @@ import glob
 import os
 from os.path import dirname, abspath, basename
 import sys
+import re
 
 currdir = dirname(abspath(__file__))+os.sep
 datadir = currdir
 
+compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:.*)$")
+dirre      = re.compile("^([^%s]*/)*" % re.escape(os.sep))
+failure    = re.compile("^(?P<prefix>.+)file=\"(?P<path>[^\"]+)\"(?P<suffix>.*)$")
+
+#print "FOO", dirre 
 def filter(line):
-    return 'Running' in line or "IGNORE" in line
+    if 'Running' in line or "IGNORE" in line:
+        return True
+    pathmatch = compilerre.match(line) # see if we can remove the basedir
+    failmatch = failure.match(line) # see if we can remove the basedir
+    #print "HERE", pathmatch, failmatch
+    if failmatch:
+        parts = failmatch.groupdict()
+        #print "X", parts
+        line = "%s file=\"%s\" %s" % (parts['prefix'], dirre.sub("", parts['path']), parts['suffix'])
+    elif pathmatch:
+        parts = pathmatch.groupdict()
+        #print "Y", parts
+        line = dirre.sub("", parts['path']) + parts['rest']
+    return line
 
 # Declare an empty TestCase class
 class Test(unittest.TestCase): pass
