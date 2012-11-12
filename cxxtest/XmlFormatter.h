@@ -191,6 +191,7 @@ public:
         while (elt != elements.end()) {
             if (elt->name == name) {
                 return elt;
+            elt++;
             }
         }
         return add_element(name);
