@@ -124,7 +124,7 @@ void doAssertSameData(const char *file, int line,
     }
 }
 
-//#if defined(_CXXTEST_HAVE_STD)
+#if defined(_CXXTEST_HAVE_STD)
 bool sameFiles(const char* file1, const char* file2, std::ostringstream& explanation) {
     std::string ppprev_line;
     std::string pprev_line;
@@ -205,7 +205,7 @@ bool sameFiles(const char* file1, const char* file2, std::ostringstream& explana
         }
     }
 }
-//#endif
+#endif
 
 void doAssertSameFiles(const char* file, int line,
                        const char* file1, const char* file2,

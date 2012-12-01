@@ -17,7 +17,8 @@ A Simple Example
 
 1. Create a test suite header file:
 
-MyTest.h:
+MyTestSuite.h:
+
   #include <cxxtest/TestSuite.h>
 
   class MyTestSuite : public CxxTest::TestSuite 

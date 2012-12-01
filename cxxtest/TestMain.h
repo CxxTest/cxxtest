@@ -21,6 +21,7 @@
 
 #include <cxxtest/StdValueTraits.h>
 
+#if defined(_CXXTEST_HAVE_STD)
 #ifdef _CXXTEST_OLD_STD
 #   include <iostream.h>
 #   include <string.h>
@@ -39,6 +40,7 @@ inline void print_help(const char* name) {
     CXXTEST_STD(cerr) << name << " --help-tests" << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " -v             Enable tracing output." << CXXTEST_STD(endl);
 }
+#endif
 
 
 template <class TesterT>
@@ -50,6 +52,7 @@ int Main(TesterT& tmp, int argc, char* argv[]) {
 // parser should be used in cxxtest.
 //
 
+#if defined(_CXXTEST_HAVE_STD)
 //
 // Print command-line syntax
 //
@@ -102,6 +105,7 @@ int Main(TesterT& tmp, int argc, char* argv[]) {
             return -1;
         }
     }
+#endif
 
     tmp.process_commandline(argc, argv);
     return tmp.run();
