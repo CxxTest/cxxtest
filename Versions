@@ -2,6 +2,14 @@
 CxxTest Releases
 ----------------
 
+* Version 4.1 (2012-11-30)
+ - Added absolute paths to resolve bug when relative path links are provided.
+ - Bug fix when files contain unicode characters
+ - Fix for --no-static-init:  Changed how non-static tests are created
+ - Updated user guide to include SCons build system
+ - Closing out Tigris and SourceForge tickets
+ - Added valgrind tests.
+
 * Version 4.0.3 (2012-01-07)
  - Adding support for Python 2.4 - 3.2
  - Various cleanup of CxxTest root directory

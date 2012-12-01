@@ -16,7 +16,7 @@ http://xprogramming.com/software.html[xUnit].  CxxTest is easy to
 use because it does not require precompiling a CxxTest testing
 library, it employs no advanced features of C++ (e.g. RTTI) and it
 supports a very flexible form of test discovery.  This documentation
-describes CxxTest 4.0, which includes significant enhancements to
+describes CxxTest 4.1, which includes significant enhancements to
 the test discovery process, a modern test driver, and new documentation.
 
 :numbered:
@@ -1145,7 +1145,7 @@ easy_install ordereddict
 
 The +cxxtestgen+ script has been tested with many different versions
 of Python:  2.4 - 3.2.  Note that this script has only been tested
-with the CPython implementation.  CxxTest 4.0 has been tested on
+with the CPython implementation.  CxxTest 4.1 has been tested on
 Linux and Mac platforms using the `g++` and `clang++` compilers.
 
 
@@ -1164,15 +1164,18 @@ distribution model is very strategic for cxxtest.
 Status and Future Plans
 -----------------------
 
-The CxxTest 4.0 release reflects major changes in the management
-and focus of CxxTest.  The 4.0 release is the first release of
+The CxxTest 4.0 release reflected major changes in the management
+and focus of CxxTest.  The 4.0 release was the first release of
 CxxTest in over seven years, and virtually all of the initial
-developers have moved on to other projects.  CxxTest is heavily
-used at Sandia National Laboratories, and Sandia's ongoing use of
-CxxTest is a major driver for the 4.0 release.
+developers have moved on to other projects.
 
-Similarly, major
-changes in CxxTest reflect the focus of the developer team:
+The CxxTest 4.1 release is an incremental release that was driven
+by a variety of bug fixes and minor enhancements.  CxxTest is heavily
+used at Sandia National Laboratories, and Sandia's ongoing use of
+CxxTest is a major driver for CxxTest development.
+
+The CxxTest 4.0 release was a major change, which reflected the
+changing focus of the developer team:
 
  - Perl is no longer used to support CxxTest scripts.  Python is now the only scripting language used by CxxTest.
  - The testing scripts have been rewritten using the PyUnit framework.
@@ -1235,20 +1238,19 @@ Acknowledgements
 ----------------
 
 CxxTest was originally developed by Erez Volk.  The following
-developers actively contributed to the CxxTest 4.0 release:
+developers contributed to the CxxTest 4.0 and 4.1 releases:
 
 * Gašper Ažman
+* Andrey Batyiev
+* Dave Elcock
 * Kevin Fitch 
 * William Hart
+* Allan Odgaard
+* Lionel Orry
 * John Siirola
 
 The CxxTest documentation is generated using
-http://www.methods.co.nz/asciidoc/[AsciiDoc].  The following people
-have contributed to the CxxTest User Manual:
-
-* William Hart
-* Lionel Orry
-* Erez Volk
+http://www.methods.co.nz/asciidoc/[AsciiDoc].
 
 A major advancement in CxxTest's capability is the new test discovery
 mechanism that is based on a parser of the Flexible Object Language
