@@ -52,9 +52,9 @@ http://cxxtest.com[http://cxxtest.com].  This webpage contains links
 for https://sourceforge.net/projects/cxxtest/files/[release downloads],
 the https://groups.google.com/forum/?hl=en#!forum/cxxtest-forum[CxxTest
 discussion list], and documentation in
-http://cxxtest.com/cxxtest/doc/guide.html[HTML],
-http://cxxtest.com/cxxtest/doc/guide.pdf[PDF], and
-http://cxxtest.comm/cxxtest/doc/guide.epub[EPUB] formats.  The
+http://cxxtest.com/guide.html[HTML],
+http://cxxtest.com/guide.pdf[PDF], and
+http://cxxtest.com/guide.epub[EPUB] formats.  The
 http://cxxtest.com[CxxTest Home Page] also includes developer
 resources (e.g. https://software.sandia.gov/hudson/view/CxxTest/[automated
 test results]).  CxxTest is available under the
@@ -1440,7 +1440,7 @@ SCons
 CxxTest provides built-in support for the SCons build system. This part
 documents this feature.
 
-[[installation]]
+[[scons_installation]]
 Installation
 ^^^^^^^^^^^^
 
