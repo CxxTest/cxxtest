@@ -37,6 +37,7 @@ public:
 };
 
 class AbortTest {};
+class SkipTest {};
 void doAbortTest();
 #   define TS_ABORT() CxxTest::doAbortTest()
 
@@ -48,6 +49,7 @@ void setMaxDumpSize(unsigned value = CXXTEST_MAX_DUMP_SIZE);
 
 void doTrace(const char *file, int line, const char *message);
 void doWarn(const char *file, int line, const char *message);
+void doSkipTest(const char *file, int line, const char *message);
 void doFailTest(const char *file, int line, const char *message);
 void doFailAssert(const char *file, int line, const char *expression, const char *message);
 
@@ -226,6 +228,7 @@ void doAssertSameFiles(const char* file, int line,
 #       define _TS_TRY try
 #       define _TS_CATCH_TYPE(t, b) catch t b
 #       define _TS_CATCH_ABORT(b) _TS_CATCH_TYPE( (const CxxTest::AbortTest &), b )
+#       define _TS_CATCH_SKIPPED(b) _TS_CATCH_TYPE( (const CxxTest::SkipTest &), b )
 #       define _TS_LAST_CATCH(b) _TS_CATCH_TYPE( (...), b )
 #       define _TSM_LAST_CATCH(f,l,m) _TS_LAST_CATCH( { (CxxTest::tracker()).failedTest(f,l,m); TS_ABORT(); } )
 #       ifdef _CXXTEST_HAVE_STD
@@ -251,6 +254,7 @@ void doAssertSameFiles(const char* file, int line,
 #       define _TS_LAST_CATCH(b)
 #       define _TS_CATCH_STD(e,b)
 #       define _TS_CATCH_ABORT(b)
+#       define _TS_CATCH_SKIPPED(b)
 #   endif // _CXXTEST_HAVE_EH
 
 // TS_TRACE
@@ -260,6 +264,10 @@ void doAssertSameFiles(const char* file, int line,
 // TS_WARN
 #   define _TS_WARN(f,l,e) CxxTest::doWarn( (f), (l), TS_AS_STRING(e) )
 #   define TS_WARN(e) _TS_WARN( __FILE__, __LINE__, e )
+
+// TS_SKIP
+#   define _TS_SKIP(f,l,e) CxxTest::doSkipTest( (f), (l), TS_AS_STRING(e) )
+#   define TS_SKIP(e) _TS_SKIP( __FILE__, __LINE__, e )
 
 // TS_FAIL
 #   define _TS_FAIL(f,l,e) CxxTest::doFailTest( (f), (l), TS_AS_STRING(e) )

@@ -48,8 +48,12 @@ namespace CxxTest
         {
             if ( tracker().failedTests() ) {
                 (*_o) << "Failed " << tracker().failedTests() << " of " << totalTests << endl;
-                unsigned numPassed = desc.numTotalTests() - tracker().failedTests();
-                (*_o) << "Success rate: " << (numPassed * 100 / desc.numTotalTests()) << "%" << endl;
+                unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracer().skippedTests();
+                unsigned numTotal = desc.numTotalTests() - tracker().skippedTests();
+                if (numTotal == 0)
+                    (*_o) << "Success rate: 100%" << endl;
+                else
+                    (*_o) << "Success rate: " << (numPassed * 100.0 / numTotal) << "%" << endl;
             }
         }
 
@@ -62,6 +66,12 @@ namespace CxxTest
         void warning( const char *file, int line, const char *expression )
         {
             stop( file, line ) << "Warning: " <<
+                expression << endl;
+        }
+
+        void skippedTest( const char *file, int line, const char *expression )
+        {
+            stop( file, line ) << "Warning: Test skipped: " <<
                 expression << endl;
         }
 

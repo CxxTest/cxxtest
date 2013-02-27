@@ -179,7 +179,8 @@ bool DynamicSuiteDescription<S>::setUp() {
         _TSM_ASSERT_THROWS_NOTHING(file(), _createLine, "Exception thrown from createSuite()", createSuite());
         _TSM_ASSERT(file(), _createLine, "createSuite() failed", suite() != 0);
     }
-    _TS_CATCH_ABORT( { return false; });
+    _TS_CATCH_ABORT( { return false; })
+    _TS_CATCH_SKIPPED( { return false; });
 
     return (suite() != 0);
 }
@@ -193,7 +194,8 @@ bool DynamicSuiteDescription<S>::tearDown() {
     _TS_TRY {
         _TSM_ASSERT_THROWS_NOTHING(file(), _destroyLine, "destroySuite() failed", destroySuite());
     }
-    _TS_CATCH_ABORT( { return false; });
+    _TS_CATCH_ABORT( { return false; })
+    _TS_CATCH_SKIPPED( { return false; });
 
     return true;
 }

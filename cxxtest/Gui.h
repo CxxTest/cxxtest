@@ -57,6 +57,10 @@ public:
         yellowBarSafe();
     }
 
+    void skippedTest(const char * /*file*/, int /*line*/, const char * /*expression*/) {
+        yellowBarSafe();
+    }
+
     void failedTest(const char * /*file*/, int /*line*/, const char * /*expression*/) {
         redBarSafe();
     }

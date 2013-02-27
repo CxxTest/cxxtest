@@ -359,6 +359,10 @@ public:
         elt->value << expression;
     }
 
+    void skippedTest(const char* file, int line, const char* expression) {
+        testSkipped(file, line, "skipped") << "Test skipped: " << expression;
+    }
+
     void failedTest(const char* file, int line, const char* expression) {
         testFailure(file, line, "failure") << "Test failed: " << expression;
     }
@@ -488,6 +492,19 @@ private:
         }
         return elt->value;
         //failedTest(file,line,message.c_str());
+    }
+
+    std::stringstream& testSkipped(const char* file, int line, const char *failureType) {
+        //testcase->fail = true;
+        element_t elt = testcase->update_element("skipped");
+        if (elt->value.str().empty()) {
+            elt->add("type", failureType);
+            elt->add("line", line);
+            elt->add("file", file);
+        } else {
+            elt->value << CXXTEST_STD(endl);
+        }
+        return elt->value;
     }
 
 #if 0

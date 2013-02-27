@@ -63,6 +63,11 @@ public:
         _second->warning(file, line, expression);
     }
 
+    void skippedTest(const char *file, int line, const char *expression) {
+        _first->skippedTest(file, line, expression);
+        _second->skippedTest(file, line, expression);
+    }
+
     void failedTest(const char *file, int line, const char *expression) {
         _first->failedTest(file, line, expression);
         _second->failedTest(file, line, expression);

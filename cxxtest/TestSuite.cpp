@@ -72,6 +72,16 @@ void doWarn(const char *file, int line, const char *message) {
     tracker().warning(file, line, message);
 }
 
+#   if defined(_CXXTEST_HAVE_EH)
+void doSkipTest(const char* file, int line, const char* message) {
+    tracker().skippedTest(file, line, message);
+    throw SkipTest();
+#   else
+void doSkipTest(const char* file, int line, const char*) {
+    doWarn(file, line, "Test skipping is not supported without exception handling.");
+#   endif
+}
+
 void doFailTest(const char *file, int line, const char *message) {
     tracker().failedTest(file, line, message);
     TS_ABORT();

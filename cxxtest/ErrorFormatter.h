@@ -81,7 +81,12 @@ public:
     }
 
     void leaveTest(const TestDescription &) {
-        if (!tracker().testFailed()) {
+        if (tracker().testSkipped()) {
+            (*_o) << "s";
+            _o->flush();
+            fflush(stdout);
+            _dotting = true;
+        } else if (!tracker().testFailed()) {
             (*_o) << ".";
             _o->flush();
             fflush(stdout);
@@ -95,9 +100,13 @@ public:
             return;
         }
         newLine();
-        (*_o) << "Failed " << tracker().failedTests() << " of " << totalTests << endl;
-        unsigned numPassed = desc.numTotalTests() - tracker().failedTests();
-        (*_o) << "Success rate: " << (numPassed * 100 / desc.numTotalTests()) << "%" << endl;
+        (*_o) << "Failed " << tracker().failedTests() << " and Skipped " << tracker().skippedTests() << " of " << totalTests << endl;
+        unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracker().skippedTests();
+        unsigned numTotal = desc.numTotalTests() - tracker().skippedTests();
+        if (numTotal == 0)
+            (*_o) << "Success rate: 100%" << endl;
+        else
+            (*_o) << "Success rate: " << (numPassed * 100.0 / numTotal) << "%" << endl;
     }
 
     void trace(const char *file, int line, const char *expression) {
@@ -107,6 +116,11 @@ public:
 
     void warning(const char *file, int line, const char *expression) {
         stop(file, line) << _warningString << ": " <<
+                         expression << endl;
+    }
+
+    void skippedTest(const char *file, int line, const char *expression) {
+        stop(file, line) << _warningString << ": Test skipped: " <<
                          expression << endl;
     }
 
