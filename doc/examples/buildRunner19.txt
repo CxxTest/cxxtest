@@ -6,5 +6,5 @@ MyTestSuite9.h:29: Error: Test failed: Maybe
 MyTestSuite9.h:30: Error: Test failed: DontKnow
 MyTestSuite9.h:31: Error: Test failed: DontCare
 MyTestSuite9.h:32: Error: Test failed: (Answer)1000
-Failed 1 of 1 test
+Failed 1 and Skipped 0 of 1 test
 Success rate: 0%

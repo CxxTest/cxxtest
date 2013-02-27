@@ -224,6 +224,7 @@ The following table summarizes the test assertions supported by CxxTest.
 | xref:ts_assert_throws_equals[+TS_ASSERT_THROWS_EQUALS(expr,arg,x,y)+] | Verify type and value of what +expr+ throws
 | <<ts_assert_throws_nothing,+TS_ASSERT_THROWS_NOTHING(expr)+>>       | Verify that +expr+ doesn't throw anything
 | <<ts_fail,+TS_FAIL(message)+>>                                   | Fail unconditionally
+| <<ts_skip,+TS_SKIP(message)+>>                                    | Skip this test
 | <<ts_trace,+TS_TRACE(message)+>>                                 | Print +message+ as an informational message
 | <<ts_warn,+TS_WARN(message)+>>                                    | Print +message+ as a warning
 |====================================================================================
@@ -562,6 +563,29 @@ The +cxxtestgen+ discovery mechanisms do not perform a C preprocessing
 step, since that would generally require using externally defined
 preprocessing variable definitions.   Additionally, preprocessor macros that act like functions will
 cause the FOG parser to fail unless they are followed by a semicolon.
+
+
+Test Classes Nested in Namespaces
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In some contexts, it is appropriate to nest test classes in namespaces.
+This allows the same class name to be used without creating conflicts
+in the test runner.  The default test discovery mechanism can only do
+this by declaring the namespaces with the class name, and then declaring the
+class with the explicit namespace prefix.  For example:
+[source,{cpp}]
+-----
+include::examples/Namespace2.h[]
+----
+However, the default test discovery mechanism cannot recognize the more typical
+declaration of test classes within nested namespaces:
+[source,{cpp}]
+-----
+include::examples/Namespace1.h[]
+----
+The FOG parser can discover tests nested within arbitrary namespaces, and unique
+names are used within the test runner to distinguish the test classes in different namespaces.
+
 
 
 [[runner]]
@@ -1391,6 +1415,13 @@ This function triggers a test failure with an associated message:
 [source,{cpp}]
 ----
 include::examples/.Assertions_fail.h[]
+----
+
+[[ts_skip]] TS_SKIP::
+This function causes the current test to be skipped with an associated warning message:
+[source,{cpp}]
+----
+include::examples/.Assertions_skip.h[]
 ----
 
 [[ts_trace]] TS_TRACE::

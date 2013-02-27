@@ -1,4 +1,4 @@
-// MyTestSuite1.h
+// Namespace1.h
 #include <cxxtest/TestSuite.h>
 
 namespace foo {

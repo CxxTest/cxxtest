@@ -5,5 +5,5 @@ MyTestSuite7.h:33: Error: Expected sizeof(z) (3) bytes to be equal at (&z) and (
    { 12 12 12 }
      differs from
    { F6 F6 F6 }
-Failed 1 of 1 test
+Failed 1 and Skipped 0 of 1 test
 Success rate: 0%

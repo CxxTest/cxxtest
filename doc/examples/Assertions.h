@@ -132,6 +132,13 @@ public:
     }
 // @:fail
 
+// @skip:
+    void test_skip(void)
+    {
+        TS_SKIP("This test has been skipped.");
+    }
+// @:skip
+
 // @trace:
     void test_trace(void)
     {
