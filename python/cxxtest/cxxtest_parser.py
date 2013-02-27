@@ -147,7 +147,8 @@ def startSuite( name, file, line, generated ):
     global suite
     closeSuite()
     object_name = name.replace(':',"_")
-    suite = { 'name'         : name,
+    suite = { 'fullname'     : name,
+              'name'         : name,
               'file'         : file,
               'cfile'        : cstr(file),
               'line'         : line,

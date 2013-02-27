@@ -54,14 +54,17 @@ def scanInputFiles(files, _options):
         for key in keys:
             if parse_info.index[key].scope_t == "class" and parse_info.is_baseclass(key,"CxxTest::TestSuite"):
                 name=parse_info.index[key].name
-                suite = { 'name'         : name,
+                fullname = key[2:] if key.startswith('::') else key
+                suite = { 
+                        'fullname'     : fullname,
+                        'name'         : name,
                         'file'         : file,
                         'cfile'        : cstr(file),
                         'line'         : str(parse_info.index[key].lineno),
                         'generated'    : 0,
-                        'object'       : 'suite_%s' % name,
-                        'dobject'      : 'suiteDescription_%s' % name,
-                        'tlist'        : 'Tests_%s' % name,
+                        'object'       : 'suite_%s' % fullname.replace('::','_'),
+                        'dobject'      : 'suiteDescription_%s' % fullname.replace('::','_'),
+                        'tlist'        : 'Tests_%s' % fullname.replace('::','_'),
                         'tests'        : [],
                         'lines'        : [] }
                 for fn in parse_info.get_functions(key,quiet=True):
@@ -78,8 +81,8 @@ def scanInputFiles(files, _options):
                         continue
                     test = { 'name'   : tname,
                         'suite'  : suite,
-                        'class'  : 'TestDescription_suite_%s_%s' % (suite['name'], tname),
-                        'object' : 'testDescription_suite_%s_%s' % (suite['name'], tname),
+                        'class'  : 'TestDescription_suite_%s_%s' % (suite['fullname'].replace('::','_'), tname),
+                        'object' : 'testDescription_suite_%s_%s' % (suite['fullname'].replace('::','_'), tname),
                         'line'   : lineno,
                         }
                     suite['tests'].append(test)
