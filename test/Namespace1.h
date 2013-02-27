@@ -53,4 +53,20 @@ public:
 }
 }
 
+namespace FOO {
+namespace BAR {
+
+class Tests : public CxxTest::TestSuite {
+public:
+    void testEquality() {
+        TS_ASSERT_EQUALS(1, 1);
+        TS_ASSERT_EQUALS(1, 2);
+        TS_ASSERT_EQUALS('a', 'A');
+        TS_ASSERT_EQUALS(1.0, -12345678900000000000000000000000000000000000000000.1234);
+    }
+};
+
+}
+}
+
 #endif // __NAMESPACE1_H

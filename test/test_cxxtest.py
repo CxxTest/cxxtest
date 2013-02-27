@@ -280,6 +280,7 @@ class BaseTestCase(object):
             # Compile without main
             cmd = join_commands("cd %s" % currdir,
                                 "%s %s %s %s. %s%s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log))
+        #print("HERE "+cmd)
         status = subprocess.call(cmd, shell=True)
         if failBuild:
             if status == 0:
@@ -595,6 +596,17 @@ class BaseTestCase(object):
     #
     # Tests that illustrate differences between the different C++ parsers
     #
+
+    def test_namespace1(self):
+        """Nested namespace declarations"""
+        if self.fog == '':
+            self.compile(prefix='namespace1', args='Namespace1.h', main=True, failBuild=True)
+        else:
+            self.compile(prefix='namespace1', args='Namespace1.h', main=True, output="namespace.out")
+
+    def test_namespace2(self):
+        """Explicit namespace declarations"""
+        self.compile(prefix='namespace2', args='Namespace2.h', main=True, output="namespace.out")
 
     def test_inheritance(self):
         """Test relying on inheritance"""
