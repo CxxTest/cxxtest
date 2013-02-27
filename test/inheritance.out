@@ -39,6 +39,6 @@ In InheritedTests2::test_TS_WARN_macro:
 InheritedTest.h:53: Warning: Just a friendly warning
 InheritedTest.h:54: Warning: Warnings don't abort the test
 .
-Failed 12 of 14 tests
+Failed 12 and Skipped 0 of 14 tests
 Success rate: 14%
 Error level = 12

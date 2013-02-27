@@ -39,6 +39,6 @@ DynamicAbort.h:42: Error: Expected (1 == 2), found (1 != 2)
 DynamicAbort.h:43: Error: Expected (2 == 3), found (2 != 3)
 In SetUpWorksAllTests::test_Override_in_this_test:
 DynamicAbort.h:49: Error: Expected (1 == 2), found (1 != 2)
-Failed 12 of 13 tests
+Failed 12 and Skipped 0 of 13 tests
 Success rate: 7%
 Error level = 12

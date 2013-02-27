@@ -19,6 +19,6 @@ In BadTest::test_TS_WARN_macro:
 BadTest.h:52: Warning: Just a friendly warning
 BadTest.h:53: Warning: Warnings don't abort the test
 .
-Failed 6 of 7 tests
+Failed 6 and Skipped 0 of 7 tests
 Success rate: 14%
 Error level = 6

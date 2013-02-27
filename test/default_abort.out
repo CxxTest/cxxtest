@@ -115,6 +115,6 @@ ThrowsAssert.h:90: Error: Expected (thing.i() != 1), found (1)
 ThrowsAssert.h:93: Error: Expected (thing.i() < 1), found (1 >= 1)
 ThrowsAssert.h:96: Error: Expected Fail( thing.i() ), found !Fail( 1 )
 ThrowsAssert.h:99: Error: Expected Fail( thing.i(), 33 ), found !Fail( 1, 33 )
-Failed 31 of 32 tests
+Failed 31 and Skipped 0 of 32 tests
 Success rate: 3%
 Error level = 31

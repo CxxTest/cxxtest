@@ -51,6 +51,6 @@ SameData.h:39: Error: Expected DATA_SIZE (24) bytes to be equal at (x) and (y), 
 { 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 13 ... }
 differs from
 { FF FE FD FC FB FA F9 F8 F7 F6 F5 F4 F3 F2 F1 F0 EF EE ED EC ... }
-Failed 10 of 10 tests
+Failed 10 and Skipped 0 of 10 tests
 Success rate: 0%
 Error level = 10

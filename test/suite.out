@@ -1,4 +1,4 @@
-Running 7 tests
+Running 8 tests
 In SimpleTest::testEquality:
 SimpleTest.h:14: Error: Expected (1 == 2), found (1 != 2)
 SimpleTest.h:15: Error: Expected ('a' == 'A'), found ('a' != 'A')
@@ -15,10 +15,13 @@ SimpleTest.h:36: Error: Expected (true == false), found (true != false)
 In SimpleTest::test_Failure:
 SimpleTest.h:40: Error: Test failed: Not implemented
 SimpleTest.h:41: Error: Test failed: 1569779912
+In SimpleTest::test_TS_SKIP_macro:
+SimpleTest.h:45: Warning: Test skipped: Simply skip this test
+s
 In SimpleTest::test_TS_WARN_macro:
-SimpleTest.h:45: Warning: Just a friendly warning
-SimpleTest.h:46: Warning: Warnings don't abort the test
+SimpleTest.h:50: Warning: Just a friendly warning
+SimpleTest.h:51: Warning: Warnings don't abort the test
 .
-Failed 6 of 7 tests
+Failed 6 and Skipped 1 of 8 tests
 Success rate: 14%
 Error level = 6

@@ -58,6 +58,6 @@ In ThrowsAssert::test_TS_ASSERT_THROWS_DELTA:
 ThrowsAssert.h:64: Error: Expected (i == 3) up to 1 (1), found (1 != 3)
 In ThrowsAssert::test_TS_ASSERT_THROWS_ASSERT:
 ThrowsAssert.h:71: Error: Expected (i == 2), found (1 != 2)
-Failed 25 of 25 tests
+Failed 25 and Skipped 0 of 25 tests
 Success rate: 0%
 Error level = 25

@@ -106,6 +106,6 @@ SameZero.h:22: Error: Expected sizeof(data) (4) bytes to be equal at (data) and 
 { 00 01 02 03 }
 differs from
 (null)
-Failed 28 of 35 tests
+Failed 28 and Skipped 0 of 35 tests
 Success rate: 20%
 Error level = 28
