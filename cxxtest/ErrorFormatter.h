@@ -84,7 +84,6 @@ public:
         if (!tracker().testFailed()) {
             (*_o) << ".";
             _o->flush();
-            fflush(stdout);
             _dotting = true;
         }
     }
