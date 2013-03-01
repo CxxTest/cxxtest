@@ -15,12 +15,11 @@
 #include <cxxtest/TestTracker.h>
 #include <cxxtest/Flags.h>
 
-#ifndef _CXXTEST_HAVE_STD
-#   define _CXXTEST_HAVE_STD
-#endif // _CXXTEST_HAVE_STD
 
 #include <cxxtest/StdValueTraits.h>
 
+
+    
 #if defined(_CXXTEST_HAVE_STD)
 #ifdef _CXXTEST_OLD_STD
 #   include <iostream.h>
@@ -29,6 +28,7 @@
 #   include <iostream>
 #   include <cstring>
 #endif // _CXXTEST_OLD_STD
+
 
 namespace CxxTest {
 
@@ -40,6 +40,8 @@ inline void print_help(const char* name) {
     CXXTEST_STD(cerr) << name << " --help-tests" << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " -v             Enable tracing output." << CXXTEST_STD(endl);
 }
+#else
+namespace CxxTest {
 #endif
 
 
