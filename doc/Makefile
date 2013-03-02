@@ -7,7 +7,7 @@ DBLATEX_OPTS  := -P latex.output.revhistory=0 -P doc.collab.show=1 -P toc.sectio
 A2X_OPTS      := -a toc -a icons -L -d article -v --xsltproc-opts "$(XSLTPROC_OPTS)" --dblatex-opts "$(DBLATEX_OPTS)"
 
 %.html: %.txt anchors outputs
-	asciidoc -v -b html -d article -n -a toc2 -a icons $<
+	asciidoc -a data-uri -v -b html -d article -n -a toc2 -a icons $<
 
 # Ignore errors (dblatex may not be installed)
 %.pdf: %.txt anchors outputs
