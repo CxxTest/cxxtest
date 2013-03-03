@@ -55,9 +55,9 @@ def scanInputFiles(files, _options):
             if parse_info.index[key].scope_t == "class" and parse_info.is_baseclass(key,"CxxTest::TestSuite"):
                 name=parse_info.index[key].name
                 if key.startswith('::'):
-                    fullname = key
-                else:
                     fullname = key[2:]
+                else:
+                    fullname = key
                 suite = { 
                         'fullname'     : fullname,
                         'name'         : name,
