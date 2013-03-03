@@ -324,7 +324,7 @@ include::examples/.buildRunner2_main.sh[]
 generates the following output:
 
 ----
-include::examples/exeRunner2.out[]
+include::examples/buildRunner2.log[]
 ----
 
 StdioPrinter
