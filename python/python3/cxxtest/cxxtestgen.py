@@ -32,6 +32,11 @@ except ImportError:
 
 from .cxxtest_misc import abort
 
+try:
+    from os.path import relpath
+except ImportError:
+    from .cxxtest_misc import relpath
+
 options = []
 suites = []
 
@@ -329,7 +334,7 @@ def writeMain( output ):
        output.write( '    CxxTest::RealWorldDescription::_worldName = "%s";\n' % options.world )
     else:
        output.write( '    %s tmp;\n' % tester_t )
-    output.write( '    status = CxxTest::Main<%s>( tmp, argc, argv );\n' % tester_t )
+    output.write( '    status = CxxTest::Main< %s >( tmp, argc, argv );\n' % tester_t )
     output.write( '    return status;\n')
     output.write( '}\n' )
 
@@ -353,12 +358,13 @@ def writeSuites(output):
         writeInclude( output, suite['file'] )
         if isGenerated(suite):
             generateSuite( output, suite )
-        if isDynamic(suite):
-            writeSuitePointer( output, suite )
-        else:
-            writeSuiteObject( output, suite )
-        writeTestList( output, suite )
-        writeSuiteDescription( output, suite )
+        if not options.noStaticInit:
+            if isDynamic(suite):
+                writeSuitePointer( output, suite )
+            else:
+                writeSuiteObject( output, suite )
+            writeTestList( output, suite )
+            writeSuiteDescription( output, suite )
         writeTestDescriptions( output, suite )
 
 def isGenerated(suite):
@@ -372,16 +378,14 @@ def isDynamic(suite):
 def writeInclude(output, file):
     '''Add #include "file" statement'''
     global lastIncluded
+    file = os.path.abspath(file)
     if file == lastIncluded: return
-    if options.outputFileName:
-        dirname = os.path.split(options.outputFileName)[0]
-        file = os.path.relpath(file, dirname)
     output.writelines( [ '#include "', file, '"\n\n' ] )
     lastIncluded = file
 
 def generateSuite( output, suite ):
     '''Write a suite declared with CXXTEST_SUITE()'''
-    output.write( 'class %s : public CxxTest::TestSuite {\n' % suite['name'] )
+    output.write( 'class %s : public CxxTest::TestSuite {\n' % suite['fullname'] )
     output.write( 'public:\n' )
     for line in suite['lines']:
         output.write(line)
@@ -390,13 +394,13 @@ def generateSuite( output, suite ):
 def writeSuitePointer( output, suite ):
     '''Create static suite pointer object for dynamic suites'''
     if options.noStaticInit:
-        output.write( 'static %s *%s;\n\n' % (suite['name'], suite['object']) )
+        output.write( 'static %s* %s;\n\n' % (suite['fullname'], suite['object']) )
     else:
-        output.write( 'static %s *%s = 0;\n\n' % (suite['name'], suite['object']) )
+        output.write( 'static %s* %s = 0;\n\n' % (suite['fullname'], suite['object']) )
 
 def writeSuiteObject( output, suite ):
     '''Create static suite object for non-dynamic suites'''
-    output.writelines( [ "static ", suite['name'], " ", suite['object'], ";\n\n" ] )
+    output.writelines( [ "static ", suite['fullname'], " ", suite['object'], ";\n\n" ] )
 
 def writeTestList( output, suite ):
     '''Write the head of the test linked list for a suite'''
@@ -419,13 +423,30 @@ def writeTestDescriptions( output, suite ):
 
 def writeTestDescription( output, suite, test ):
     '''Write test description object'''
-    output.write( 'static class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
+    if not options.noStaticInit:
+        output.write( 'static class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
+    else:
+        output.write( 'class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
+    #   
     output.write( 'public:\n' )
     if not options.noStaticInit:
         output.write( ' %s() : CxxTest::RealTestDescription( %s, %s, %s, "%s" ) {}\n' %
                       (test['class'], suite['tlist'], suite['dobject'], test['line'], test['name']) )
+    else:
+        if isDynamic(suite):
+            output.write( ' %s(%s* _%s) : %s(_%s) { }\n' %
+                      (test['class'], suite['fullname'], suite['object'], suite['object'], suite['object']) )
+            output.write( ' %s* %s;\n' % (suite['fullname'], suite['object']) )
+        else:
+            output.write( ' %s(%s& _%s) : %s(_%s) { }\n' %
+                      (test['class'], suite['fullname'], suite['object'], suite['object'], suite['object']) )
+            output.write( ' %s& %s;\n' % (suite['fullname'], suite['object']) )
     output.write( ' void runTest() { %s }\n' % runBody( suite, test ) )
-    output.write( '} %s;\n\n' % test['object'] )
+    #   
+    if not options.noStaticInit:
+        output.write( '} %s;\n\n' % test['object'] )
+    else:
+        output.write( '};\n\n' )
 
 def runBody( suite, test ):
     '''Body of TestDescription::run()'''
@@ -449,10 +470,10 @@ def writeSuiteDescription( output, suite ):
 
 def writeDynamicDescription( output, suite ):
     '''Write SuiteDescription for a dynamic suite'''
-    output.write( 'CxxTest::DynamicSuiteDescription<%s> %s' % (suite['name'], suite['dobject']) )
+    output.write( 'CxxTest::DynamicSuiteDescription< %s > %s' % (suite['fullname'], suite['dobject']) )
     if not options.noStaticInit:
         output.write( '( %s, %s, "%s", %s, %s, %s, %s )' %
-                      (suite['cfile'], suite['line'], suite['name'], suite['tlist'],
+                      (suite['cfile'], suite['line'], suite['fullname'], suite['tlist'],
                        suite['object'], suite['create'], suite['destroy']) )
     output.write( ';\n\n' )
 
@@ -461,7 +482,7 @@ def writeStaticDescription( output, suite ):
     output.write( 'CxxTest::StaticSuiteDescription %s' % suite['dobject'] )
     if not options.noStaticInit:
         output.write( '( %s, %s, "%s", %s, %s )' %
-                      (suite['cfile'], suite['line'], suite['name'], suite['object'], suite['tlist']) )
+                      (suite['cfile'], suite['line'], suite['fullname'], suite['object'], suite['tlist']) )
     output.write( ';\n\n' )
 
 def writeRoot(output):
@@ -474,18 +495,31 @@ def writeInitialize(output):
     output.write( ' void initialize()\n' )
     output.write( ' {\n' )
     for suite in suites:
+        #print "HERE", suite
+        writeTestList( output, suite )
         output.write( '  %s.initialize();\n' % suite['tlist'] )
+        #writeSuiteObject( output, suite )
         if isDynamic(suite):
-            output.write( '  %s = 0;\n' % suite['object'] )
+            writeSuitePointer( output, suite )
+            output.write( '  %s = 0;\n' % suite['object'])
+        else:
+            writeSuiteObject( output, suite )
+        output.write( ' static ')
+        writeSuiteDescription( output, suite )
+        if isDynamic(suite):
+            #output.write( '  %s = %s.suite();\n' % (suite['object'],suite['dobject']) )
             output.write( '  %s.initialize( %s, %s, "%s", %s, %s, %s, %s );\n' %
-                          (suite['dobject'], suite['cfile'], suite['line'], suite['name'],
+                          (suite['dobject'], suite['cfile'], suite['line'], suite['fullname'],
                            suite['tlist'], suite['object'], suite['create'], suite['destroy']) )
+            output.write( '  %s.setUp();\n' % suite['dobject'])
         else:
             output.write( '  %s.initialize( %s, %s, "%s", %s, %s );\n' %
-                          (suite['dobject'], suite['cfile'], suite['line'], suite['name'],
+                          (suite['dobject'], suite['cfile'], suite['line'], suite['fullname'],
                            suite['object'], suite['tlist']) )
 
         for test in suite['tests']:
+            output.write( '  static %s %s(%s);\n' %
+                          (test['class'], test['object'], suite['object']) )
             output.write( '  %s.initialize( %s, %s, %s, "%s" );\n' %
                           (test['object'], suite['tlist'], suite['dobject'], test['line'], test['name']) )
 
