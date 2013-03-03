@@ -106,7 +106,7 @@ public:
         if (numTotal == 0)
             (*_o) << "Success rate: 100%" << endl;
         else
-            (*_o) << "Success rate: " << (numPassed * 100.0 / numTotal) << "%" << endl;
+            (*_o) << "Success rate: " << (unsigned) (numPassed * 100.0 / numTotal) << "%" << endl;
     }
 
     void trace(const char *file, int line, const char *expression) {
