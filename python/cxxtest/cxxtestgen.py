@@ -331,9 +331,9 @@ def writeMain( output ):
     if options.xunit_printer:
        output.write( '    std::ofstream ofstr("%s");\n' % options.xunit_file )
        output.write( '    %s tmp(ofstr);\n' % tester_t )
-       output.write( '    CxxTest::RealWorldDescription::_worldName = "%s";\n' % options.world )
     else:
        output.write( '    %s tmp;\n' % tester_t )
+    output.write( '    CxxTest::RealWorldDescription::_worldName = "%s";\n' % options.world )
     output.write( '    status = CxxTest::Main< %s >( tmp, argc, argv );\n' % tester_t )
     output.write( '    return status;\n')
     output.write( '}\n' )

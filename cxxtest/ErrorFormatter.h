@@ -60,7 +60,7 @@ public:
     }
 
     void enterWorld(const WorldDescription & /*desc*/) {
-        (*_o) << "Running " << totalTests;
+        (*_o) << "Running [" << CxxTest::RealWorldDescription::_worldName << "] " << totalTests;
         _o->flush();
         _dotting = true;
         _reported = false;
