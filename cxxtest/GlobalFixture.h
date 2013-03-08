@@ -23,7 +23,7 @@ public:
     virtual bool tearDown();
 
     GlobalFixture();
-    ~GlobalFixture();
+    virtual ~GlobalFixture();
 
     static GlobalFixture *firstGlobalFixture();
     static GlobalFixture *lastGlobalFixture();
