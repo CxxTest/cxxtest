@@ -188,7 +188,7 @@ bool delta_le_helper(X x, Y y) {
 template<class X, class Y, class D>
 struct delta {
     static bool test(X x, Y y, D d) {
-        return delta_le_helper(x - d, y) && delta_le_helper(y, x + d);
+        return delta_le_helper(x, y + d) && delta_le_helper(y, x + d);
         //(y >= x - d) && (y <= x + d));
     }
 };

@@ -1,7 +1,7 @@
-Running 15 tests
+Running 16 tests
 In CreatedTest::test_nothing:
 CreatedTest.h:24: Error: Test failed: Nothing to test
-.
+..
 In EnumTraits::test_Enum_traits:
 EnumTraits.h:30: Error: Test failed: Yes
 EnumTraits.h:31: Error: Test failed: No
@@ -50,6 +50,6 @@ In TestFunky::testPets:
 TraitsTest.h:53: Error: Expected (pet1 == pet2), found (Pet("dog") != Pet("cat"))
 TraitsTest.h:55: Error: Expected (cat != gato), found (Pet("cat"))
 TraitsTest.h:58: Error: Expected (String("Hello") == String("World!")), found ("Hello" != "World!")
-Failed 12 and Skipped 1 of 15 tests
-Success rate: 14%
+Failed 12 and Skipped 1 of 16 tests
+Success rate: 20%
 Error level = 12

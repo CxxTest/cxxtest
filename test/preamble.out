@@ -1,7 +1,7 @@
-Running 15 tests
+Running 16 tests
 In CreatedTest::test_nothing:
 CreatedTest.h:24: Error: Test failed: Nothing to test
-.
+..
 In EnumTraits::test_Enum_traits:
 EnumTraits.h:30: Error: Test failed: Yes
 In ExceptionTest::testAssertion:
@@ -32,12 +32,12 @@ SimpleTest.h:51: Warning: Warnings don't abort the test
 .
 In TestFunky::testPets:
 TraitsTest.h:53: Error: Expected (pet1 == pet2), found (Pet("dog") != Pet("cat"))
-Failed 12 and Skipped 1 of 15 tests
-Success rate: 14%
-Running 15 tests
+Failed 12 and Skipped 1 of 16 tests
+Success rate: 20%
+Running 16 tests
 In CreatedTest::test_nothing:
 CreatedTest.h:24: Error: Test failed: Nothing to test
-.
+..
 In EnumTraits::test_Enum_traits:
 EnumTraits.h:30: Error: Test failed: Yes
 In ExceptionTest::testAssertion:
@@ -68,6 +68,6 @@ SimpleTest.h:51: Warning: Warnings don't abort the test
 .
 In TestFunky::testPets:
 TraitsTest.h:53: Error: Expected (pet1 == pet2), found (Pet("dog") != Pet("cat"))
-Failed 12 and Skipped 1 of 15 tests
-Success rate: 14%
+Failed 12 and Skipped 1 of 16 tests
+Success rate: 20%
 Error level = 24
