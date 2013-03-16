@@ -452,8 +452,7 @@ void doAssertSameFiles(const char* file, int line,
 // TS_ASSERT_THROWS_ASSERT
 #   define ___TS_ASSERT_THROWS_ASSERT(f,l,e,t,a,m) { \
             bool _ts_threw_expected = false, _ts_threw_else = false; \
-            _TS_TRY { e; } \
-            _TS_CATCH_TYPE( (t), { a; _ts_threw_expected = true; } ) \
+            _TS_TRY { try{ e; } _TS_CATCH_TYPE( (t), { a; _ts_threw_expected = true; } ) } \
             _TS_CATCH_ABORT( { throw; } ) \
             _TS_CATCH_STD( ex, { _ts_threw_expected = true; CxxTest::doFailAssertThrows((f), (l), #e, #t, true, (m), ex.what() ); } ) \
             _TS_LAST_CATCH( { _ts_threw_else = true; } ) \

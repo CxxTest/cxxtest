@@ -14,7 +14,8 @@ ExceptionTest.h:18: Error: Expected (throwThis(5)) to throw (const char *) but i
 ExceptionTest.h:20: Error: Expected (goodFunction(1)) to throw (...) but it didn't throw
 ExceptionTest.h:22: Error: Test failed: Unhandled exception
 ExceptionTest.h:24: Error: Expected (throwThis(-1)) not to throw, but it did
-ExceptionTest.h:29: Error: Test failed: throwThis(3) failed
+ExceptionTest.h:26: Error: Expected (throwThis(3)) to throw (std::exception&) but it threw something else
+ExceptionTest.h:31: Error: Test failed: throwThis(3) failed
 In FixtureTest::test_strcpy:
 FixtureTest.h:28: Error: Expected (_buffer[1] == 'E'), found ('e' != 'E')
 In MessageTest::testValues:

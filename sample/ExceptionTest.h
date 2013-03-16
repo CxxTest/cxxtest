@@ -22,6 +22,8 @@ public:
         TS_ASSERT_EQUALS(throwThis(3), 333);
         // You can assert that a function throws nothing
         TS_ASSERT_THROWS_NOTHING(throwThis(-1));
+        // This assert fails, since throwThis() throws (Number)
+        TS_ASSERT_THROWS(throwThis(3), std::exception&);
         // If you want to catch the exceptions yourself, use the ETS_ marcos
         try {
             ETS_ASSERT_EQUALS(throwThis(3), 333);
