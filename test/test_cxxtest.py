@@ -458,6 +458,10 @@ class BaseTestCase(object):
         self.check_if_supported('stpltpl.cpp', "The file stpltpl.cpp is not supported.")
         self.compile(prefix='stl_traits', args="--error-printer StlTraits.h", output="stl.out")
 
+    def test_normal_behavior_world(self):
+        """Normal Behavior with World"""
+        self.compile(prefix='normal_behavior_world', args="--error-printer --world=myworld "+self.normals, output="world.out")
+
     #
     # Test cases which do require exception handling
     #

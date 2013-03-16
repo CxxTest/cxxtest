@@ -1,4 +1,4 @@
-Running 8 tests
+Running cxxtest tests (8 tests)
 In SimpleTest::testEquality:
 SimpleTest.h:14: Error: Expected (1 == 2), found (1 != 2)
 SimpleTest.h:15: Error: Expected ('a' == 'A'), found ('a' != 'A')

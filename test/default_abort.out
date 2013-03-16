@@ -1,4 +1,4 @@
-Running 32 tests
+Running cxxtest tests (32 tests)
 In NullCreate::<no test>:
 Exceptions.h:10: Error: Test failed: createSuite() failed
 Exceptions.h:10: Error: Assertion failed: suite() != 0

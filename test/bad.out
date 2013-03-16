@@ -1,4 +1,4 @@
-Running 7 tests
+Running cxxtest tests (7 tests)
 In BadTest::testEquality:
 BadTest.h:15: Error: Expected (1 == 2), found (1 != 2)
 BadTest.h:16: Error: Expected ('a' == 'A'), found ('a' != 'A')

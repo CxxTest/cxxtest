@@ -1,4 +1,4 @@
-Running 25 tests
+Running cxxtest tests (25 tests)
 In DynamicAbort::test_Abort_on_fail_in_this_test:
 DynamicAbort.h:8: Error: Expected (1 == 2), found (1 != 2)
 In DynamicAbort::test_Dont_abort_in_this_test:

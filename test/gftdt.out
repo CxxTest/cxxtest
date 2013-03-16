@@ -1,4 +1,4 @@
-Running 2 tests
+Running cxxtest tests (2 tests)
 In Suite::testOne:
 GfTearDownThrows.h:24: Error: Test failed: Error in GlobalFixture::tearDown()
 In Suite::testTwo:

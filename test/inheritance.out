@@ -1,4 +1,4 @@
-Running 14 tests
+Running cxxtest tests (14 tests)
 In InheritedTests1::testEquality:
 InheritedTest.h:16: Error: Expected (1 == 2), found (1 != 2)
 InheritedTest.h:17: Error: Expected ('a' == 'A'), found ('a' != 'A')

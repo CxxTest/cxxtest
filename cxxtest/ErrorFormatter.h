@@ -59,8 +59,8 @@ public:
         return tracker().failedTests();
     }
 
-    void enterWorld(const WorldDescription & /*desc*/) {
-        (*_o) << "Running " << totalTests;
+    void enterWorld(const WorldDescription& desc) {
+        (*_o) << "Running " << desc.worldName() << " tests (" << totalTests << ")";
         _o->flush();
         _dotting = true;
         _reported = false;

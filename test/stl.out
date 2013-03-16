@@ -1,4 +1,4 @@
-Running 9 tests
+Running cxxtest tests (9 tests)
 In StlTraits::test_Pair:
 StlTraits.h:13: Error: Test failed: <3, "Three">
 StlTraits.h:15: Error: Test failed: <"Four", 4.0000>

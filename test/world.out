@@ -1,4 +1,4 @@
-Running cxxtest tests (35 tests)
+Running myworld tests (35 tests)
 In LessThanEquals::testLessThanEquals:
 LessThanEquals.h:16: Error: Expected (1 <= 0), found (1 > 0)
 LessThanEquals.h:17: Error: Test failed: 1 <=? 0

@@ -1,4 +1,4 @@
-{Start 7 tests} Running 7 tests {GreenYellowRed::test_Start_green()} . {GreenYellowRed::test_Green_again()}
+{Start 7 tests} Running cxxtest tests (7 tests) {GreenYellowRed::test_Start_green()} . {GreenYellowRed::test_Green_again()}
 In GreenYellowRed::test_Green_again:
 GreenYellowRed.h(26): Trace: Still green
 . {GreenYellowRed::test_Now_yellow()}  {Yellow}

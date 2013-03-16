@@ -1,4 +1,4 @@
-Running 35 tests
+Running cxxtest tests (35 tests)
 In LessThanEquals::testLessThanEquals:
 LessThanEquals.h:16: Error: Expected (1 <= 0), found (1 > 0)
 In Relation::testPredicate:

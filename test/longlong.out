@@ -1,4 +1,4 @@
-Running 1 test
+Running cxxtest tests (1 test)
 In LongLongTest::testLongLong:
 LongLong.h:12: Error: Expected ((long long)1 == (long long)2), found (1 != 2)
 LongLong.h:13: Error: Expected ((long long)3 != (long long)3), found (3)

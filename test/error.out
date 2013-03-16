@@ -1,4 +1,4 @@
-Running 16 tests
+Running cxxtest tests (16 tests)
 In CreatedTest::test_nothing:
 CreatedTest.h:24: Error: Test failed: Nothing to test
 ..

@@ -1,4 +1,4 @@
-Running 16 tests
+Running cxxtest tests (16 tests)
 In CreatedTest::test_nothing:
 CreatedTest.h:24: Error: Test failed: Nothing to test
 ..
@@ -34,7 +34,7 @@ In TestFunky::testPets:
 TraitsTest.h:53: Error: Expected (pet1 == pet2), found (Pet("dog") != Pet("cat"))
 Failed 12 and Skipped 1 of 16 tests
 Success rate: 20%
-Running 16 tests
+Running cxxtest tests (16 tests)
 In CreatedTest::test_nothing:
 CreatedTest.h:24: Error: Test failed: Nothing to test
 ..
