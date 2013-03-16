@@ -32,7 +32,7 @@ done
 
 # Setup virtual Python environment
 \rm -Rf vpython
-python cxxtest/admin/virtualenv.py --never-download vpython
+python cxxtest/admin/virtualenv.py vpython
 vpython/bin/easy_install nose
 if test "$PYTHON_VER" -gt 2; then
     vpython/bin/easy_install unittest2py3k
