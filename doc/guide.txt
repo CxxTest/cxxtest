@@ -58,7 +58,7 @@ http://cxxtest.com/guide.epub[EPUB] formats.  The
 http://cxxtest.com[CxxTest Home Page] also includes developer
 resources (e.g. https://software.sandia.gov/hudson/view/CxxTest/[automated
 test results]).  CxxTest is available under the
-http://www.gnu.org/copyleft/lesser.html[GNU Lesser General Public]
+http://www.gnu.org/licenses/lgpl.html[GNU Lesser General Public]
 license.
 
 The CxxTest User Guide provides the following documentation:
