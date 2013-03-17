@@ -56,16 +56,22 @@ def find(filename, executable=False, isfile=True,  validate=None):
 def join_commands(command_one, command_two):
     return command_separator.join([command_one, command_two])
 
+_available = {}
 def available(compiler, exe_option):
+    if (compiler,exe_option) in _available:
+        return _available[compiler,exe_option]
     cmd = join_commands("cd %s" % currdir,
                         "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log'))
-    ##print cmd
+    print("Testing for compiler "+compiler)
+    print("Command: "+cmd)
     status = subprocess.call(cmd, shell=True)
     executable = currdir+'anything'+target_suffix
     flag = status == 0 and os.path.exists(executable)
     os.remove(currdir+'anything.log')
     if os.path.exists(executable):
         os.remove(executable)
+    print("Status: "+str(flag))
+    _available[compiler,exe_option] = flag
     return flag
 
 def remove_absdir(filename):
