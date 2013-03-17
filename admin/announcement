@@ -1,9 +1,4 @@
-We are pleased to announce the updated release of CxxTest 4.2.
-CxxTest is a unit testing framework for C++ that is similar in
-spirit to JUnit, CppUnit, and xUnit. CxxTest is easy to use because
-it does not require precompiling a CxxTest testing library, it
-employs no advanced features of C++ (e.g. RTTI) and it supports a
-very flexible form of test discovery.
+We are pleased to announce the updated release of CxxTest 4.2.  CxxTest is a unit testing framework for C++ that is similar in spirit to JUnit, CppUnit, and xUnit. CxxTest is easy to use because it does not require precompiling a CxxTest testing library, it employs no advanced features of C++ (e.g. RTTI) and it supports a very flexible form of test discovery.
 
 This release resolves the following issues:
 
@@ -16,8 +11,7 @@ This release resolves the following issues:
  - Fixed TS_ASSERT_DELTA to work on integer types (#65)
  - Changed output format to print world-name (#70)
 
-See the CxxTest Home Page (http://cxxtest.com) for documentation
-and download instructions.
+See the CxxTest Home Page (http://cxxtest.com) for documentation and download instructions.
 
 Enjoy!
 
