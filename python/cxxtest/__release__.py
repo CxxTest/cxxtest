@@ -9,5 +9,5 @@
 
 """ Release Information for cxxtest """
 
-__version__ = '4.1'
-__date__ = "2012-11-30"
+__version__ = '4.2'
+__date__ = "2013-03-16"
