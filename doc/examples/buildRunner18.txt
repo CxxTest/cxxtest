@@ -1,4 +1,4 @@
-Running 2 testsStarting a test suite
+Running cxxtest tests (2 tests)Starting a test suite
 Starting a test suite
 ..Finishing a test suite
 Finishing a test suite

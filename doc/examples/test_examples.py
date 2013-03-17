@@ -15,7 +15,9 @@ failure    = re.compile("^(?P<prefix>.+)file=\"(?P<path>[^\"]+)\"(?P<suffix>.*)$
 
 #print "FOO", dirre 
 def filter(line):
-    if 'Running' in line or "IGNORE" in line:
+    if 'Running' in line:
+        return False
+    if "IGNORE" in line:
         return True
     pathmatch = compilerre.match(line) # see if we can remove the basedir
     failmatch = failure.match(line) # see if we can remove the basedir

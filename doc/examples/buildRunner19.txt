@@ -1,4 +1,4 @@
-Running 1 test
+Running cxxtest tests (1 test)
 In EnumTraits::test_Enum_traits:
 MyTestSuite9.h:27: Error: Test failed: Yes
 MyTestSuite9.h:28: Error: Test failed: No
