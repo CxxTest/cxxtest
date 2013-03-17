@@ -133,7 +133,6 @@ def make_diff_readable(diff):
                     break
         i+=1
 
-
 def file_diff(filename1, filename2, filtered_reader):
     remove_absdir(filename1)
     remove_absdir(filename2)
@@ -258,6 +257,7 @@ class BaseTestCase(object):
         self.passed=True
 
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False):
+        """Run cxxtestgen and compile the code that is generated"""
         self.init(prefix)
         #
         cmd = join_commands("cd %s" % currdir,
