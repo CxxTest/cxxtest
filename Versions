@@ -2,6 +2,9 @@
 CxxTest Releases
 ----------------
 
+* Version 4.2.1 (2013-03-22)
+ - Fixing documentation of LGPL version
+
 * Version 4.2 (2013-03-16)
  - Changes to support test fixtures in namespaces
  - Adding logic to support test skipping

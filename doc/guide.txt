@@ -16,7 +16,7 @@ http://xprogramming.com/software.html[xUnit].  CxxTest is easy to
 use because it does not require precompiling a CxxTest testing
 library, it employs no advanced features of C++ (e.g. RTTI) and it
 supports a very flexible form of test discovery.  This documentation
-describes CxxTest 4.2, which is an incremental release that includes
+describes CxxTest 4.2.1, which is an incremental release that includes
 better test discovery features and new test skipping features.
 
 :numbered:
@@ -1170,7 +1170,7 @@ easy_install ordereddict
 The +cxxtestgen+ script has been tested with many different versions
 of Python:  2.4 - 3.3, though future releases will not support
 Python 2.4.  Note that this script has only been tested with the
-CPython implementation.  CxxTest 4.2 has been tested on Linux and
+CPython implementation.  CxxTest 4.2.1 has been tested on Linux and
 Mac platforms using the `g++` and `clang++` compilers.
 
 
@@ -1194,7 +1194,7 @@ and focus of CxxTest.  The 4.0 release was the first release of
 CxxTest in over seven years, and virtually all of the initial
 developers have moved on to other projects.
 
-The CxxTest 4.2 release is an incremental release that was driven
+The CxxTest 4.2.1 release is an incremental release that was driven
 by a variety of bug fixes and minor enhancements.  CxxTest is heavily
 used at Sandia National Laboratories, and Sandia's ongoing use of
 CxxTest is a major driver for CxxTest development.
