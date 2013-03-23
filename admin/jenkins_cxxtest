@@ -42,6 +42,7 @@ fi
 vpython/bin/easy_install ply
 vpython/bin/easy_install ordereddict
 vpython/bin/easy_install gcovr
+vpython/bin/easy_install coverage
 vpython/bin/easy_install pyutilib.th
 cd "$WORKSPACE"/cxxtest/python
 "$WORKSPACE"/vpython/bin/python setup.py install
@@ -56,10 +57,13 @@ cd "$WORKSPACE"
 # Run tests
 export CXXTEST_GCOV_FLAGS='-fprofile-arcs -ftest-coverage'
 vpython/bin/nosetests -v -v -w "$WORKSPACE"/cxxtest \
-    --with-xunit --xunit-file="$WORKSPACE"/TEST-cxxtest.xml \
+    --coverage --with-xunit --xunit-file="$WORKSPACE"/TEST-cxxtest.xml \
     || echo "(INFO) nosetests returned non-zero return code"
 
-# Generate code coverage
+# Generate Python code coverage
+vpython/bin/coverage xml --omit="$WORKSPACE/vpython/lib/*" -o $WORKSPACE/cxxtest/test/coverage.xml
+
+# Generate C++ code coverage
 cd "$WORKSPACE"/cxxtest
 "$WORKSPACE"/vpython/bin/gcovr -v -d -r "$WORKSPACE"/cxxtest \
     -x -o "$WORKSPACE"/cxxtest/test/coverage.xml \
