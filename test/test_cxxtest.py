@@ -253,6 +253,7 @@ class BaseTestCase(object):
             file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
             if self.cxxtest_import:
+                os.chdir(currdir)
                 cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file]+re.split('[ ]+',args), True)
             else:
                 cmd = join_commands("cd %s" % currdir,
@@ -288,6 +289,7 @@ class BaseTestCase(object):
         #
         if self.cxxtest_import:
             try:
+                os.chdir(currdir)
                 status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args), True)
             except:
                 status = 1
@@ -754,7 +756,7 @@ class TestGppFOG(TestGpp):
             return TestGpp.run(self, *args, **kwds)
 
 
-class TestGppFOGPy(TestGpp):
+class TestGppFOGPy(TestGppFOG):
 
     def run(self, *args, **kwds):
         if cxxtest_available:
