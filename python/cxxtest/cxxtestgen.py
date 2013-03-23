@@ -45,7 +45,7 @@ wroteWorld = 0
 lastIncluded = ''
 
 
-def main(args=sys.argv):
+def main(args=sys.argv, catch=False):
     '''The main program'''
     #
     # Reset global state
@@ -69,7 +69,8 @@ def main(args=sys.argv):
             [options,suites] = cxxtest_parser.scanInputFiles( files, options )
         writeOutput()
     except SystemExit:
-        pass
+        if not catch:
+            raise
 
 def create_parser(asciidoc=False):
     parser = OptionParser("cxxtestgen [options] [<filename> ...]")
