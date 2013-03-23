@@ -16,9 +16,6 @@
 
 import sys
 import re
-#from os.path import abspath, dirname
-#sys.path.insert(0, dirname(dirname(abspath(__file__))))
-#sys.path.insert(0, dirname(dirname(abspath(__file__)))+"/cxx_parse")
 from .cxxtest_misc import abort
 from . import cxx_parser
 import re

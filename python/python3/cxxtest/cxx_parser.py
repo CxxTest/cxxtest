@@ -58,12 +58,14 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
+# global data
 lexer = None
 scope_lineno = 0
 identifier_lineno = {}
 _parse_info=None
 _parsedata=None
 noExceptionLogic = True
+
 
 def ply_init(data):
     global _parsedata
@@ -2100,6 +2102,22 @@ def p_error(p):
 # The function that performs the parsing
 #
 def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func_filter=None):
+    #
+    # Reset global data
+    #
+    global lexer
+    lexer = None
+    global scope_lineno
+    scope_lineno = 0
+    global indentifier_lineno
+    identifier_lineno = {}
+    global _parse_info
+    _parse_info=None
+    global _parsedata
+    _parsedata=None
+    global noExceptionLogic
+    noExceptionLogic = True
+    #
     if debug > 0:
         print("Debugging parse_cpp!")
         #

@@ -37,9 +37,9 @@ try:
 except ImportError:
     from .cxxtest_misc import relpath
 
+# Global data is initialized by main()
 options = []
 suites = []
-
 wrotePreamble = 0
 wroteWorld = 0
 lastIncluded = ''
@@ -56,15 +56,20 @@ def main(args=sys.argv):
     wroteWorld=0
     global lastIncluded
     lastIncluded = ''
-
     global suites
+    suites = []
     global options
-    files = parseCommandline(args)
-    if imported_fog and options.fog:
-        [options,suites] = cxxtest_fog.scanInputFiles( files, options )
-    else:
-        [options,suites] = cxxtest_parser.scanInputFiles( files, options )
-    writeOutput()
+    options = []
+    #
+    try:
+        files = parseCommandline(args)
+        if imported_fog and options.fog:
+            [options,suites] = cxxtest_fog.scanInputFiles( files, options )
+        else:
+            [options,suites] = cxxtest_parser.scanInputFiles( files, options )
+        writeOutput()
+    except SystemExit:
+        pass
 
 def create_parser(asciidoc=False):
     parser = OptionParser("cxxtestgen [options] [<filename> ...]")

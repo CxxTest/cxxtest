@@ -24,6 +24,12 @@ try:
     ply_available=True
 except:
     ply_available=False
+try:
+    import cxxtest
+    cxxtest_available=True
+    import cxxtest.cxxtestgen
+except:
+    cxxtest_available=False
 
 currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
 sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
@@ -211,7 +217,6 @@ class BaseTestCase(object):
         log=currdir+'check'+'_build.log'
         cmd = join_commands("cd %s" % currdir,
                             "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, target, self.include_option, self.include_option, currdir, filename, log))
-        ##print cmd
         status = subprocess.call(cmd, shell=True)
         os.remove(log)
         if status != 0 or not os.path.exists(target):
@@ -231,26 +236,30 @@ class BaseTestCase(object):
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
-        cmd = join_commands("cd %s" % currdir,
+        if cxxtest_available:
+            os.chdir(currdir)
+            cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args))
+        else:
+            cmd = join_commands("cd %s" % currdir,
                             "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
-        #print self.fog, "CMD", cmd
-        status = subprocess.call(cmd, shell=True)
-        self.assertEqual(status, 0, 'Error executing cxxtestgen')
+            status = subprocess.call(cmd, shell=True)
+            self.assertEqual(status, 0, 'Error executing cxxtestgen')
         #
         files = [self.py_cpp]
         for i in [1,2]:
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
-            cmd = join_commands("cd %s" % currdir,
+            if cxxtest_available:
+                cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file]+re.split('[ ]+',args))
+            else:
+                cmd = join_commands("cd %s" % currdir,
                                 "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
-            ##print cmd
-            status = subprocess.call(cmd, shell=True)
-            self.assertEqual(status, 0, 'Error executing cxxtestgen')
+                status = subprocess.call(cmd, shell=True)
+                self.assertEqual(status, 0, 'Error executing cxxtestgen')
         #
         cmd = join_commands("cd %s" % currdir,
                             "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log))
-        ##print cmd
         status = subprocess.call(cmd, shell=True)
         for file in files:
             if os.path.exists(file):
@@ -275,17 +284,23 @@ class BaseTestCase(object):
         """Run cxxtestgen and compile the code that is generated"""
         self.init(prefix)
         #
-        cmd = join_commands("cd %s" % currdir,
+        if cxxtest_available:
+            try:
+                status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args))
+            except:
+                status = 1
+        else:
+            cmd = join_commands("cd %s" % currdir,
                             "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
-        #print ("HERE "+cmd)
-        status = subprocess.call(cmd, shell=True)
+            status = subprocess.call(cmd, shell=True)
         if failGen:
             if status == 0:
                 self.fail('Expected cxxtestgen to fail.')
             else:
                 self.passed=True
                 return
-        self.assertEqual(status, 0, 'Error executing command: '+cmd)
+        if not cxxtest_available:
+            self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
         if not main is None:
             # Compile with main
@@ -295,7 +310,6 @@ class BaseTestCase(object):
             # Compile without main
             cmd = join_commands("cd %s" % currdir,
                                 "%s %s %s %s. %s%s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log))
-        #print("HERE "+cmd)
         status = subprocess.call(cmd, shell=True)
         if failBuild:
             if status == 0:
@@ -313,7 +327,6 @@ class BaseTestCase(object):
             else:
                 cmd = run % (self.valgrind, self.build_target, self.px_pre)
             status = subprocess.call(cmd, shell=True)
-            #print "HERE-status",status
             OUTPUT = open(self.px_pre,'a')
             OUTPUT.write('Error level = '+str(status)+'\n')
             OUTPUT.close()

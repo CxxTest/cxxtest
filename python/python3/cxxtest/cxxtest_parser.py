@@ -11,9 +11,6 @@
 
 import codecs
 import re
-#import sys
-#import getopt
-#import glob
 from cxxtest.cxxtest_misc import abort
 
 # Global variables
@@ -24,11 +21,20 @@ options=None
 
 def scanInputFiles(files, _options):
     '''Scan all input files for test suites'''
+    #
+    # Reset global data
+    #
     global options
     options=_options
+    global suites
+    suites = []
+    global suite
+    suite = None
+    global inBlock
+    inBlock = 0
+    #
     for file in files:
         scanInputFile(file)
-    global suites
     if len(suites) is 0 and not options.root:
         abort( 'No tests defined' )
     return [options,suites]
