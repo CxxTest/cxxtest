@@ -174,10 +174,12 @@ def file_diff(filename1, filename2, filtered_reader):
     diff = '\n'.join(diff)
     return diff
 
+
 class BaseTestCase(object):
 
     fog=''
     valgrind=''
+    cxxtest_import=False
 
     def setUp(self):
         self.passed=False
@@ -236,9 +238,9 @@ class BaseTestCase(object):
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
-        if cxxtest_available:
+        if self.cxxtest_import:
             os.chdir(currdir)
-            cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args))
+            cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args), True)
         else:
             cmd = join_commands("cd %s" % currdir,
                             "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
@@ -250,8 +252,8 @@ class BaseTestCase(object):
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
-            if cxxtest_available:
-                cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file]+re.split('[ ]+',args))
+            if self.cxxtest_import:
+                cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file]+re.split('[ ]+',args), True)
             else:
                 cmd = join_commands("cd %s" % currdir,
                                 "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
@@ -284,9 +286,9 @@ class BaseTestCase(object):
         """Run cxxtestgen and compile the code that is generated"""
         self.init(prefix)
         #
-        if cxxtest_available:
+        if self.cxxtest_import:
             try:
-                status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args))
+                status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args), True)
             except:
                 status = 1
         else:
@@ -299,7 +301,7 @@ class BaseTestCase(object):
             else:
                 self.passed=True
                 return
-        if not cxxtest_available:
+        if not self.cxxtest_import:
             self.assertEqual(status, 0, 'Error executing command: '+cmd)
         #
         if not main is None:
@@ -733,6 +735,16 @@ class TestGpp(BaseTestCase, unittest.TestCase):
         BaseTestCase.tearDown(self)
 
 
+class TestGppPy(TestGpp):
+
+    def run(self, *args, **kwds):
+        if cxxtest_available:
+            self.cxxtest_import = True
+            status = TestGpp.run(self, *args, **kwds)
+            self.cxxtest_import = False
+            return status
+
+
 class TestGppFOG(TestGpp):
 
     fog='-f'
@@ -740,6 +752,16 @@ class TestGppFOG(TestGpp):
     def run(self, *args, **kwds):
         if ply_available:
             return TestGpp.run(self, *args, **kwds)
+
+
+class TestGppFOGPy(TestGpp):
+
+    def run(self, *args, **kwds):
+        if cxxtest_available:
+            self.cxxtest_import = True
+            status = TestGppFOG.run(self, *args, **kwds)
+            self.cxxtest_import = False
+            return status
 
 
 class TestGppValgrind(TestGpp):
