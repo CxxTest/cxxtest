@@ -57,7 +57,7 @@ cd "$WORKSPACE"
 # Run tests
 export CXXTEST_GCOV_FLAGS='-fprofile-arcs -ftest-coverage'
 vpython/bin/nosetests -v -v -w "$WORKSPACE"/cxxtest \
-    --coverage --with-xunit --xunit-file="$WORKSPACE"/TEST-cxxtest.xml \
+    --with-coverage --with-xunit --xunit-file="$WORKSPACE"/TEST-cxxtest.xml \
     || echo "(INFO) nosetests returned non-zero return code"
 
 # Generate Python code coverage
