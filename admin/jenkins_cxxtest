@@ -66,7 +66,7 @@ vpython/bin/coverage xml --omit="$WORKSPACE/vpython/lib/*" -o $WORKSPACE/cxxtest
 # Generate C++ code coverage
 cd "$WORKSPACE"/cxxtest
 "$WORKSPACE"/vpython/bin/gcovr -v -d -r "$WORKSPACE"/cxxtest \
-    -x -o "$WORKSPACE"/cxxtest/test/coverage.xml \
+    -x -o "$WORKSPACE"/cxxtest/coverage.xml \
     --gcov-filter '.*#test#(\.\.|\^)#cxxtest#.*gcov'
 
 echo "DONE"
