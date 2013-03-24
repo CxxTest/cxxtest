@@ -45,7 +45,7 @@ vpython/bin/easy_install gcovr
 vpython/bin/easy_install coverage
 vpython/bin/easy_install pyutilib.th
 cd "$WORKSPACE"/cxxtest/python
-"$WORKSPACE"/vpython/bin/python setup.py install
+"$WORKSPACE"/vpython/bin/python setup.py develop
 
 # Cleanup test directories
 cd "$WORKSPACE"/cxxtest/test
@@ -61,7 +61,7 @@ vpython/bin/nosetests -v -v -w "$WORKSPACE"/cxxtest \
     || echo "(INFO) nosetests returned non-zero return code"
 
 # Generate Python code coverage
-vpython/bin/coverage xml --omit="$WORKSPACE/vpython/lib/*" -o $WORKSPACE/cxxtest/test/coverage.xml
+vpython/bin/coverage xml --omit="$WORKSPACE/vpython/lib/*,$WORKSPACE/cxxtest/test/*,$WORKSPACE/cxxtest/doc/examples/*" -o $WORKSPACE/cxxtest/test/coverage.xml
 
 # Generate C++ code coverage
 cd "$WORKSPACE"/cxxtest
