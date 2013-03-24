@@ -17,7 +17,7 @@ def abort( problem ):
     sys.stderr.write( '\n\n' )
     sys.exit(2)
 
-if sys.version_info < (2,6):
+if sys.version_info < (2,6):    #pragma: no cover
     def resolve_symlinks(orig_path):
         drive,tmp = os.path.splitdrive(os.path.normpath(orig_path))
         if not drive:
