@@ -2138,12 +2138,10 @@ def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func
     #
     # Build lexer
     #
-    global lexer
     lexer = lex.lex()
     #
     # Initialize parse object
     #
-    global _parse_info
     _parse_info = CppInfo(filter=func_filter)
     _parse_info.verbose=verbose
     #
@@ -2154,7 +2152,6 @@ def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func
     #
     # Parse the file
     #
-    global _parsedata
     if not data is None:
         _parsedata=data
         ply_init(_parsedata)
@@ -2184,7 +2181,7 @@ def parse_cpp(data=None, filename=None, debug=0, optimize=0, verbose=False, func
 
 import sys
 
-if __name__ == '__main__':
+if __name__ == '__main__':  #pragma: no cover
     #
     # This MAIN routine parses a sequence of files provided at the command
     # line.  If '-v' is included, then a verbose parsing output is 
