@@ -23,6 +23,7 @@ public:
         printf("Number of suites: %u\n", wd.numSuites());
         printf("Number of tests: %u\n", wd.numTotalTests());
         printf("Number of failed tests: %u\n", TestTracker::tracker().failedTests());
+        printf("Number of skipped tests: %u\n", TestTracker::tracker().skippedTests());
     }
 };
 

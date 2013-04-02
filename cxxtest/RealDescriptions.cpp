@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------
  CxxTest: A lightweight C++ unit testing library.
  Copyright (c) 2008 Sandia Corporation.
- This software is distributed under the LGPL License v2.1
+ This software is distributed under the LGPL License v3
  For more information, see the COPYING file in the top CxxTest directory.
  Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
  the U.S. Government retains certain rights in this software.
@@ -58,10 +58,11 @@ bool RealTestDescription::setUp() {
 
     _TS_TRY {
         bool ok = false;
-        _TSM_ASSERT_THROWS_NOTHING(file(), line(), "Exception thrown from setUp()", suite()->setUp(); ok = true);
+        _TSM_ASSERT_THROWS_NOTHING(file(), line(), "Exception thrown from setUp()", suite()->setUp(); ok=true);
         if (ok == false) { return ok; }
     }
-    _TS_CATCH_ABORT( { return false; });
+    _TS_CATCH_ABORT( { return false; })
+    _TS_CATCH_SKIPPED( { return false; });
 
     return true;
 }
@@ -74,7 +75,8 @@ bool RealTestDescription::tearDown() {
     _TS_TRY {
         _TSM_ASSERT_THROWS_NOTHING(file(), line(), "Exception thrown from tearDown()", suite()->tearDown());
     }
-    _TS_CATCH_ABORT( { return false; });
+    _TS_CATCH_ABORT( { return false; })
+    _TS_CATCH_SKIPPED( { return false; });
 
     for (GlobalFixture *gf = GlobalFixture::lastGlobalFixture(); gf != 0; gf = gf->prevGlobalFixture()) {
         bool ok;
@@ -103,6 +105,7 @@ TestSuite *RealTestDescription::suite() const { return _suite->suite(); }
 void RealTestDescription::run() {
     _TS_TRY { runTest(); }
     _TS_CATCH_ABORT( {})
+    _TS_CATCH_SKIPPED( {})
     ___TSM_CATCH(file(), line(), "Exception thrown from test");
 }
 

@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------
  CxxTest: A lightweight C++ unit testing library.
  Copyright (c) 2008 Sandia Corporation.
- This software is distributed under the LGPL License v2.1
+ This software is distributed under the LGPL License v3
  For more information, see the COPYING file in the top CxxTest directory.
  Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
  the U.S. Government retains certain rights in this software.
@@ -36,6 +36,8 @@ TestTracker & TestTracker::tracker() {
 
 void TestTracker::initialize() {
     _warnings = 0;
+    _skippedTests = 0;
+    _testSkipped = false;
     _failedTests = 0;
     _testFailedAsserts = 0;
     _suiteFailedTests = 0;
@@ -75,19 +77,22 @@ void TestTracker::setListener(TestListener *l) {
 
 void TestTracker::enterWorld(const WorldDescription &wd) {
     setWorld(&wd);
-    _warnings = _failedTests = _testFailedAsserts = _suiteFailedTests = _failedSuites = 0;
+    _warnings = _skippedTests = _failedTests = _testFailedAsserts = _suiteFailedTests = _failedSuites = 0;
+    _testSkipped = false;
     _l->enterWorld(wd);
 }
 
 void TestTracker::enterSuite(const SuiteDescription &sd) {
     setSuite(&sd);
     _testFailedAsserts = _suiteFailedTests = 0;
+    _testSkipped = false;
     _l->enterSuite(sd);
 }
 
 void TestTracker::enterTest(const TestDescription &td) {
     setTest(&td);
     _testFailedAsserts = false;
+    _testSkipped = false;
     _l->enterTest(td);
 }
 
@@ -113,6 +118,12 @@ void TestTracker::trace(const char *file, int line, const char *expression) {
 void TestTracker::warning(const char *file, int line, const char *expression) {
     countWarning();
     _l->warning(file, line, expression);
+}
+
+void TestTracker::skippedTest(const char *file, int line, const char *expression) {
+    countSkipped();
+    _testSkipped = true;
+    _l->skippedTest(file, line, expression);
 }
 
 void TestTracker::failedTest(const char *file, int line, const char *expression) {
@@ -214,6 +225,10 @@ void TestTracker::setTest(const TestDescription *t) {
 
 void TestTracker::countWarning() {
     ++ _warnings;
+}
+
+void TestTracker::countSkipped() {
+    ++ _skippedTests;
 }
 
 void TestTracker::countFailure() {

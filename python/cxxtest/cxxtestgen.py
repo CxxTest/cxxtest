@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------
 # CxxTest: A lightweight C++ unit testing library.
 # Copyright (c) 2008 Sandia Corporation.
-# This software is distributed under the LGPL License v2.1
+# This software is distributed under the LGPL License v3
 # For more information, see the COPYING file in the top CxxTest directory.
 # Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
 # the U.S. Government retains certain rights in this software.
@@ -331,10 +331,10 @@ def writeMain( output ):
     if options.xunit_printer:
        output.write( '    std::ofstream ofstr("%s");\n' % options.xunit_file )
        output.write( '    %s tmp(ofstr);\n' % tester_t )
-       output.write( '    CxxTest::RealWorldDescription::_worldName = "%s";\n' % options.world )
     else:
        output.write( '    %s tmp;\n' % tester_t )
-    output.write( '    status = CxxTest::Main<%s>( tmp, argc, argv );\n' % tester_t )
+    output.write( '    CxxTest::RealWorldDescription::_worldName = "%s";\n' % options.world )
+    output.write( '    status = CxxTest::Main< %s >( tmp, argc, argv );\n' % tester_t )
     output.write( '    return status;\n')
     output.write( '}\n' )
 
@@ -385,7 +385,7 @@ def writeInclude(output, file):
 
 def generateSuite( output, suite ):
     '''Write a suite declared with CXXTEST_SUITE()'''
-    output.write( 'class %s : public CxxTest::TestSuite {\n' % suite['name'] )
+    output.write( 'class %s : public CxxTest::TestSuite {\n' % suite['fullname'] )
     output.write( 'public:\n' )
     for line in suite['lines']:
         output.write(line)
@@ -394,13 +394,13 @@ def generateSuite( output, suite ):
 def writeSuitePointer( output, suite ):
     '''Create static suite pointer object for dynamic suites'''
     if options.noStaticInit:
-        output.write( 'static %s *%s;\n\n' % (suite['name'], suite['object']) )
+        output.write( 'static %s* %s;\n\n' % (suite['fullname'], suite['object']) )
     else:
-        output.write( 'static %s *%s = 0;\n\n' % (suite['name'], suite['object']) )
+        output.write( 'static %s* %s = 0;\n\n' % (suite['fullname'], suite['object']) )
 
 def writeSuiteObject( output, suite ):
     '''Create static suite object for non-dynamic suites'''
-    output.writelines( [ "static ", suite['name'], " ", suite['object'], ";\n\n" ] )
+    output.writelines( [ "static ", suite['fullname'], " ", suite['object'], ";\n\n" ] )
 
 def writeTestList( output, suite ):
     '''Write the head of the test linked list for a suite'''
@@ -435,12 +435,12 @@ def writeTestDescription( output, suite, test ):
     else:
         if isDynamic(suite):
             output.write( ' %s(%s* _%s) : %s(_%s) { }\n' %
-                      (test['class'], suite['name'], suite['object'], suite['object'], suite['object']) )
-            output.write( ' %s* %s;\n' % (suite['name'], suite['object']) )
+                      (test['class'], suite['fullname'], suite['object'], suite['object'], suite['object']) )
+            output.write( ' %s* %s;\n' % (suite['fullname'], suite['object']) )
         else:
-            output.write( ' %s(%s &_%s) : %s(_%s) { }\n' %
-                      (test['class'], suite['name'], suite['object'], suite['object'], suite['object']) )
-            output.write( ' %s& %s;\n' % (suite['name'], suite['object']) )
+            output.write( ' %s(%s& _%s) : %s(_%s) { }\n' %
+                      (test['class'], suite['fullname'], suite['object'], suite['object'], suite['object']) )
+            output.write( ' %s& %s;\n' % (suite['fullname'], suite['object']) )
     output.write( ' void runTest() { %s }\n' % runBody( suite, test ) )
     #   
     if not options.noStaticInit:
@@ -470,10 +470,10 @@ def writeSuiteDescription( output, suite ):
 
 def writeDynamicDescription( output, suite ):
     '''Write SuiteDescription for a dynamic suite'''
-    output.write( 'CxxTest::DynamicSuiteDescription<%s> %s' % (suite['name'], suite['dobject']) )
+    output.write( 'CxxTest::DynamicSuiteDescription< %s > %s' % (suite['fullname'], suite['dobject']) )
     if not options.noStaticInit:
         output.write( '( %s, %s, "%s", %s, %s, %s, %s )' %
-                      (suite['cfile'], suite['line'], suite['name'], suite['tlist'],
+                      (suite['cfile'], suite['line'], suite['fullname'], suite['tlist'],
                        suite['object'], suite['create'], suite['destroy']) )
     output.write( ';\n\n' )
 
@@ -482,7 +482,7 @@ def writeStaticDescription( output, suite ):
     output.write( 'CxxTest::StaticSuiteDescription %s' % suite['dobject'] )
     if not options.noStaticInit:
         output.write( '( %s, %s, "%s", %s, %s )' %
-                      (suite['cfile'], suite['line'], suite['name'], suite['object'], suite['tlist']) )
+                      (suite['cfile'], suite['line'], suite['fullname'], suite['object'], suite['tlist']) )
     output.write( ';\n\n' )
 
 def writeRoot(output):
@@ -495,7 +495,7 @@ def writeInitialize(output):
     output.write( ' void initialize()\n' )
     output.write( ' {\n' )
     for suite in suites:
-        print "HERE", suite
+        #print "HERE", suite
         writeTestList( output, suite )
         output.write( '  %s.initialize();\n' % suite['tlist'] )
         #writeSuiteObject( output, suite )
@@ -509,12 +509,12 @@ def writeInitialize(output):
         if isDynamic(suite):
             #output.write( '  %s = %s.suite();\n' % (suite['object'],suite['dobject']) )
             output.write( '  %s.initialize( %s, %s, "%s", %s, %s, %s, %s );\n' %
-                          (suite['dobject'], suite['cfile'], suite['line'], suite['name'],
+                          (suite['dobject'], suite['cfile'], suite['line'], suite['fullname'],
                            suite['tlist'], suite['object'], suite['create'], suite['destroy']) )
             output.write( '  %s.setUp();\n' % suite['dobject'])
         else:
             output.write( '  %s.initialize( %s, %s, "%s", %s, %s );\n' %
-                          (suite['dobject'], suite['cfile'], suite['line'], suite['name'],
+                          (suite['dobject'], suite['cfile'], suite['line'], suite['fullname'],
                            suite['object'], suite['tlist']) )
 
         for test in suite['tests']:
@@ -583,7 +583,7 @@ CxxTest User Guide: <http://cxxtest.com/cxxtest/doc/guide.html>
 COPYING
 -------
 Copyright (c) 2008 Sandia Corporation.  This software is distributed
-under the Lesser GNU General Public License (LGPL) v2.1
+under the Lesser GNU General Public License (LGPL) v3
 """)
 
 def create_manpage():

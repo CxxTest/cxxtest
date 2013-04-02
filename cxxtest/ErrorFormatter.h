@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------
  CxxTest: A lightweight C++ unit testing library.
  Copyright (c) 2008 Sandia Corporation.
- This software is distributed under the LGPL License v2.1
+ This software is distributed under the LGPL License v3
  For more information, see the COPYING file in the top CxxTest directory.
  Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
  the U.S. Government retains certain rights in this software.
@@ -59,8 +59,8 @@ public:
         return tracker().failedTests();
     }
 
-    void enterWorld(const WorldDescription & /*desc*/) {
-        (*_o) << "Running " << totalTests;
+    void enterWorld(const WorldDescription& desc) {
+        (*_o) << "Running " << desc.worldName() << " tests (" << totalTests << ")";
         _o->flush();
         _dotting = true;
         _reported = false;
@@ -81,7 +81,12 @@ public:
     }
 
     void leaveTest(const TestDescription &) {
-        if (!tracker().testFailed()) {
+        if (tracker().testSkipped()) {
+            (*_o) << "s";
+            _o->flush();
+            fflush(stdout);
+            _dotting = true;
+        } else if (!tracker().testFailed()) {
             (*_o) << ".";
             _o->flush();
             _dotting = true;
@@ -94,9 +99,13 @@ public:
             return;
         }
         newLine();
-        (*_o) << "Failed " << tracker().failedTests() << " of " << totalTests << endl;
-        unsigned numPassed = desc.numTotalTests() - tracker().failedTests();
-        (*_o) << "Success rate: " << (numPassed * 100 / desc.numTotalTests()) << "%" << endl;
+        (*_o) << "Failed " << tracker().failedTests() << " and Skipped " << tracker().skippedTests() << " of " << totalTests << endl;
+        unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracker().skippedTests();
+        unsigned numTotal = desc.numTotalTests() - tracker().skippedTests();
+        if (numTotal == 0)
+            (*_o) << "Success rate: 100%" << endl;
+        else
+            (*_o) << "Success rate: " << (unsigned) (numPassed * 100.0 / numTotal) << "%" << endl;
     }
 
     void trace(const char *file, int line, const char *expression) {
@@ -106,6 +115,11 @@ public:
 
     void warning(const char *file, int line, const char *expression) {
         stop(file, line) << _warningString << ": " <<
+                         expression << endl;
+    }
+
+    void skippedTest(const char *file, int line, const char *expression) {
+        stop(file, line) << _warningString << ": Test skipped: " <<
                          expression << endl;
     }
 

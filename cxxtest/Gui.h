@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------
  CxxTest: A lightweight C++ unit testing library.
  Copyright (c) 2008 Sandia Corporation.
- This software is distributed under the LGPL License v2.1
+ This software is distributed under the LGPL License v3
  For more information, see the COPYING file in the top CxxTest directory.
  Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
  the U.S. Government retains certain rights in this software.
@@ -54,6 +54,10 @@ public:
     void leaveWorld(const WorldDescription &) {}
 
     void warning(const char * /*file*/, int /*line*/, const char * /*expression*/) {
+        yellowBarSafe();
+    }
+
+    void skippedTest(const char * /*file*/, int /*line*/, const char * /*expression*/) {
         yellowBarSafe();
     }
 

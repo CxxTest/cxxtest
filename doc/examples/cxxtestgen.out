@@ -43,4 +43,4 @@ Options:
   --root                Write the main() function and global data for a test
                         runner.
   --part                Write the tester classes for a test runner.
-  -f, --fog-parser      Use new FOG C++ parser
+  -f, --fog-parser      Use new FOG C++ parser (disabled)

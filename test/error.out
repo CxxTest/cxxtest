@@ -1,7 +1,7 @@
-Running 14 tests
+Running cxxtest tests (16 tests)
 In CreatedTest::test_nothing:
 CreatedTest.h:24: Error: Test failed: Nothing to test
-.
+..
 In EnumTraits::test_Enum_traits:
 EnumTraits.h:30: Error: Test failed: Yes
 EnumTraits.h:31: Error: Test failed: No
@@ -14,7 +14,8 @@ ExceptionTest.h:18: Error: Expected (throwThis(5)) to throw (const char *) but i
 ExceptionTest.h:20: Error: Expected (goodFunction(1)) to throw (...) but it didn't throw
 ExceptionTest.h:22: Error: Test failed: Unhandled exception
 ExceptionTest.h:24: Error: Expected (throwThis(-1)) not to throw, but it did
-ExceptionTest.h:29: Error: Test failed: throwThis(3) failed
+ExceptionTest.h:26: Error: Expected (throwThis(3)) to throw (std::exception&) but it threw something else
+ExceptionTest.h:31: Error: Test failed: throwThis(3) failed
 In FixtureTest::test_strcpy:
 FixtureTest.h:28: Error: Expected (_buffer[1] == 'E'), found ('e' != 'E')
 In MessageTest::testValues:
@@ -38,14 +39,17 @@ SimpleTest.h:36: Error: Expected (true == false), found (true != false)
 In SimpleTest::test_Failure:
 SimpleTest.h:40: Error: Test failed: Not implemented
 SimpleTest.h:41: Error: Test failed: 1569779912
+In SimpleTest::test_TS_SKIP_macro:
+SimpleTest.h:45: Warning: Test skipped: Simply skip this test
+s
 In SimpleTest::test_TS_WARN_macro:
-SimpleTest.h:45: Warning: Just a friendly warning
-SimpleTest.h:46: Warning: Warnings don't abort the test
+SimpleTest.h:50: Warning: Just a friendly warning
+SimpleTest.h:51: Warning: Warnings don't abort the test
 .
 In TestFunky::testPets:
 TraitsTest.h:53: Error: Expected (pet1 == pet2), found (Pet("dog") != Pet("cat"))
 TraitsTest.h:55: Error: Expected (cat != gato), found (Pet("cat"))
 TraitsTest.h:58: Error: Expected (String("Hello") == String("World!")), found ("Hello" != "World!")
-Failed 12 of 14 tests
-Success rate: 14%
+Failed 12 and Skipped 1 of 16 tests
+Success rate: 20%
 Error level = 12

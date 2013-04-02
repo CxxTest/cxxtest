@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------
 # CxxTest: A lightweight C++ unit testing library.
 # Copyright (c) 2008 Sandia Corporation.
-# This software is distributed under the LGPL License v2.1
+# This software is distributed under the LGPL License v3
 # For more information, see the COPYING file in the top CxxTest directory.
 # Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
 # the U.S. Government retains certain rights in this software.
@@ -47,7 +47,11 @@ def scanInputFile(fileName):
     lineNo = 0
     contNo = 0
     while 1:
-        line = file.readline()
+        try:
+            line = file.readline()
+        except UnicodeDecodeError:
+            sys.stderr.write("Could not decode unicode character at %s:%s\n" % (fileName, lineNo + 1));
+            raise
         if not line:
             break
         lineNo += 1
@@ -143,7 +147,8 @@ def startSuite( name, file, line, generated ):
     global suite
     closeSuite()
     object_name = name.replace(':',"_")
-    suite = { 'name'         : name,
+    suite = { 'fullname'     : name,
+              'name'         : name,
               'file'         : file,
               'cfile'        : cstr(file),
               'line'         : line,

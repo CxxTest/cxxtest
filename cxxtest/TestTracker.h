@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------
  CxxTest: A lightweight C++ unit testing library.
  Copyright (c) 2008 Sandia Corporation.
- This software is distributed under the LGPL License v2.1
+ This software is distributed under the LGPL License v3
  For more information, see the COPYING file in the top CxxTest directory.
  Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
  the U.S. Government retains certain rights in this software.
@@ -39,11 +39,13 @@ public:
     const SuiteDescription &suite() const { return *_suite; }
     const WorldDescription &world() const { return *_world; }
 
+    bool testSkipped() const { return _testSkipped; }
     bool testFailed() const { return (testFailedAsserts() > 0); }
     bool suiteFailed() const { return (suiteFailedTests() > 0); }
     bool worldFailed() const { return (failedSuites() > 0); }
 
     unsigned warnings() const { return _warnings; }
+    unsigned skippedTests() const { return _skippedTests; }
     unsigned failedTests() const { return _failedTests; }
     unsigned testFailedAsserts() const { return _testFailedAsserts; }
     unsigned suiteFailedTests() const { return _suiteFailedTests; }
@@ -57,6 +59,7 @@ public:
     void leaveWorld(const WorldDescription &wd);
     void trace(const char *file, int line, const char *expression);
     void warning(const char *file, int line, const char *expression);
+    void skippedTest(const char *file, int line, const char *expression);
     void failedTest(const char *file, int line, const char *expression);
     void failedAssert(const char *file, int line, const char *expression);
     void failedAssertEquals(const char *file, int line,
@@ -98,7 +101,8 @@ private:
     static bool _created;
     TestListener _dummyListener;
     DummyWorldDescription _dummyWorld;
-    unsigned _warnings, _failedTests, _testFailedAsserts, _suiteFailedTests, _failedSuites;
+    bool _testSkipped;
+    unsigned _warnings, _skippedTests, _failedTests, _testFailedAsserts, _suiteFailedTests, _failedSuites;
     TestListener *_l;
     const WorldDescription *_world;
     const SuiteDescription *_suite;
@@ -113,6 +117,7 @@ private:
     void setTest(const TestDescription *t);
     void countWarning();
     void countFailure();
+    void countSkipped();
 
     friend class TestRunner;
 

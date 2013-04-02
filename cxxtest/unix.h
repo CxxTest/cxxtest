@@ -1,3 +1,14 @@
+/*
+-------------------------------------------------------------------------
+ CxxTest: A lightweight C++ unit testing library.
+ Copyright (c) 2008 Sandia Corporation.
+ This software is distributed under the LGPL License v3
+ For more information, see the COPYING file in the top CxxTest directory.
+ Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
+ the U.S. Government retains certain rights in this software.
+-------------------------------------------------------------------------
+*/
+
 #ifndef UNIX_ERROR_PRINTER_H_N4C6JUX4
 #define UNIX_ERROR_PRINTER_H_N4C6JUX4
 
@@ -48,8 +59,12 @@ namespace CxxTest
         {
             if ( tracker().failedTests() ) {
                 (*_o) << "Failed " << tracker().failedTests() << " of " << totalTests << endl;
-                unsigned numPassed = desc.numTotalTests() - tracker().failedTests();
-                (*_o) << "Success rate: " << (numPassed * 100 / desc.numTotalTests()) << "%" << endl;
+                unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracer().skippedTests();
+                unsigned numTotal = desc.numTotalTests() - tracker().skippedTests();
+                if (numTotal == 0)
+                    (*_o) << "Success rate: 100%" << endl;
+                else
+                    (*_o) << "Success rate: " << (unsigned)(numPassed * 100.0 / numTotal) << "%" << endl;
             }
         }
 
@@ -62,6 +77,12 @@ namespace CxxTest
         void warning( const char *file, int line, const char *expression )
         {
             stop( file, line ) << "Warning: " <<
+                expression << endl;
+        }
+
+        void skippedTest( const char *file, int line, const char *expression )
+        {
+            stop( file, line ) << "Warning: Test skipped: " <<
                 expression << endl;
         }
 

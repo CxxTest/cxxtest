@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------
  CxxTest: A lightweight C++ unit testing library.
  Copyright (c) 2008 Sandia Corporation.
- This software is distributed under the LGPL License v2.1
+ This software is distributed under the LGPL License v3
  For more information, see the COPYING file in the top CxxTest directory.
  Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
  the U.S. Government retains certain rights in this software.
@@ -37,6 +37,7 @@ public:
 };
 
 class AbortTest {};
+class SkipTest {};
 void doAbortTest();
 #   define TS_ABORT() CxxTest::doAbortTest()
 
@@ -48,6 +49,7 @@ void setMaxDumpSize(unsigned value = CXXTEST_MAX_DUMP_SIZE);
 
 void doTrace(const char *file, int line, const char *message);
 void doWarn(const char *file, int line, const char *message);
+void doSkipTest(const char *file, int line, const char *message);
 void doFailTest(const char *file, int line, const char *message);
 void doFailAssert(const char *file, int line, const char *expression, const char *message);
 
@@ -186,7 +188,7 @@ bool delta_le_helper(X x, Y y) {
 template<class X, class Y, class D>
 struct delta {
     static bool test(X x, Y y, D d) {
-        return delta_le_helper(x - d, y) && delta_le_helper(y, x + d);
+        return delta_le_helper(x, y + d) && delta_le_helper(y, x + d);
         //(y >= x - d) && (y <= x + d));
     }
 };
@@ -226,6 +228,7 @@ void doAssertSameFiles(const char* file, int line,
 #       define _TS_TRY try
 #       define _TS_CATCH_TYPE(t, b) catch t b
 #       define _TS_CATCH_ABORT(b) _TS_CATCH_TYPE( (const CxxTest::AbortTest &), b )
+#       define _TS_CATCH_SKIPPED(b) _TS_CATCH_TYPE( (const CxxTest::SkipTest &), b )
 #       define _TS_LAST_CATCH(b) _TS_CATCH_TYPE( (...), b )
 #       define _TSM_LAST_CATCH(f,l,m) _TS_LAST_CATCH( { (CxxTest::tracker()).failedTest(f,l,m); TS_ABORT(); } )
 #       ifdef _CXXTEST_HAVE_STD
@@ -251,6 +254,7 @@ void doAssertSameFiles(const char* file, int line,
 #       define _TS_LAST_CATCH(b)
 #       define _TS_CATCH_STD(e,b)
 #       define _TS_CATCH_ABORT(b)
+#       define _TS_CATCH_SKIPPED(b)
 #   endif // _CXXTEST_HAVE_EH
 
 // TS_TRACE
@@ -260,6 +264,10 @@ void doAssertSameFiles(const char* file, int line,
 // TS_WARN
 #   define _TS_WARN(f,l,e) CxxTest::doWarn( (f), (l), TS_AS_STRING(e) )
 #   define TS_WARN(e) _TS_WARN( __FILE__, __LINE__, e )
+
+// TS_SKIP
+#   define _TS_SKIP(f,l,e) CxxTest::doSkipTest( (f), (l), TS_AS_STRING(e) )
+#   define TS_SKIP(e) _TS_SKIP( __FILE__, __LINE__, e )
 
 // TS_FAIL
 #   define _TS_FAIL(f,l,e) CxxTest::doFailTest( (f), (l), TS_AS_STRING(e) )
@@ -444,8 +452,7 @@ void doAssertSameFiles(const char* file, int line,
 // TS_ASSERT_THROWS_ASSERT
 #   define ___TS_ASSERT_THROWS_ASSERT(f,l,e,t,a,m) { \
             bool _ts_threw_expected = false, _ts_threw_else = false; \
-            _TS_TRY { e; } \
-            _TS_CATCH_TYPE( (t), { a; _ts_threw_expected = true; } ) \
+            _TS_TRY { try{ e; } _TS_CATCH_TYPE( (t), { a; _ts_threw_expected = true; } ) } \
             _TS_CATCH_ABORT( { throw; } ) \
             _TS_CATCH_STD( ex, { _ts_threw_expected = true; CxxTest::doFailAssertThrows((f), (l), #e, #t, true, (m), ex.what() ); } ) \
             _TS_LAST_CATCH( { _ts_threw_else = true; } ) \

@@ -40,5 +40,5 @@ MyTestSuite.h:
 
   # g++ -o main tests.cpp
   # ./main
-  Running 1 test(s).OK!
+  Running cxxtest tests (1 test).OK!
 

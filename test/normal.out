@@ -1,4 +1,4 @@
-Running 35 tests
+Running cxxtest tests (35 tests)
 In LessThanEquals::testLessThanEquals:
 LessThanEquals.h:16: Error: Expected (1 <= 0), found (1 > 0)
 LessThanEquals.h:17: Error: Test failed: 1 <=? 0
@@ -199,6 +199,6 @@ SameZero.h:23: Error: Expected sizeof(data) (4) bytes to be equal at (0) and (da
 (null)
 differs from
 { 00 01 02 03 }
-Failed 28 of 35 tests
+Failed 28 and Skipped 0 of 35 tests
 Success rate: 20%
 Error level = 28

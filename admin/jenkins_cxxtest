@@ -33,7 +33,6 @@ done
 # Setup virtual Python environment
 \rm -Rf vpython
 python cxxtest/admin/virtualenv.py vpython
-#vpy/scripts/vpy_install
 vpython/bin/easy_install nose
 if test "$PYTHON_VER" -gt 2; then
     vpython/bin/easy_install unittest2py3k
@@ -47,14 +46,16 @@ vpython/bin/easy_install pyutilib.th
 cd "$WORKSPACE"/cxxtest/python
 "$WORKSPACE"/vpython/bin/python setup.py install
 
-# Cleanup test directory
+# Cleanup test directories
 cd "$WORKSPACE"/cxxtest/test
+make clean
+cd "$WORKSPACE"/cxxtest/doc
 make clean
 cd "$WORKSPACE"
 
 # Run tests
 export CXXTEST_GCOV_FLAGS='-fprofile-arcs -ftest-coverage'
-vpython/bin/nosetests -v -v -w "$WORKSPACE"/cxxtest/test \
+vpython/bin/nosetests -v -v -w "$WORKSPACE"/cxxtest \
     --with-xunit --xunit-file="$WORKSPACE"/TEST-cxxtest.xml \
     || echo "(INFO) nosetests returned non-zero return code"
 

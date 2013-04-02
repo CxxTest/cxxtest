@@ -16,8 +16,8 @@ http://xprogramming.com/software.html[xUnit].  CxxTest is easy to
 use because it does not require precompiling a CxxTest testing
 library, it employs no advanced features of C++ (e.g. RTTI) and it
 supports a very flexible form of test discovery.  This documentation
-describes CxxTest 4.1, which includes significant enhancements to
-the test discovery process, a modern test driver, and new documentation.
+describes CxxTest 4.2.1, which is an incremental release that includes
+better test discovery features and new test skipping features.
 
 :numbered:
 
@@ -58,7 +58,7 @@ http://cxxtest.com/guide.epub[EPUB] formats.  The
 http://cxxtest.com[CxxTest Home Page] also includes developer
 resources (e.g. https://software.sandia.gov/hudson/view/CxxTest/[automated
 test results]).  CxxTest is available under the
-http://www.gnu.org/copyleft/lesser.html[GNU Lesser General Public]
+http://www.gnu.org/licenses/lgpl.html[GNU Lesser General Public]
 license.
 
 The CxxTest User Guide provides the following documentation:
@@ -224,6 +224,7 @@ The following table summarizes the test assertions supported by CxxTest.
 | xref:ts_assert_throws_equals[+TS_ASSERT_THROWS_EQUALS(expr,arg,x,y)+] | Verify type and value of what +expr+ throws
 | <<ts_assert_throws_nothing,+TS_ASSERT_THROWS_NOTHING(expr)+>>       | Verify that +expr+ doesn't throw anything
 | <<ts_fail,+TS_FAIL(message)+>>                                   | Fail unconditionally
+| <<ts_skip,+TS_SKIP(message)+>>                                    | Skip this test
 | <<ts_trace,+TS_TRACE(message)+>>                                 | Print +message+ as an informational message
 | <<ts_warn,+TS_WARN(message)+>>                                    | Print +message+ as a warning
 |====================================================================================
@@ -323,7 +324,7 @@ include::examples/.buildRunner2_main.sh[]
 generates the following output:
 
 ----
-include::examples/exeRunner2.out[]
+include::examples/buildRunner2.log[]
 ----
 
 StdioPrinter
@@ -562,6 +563,29 @@ The +cxxtestgen+ discovery mechanisms do not perform a C preprocessing
 step, since that would generally require using externally defined
 preprocessing variable definitions.   Additionally, preprocessor macros that act like functions will
 cause the FOG parser to fail unless they are followed by a semicolon.
+
+
+Test Classes Nested in Namespaces
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In some contexts, it is appropriate to nest test classes in namespaces.
+This allows the same class name to be used without creating conflicts
+in the test runner.  The default test discovery mechanism can only do
+this by declaring the namespaces with the class name, and then declaring the
+class with the explicit namespace prefix.  For example:
+[source,{cpp}]
+-----
+include::examples/Namespace2.h[]
+----
+However, the default test discovery mechanism cannot recognize the more typical
+declaration of test classes within nested namespaces:
+[source,{cpp}]
+-----
+include::examples/Namespace1.h[]
+----
+The FOG parser can discover tests nested within arbitrary namespaces, and unique
+names are used within the test runner to distinguish the test classes in different namespaces.
+
 
 
 [[runner]]
@@ -1144,9 +1168,10 @@ easy_install ordereddict
 ----
 
 The +cxxtestgen+ script has been tested with many different versions
-of Python:  2.4 - 3.2.  Note that this script has only been tested
-with the CPython implementation.  CxxTest 4.1 has been tested on
-Linux and Mac platforms using the `g++` and `clang++` compilers.
+of Python:  2.4 - 3.3, though future releases will not support
+Python 2.4.  Note that this script has only been tested with the
+CPython implementation.  CxxTest 4.2.1 has been tested on Linux and
+Mac platforms using the `g++` and `clang++` compilers.
 
 
 ////
@@ -1169,7 +1194,7 @@ and focus of CxxTest.  The 4.0 release was the first release of
 CxxTest in over seven years, and virtually all of the initial
 developers have moved on to other projects.
 
-The CxxTest 4.1 release is an incremental release that was driven
+The CxxTest 4.2.1 release is an incremental release that was driven
 by a variety of bug fixes and minor enhancements.  CxxTest is heavily
 used at Sandia National Laboratories, and Sandia's ongoing use of
 CxxTest is a major driver for CxxTest development.
@@ -1238,7 +1263,7 @@ Acknowledgements
 ----------------
 
 CxxTest was originally developed by Erez Volk.  The following
-developers contributed to the CxxTest 4.0 and 4.1 releases:
+developers contributed to the CxxTest 4.x releases:
 
 * Gašper Ažman
 * Andrey Batyiev
@@ -1248,6 +1273,7 @@ developers contributed to the CxxTest 4.0 and 4.1 releases:
 * Allan Odgaard
 * Lionel Orry
 * John Siirola
+* Jon Schlueter
 
 The CxxTest documentation is generated using
 http://www.methods.co.nz/asciidoc/[AsciiDoc].
@@ -1391,6 +1417,13 @@ This function triggers a test failure with an associated message:
 [source,{cpp}]
 ----
 include::examples/.Assertions_fail.h[]
+----
+
+[[ts_skip]] TS_SKIP::
+This function causes the current test to be skipped with an associated warning message:
+[source,{cpp}]
+----
+include::examples/.Assertions_skip.h[]
 ----
 
 [[ts_trace]] TS_TRACE::

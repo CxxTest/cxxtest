@@ -41,6 +41,11 @@ public:
         TS_FAIL(1569779912);
     }
 
+    void test_TS_SKIP_macro() {
+        TS_SKIP("Simply skip this test");
+        TS_WARN("Skipping will abort the test");
+    }
+
     void test_TS_WARN_macro() {
         TS_WARN("Just a friendly warning");
         TS_WARN("Warnings don't abort the test");

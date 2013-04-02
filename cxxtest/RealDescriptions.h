@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------
  CxxTest: A lightweight C++ unit testing library.
  Copyright (c) 2008 Sandia Corporation.
- This software is distributed under the LGPL License v2.1
+ This software is distributed under the LGPL License v3
  For more information, see the COPYING file in the top CxxTest directory.
  Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
  the U.S. Government retains certain rights in this software.
@@ -179,7 +179,8 @@ bool DynamicSuiteDescription<S>::setUp() {
         _TSM_ASSERT_THROWS_NOTHING(file(), _createLine, "Exception thrown from createSuite()", createSuite());
         _TSM_ASSERT(file(), _createLine, "createSuite() failed", suite() != 0);
     }
-    _TS_CATCH_ABORT( { return false; });
+    _TS_CATCH_ABORT( { return false; })
+    _TS_CATCH_SKIPPED( { return false; });
 
     return (suite() != 0);
 }
@@ -193,7 +194,8 @@ bool DynamicSuiteDescription<S>::tearDown() {
     _TS_TRY {
         _TSM_ASSERT_THROWS_NOTHING(file(), _destroyLine, "destroySuite() failed", destroySuite());
     }
-    _TS_CATCH_ABORT( { return false; });
+    _TS_CATCH_ABORT( { return false; })
+    _TS_CATCH_SKIPPED( { return false; });
 
     return true;
 }

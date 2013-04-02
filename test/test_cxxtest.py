@@ -1,3 +1,12 @@
+#-------------------------------------------------------------------------
+# CxxTest: A lightweight C++ unit testing library.
+# Copyright (c) 2008 Sandia Corporation.
+# This software is distributed under the LGPL License v3
+# For more information, see the COPYING file in the top CxxTest directory.
+# Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
+# the U.S. Government retains certain rights in this software.
+#-------------------------------------------------------------------------
+
 import sys
 import os
 import os.path
@@ -56,16 +65,22 @@ def find(filename, executable=False, isfile=True,  validate=None):
 def join_commands(command_one, command_two):
     return command_separator.join([command_one, command_two])
 
+_available = {}
 def available(compiler, exe_option):
+    if (compiler,exe_option) in _available:
+        return _available[compiler,exe_option]
     cmd = join_commands("cd %s" % currdir,
                         "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log'))
-    ##print cmd
+    print("Testing for compiler "+compiler)
+    print("Command: "+cmd)
     status = subprocess.call(cmd, shell=True)
     executable = currdir+'anything'+target_suffix
     flag = status == 0 and os.path.exists(executable)
     os.remove(currdir+'anything.log')
     if os.path.exists(executable):
         os.remove(executable)
+    print("Status: "+str(flag))
+    _available[compiler,exe_option] = flag
     return flag
 
 def remove_absdir(filename):
@@ -132,7 +147,6 @@ def make_diff_readable(diff):
                         diff[i+1] = '+(...)' + l2
                     break
         i+=1
-
 
 def file_diff(filename1, filename2, filtered_reader):
     remove_absdir(filename1)
@@ -258,6 +272,7 @@ class BaseTestCase(object):
         self.passed=True
 
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False):
+        """Run cxxtestgen and compile the code that is generated"""
         self.init(prefix)
         #
         cmd = join_commands("cd %s" % currdir,
@@ -280,6 +295,7 @@ class BaseTestCase(object):
             # Compile without main
             cmd = join_commands("cd %s" % currdir,
                                 "%s %s %s %s. %s%s../ %s %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log))
+        #print("HERE "+cmd)
         status = subprocess.call(cmd, shell=True)
         if failBuild:
             if status == 0:
@@ -457,6 +473,10 @@ class BaseTestCase(object):
         self.check_if_supported('stpltpl.cpp', "The file stpltpl.cpp is not supported.")
         self.compile(prefix='stl_traits', args="--error-printer StlTraits.h", output="stl.out")
 
+    def test_normal_behavior_world(self):
+        """Normal Behavior with World"""
+        self.compile(prefix='normal_behavior_world', args="--error-printer --world=myworld "+self.normals, output="world.out")
+
     #
     # Test cases which do require exception handling
     #
@@ -595,6 +615,17 @@ class BaseTestCase(object):
     #
     # Tests that illustrate differences between the different C++ parsers
     #
+
+    def test_namespace1(self):
+        """Nested namespace declarations"""
+        if self.fog == '':
+            self.compile(prefix='namespace1', args='Namespace1.h', main=True, failBuild=True)
+        else:
+            self.compile(prefix='namespace1', args='Namespace1.h', main=True, output="namespace.out")
+
+    def test_namespace2(self):
+        """Explicit namespace declarations"""
+        self.compile(prefix='namespace2', args='Namespace2.h', main=True, output="namespace.out")
 
     def test_inheritance(self):
         """Test relying on inheritance"""

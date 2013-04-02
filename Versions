@@ -2,6 +2,19 @@
 CxxTest Releases
 ----------------
 
+* Version 4.2.1 (2013-03-22)
+ - Fixing documentation of LGPL version
+
+* Version 4.2 (2013-03-16)
+ - Changes to support test fixtures in namespaces
+ - Adding logic to support test skipping
+ - Change to create self-contained HTML documentation
+ - Fixed inheritance issue in GlobalFixture (#69)
+ - Update LGPL version
+ - Changes to try/catch to avoid ambiguities withn catching std::exception (#53)
+ - Fixed TS_ASSERT_DELTA to work on integer types (#65)
+ - Changed output format to print world-name (#70)
+
 * Version 4.1 (2012-11-30)
  - Added absolute paths to resolve bug when relative path links are provided.
  - Bug fix when files contain unicode characters
