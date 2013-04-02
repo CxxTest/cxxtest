@@ -26,8 +26,10 @@
 #include <cxxtest/ValueTraits.h>
 #include <cstdio>
 
-namespace CxxTest {
-class OutputStream {
+namespace CxxTest
+{
+class OutputStream
+{
 public:
     virtual ~OutputStream() {}
     virtual void flush() {};
@@ -40,7 +42,8 @@ public:
     static void endl(OutputStream &o) { (o << "\n").flush(); }
 };
 
-class ErrorFormatter : public TestListener {
+class ErrorFormatter : public TestListener
+{
 public:
     ErrorFormatter(OutputStream *o, const char *preLine = ":", const char *postLine = "",
                    const char *errorString = "Error",
@@ -51,42 +54,52 @@ public:
         _preLine(preLine),
         _postLine(postLine),
         _errorString(errorString),
-        _warningString(warningString) {
+        _warningString(warningString)
+    {
     }
 
-    int run() {
+    int run()
+    {
         TestRunner::runAllTests(*this);
         return tracker().failedTests();
     }
 
-    void enterWorld(const WorldDescription& desc) {
+    void enterWorld(const WorldDescription& desc)
+    {
         (*_o) << "Running " << desc.worldName() << " tests (" << totalTests << ")";
         _o->flush();
         _dotting = true;
         _reported = false;
     }
 
-    static void totalTests(OutputStream &o) {
+    static void totalTests(OutputStream &o)
+    {
         char s[WorldDescription::MAX_STRLEN_TOTAL_TESTS];
         const WorldDescription &wd = tracker().world();
         o << wd.strTotalTests(s) << (wd.numTotalTests() == 1 ? " test" : " tests");
     }
 
-    void enterSuite(const SuiteDescription &) {
+    void enterSuite(const SuiteDescription &)
+    {
         _reported = false;
     }
 
-    void enterTest(const TestDescription &) {
+    void enterTest(const TestDescription &)
+    {
         _reported = false;
     }
 
-    void leaveTest(const TestDescription &) {
-        if (tracker().testSkipped()) {
+    void leaveTest(const TestDescription &)
+    {
+        if (tracker().testSkipped())
+        {
             (*_o) << "s";
             _o->flush();
             fflush(stdout);
             _dotting = true;
-        } else if (!tracker().testFailed()) {
+        }
+        else if (!tracker().testFailed())
+        {
             (*_o) << ".";
             _o->flush();
             fflush(stdout);
@@ -94,8 +107,10 @@ public:
         }
     }
 
-    void leaveWorld(const WorldDescription &desc) {
-        if (!tracker().failedTests()) {
+    void leaveWorld(const WorldDescription &desc)
+    {
+        if (!tracker().failedTests())
+        {
             (*_o) << "OK!" << endl;
             return;
         }
@@ -104,39 +119,49 @@ public:
         unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracker().skippedTests();
         unsigned numTotal = desc.numTotalTests() - tracker().skippedTests();
         if (numTotal == 0)
+        {
             (*_o) << "Success rate: 100%" << endl;
+        }
         else
-            (*_o) << "Success rate: " << (unsigned) (numPassed * 100.0 / numTotal) << "%" << endl;
+        {
+            (*_o) << "Success rate: " << (unsigned)(numPassed * 100.0 / numTotal) << "%" << endl;
+        }
     }
 
-    void trace(const char *file, int line, const char *expression) {
+    void trace(const char *file, int line, const char *expression)
+    {
         stop(file, line) << "Trace: " <<
                          expression << endl;
     }
 
-    void warning(const char *file, int line, const char *expression) {
+    void warning(const char *file, int line, const char *expression)
+    {
         stop(file, line) << _warningString << ": " <<
                          expression << endl;
     }
 
-    void skippedTest(const char *file, int line, const char *expression) {
+    void skippedTest(const char *file, int line, const char *expression)
+    {
         stop(file, line) << _warningString << ": Test skipped: " <<
                          expression << endl;
     }
 
-    void failedTest(const char *file, int line, const char *expression) {
+    void failedTest(const char *file, int line, const char *expression)
+    {
         stop(file, line) << _errorString << ": Test failed: " <<
                          expression << endl;
     }
 
-    void failedAssert(const char *file, int line, const char *expression) {
+    void failedAssert(const char *file, int line, const char *expression)
+    {
         stop(file, line) << _errorString << ": Assertion failed: " <<
                          expression << endl;
     }
 
     void failedAssertEquals(const char *file, int line,
                             const char *xStr, const char *yStr,
-                            const char *x, const char *y) {
+                            const char *x, const char *y)
+    {
         stop(file, line) << _errorString << ": Expected (" <<
                          xStr << " == " << yStr << "), found (" <<
                          x << " != " << y << ")" << endl;
@@ -145,7 +170,8 @@ public:
     void failedAssertSameData(const char *file, int line,
                               const char *xStr, const char *yStr,
                               const char *sizeStr, const void *x,
-                              const void *y, unsigned size) {
+                              const void *y, unsigned size)
+    {
         stop(file, line) << _errorString << ": Expected " << sizeStr << " (" << size << ") bytes to be equal at (" <<
                          xStr << ") and (" << yStr << "), found:" << endl;
         dump(x, size);
@@ -156,13 +182,15 @@ public:
     void failedAssertSameFiles(const char* file, int line,
                                const char*, const char*,
                                const char* explanation
-                              ) {
+                              )
+    {
         stop(file, line) << _errorString << ": " << explanation << endl;
     }
 
     void failedAssertDelta(const char *file, int line,
                            const char *xStr, const char *yStr, const char *dStr,
-                           const char *x, const char *y, const char *d) {
+                           const char *x, const char *y, const char *d)
+    {
         stop(file, line) << _errorString << ": Expected (" <<
                          xStr << " == " << yStr << ") up to " << dStr << " (" << d << "), found (" <<
                          x << " != " << y << ")" << endl;
@@ -170,7 +198,8 @@ public:
 
     void failedAssertDiffers(const char *file, int line,
                              const char *xStr, const char *yStr,
-                             const char *value) {
+                             const char *value)
+    {
         stop(file, line) << _errorString << ": Expected (" <<
                          xStr << " != " << yStr << "), found (" <<
                          value << ")" << endl;
@@ -178,7 +207,8 @@ public:
 
     void failedAssertLessThan(const char *file, int line,
                               const char *xStr, const char *yStr,
-                              const char *x, const char *y) {
+                              const char *x, const char *y)
+    {
         stop(file, line) << _errorString << ": Expected (" <<
                          xStr << " < " << yStr << "), found (" <<
                          x << " >= " << y << ")" << endl;
@@ -186,7 +216,8 @@ public:
 
     void failedAssertLessThanEquals(const char *file, int line,
                                     const char *xStr, const char *yStr,
-                                    const char *x, const char *y) {
+                                    const char *x, const char *y)
+    {
         stop(file, line) << _errorString << ": Expected (" <<
                          xStr << " <= " << yStr << "), found (" <<
                          x << " > " << y << ")" << endl;
@@ -194,32 +225,37 @@ public:
 
     void failedAssertRelation(const char *file, int line,
                               const char *relation, const char *xStr, const char *yStr,
-                              const char *x, const char *y) {
+                              const char *x, const char *y)
+    {
         stop(file, line) << _errorString << ": Expected " << relation << "( " <<
                          xStr << ", " << yStr << " ), found !" << relation << "( " << x << ", " << y << " )" << endl;
     }
 
     void failedAssertPredicate(const char *file, int line,
-                               const char *predicate, const char *xStr, const char *x) {
+                               const char *predicate, const char *xStr, const char *x)
+    {
         stop(file, line) << _errorString << ": Expected " << predicate << "( " <<
                          xStr << " ), found !" << predicate << "( " << x << " )" << endl;
     }
 
     void failedAssertThrows(const char *file, int line,
                             const char *expression, const char *type,
-                            bool otherThrown) {
+                            bool otherThrown)
+    {
         stop(file, line) << _errorString << ": Expected (" << expression << ") to throw (" <<
                          type << ") but it " << (otherThrown ? "threw something else" : "didn't throw") <<
                          endl;
     }
 
-    void failedAssertThrowsNot(const char *file, int line, const char *expression) {
+    void failedAssertThrowsNot(const char *file, int line, const char *expression)
+    {
         stop(file, line) << _errorString << ": Expected (" << expression << ") not to throw, but it did" <<
                          endl;
     }
 
 protected:
-    OutputStream *outputStream() const {
+    OutputStream *outputStream() const
+    {
         return _o;
     }
 
@@ -227,57 +263,72 @@ private:
     ErrorFormatter(const ErrorFormatter &);
     ErrorFormatter &operator=(const ErrorFormatter &);
 
-    OutputStream &stop(const char *file, int line) {
+    OutputStream &stop(const char *file, int line)
+    {
         newLine();
         reportTest();
         return (*_o) << file << _preLine << line << _postLine << ": ";
     }
 
-    void newLine(void) {
-        if (_dotting) {
+    void newLine(void)
+    {
+        if (_dotting)
+        {
             (*_o) << endl;
             _dotting = false;
         }
     }
 
-    void reportTest(void) {
-        if (_reported) {
+    void reportTest(void)
+    {
+        if (_reported)
+        {
             return;
         }
         (*_o) << "In " << tracker().suite().suiteName() << "::" << tracker().test().testName() << ":" << endl;
         _reported = true;
     }
 
-    void dump(const void *buffer, unsigned size) {
-        if (!buffer) {
+    void dump(const void *buffer, unsigned size)
+    {
+        if (!buffer)
+        {
             dumpNull();
-        } else {
+        }
+        else
+        {
             dumpBuffer(buffer, size);
         }
     }
 
-    void dumpNull() {
+    void dumpNull()
+    {
         (*_o) << "   (null)" << endl;
     }
 
-    void dumpBuffer(const void *buffer, unsigned size) {
+    void dumpBuffer(const void *buffer, unsigned size)
+    {
         unsigned dumpSize = size;
-        if (maxDumpSize() && dumpSize > maxDumpSize()) {
+        if (maxDumpSize() && dumpSize > maxDumpSize())
+        {
             dumpSize = maxDumpSize();
         }
 
         const unsigned char *p = (const unsigned char *)buffer;
         (*_o) << "   { ";
-        for (unsigned i = 0; i < dumpSize; ++ i) {
+        for (unsigned i = 0; i < dumpSize; ++ i)
+        {
             (*_o) << byteToHex(*p++) << " ";
         }
-        if (dumpSize < size) {
+        if (dumpSize < size)
+        {
             (*_o) << "... ";
         }
         (*_o) << "}" << endl;
     }
 
-    static void endl(OutputStream &o) {
+    static void endl(OutputStream &o)
+    {
         OutputStream::endl(o);
     }
 

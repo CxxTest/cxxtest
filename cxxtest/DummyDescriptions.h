@@ -18,8 +18,10 @@
 
 #include <cxxtest/Descriptions.h>
 
-namespace CxxTest {
-class DummyTestDescription : public TestDescription {
+namespace CxxTest
+{
+class DummyTestDescription : public TestDescription
+{
 public:
     DummyTestDescription();
 
@@ -35,7 +37,8 @@ public:
     const TestDescription *next() const;
 };
 
-class DummySuiteDescription : public SuiteDescription {
+class DummySuiteDescription : public SuiteDescription
+{
 public:
     DummySuiteDescription();
 
@@ -59,7 +62,8 @@ private:
     DummyTestDescription _test;
 };
 
-class DummyWorldDescription : public WorldDescription {
+class DummyWorldDescription : public WorldDescription
+{
 public:
     DummyWorldDescription();
 

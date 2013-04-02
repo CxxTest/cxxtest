@@ -28,8 +28,10 @@
 #   include <stdexcept>
 #endif // _CXXTEST_HAVE_STD
 
-namespace CxxTest {
-class TestSuite {
+namespace CxxTest
+{
+class TestSuite
+{
 public:
     virtual ~TestSuite();
     virtual void setUp();
@@ -54,8 +56,10 @@ void doFailTest(const char *file, int line, const char *message);
 void doFailAssert(const char *file, int line, const char *expression, const char *message);
 
 template<class X, class Y>
-struct equals {
-    static bool test(X x, Y y) {
+struct equals
+{
+    static bool test(X x, Y y)
+    {
         return (x == y);
     }
 };
@@ -64,9 +68,12 @@ template<class X, class Y>
 void doAssertEquals(const char *file, int line,
                     const char *xExpr, X x,
                     const char *yExpr, Y y,
-                    const char *message) {
-    if (!equals<X, Y>::test(x, y)) {
-        if (message) {
+                    const char *message)
+{
+    if (!equals<X, Y>::test(x, y))
+    {
+        if (message)
+        {
             tracker().failedTest(file, line, message);
         }
         tracker().failedAssertEquals(file, line, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y));
@@ -87,8 +94,10 @@ bool sameFiles(const char* file1, const char* file2, std::ostringstream& explana
 //#endif
 
 template<class X, class Y>
-struct differs {
-    static bool test(X x, Y y) {
+struct differs
+{
+    static bool test(X x, Y y)
+    {
         return !(x == y);
     }
 };
@@ -97,9 +106,12 @@ template<class X, class Y>
 void doAssertDiffers(const char *file, int line,
                      const char *xExpr, X x,
                      const char *yExpr, Y y,
-                     const char *message) {
-    if (!differs<X, Y>::test(x, y)) {
-        if (message) {
+                     const char *message)
+{
+    if (!differs<X, Y>::test(x, y))
+    {
+        if (message)
+        {
             tracker().failedTest(file, line, message);
         }
         tracker().failedAssertDiffers(file, line, xExpr, yExpr, TS_AS_STRING(x));
@@ -108,8 +120,10 @@ void doAssertDiffers(const char *file, int line,
 }
 
 template<class X, class Y>
-struct lessThan {
-    static bool test(X x, Y y) {
+struct lessThan
+{
+    static bool test(X x, Y y)
+    {
         return (x < y);
     }
 };
@@ -118,9 +132,12 @@ template<class X, class Y>
 void doAssertLessThan(const char *file, int line,
                       const char *xExpr, X x,
                       const char *yExpr, Y y,
-                      const char *message) {
-    if (!lessThan<X, Y>::test(x, y)) {
-        if (message) {
+                      const char *message)
+{
+    if (!lessThan<X, Y>::test(x, y))
+    {
+        if (message)
+        {
             tracker().failedTest(file, line, message);
         }
         tracker().failedAssertLessThan(file, line, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y));
@@ -129,8 +146,10 @@ void doAssertLessThan(const char *file, int line,
 }
 
 template<class X, class Y>
-struct lessThanEquals {
-    static bool test(X x, Y y) {
+struct lessThanEquals
+{
+    static bool test(X x, Y y)
+    {
         return (x <= y);
     }
 };
@@ -139,9 +158,12 @@ template<class X, class Y>
 void doAssertLessThanEquals(const char *file, int line,
                             const char *xExpr, X x,
                             const char *yExpr, Y y,
-                            const char *message) {
-    if (!lessThanEquals<X, Y>::test(x, y)) {
-        if (message) {
+                            const char *message)
+{
+    if (!lessThanEquals<X, Y>::test(x, y))
+    {
+        if (message)
+        {
             tracker().failedTest(file, line, message);
         }
         tracker().failedAssertLessThanEquals(file, line, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y));
@@ -153,9 +175,12 @@ template<class X, class P>
 void doAssertPredicate(const char *file, int line,
                        const char *pExpr, const P &p,
                        const char *xExpr, X x,
-                       const char *message) {
-    if (!p(x)) {
-        if (message) {
+                       const char *message)
+{
+    if (!p(x))
+    {
+        if (message)
+        {
             tracker().failedTest(file, line, message);
         }
         tracker().failedAssertPredicate(file, line, pExpr, xExpr, TS_AS_STRING(x));
@@ -168,9 +193,12 @@ void doAssertRelation(const char *file, int line,
                       const char *rExpr, const R &r,
                       const char *xExpr, X x,
                       const char *yExpr, Y y,
-                      const char *message) {
-    if (!r(x, y)) {
-        if (message) {
+                      const char *message)
+{
+    if (!r(x, y))
+    {
+        if (message)
+        {
             tracker().failedTest(file, line, message);
         }
         tracker().failedAssertRelation(file, line, rExpr, xExpr, yExpr, TS_AS_STRING(x), TS_AS_STRING(y));
@@ -181,13 +209,16 @@ void doAssertRelation(const char *file, int line,
 // An indirection template so the compiler can determine what type
 // "X +/- D" should be
 template<class X, class Y>
-bool delta_le_helper(X x, Y y) {
+bool delta_le_helper(X x, Y y)
+{
     return lessThanEquals<X, Y>::test(x, y);
 }
 
 template<class X, class Y, class D>
-struct delta {
-    static bool test(X x, Y y, D d) {
+struct delta
+{
+    static bool test(X x, Y y, D d)
+    {
         return delta_le_helper(x, y + d) && delta_le_helper(y, x + d);
         //(y >= x - d) && (y <= x + d));
     }
@@ -198,9 +229,12 @@ void doAssertDelta(const char *file, int line,
                    const char *xExpr, X x,
                    const char *yExpr, Y y,
                    const char *dExpr, D d,
-                   const char *message) {
-    if (!delta<X, Y, D>::test(x, y, d)) {
-        if (message) {
+                   const char *message)
+{
+    if (!delta<X, Y, D>::test(x, y, d))
+    {
+        if (message)
+        {
             tracker().failedTest(file, line, message);
         }
 
@@ -554,16 +588,20 @@ void doAssertSameFiles(const char* file, int line,
 #if 0
 // These specializations are not needed because delta makes use of
 // CxxTest::lessThanEquals for the actual comparison
-template<class D> struct delta<CXXTEST_X, CXXTEST_Y, D> {
+template<class D> struct delta<CXXTEST_X, CXXTEST_Y, D>
+{
     \
-    static bool test(CXXTEST_X x, CXXTEST_Y y, D d) {
+    static bool test(CXXTEST_X x, CXXTEST_Y y, D d)
+    {
         \
         return delta<CXXTEST_T, CXXTEST_T, D>::test((CXXTEST_T)x, (CXXTEST_T)y, d);
     }
 }; \
-template<class D> struct delta<CXXTEST_Y, CXXTEST_X, D> {
+template<class D> struct delta<CXXTEST_Y, CXXTEST_X, D>
+{
     \
-    static bool test(CXXTEST_Y x, CXXTEST_X y, D d) {
+    static bool test(CXXTEST_Y x, CXXTEST_X y, D d)
+    {
         \
         return delta<CXXTEST_T, CXXTEST_T, D>::test((CXXTEST_T)x, (CXXTEST_T)y, d);
     }

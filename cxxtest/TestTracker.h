@@ -21,10 +21,12 @@
 #include <cxxtest/TestListener.h>
 #include <cxxtest/DummyDescriptions.h>
 
-namespace CxxTest {
+namespace CxxTest
+{
 class TestListener;
 
-class TestTracker : public TestListener {
+class TestTracker : public TestListener
+{
 public:
     virtual ~TestTracker();
 

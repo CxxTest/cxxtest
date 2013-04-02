@@ -19,10 +19,12 @@
 
 #include <cxxtest/LinkedList.h>
 
-namespace CxxTest {
+namespace CxxTest
+{
 class TestSuite;
 
-class TestDescription : public Link {
+class TestDescription : public Link
+{
 public:
     virtual ~TestDescription();
 
@@ -39,7 +41,8 @@ public:
     virtual TestDescription *next() = 0;
 };
 
-class SuiteDescription : public Link {
+class SuiteDescription : public Link
+{
 public:
     virtual ~SuiteDescription();
 
@@ -63,7 +66,8 @@ public:
     virtual bool tearDown() = 0;
 };
 
-class WorldDescription : public Link {
+class WorldDescription : public Link
+{
 public:
     virtual ~WorldDescription();
 

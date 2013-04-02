@@ -35,7 +35,8 @@
 #include <math.h>
 #endif
 
-namespace CxxTest {
+namespace CxxTest
+{
 //
 // This is how we use the value traits
 //
@@ -87,7 +88,8 @@ char *charToString(char c, char *s);
 // The default ValueTraits class dumps up to 8 bytes as hex values
 //
 template <class T>
-class ValueTraits {
+class ValueTraits
+{
     enum { MAX_BYTES = 8 };
     char _asString[sizeof("{ ") + sizeof("XX ") * MAX_BYTES + sizeof("... }")];
 
@@ -101,7 +103,8 @@ public:
 // Creates an object of type ValueTraits<T>
 //
 template <class T>
-inline ValueTraits<T> traits(T t) {
+inline ValueTraits<T> traits(T t)
+{
     return ValueTraits<T>(t);
 }
 
@@ -157,21 +160,26 @@ template<class N>
 char *numberToString(N n, char *s,
                      N base = 10,
                      unsigned skipDigits = 0,
-                     unsigned maxDigits = (unsigned) - 1) {
-    if (negative(n)) {
+                     unsigned maxDigits = (unsigned) - 1)
+{
+    if (negative(n))
+    {
         *s++ = '-';
         n = abs(n);
     }
 
     N digit = 1;
-    while (digit <= (n / base)) {
+    while (digit <= (n / base))
+    {
         digit *= base;
     }
     N digitValue;
-    for (; digit >= 1 && skipDigits; n -= digit * digitValue, digit /= base, -- skipDigits) {
+    for (; digit >= 1 && skipDigits; n -= digit * digitValue, digit /= base, -- skipDigits)
+    {
         digitValue = (unsigned)(n / digit);
     }
-    for (; digit >= 1 && maxDigits; n -= digit * digitValue, digit /= base, -- maxDigits) {
+    for (; digit >= 1 && maxDigits; n -= digit * digitValue, digit /= base, -- maxDigits)
+    {
         *s++ = digitToChar((unsigned)(digitValue = (unsigned)(n / digit)));
     }
 
@@ -190,7 +198,8 @@ char *numberToString(N n, char *s,
 // This is used for printing strings, as in TS_FAIL( "Message" )
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const char * const &> {
+class ValueTraits<const char * const &>
+{
     ValueTraits &operator=(const ValueTraits &);
     const char *_asString;
 
@@ -198,25 +207,28 @@ public:
     ValueTraits(const char * const &value) : _asString(value) {}
     ValueTraits(const ValueTraits &other) : _asString(other._asString) {}
     const char *asString(void) const { return _asString; }
-    #if 0
-    const char *asString( void ) const {
+#if 0
+    const char *asString(void) const
+    {
         std::string tmp(1, '"');
-        for (char const* src = _asString; src && *src; ++src) {
-            switch(*src) {
-                case '\\': tmp += "\\\\"; break;
-                case '\n': tmp += "\\n";  break;
-                case '\r': tmp += "\\r";  break;
-                case '\t': tmp += "\\t";  break;
-                case '"':  tmp += "\\\""; break;
-                default:   tmp += *src;   break;
+        for (char const* src = _asString; src && *src; ++src)
+        {
+            switch (*src)
+            {
+            case '\\': tmp += "\\\\"; break;
+            case '\n': tmp += "\\n";  break;
+            case '\r': tmp += "\\r";  break;
+            case '\t': tmp += "\\t";  break;
+            case '"':  tmp += "\\\""; break;
+            default:   tmp += *src;   break;
             }
         }
         tmp += '"';
 
-        char* res = new char[tmp.size()+1];
+        char* res = new char[tmp.size() + 1];
         return strcpy(res, tmp.c_str());
     }
-    #endif
+#endif
 };
 
 CXXTEST_COPY_TRAITS(const char *, const char * const &);
@@ -226,7 +238,8 @@ CXXTEST_COPY_TRAITS(char *, const char * const &);
 // ValueTraits: bool
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const bool> {
+class ValueTraits<const bool>
+{
     bool _value;
 
 public:
@@ -241,7 +254,8 @@ CXXTEST_COPY_CONST_TRAITS(bool);
 // ValueTraits: signed long long
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const signed _CXXTEST_LONGLONG> {
+class ValueTraits<const signed _CXXTEST_LONGLONG>
+{
     typedef _CXXTEST_LONGLONG T;
     char _asString[2 + 3 * sizeof(T)];
 public:
@@ -255,7 +269,8 @@ CXXTEST_COPY_CONST_TRAITS(signed _CXXTEST_LONGLONG);
 // ValueTraits: unsigned long long
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const unsigned _CXXTEST_LONGLONG> {
+class ValueTraits<const unsigned _CXXTEST_LONGLONG>
+{
     typedef unsigned _CXXTEST_LONGLONG T;
     char _asString[1 + 3 * sizeof(T)];
 public:
@@ -270,7 +285,8 @@ CXXTEST_COPY_CONST_TRAITS(unsigned _CXXTEST_LONGLONG);
 // ValueTraits: signed long
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const signed long int> {
+class ValueTraits<const signed long int>
+{
     typedef signed long int T;
     char _asString[2 + 3 * sizeof(T)];
 public:
@@ -284,7 +300,8 @@ CXXTEST_COPY_CONST_TRAITS(signed long int);
 // ValueTraits: unsigned long
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const unsigned long int> {
+class ValueTraits<const unsigned long int>
+{
     typedef unsigned long int T;
     char _asString[1 + 3 * sizeof(T)];
 public:
@@ -315,7 +332,8 @@ CXXTEST_COPY_CONST_TRAITS(unsigned char);
 // Returns 'x' for printable chars, '\x??' for others
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const char> {
+class ValueTraits<const char>
+{
     char _asString[sizeof("'\\xXX'")];
 public:
     ValueTraits(char c) { copyString(charToString(c, copyString(_asString, "'")), "'"); }
@@ -335,14 +353,21 @@ CXXTEST_COPY_CONST_TRAITS(signed char);
 // ValueTraits: double
 //
 CXXTEST_TEMPLATE_INSTANTIATION
-class ValueTraits<const double> {
+class ValueTraits<const double>
+{
 public:
-    ValueTraits(double t) {
-        if ((t != t) || (t >= HUGE_VAL) || (t == -HUGE_VAL)) {
+    ValueTraits(double t)
+    {
+        if ((t != t) || (t >= HUGE_VAL) || (t == -HUGE_VAL))
+        {
             nonFiniteNumber(t);
-        } else if (requiredDigitsOnLeft(t) > MAX_DIGITS_ON_LEFT) {
+        }
+        else if (requiredDigitsOnLeft(t) > MAX_DIGITS_ON_LEFT)
+        {
             hugeNumber(t);
-        } else {
+        }
+        else
+        {
             normalNumber(t);
         }
     }

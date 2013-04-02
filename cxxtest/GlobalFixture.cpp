@@ -14,7 +14,8 @@
 
 #include <cxxtest/GlobalFixture.h>
 
-namespace CxxTest {
+namespace CxxTest
+{
 bool GlobalFixture::setUpWorld() { return true; }
 bool GlobalFixture::tearDownWorld() { return true; }
 bool GlobalFixture::setUp() { return true; }

@@ -20,8 +20,10 @@
 
 #include <cxxtest/ErrorPrinter.h>
 
-namespace CxxTest {
-class ParenPrinter : public ErrorPrinter {
+namespace CxxTest
+{
+class ParenPrinter : public ErrorPrinter
+{
 public:
     ParenPrinter(CXXTEST_STD(ostream) &o = CXXTEST_STD(cout)) : ErrorPrinter(o, "(", ")") {}
 };

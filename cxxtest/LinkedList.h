@@ -14,11 +14,13 @@
 
 #include <cxxtest/Flags.h>
 
-namespace CxxTest {
+namespace CxxTest
+{
 struct List;
 class Link;
 
-struct List {
+struct List
+{
     Link *_head;
     Link *_tail;
 
@@ -37,7 +39,8 @@ struct List {
     void leaveOnly(const Link &link);
 };
 
-class Link {
+class Link
+{
 public:
     Link();
     virtual ~Link();

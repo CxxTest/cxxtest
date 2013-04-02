@@ -31,16 +31,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-namespace CxxTest {
-class X11Gui : public GuiListener {
+namespace CxxTest
+{
+class X11Gui : public GuiListener
+{
 public:
-    void enterGui(int &argc, char **argv) {
+    void enterGui(int &argc, char **argv)
+    {
         parseCommandLine(argc, argv);
     }
 
-    void enterWorld(const WorldDescription &wd) {
+    void enterWorld(const WorldDescription &wd)
+    {
         openDisplay();
-        if (_display) {
+        if (_display)
+        {
             createColors();
             createWindow();
             createGc();
@@ -52,32 +57,40 @@ public:
         }
     }
 
-    void guiEnterTest(const char *suiteName, const char *testName) {
-        if (_display) {
+    void guiEnterTest(const char *suiteName, const char *testName)
+    {
+        if (_display)
+        {
             ++ _testsDone;
             setWindowName(suiteName, testName);
             redraw();
         }
     }
 
-    void yellowBar() {
-        if (_display) {
+    void yellowBar()
+    {
+        if (_display)
+        {
             _barColor = getColor(_yellowName);
             getTotalTests();
             processEvents();
         }
     }
 
-    void redBar() {
-        if (_display) {
+    void redBar()
+    {
+        if (_display)
+        {
             _barColor = getColor(_redName);
             getTotalTests();
             processEvents();
         }
     }
 
-    void leaveGui() {
-        if (_display) {
+    void leaveGui()
+    {
+        if (_display)
+        {
             freeFontInfo();
             destroyGc();
             destroyWindow();
@@ -103,7 +116,8 @@ private:
     long _eventMask;
     Colormap _colormap;
 
-    void parseCommandLine(int &argc, char **argv) {
+    void parseCommandLine(int &argc, char **argv)
+    {
         _programName = argv[0];
 
         _fontName = 0;
@@ -113,52 +127,73 @@ private:
         _yellowName = "Yellow";
         _redName = "Red";
 
-        for (int i = 1; i + 1 < argc; ++ i) {
-            if (!strcmp(argv[i], "-title")) {
+        for (int i = 1; i + 1 < argc; ++ i)
+        {
+            if (!strcmp(argv[i], "-title"))
+            {
                 _programName = argv[++ i];
-            } else if (!strcmp(argv[i], "-fn") || !strcmp(argv[i], "-font")) {
+            }
+            else if (!strcmp(argv[i], "-fn") || !strcmp(argv[i], "-font"))
+            {
                 _fontName = argv[++ i];
-            } else if (!strcmp(argv[i], "-fg") || !strcmp(argv[i], "-foreground")) {
+            }
+            else if (!strcmp(argv[i], "-fg") || !strcmp(argv[i], "-foreground"))
+            {
                 _foregroundName = argv[++ i];
-            } else if (!strcmp(argv[i], "-bg") || !strcmp(argv[i], "-background")) {
+            }
+            else if (!strcmp(argv[i], "-bg") || !strcmp(argv[i], "-background"))
+            {
                 _backgroundName = argv[++ i];
-            } else if (!strcmp(argv[i], "-green")) {
+            }
+            else if (!strcmp(argv[i], "-green"))
+            {
                 _greenName = argv[++ i];
-            } else if (!strcmp(argv[i], "-yellow")) {
+            }
+            else if (!strcmp(argv[i], "-yellow"))
+            {
                 _yellowName = argv[++ i];
-            } else if (!strcmp(argv[i], "-red")) {
+            }
+            else if (!strcmp(argv[i], "-red"))
+            {
                 _redName = argv[++ i];
             }
         }
     }
 
-    void openDisplay() {
+    void openDisplay()
+    {
         _display = XOpenDisplay(NULL);
     }
 
-    void createColors() {
+    void createColors()
+    {
         _colormap = DefaultColormap(_display, 0);
         _foreground = getColor(_foregroundName);
         _background = getColor(_backgroundName);
     }
 
-    unsigned long getColor(const char *colorName) {
+    unsigned long getColor(const char *colorName)
+    {
         XColor color;
         XParseColor(_display, _colormap, colorName, &color);
         XAllocColor(_display, _colormap, &color);
         return color.pixel;
     }
 
-    void createWindow() {
+    void createWindow()
+    {
         _window = XCreateSimpleWindow(_display, RootWindow(_display, 0), 0, 0, 1, 1, 0, 0, _background);
     }
 
-    void createGc() {
+    void createGc()
+    {
         _gc = XCreateGC(_display, _window, 0, 0);
     }
 
-    void createFont() {
-        if (!loadFont()) {
+    void createFont()
+    {
+        if (!loadFont())
+        {
             useDefaultFont();
         }
         getFontInfo();
@@ -166,47 +201,57 @@ private:
         _textDescent = _fontInfo->descent;
     }
 
-    bool loadFont() {
-        if (!_fontName) {
+    bool loadFont()
+    {
+        if (!_fontName)
+        {
             return false;
         }
         _fontId = XLoadFont(_display, _fontName);
         return (XSetFont(_display, _gc, _fontId) == Success);
     }
 
-    void useDefaultFont() {
+    void useDefaultFont()
+    {
         _fontId = XGContextFromGC(_gc);
     }
 
-    void getFontInfo() {
+    void getFontInfo()
+    {
         _fontInfo = XQueryFont(_display, _fontId);
     }
 
-    void freeFontInfo() {
+    void freeFontInfo()
+    {
         XFreeFontInfo(NULL, _fontInfo, 1);
     }
 
-    void initializeEvents() {
+    void initializeEvents()
+    {
         _eventMask = ExposureMask;
         XSelectInput(_display, _window, _eventMask);
     }
 
-    void initializeBar(const WorldDescription &wd) {
+    void initializeBar(const WorldDescription &wd)
+    {
         getTotalTests(wd);
         _testsDone = 0;
         _barColor = getColor(_greenName);
     }
 
-    void getTotalTests() {
+    void getTotalTests()
+    {
         getTotalTests(tracker().world());
     }
 
-    void getTotalTests(const WorldDescription &wd) {
+    void getTotalTests(const WorldDescription &wd)
+    {
         _numTotalTests = wd.numTotalTests();
         wd.strTotalTests(_strTotalTests);
     }
 
-    void centerWindow() {
+    void centerWindow()
+    {
         XMapWindow(_display, _window);
 
         Screen *screen = XDefaultScreenOfDisplay(_display);
@@ -221,16 +266,19 @@ private:
         XMoveResizeWindow(_display, _window, xCenter - (_width / 2), yCenter - (_height / 2), _width, _height);
     }
 
-    void processEvents() {
+    void processEvents()
+    {
         redraw();
 
         XEvent event;
-        while (XCheckMaskEvent(_display, _eventMask, &event)) {
+        while (XCheckMaskEvent(_display, _eventMask, &event))
+        {
             redraw();
         }
     }
 
-    void setWindowName(const char *suiteName, const char *testName) {
+    void setWindowName(const char *suiteName, const char *testName)
+    {
         unsigned length = strlen(_programName) + strlen(suiteName) + strlen(testName) + sizeof(" - ::()");
         char *name = (char *)malloc(length);
         sprintf(name, "%s - %s::%s()", _programName, suiteName, testName);
@@ -238,7 +286,8 @@ private:
         free(name);
     }
 
-    void redraw() {
+    void redraw()
+    {
         getWindowSize();
         drawSolidBar();
         drawDividers();
@@ -246,14 +295,16 @@ private:
         flush();
     }
 
-    void getWindowSize() {
+    void getWindowSize()
+    {
         XWindowAttributes attributes;
         XGetWindowAttributes(_display, _window, &attributes);
         _width = attributes.width;
         _height = attributes.height;
     }
 
-    void drawSolidBar() {
+    void drawSolidBar()
+    {
         unsigned barWidth = (_width * _testsDone) / _numTotalTests;
 
         XSetForeground(_display, _gc, _barColor);
@@ -263,17 +314,21 @@ private:
         XFillRectangle(_display, _window, _gc, barWidth, 0, _width + 1 - barWidth, _height);
     }
 
-    void drawDividers() {
-        if (_width / _numTotalTests < 5) {
+    void drawDividers()
+    {
+        if (_width / _numTotalTests < 5)
+        {
             return;
         }
-        for (unsigned i = 1; i < _testsDone; ++ i) {
+        for (unsigned i = 1; i < _testsDone; ++ i)
+        {
             int x = (_width * i) / _numTotalTests;
             XDrawLine(_display, _window, _gc, x, 0, x, _height);
         }
     }
 
-    void drawPercentage() {
+    void drawPercentage()
+    {
         XSetForeground(_display, _gc, _foreground);
 
         char str[sizeof("1000000000 of ") + sizeof(_strTotalTests) + sizeof(" (100%)")];
@@ -287,19 +342,23 @@ private:
                     str, len);
     }
 
-    void flush() {
+    void flush()
+    {
         XFlush(_display);
     }
 
-    void destroyGc() {
+    void destroyGc()
+    {
         XFreeGC(_display, _gc);
     }
 
-    void destroyWindow() {
+    void destroyWindow()
+    {
         XDestroyWindow(_display, _window);
     }
 
-    void closeDisplay() {
+    void closeDisplay()
+    {
         XCloseDisplay(_display);
     }
 };

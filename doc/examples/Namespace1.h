@@ -1,8 +1,10 @@
 // Namespace1.h
 #include <cxxtest/TestSuite.h>
 
-namespace foo {
-namespace bar {
+namespace foo
+{
+namespace bar
+{
 
 class MyTestSuite1 : public CxxTest::TestSuite
 {
@@ -18,8 +20,10 @@ public:
 }
 
 
-namespace FOO {
-namespace BAR {
+namespace FOO
+{
+namespace BAR
+{
 
 class MyTestSuite1 : public CxxTest::TestSuite
 {

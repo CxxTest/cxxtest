@@ -14,7 +14,8 @@
 
 #include <cxxtest/Descriptions.h>
 
-namespace CxxTest {
+namespace CxxTest
+{
 TestDescription::~TestDescription() {}
 SuiteDescription::~SuiteDescription() {}
 WorldDescription::~WorldDescription() {}
@@ -23,43 +24,54 @@ WorldDescription::~WorldDescription() {}
 // Convert total tests to string
 //
 #ifndef _CXXTEST_FACTOR
-char *WorldDescription::strTotalTests(char *s) const {
+char *WorldDescription::strTotalTests(char *s) const
+{
     numberToString(numTotalTests(), s);
     return s;
 }
 #else // _CXXTEST_FACTOR
-char *WorldDescription::strTotalTests(char *s) const {
+char *WorldDescription::strTotalTests(char *s) const
+{
     char *p = numberToString(numTotalTests(), s);
 
-    if (numTotalTests() <= 1) {
+    if (numTotalTests() <= 1)
+    {
         return s;
     }
 
     unsigned n = numTotalTests();
     unsigned numFactors = 0;
 
-    for (unsigned factor = 2; (factor * factor) <= n; factor += (factor == 2) ? 1 : 2) {
+    for (unsigned factor = 2; (factor * factor) <= n; factor += (factor == 2) ? 1 : 2)
+    {
         unsigned power;
 
-        for (power = 0; (n % factor) == 0; n /= factor) {
+        for (power = 0; (n % factor) == 0; n /= factor)
+        {
             ++ power;
         }
 
-        if (!power) {
+        if (!power)
+        {
             continue;
         }
 
         p = numberToString(factor, copyString(p, (numFactors == 0) ? " = " : " * "));
-        if (power > 1) {
+        if (power > 1)
+        {
             p = numberToString(power, copyString(p, "^"));
         }
         ++ numFactors;
     }
 
-    if (n > 1) {
-        if (!numFactors) {
+    if (n > 1)
+    {
+        if (!numFactors)
+        {
             copyString(p, tracker().failedTests() ? " :(" : tracker().warnings() ? " :|" : " :)");
-        } else {
+        }
+        else
+        {
             numberToString(n, copyString(p, " * "));
         }
     }

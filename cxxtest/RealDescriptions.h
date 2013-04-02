@@ -20,8 +20,10 @@
 #include <cxxtest/TestSuite.h>
 #include <cxxtest/GlobalFixture.h>
 
-namespace CxxTest {
-class RealTestDescription : public TestDescription {
+namespace CxxTest
+{
+class RealTestDescription : public TestDescription
+{
 public:
     RealTestDescription();
     RealTestDescription(List &argList, SuiteDescription &argSuite, unsigned argLine, const char *argTestName);
@@ -52,7 +54,8 @@ private:
     const char *_testName;
 };
 
-class RealSuiteDescription : public SuiteDescription {
+class RealSuiteDescription : public SuiteDescription
+{
 public:
     RealSuiteDescription();
     RealSuiteDescription(const char *argFile, unsigned argLine, const char *argSuiteName, List &argTests);
@@ -87,7 +90,8 @@ private:
     friend class RealWorldDescription;
 };
 
-class StaticSuiteDescription : public RealSuiteDescription {
+class StaticSuiteDescription : public RealSuiteDescription
+{
 public:
     StaticSuiteDescription();
     StaticSuiteDescription(const char *argFile, unsigned argLine,
@@ -111,7 +115,8 @@ private:
     TestSuite *_suite;
 };
 
-class CommonDynamicSuiteDescription : public RealSuiteDescription {
+class CommonDynamicSuiteDescription : public RealSuiteDescription
+{
 public:
     CommonDynamicSuiteDescription();
     CommonDynamicSuiteDescription(const char *argFile, unsigned argLine,
@@ -130,21 +135,24 @@ private:
 };
 
 template<class S>
-class DynamicSuiteDescription : public CommonDynamicSuiteDescription {
+class DynamicSuiteDescription : public CommonDynamicSuiteDescription
+{
 public:
     DynamicSuiteDescription() {}
     DynamicSuiteDescription(const char *argFile, unsigned argLine,
                             const char *argSuiteName, List &argTests,
                             S *&argSuite, unsigned argCreateLine,
                             unsigned argDestroyLine) :
-        CommonDynamicSuiteDescription(argFile, argLine, argSuiteName, argTests, argCreateLine, argDestroyLine) {
+        CommonDynamicSuiteDescription(argFile, argLine, argSuiteName, argTests, argCreateLine, argDestroyLine)
+    {
         _suite = &argSuite;
     }
 
     void initialize(const char *argFile, unsigned argLine,
                     const char *argSuiteName, List &argTests,
                     S *&argSuite, unsigned argCreateLine,
-                    unsigned argDestroyLine) {
+                    unsigned argDestroyLine)
+    {
         CommonDynamicSuiteDescription::initialize(argFile, argLine,
                 argSuiteName, argTests,
                 argCreateLine, argDestroyLine);
@@ -160,11 +168,13 @@ private:
     S *realSuite() const { return *_suite; }
     void setSuite(S *s) { *_suite = s; }
 
-    void createSuite() {
+    void createSuite()
+    {
         setSuite(S::createSuite());
     }
 
-    void destroySuite() {
+    void destroySuite()
+    {
         S *s = realSuite();
         setSuite(0);
         S::destroySuite(s);
@@ -174,8 +184,10 @@ private:
 };
 
 template<class S>
-bool DynamicSuiteDescription<S>::setUp() {
-    _TS_TRY {
+bool DynamicSuiteDescription<S>::setUp()
+{
+    _TS_TRY
+    {
         _TSM_ASSERT_THROWS_NOTHING(file(), _createLine, "Exception thrown from createSuite()", createSuite());
         _TSM_ASSERT(file(), _createLine, "createSuite() failed", suite() != 0);
     }
@@ -186,12 +198,15 @@ bool DynamicSuiteDescription<S>::setUp() {
 }
 
 template<class S>
-bool DynamicSuiteDescription<S>::tearDown() {
-    if (!_suite) {
+bool DynamicSuiteDescription<S>::tearDown()
+{
+    if (!_suite)
+    {
         return true;
     }
 
-    _TS_TRY {
+    _TS_TRY
+    {
         _TSM_ASSERT_THROWS_NOTHING(file(), _destroyLine, "destroySuite() failed", destroySuite());
     }
     _TS_CATCH_ABORT( { return false; })
@@ -200,7 +215,8 @@ bool DynamicSuiteDescription<S>::tearDown() {
     return true;
 }
 
-class RealWorldDescription : public WorldDescription {
+class RealWorldDescription : public WorldDescription
+{
 public:
     static List &suites();
     const char *worldName() const { return _worldName;}

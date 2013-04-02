@@ -23,8 +23,10 @@
 
 #include <cxxtest/Descriptions.h>
 
-namespace CxxTest {
-class TestListener {
+namespace CxxTest
+{
+class TestListener
+{
 public:
     TestListener() {}
     virtual ~TestListener() {}
@@ -38,7 +40,7 @@ public:
     virtual void warning(const char * /*file*/, int /*line*/,
                          const char * /*expression*/) {}
     virtual void skippedTest(const char * /*file*/, int /*line*/,
-                            const char * /*expression*/) {}
+                             const char * /*expression*/) {}
     virtual void failedTest(const char * /*file*/, int /*line*/,
                             const char * /*expression*/) {}
     virtual void failedAssert(const char * /*file*/, int /*line*/,

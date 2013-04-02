@@ -11,7 +11,8 @@
 
 #include <cxxtest/DummyDescriptions.h>
 
-namespace CxxTest {
+namespace CxxTest
+{
 DummyTestDescription::DummyTestDescription() {}
 
 const char *DummyTestDescription::file() const { return "<no file>"; }

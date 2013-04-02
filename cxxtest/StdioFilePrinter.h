@@ -22,15 +22,18 @@
 #include <cxxtest/ErrorFormatter.h>
 #include <stdio.h>
 
-namespace CxxTest {
-class StdioFilePrinter : public ErrorFormatter {
+namespace CxxTest
+{
+class StdioFilePrinter : public ErrorFormatter
+{
 public:
     StdioFilePrinter(FILE *o, const char *preLine = ":", const char *postLine = "") :
         ErrorFormatter(new Adapter(o), preLine, postLine) {}
     virtual ~StdioFilePrinter() { delete outputStream(); }
 
 private:
-    class Adapter : public OutputStream {
+    class Adapter : public OutputStream
+    {
         Adapter(const Adapter &);
         Adapter &operator=(const Adapter &);
 

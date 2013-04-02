@@ -27,8 +27,10 @@
 
 #include <cxxtest/ErrorPrinter.h>
 
-namespace CxxTest {
-class MSVCErrorPrinter : public ErrorPrinter {
+namespace CxxTest
+{
+class MSVCErrorPrinter : public ErrorPrinter
+{
 public:
     MSVCErrorPrinter(CXXTEST_STD(ostream) &o = CXXTEST_STD(cout))
         : ErrorPrinter(o, "(", ") ", "error C2999", "warning C4999") {}

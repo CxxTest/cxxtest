@@ -14,8 +14,10 @@
 
 #include <cxxtest/LinkedList.h>
 
-namespace CxxTest {
-class GlobalFixture : public Link {
+namespace CxxTest
+{
+class GlobalFixture : public Link
+{
 public:
     virtual bool setUpWorld();
     virtual bool tearDownWorld();
