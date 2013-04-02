@@ -703,6 +703,16 @@ supports this with the +CXXTEST_STD()+ macro.  For example,
 handles the mapping of this to +cout+ or +std::cout+ depending on
 options provided to +cxxtestgen+.
 
+Finally, CxxTest defines the +CXXTEST_RUNNING+ preprocessor macro.
+This can be used in a test header file to define code that is
+executed when the header is not used in a test runner.  For example:
+[source,{cpp}]
+-----
+include::examples/MyTestSuite12.h[]
+----
+Note that test suites derived from +CxxTest::TestSuite+ class cannot
+easily be built outside of the test runner.
+
 
 
 Customizing Test Fixtures
