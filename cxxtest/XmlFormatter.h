@@ -217,8 +217,8 @@ public:
             if (elt->name == name)
             {
                 return elt;
-                elt++;
             }
+            elt++;
         }
         return add_element(name);
     }
