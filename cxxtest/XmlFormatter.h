@@ -45,6 +45,7 @@
 #include <sstream>
 #include <cstring>
 #include <cstdio>
+#include <ctime>
 
 namespace CxxTest
 {
@@ -382,9 +383,18 @@ public:
     void leaveWorld(const WorldDescription& desc)
     {
         std::ostringstream os;
+        const time_t current_date(time(0));
+        char current_date_string[27];
+        const size_t n = strlen(ctime_r(&current_date,current_date_string));
+        if (n) {
+            current_date_string[n-1] = '\0'; // remove the ending \n
+        } else {
+            current_date_string[0] = '\0'; // just in case...
+        }
         os << totaltime;
         (*_o) << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
         (*_o) << "<testsuite name=\"" << desc.worldName() << "\" ";
+        (*_o) << " date=\"" << current_date_string << "\" ";
         (*_o) << " tests=\"" << ntests
               << "\" errors=\"" << nerror
               << "\" failures=\"" << nfail
