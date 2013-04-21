@@ -7,6 +7,7 @@
 # the U.S. Government retains certain rights in this software.
 #-------------------------------------------------------------------------
 
+import time
 import sys
 import os
 import os.path
@@ -194,18 +195,28 @@ class BaseTestCase(object):
     def tearDown(self):
         if not self.passed:
             return
+        files = []
         if os.path.exists(self.py_out):
-            os.remove(self.py_out)
+            files.append(self.py_out)
         if os.path.exists(self.py_cpp) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
-            os.remove(self.py_cpp)
+            files.append(self.py_cpp)
         if os.path.exists(self.px_pre):
-            os.remove(self.px_pre)
+            files.append(self.px_pre)
         if os.path.exists(self.px_out):
-            os.remove(self.px_out)
+            files.append(self.px_out)
         if os.path.exists(self.build_log):
-            os.remove(self.build_log)
+            files.append(self.build_log)
         if os.path.exists(self.build_target) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
-            os.remove(self.build_target)
+            files.append(self.build_target)
+        for file in files:
+            try:
+                os.remove(file)
+            except:
+                time.sleep(2)
+                try:
+                    os.remove(file)
+                except:
+                    print "Error removing file '%s'" % file
 
 
     # This is a "generator" that just reads a file and normalizes the lines
