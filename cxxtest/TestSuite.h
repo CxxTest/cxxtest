@@ -339,6 +339,19 @@ void doAssertSameFiles(const char* file, int line,
 #   define ETSM_ASSERT_EQUALS(m,x,y) _ETSM_ASSERT_EQUALS(__FILE__,__LINE__,m,x,y)
 #   define TSM_ASSERT_EQUALS(m,x,y) _TSM_ASSERT_EQUALS(__FILE__,__LINE__,m,x,y)
 
+// Special foating point values support
+#   define ETS_ASSERT_IS_NAN(x)  _ETS_ASSERT(__FILE__,__LINE__,isnan(x))
+#   define TS_ASSERT_IS_NAN(x)   _TS_ASSERT(__FILE__,__LINE__,isnan(x))
+
+#   define ETSM_ASSERT_IS_NAN(m,x) _ETSM_ASSERT(__FILE__,__LINE__,m,isnan(x))
+#   define TSM_ASSERT_IS_NAN(m,x) _TSM_ASSERT(__FILE__,__LINE__,m,isnan(x))
+
+#   define ETS_ASSERT_IS_INFINITE(x)  _ETS_ASSERT(__FILE__,__LINE__,isinf(x))
+#   define TS_ASSERT_IS_INFINITE(x)   _TS_ASSERT(__FILE__,__LINE__,isinf(x))
+
+#   define ETSM_ASSERT_IS_INFINITE(m,x) _ETSM_ASSERT(__FILE__,__LINE__,m,isinf(x))
+#   define TSM_ASSERT_IS_INFINITE(m,x) _TSM_ASSERT(__FILE__,__LINE__,m,isinf(x))
+
 // TS_ASSERT_SAME_DATA
 #   define ___ETS_ASSERT_SAME_DATA(f,l,x,y,s,m) CxxTest::doAssertSameData( (f), (l), #x, (x), #y, (y), #s, (s), (m) )
 #   define ___TS_ASSERT_SAME_DATA(f,l,x,y,s,m) { _TS_TRY { ___ETS_ASSERT_SAME_DATA(f,l,x,y,s,m); } __TS_CATCH(f,l) }
@@ -501,6 +514,13 @@ void doAssertSameFiles(const char* file, int line,
 // TS_ASSERT_THROWS_EQUALS
 #   define TS_ASSERT_THROWS_EQUALS(e,t,x,y) TS_ASSERT_THROWS_ASSERT(e,t,TS_ASSERT_EQUALS(x,y))
 #   define TSM_ASSERT_THROWS_EQUALS(m,e,t,x,y) TSM_ASSERT_THROWS_ASSERT(m,e,t,TSM_ASSERT_EQUALS(m,x,y))
+
+// Special foating point values support
+#   define TS_ASSERT_THROWS_IS_NAN(e,t,x) TS_ASSERT_THROWS_ASSERT(e,t,TS_ASSERT_IS_NAN(x))
+#   define TSM_ASSERT_THROWS_IS_NAN(m,e,t,x) TSM_ASSERT_THROWS_ASSERT(m,e,t,TSM_ASSERT_IS_NAN(m,x))
+
+#   define TS_ASSERT_THROWS_IS_INFINITE(e,t,x) TS_ASSERT_THROWS_ASSERT(e,t,TS_ASSERT_IS_INFINITE(x))
+#   define TSM_ASSERT_THROWS_IS_INFINITE(m,e,t,x) TSM_ASSERT_THROWS_ASSERT(m,e,t,TSM_ASSERT_IS_INFINITE(m,x))
 
 // TS_ASSERT_THROWS_DIFFERS
 #   define TS_ASSERT_THROWS_DIFFERS(e,t,x,y) TS_ASSERT_THROWS_ASSERT(e,t,TS_ASSERT_DIFFERS(x,y))
