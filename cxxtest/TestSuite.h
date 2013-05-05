@@ -23,6 +23,7 @@
 #include <cxxtest/Descriptions.h>
 #include <cxxtest/ValueTraits.h>
 #include <sstream>
+#include <cstring>
 
 #if defined(_CXXTEST_HAVE_STD)
 #   include <stdexcept>
@@ -61,6 +62,42 @@ struct equals
     static bool test(X x, Y y)
     {
         return (x == y);
+    }
+};
+
+template<>
+struct equals<const char*, const char*>
+{
+    static bool test(const char *x, const  char *y)
+    {
+        return (std::strcmp(x,y) == 0);
+    }
+};
+
+template<>
+struct equals<char*, char*>
+{
+    static bool test(char *x, char *y)
+    {
+        return (std::strcmp(x,y) == 0);
+    }
+};
+
+template<>
+struct equals<const char*, char*>
+{
+    static bool test(const char *x, char *y)
+    {
+        return (std::strcmp(x,y) == 0);
+    }
+};
+
+template<>
+struct equals<char*, const char*>
+{
+    static bool test(char *x, const char *y)
+    {
+        return (std::strcmp(x,y) == 0);
     }
 };
 
