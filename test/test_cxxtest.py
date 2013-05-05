@@ -39,6 +39,7 @@ cxxtestdir = os.path.dirname(os.path.dirname(currdir))+os.sep
 compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:.*)$")
 dirre      = re.compile("^([^%s]*/)*" % re.escape(os.sep))
 xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
+datere      = re.compile("date=\"[^\"]*\"")
 
 # Headers from the cxxtest/sample directory
 samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
@@ -136,6 +137,8 @@ def normalize_line_for_diff(line):
             lambda match: '"'+re.sub("^[^/]+/", "", match.group(1))+'"',
             line
             )
+    # Remove date info
+    line = datere.sub( lambda match: 'date=""', line)
     return line
 
 def make_diff_readable(diff):

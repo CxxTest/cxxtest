@@ -394,8 +394,8 @@ public:
         os << totaltime;
         (*_o) << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
         (*_o) << "<testsuite name=\"" << desc.worldName() << "\" ";
-        (*_o) << " date=\"" << current_date_string << "\" ";
-        (*_o) << " tests=\"" << ntests
+        (*_o) << "date=\"" << current_date_string;
+        (*_o) << "\" tests=\"" << ntests
               << "\" errors=\"" << nerror
               << "\" failures=\"" << nfail
               << "\" time=\"" << os.str().c_str() << "\" >";
