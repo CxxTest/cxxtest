@@ -14,6 +14,8 @@ public:
         TS_ASSERT_EQUALS(1, 2);
         TS_ASSERT_EQUALS('a', 'A');
         TS_ASSERT_EQUALS(1.0, -12345678900000000000000000000000000000000000000000.1234);
+        const char* tmp = "foo";
+        TS_ASSERT_EQUALS("foo", tmp);
     }
 
     void testAddition() {
