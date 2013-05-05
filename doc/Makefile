@@ -1,4 +1,4 @@
-.PHONY: all anchors outputs clean
+.PHONY: all anchors outputs clean manpages
 
 export XML_CATALOG_FILES = catalog.xml
 PY = python
@@ -16,18 +16,18 @@ A2X_OPTS      := -a toc -a icons -L -d article -v --xsltproc-opts "$(XSLTPROC_OP
 # Ignore errors
 %.epub: %.txt anchors outputs
 	- a2x -f epub $(A2X_OPTS) $<
+
+all: guide.html guide.pdf guide.epub
+
 manpages: 
 	cd man; ./create_manpage;
 	cd man; asciidoc -v -d manpage ./cxxtestgen.1.txt
-	cd man; a2x -d manpage -f manpage ./cxxtestgen.1.txt
 
 html: guide.html
 
 pdf: guide.pdf
 
 epub: guide.epub
-
-all: guide.html guide.pdf guide.epub
 
 anchors: guide.txt
 	$(PY) include_anchors.py $<
