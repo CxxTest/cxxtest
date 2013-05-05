@@ -22,6 +22,7 @@
 #include <cxxtest/TestTracker.h>
 #include <cxxtest/Descriptions.h>
 #include <cxxtest/ValueTraits.h>
+#include <cxxtest/StdValueTraits.h>
 #include <sstream>
 #include <cstring>
 
@@ -70,7 +71,7 @@ struct equals<const char*, const char*>
 {
     static bool test(const char *x, const  char *y)
     {
-        return (std::strcmp(x,y) == 0);
+        return (CXXTEST_STD(strcmp(x,y)) == 0);
     }
 };
 
@@ -79,7 +80,7 @@ struct equals<char*, char*>
 {
     static bool test(char *x, char *y)
     {
-        return (std::strcmp(x,y) == 0);
+        return (CXXTEST_STD(strcmp(x,y)) == 0);
     }
 };
 
@@ -88,7 +89,7 @@ struct equals<const char*, char*>
 {
     static bool test(const char *x, char *y)
     {
-        return (std::strcmp(x,y) == 0);
+        return (CXXTEST_STD(strcmp(x,y)) == 0);
     }
 };
 
@@ -97,7 +98,7 @@ struct equals<char*, const char*>
 {
     static bool test(char *x, const char *y)
     {
-        return (std::strcmp(x,y) == 0);
+        return (CXXTEST_STD(strcmp(x,y)) == 0);
     }
 };
 
