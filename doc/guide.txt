@@ -209,10 +209,12 @@ The following table summarizes the test assertions supported by CxxTest.
 [options="header"]
 |====================================================================================
 | Macro                                                                 | Description
-| <<ts_assert,+TS_ASSERT(expr)+>>                                   | Verify +expr+ is true
+| <<ts_assert,+TS_ASSERT(expr)+>>                                       | Verify +expr+ is true
 | xref:ts_assert_delta[+TS_ASSERT_DELTA(x,y,d)+]                        | Verify that +abs(x-y) < d+
 | xref:ts_assert_differs[+TS_ASSERT_DIFFERS(x,y)+]                      | Verify that +x != y+
 | xref:ts_assert_equals[+TS_ASSERT_EQUALS(x,y)+]                        | Verify that +x == y+
+| <<ts_assert_is_nan,+TS_ASSERT_IS_NAN(x)+>>                            | Verify that +x+ is NaN
+| <<ts_assert_is_infinite,+TS_ASSERT_IS_INFINITE(x)+>>                  | Verify that +x+ is infinite
 | xref:ts_assert_less_than[+TS_ASSERT_LESS_THAN(x,y)+]                  | Verify that +x < y+
 | xref:ts_assert_less_than_equals[+TS_ASSERT_LESS_THAN_EQUALS(x,y)+]    | Verify that +x <= y+
 | xref:ts_assert_predicate[+TS_ASSERT_PREDICATE(P,x)+]                  | Verify +P(x)+
@@ -222,6 +224,8 @@ The following table summarizes the test assertions supported by CxxTest.
 | <<ts_assert_throws_anything,+TS_ASSERT_THROWS_ANYTHING(expr)+>>     | Verify that +expr+ throws an exception
 | xref:ts_assert_throws_assert[+TS_ASSERT_THROWS_ASSERT(expr,arg,assertion)+] | Verify type and value of what +expr+ throws
 | xref:ts_assert_throws_equals[+TS_ASSERT_THROWS_EQUALS(expr,arg,x,y)+] | Verify type and value of what +expr+ throws
+| xref:ts_assert_throws_is_nan[+TS_ASSERT_THROWS_IS_NAN(expr,arg,x)+] | Verify type and value of what +expr+ throws
+| xref:ts_assert_throws_is_infinite[+TS_ASSERT_THROWS_IS_INFINITE(expr,arg,x)+] | Verify type and value of what +expr+ throws
 | <<ts_assert_throws_nothing,+TS_ASSERT_THROWS_NOTHING(expr)+>>       | Verify that +expr+ doesn't throw anything
 | <<ts_fail,+TS_FAIL(message)+>>                                   | Fail unconditionally
 | <<ts_skip,+TS_SKIP(message)+>>                                    | Skip this test
@@ -1344,6 +1348,20 @@ include::examples/.Assertions_assertEquals.h[]
 ----
 Note that this test is performed using the C++ +==+ operator, whose behavior may be redefined for the two argument types.
 
+[[ts_assert_is_nan]] TS_ASSERT_IS_NAN::
+  This test assertion verifies that the argument is NaN:
+[source,{cpp}]
+----
+include::examples/.Assertions_assertIsNan.h[]
+----
+
+[[ts_assert_is_infinite]] TS_ASSERT_IS_INFINITE::
+  This test assertion verifies that the argument is infinite:
+[source,{cpp}]
+----
+include::examples/.Assertions_assertIsInfinite.h[]
+----
+
 [[ts_assert_less_than]] TS_ASSERT_LESS_THAN::
 This test assertion verifies that the first argument is strictly less than the second argument:
 [source,{cpp}]
@@ -1413,6 +1431,20 @@ This test assertion verifies that an exception is thrown when executing the firs
 [source,{cpp}]
 ----
 include::examples/.Assertions_assertThrowsEquals.h[]
+----
+
+[[ts_assert_throws_is_nan]] TS_ASSERT_THROWS_IS_NAN::
+This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third argument is a value that are asserted to be NaN after the exception is thrown:
+[source,{cpp}]
+----
+include::examples/.Assertions_assertThrowsIsNan.h[]
+----
+
+[[ts_assert_throws_is_infinite]] TS_ASSERT_THROWS_IS_INFINITE::
+This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third argument is a value that are asserted to be infinite after the exception is thrown:
+[source,{cpp}]
+----
+include::examples/.Assertions_assertThrowsIsInfinite.h[]
 ----
 
 [[ts_assert_throws_nothing]] TS_ASSERT_THROWS_NOTHING::

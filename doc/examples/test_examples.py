@@ -20,10 +20,21 @@ datadir = currdir
 
 compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:.*)$")
 dirre      = re.compile("^([^%s]*/)*" % re.escape(os.sep))
+xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
+datere     = re.compile("date=\"[^\"]*\"")
 failure    = re.compile("^(?P<prefix>.+)file=\"(?P<path>[^\"]+)\"(?P<suffix>.*)$")
 
 #print "FOO", dirre 
 def filter(line):
+    # for xml, remove prefixes from everything that looks like a 
+    # file path inside ""
+    line = xmlre.sub(
+            lambda match: '"'+re.sub("^[^/]+/", "", match.group(1))+'"',
+            line
+            )
+    # Remove date info
+    line = datere.sub( lambda match: 'date=""', line)
+
     if 'Running' in line:
         return False
     if "IGNORE" in line:

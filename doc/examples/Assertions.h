@@ -33,6 +33,20 @@ public:
     }
 // @:assertEquals
 
+// @assertIsNan:
+    void test_assert_is_nan(void)
+    {
+        TS_ASSERT_IS_NAN( 0.0/0.0 );
+    }
+// @:assertIsNan
+
+// @assertIsInfinite:
+    void test_assert_is_infinite(void)
+    {
+        TS_ASSERT_IS_INFINITE( 1.0/0.0 );
+    }
+// @:assertIsInfinite
+
 // @assertLessThan:
     void test_assert_less_than(void)
     {
@@ -114,6 +128,30 @@ public:
         TS_ASSERT_THROWS_EQUALS(self.throws_value(), const Error & e, e.what(), 1);
     }
 // @:assertThrowsEquals
+
+// @assertThrowsIsNan:
+    void throws_nan(void)
+    {
+        raise 0.0/0.0;
+    }
+
+    void test_assert_throws_is_nan(void)
+    {
+        TS_ASSERT_THROWS_IS_NAN(self.throws_nan(), const Error & e, e.what());
+    }
+// @:assertThrowsIsNan
+
+// @assertThrowsIsInfinite:
+    void throws_infinite(void)
+    {
+        raise 1.0/0.0;
+    }
+
+    void test_assert_throws_is_infinite(void)
+    {
+        TS_ASSERT_THROWS_IS_INFINITE(self.throws_infinite(), const Error & e, e.what());
+    }
+// @:assertThrowsIsInfinite
 
 // @assertThrowsNothing:
     void throws_nothing(void)
