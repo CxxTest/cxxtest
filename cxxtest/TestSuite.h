@@ -70,7 +70,11 @@ struct equals<const char*, const char*>
 {
     static bool test(const char *x, const  char *y)
     {
-        return (std::strcmp(x,y) == 0);
+      if ((x != 0) && (y != 0)) {
+         return (std::strcmp(x,y) == 0);
+      } else {
+	 return (x == y);
+      }
     }
 };
 
@@ -79,7 +83,11 @@ struct equals<char*, char*>
 {
     static bool test(char *x, char *y)
     {
-        return (std::strcmp(x,y) == 0);
+      if ((x != 0) && (y != 0)) {
+         return (std::strcmp(x,y) == 0);
+      } else {
+	 return (x == y);
+      }
     }
 };
 
@@ -88,7 +96,11 @@ struct equals<const char*, char*>
 {
     static bool test(const char *x, char *y)
     {
-        return (std::strcmp(x,y) == 0);
+       if ((x != 0) && (y != 0)) {
+          return (std::strcmp(x,y) == 0);
+       } else {
+	  return (x == y);
+       }
     }
 };
 
@@ -97,7 +109,11 @@ struct equals<char*, const char*>
 {
     static bool test(char *x, const char *y)
     {
-        return (std::strcmp(x,y) == 0);
+      if ((x != 0) && (y != 0)) {
+         return (std::strcmp(x,y) == 0);
+      } else {
+	 return (x == y);
+      }
     }
 };
 
