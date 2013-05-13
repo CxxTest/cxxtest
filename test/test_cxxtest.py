@@ -219,7 +219,7 @@ class BaseTestCase(object):
                 try:
                     os.remove(file)
                 except:
-                    print "Error removing file '%s'" % file
+                    print( "Error removing file '%s'" % file)
 
 
     # This is a "generator" that just reads a file and normalizes the lines
