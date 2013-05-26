@@ -186,6 +186,7 @@ class BaseTestCase(object):
     cxxtest_import=False
 
     def setUp(self):
+        sys.stderr.write("("+self.__class__.__name__+") ")
         self.passed=False
         self.prefix=''
         self.py_out=''
