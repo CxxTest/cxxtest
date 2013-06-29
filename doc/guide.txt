@@ -744,6 +744,14 @@ allocate and deallocate memory for a string buffer:
 include::examples/MyTestSuite5.h[]
 -----
 
+Note that test assertions cannot be used in within the +setUp()+
+or +tearDown()+ methods.  The scope of these methods is outside any
+test case, so an assertion failure does not have a clear semantics.
+Similarly, test assertions cannot be used in
+world setup and teardown or in +createSuite()+ or +destroySuite()+ methods for for
+dynamicly created test suites (see below).
+
+
 Dynamically Created Test Suites
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
