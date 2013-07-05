@@ -40,9 +40,9 @@ done
 \rm -Rf vpython
 tmp=2.6
 if [ "yes" = "$(echo | awk "($PYTHON_VER <= $tmp) { print \"yes\"; }")" ]; then
-   "$PYTHON" virtualenv_1.7.py "$WORKSPACE"/vpython || exit 1
+   "$PYTHON" "$WORKSPACE"/cxxtest/admin/virtualenv_1.7.py "$WORKSPACE"/vpython || exit 1
 else
-   "$PYTHON" virtualenv.py "$WORKSPACE"/vpython || exit 1
+   "$PYTHON" "$WORKSPACE"/cxxtest/admin/virtualenv.py "$WORKSPACE"/vpython || exit 1
 fi
 vpython/bin/easy_install nose
 if test "$PYTHON_VER" -gt 2; then
