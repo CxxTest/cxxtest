@@ -2,6 +2,14 @@
 CxxTest Releases
 ----------------
 
+* Version 4.3 (2013-07-05)
+ - Changes to assess code coverage of the cxxtestgen command
+ - Standardizing C++ file formats (using astyle)
+ - Bug fixes that led to the test runner hanging
+ - Adding special assertions for floating point values
+ - Added date to XML output
+ - Added support for comparison of C strings
+
 * Version 4.2.1 (2013-03-22)
  - Fixing documentation of LGPL version
 
