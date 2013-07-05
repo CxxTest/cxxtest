@@ -4,8 +4,13 @@ if test -z "$WORKSPACE"; then
     echo "ERROR: \$WORKSPACE not defined"
     exit 1
 fi
-
 export PATH="$WORKSPACE/vpython/bin:$PATH"
+
+if test -n "$1"; then
+    PYTHON="$1"
+else
+    PYTHON=python
+fi
 
 echo
 echo "Building on `hostname`:"
@@ -18,9 +23,9 @@ echo "  Environment:"
 /usr/bin/env 2>&1 | sort | sed 's/^/    /'
 echo
 echo "  Python:"
-python -c 'import sys; sys.stdout.write(sys.version+"\n")' 2>&1 \
+${PYTHON} -c 'import sys; sys.stdout.write(sys.version+"\n")' 2>&1 \
     | sed 's/^/    /'
-PYTHON_VER=`python -c 'import sys; sys.stdout.write(str(sys.version_info[0]))'`
+PYTHON_VER=`${PYTHON} -c 'import sys; sys.stdout.write(str(sys.version_info[0]))'`
 echo
 # The following executables are required (missing app yields build failure)
 for app in gcc; do
@@ -33,7 +38,11 @@ done
 
 # Setup virtual Python environment
 \rm -Rf vpython
-python cxxtest/admin/virtualenv.py vpython
+if test "$PYTHON_VER" -lt 2.6; then
+   "$PYTHON" "$BUILD_SCRIPTS"/virtualenv_1.7.py "$WORKSPACE"/vpython || exit 1
+else
+   "$PYTHON" "$BUILD_SCRIPTS"/virtualenv.py "$WORKSPACE"/vpython || exit 1
+fi
 vpython/bin/easy_install nose
 if test "$PYTHON_VER" -gt 2; then
     vpython/bin/easy_install unittest2py3k
