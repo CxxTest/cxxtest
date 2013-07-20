@@ -59,7 +59,7 @@ class ValueTraits<const CXXTEST_STD(string)> : public StdTraitsBase
 {
     static bool mb_partial(char ch)
     {
-        return ch & 0x80;
+        return !!(ch & 0x80);
     }
     static bool mb_start(char ch)
     {
@@ -80,7 +80,7 @@ class ValueTraits<const CXXTEST_STD(string)> : public StdTraitsBase
         {
             return false;
         }
-        for (unsigned len = mb_length(s[i]); len > 0; -- len, ++ i)
+        for (size_t len = mb_length(s[i]); len > 0; -- len, ++ i)
         {
             if (!mb_partial(s[i]))
             {
@@ -98,7 +98,7 @@ public:
         {
             if (is_mb(s, i))
             {
-                for (unsigned len = mb_length(s[i]); len > 0; -- len, ++ i)
+                for (size_t len = mb_length(s[i]); len > 0; -- len, ++ i)
                 {
                     char c[2] = { s[i], '\0' };
                     *this << c;
