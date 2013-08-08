@@ -383,18 +383,11 @@ public:
     void leaveWorld(const WorldDescription& desc)
     {
         std::ostringstream os;
-        const time_t current_date(time(0));
-        char current_date_string[27];
-        const size_t n = strlen(ctime_r(&current_date,current_date_string));
-        if (n) {
-            current_date_string[n-1] = '\0'; // remove the ending \n
-        } else {
-            current_date_string[0] = '\0'; // just in case...
-        }
+        const std::string currentDateTime = currentDateTimeStr();
         os << totaltime;
         (*_o) << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
         (*_o) << "<testsuite name=\"" << desc.worldName() << "\" ";
-        (*_o) << "date=\"" << current_date_string;
+        (*_o) << "date=\"" << currentDateTime.c_str();
         (*_o) << "\" tests=\"" << ntests
               << "\" errors=\"" << nerror
               << "\" failures=\"" << nfail
@@ -590,6 +583,29 @@ private:
             elt->value << CXXTEST_STD(endl);
         }
         return elt->value;
+    }
+
+    std::string currentDateTimeStr()
+    {
+        std::string retVal;
+        const time_t now(time(NULL));
+        char current_date_string[27];
+        
+#ifdef WIN32
+        if (ctime_s(current_date_string, sizeof(current_date_string)-1, &now) == 0)
+        {
+            retVal = current_date_string;
+            retVal.erase(retVal.find_last_not_of(" \n\r\t")+1); // trim trailing whitespace
+        }
+#else
+        const size_t n = strlen(ctime_r(&now, current_date_string));
+        if (n) 
+        {
+            current_date_string[n-1] = '\0'; // remove the ending \n
+            retVal = current_date_string;
+        } 
+#endif
+        return retVal;
     }
 
 #if 0
