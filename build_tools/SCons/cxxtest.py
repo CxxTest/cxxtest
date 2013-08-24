@@ -118,10 +118,15 @@ def UnitTest(env, target, source = [], **kwargs):
     kwargs["CXXFLAGS"] = cxxflags
     kwargs["CCFLAGS"]  = ccflags
     test = env.Program(target, source = source, **kwargs)
-    if multiget([kwargs, env, os.environ], 'CXXTEST_SKIP_ERRORS', False):
-        runner = env.Action(test[0].abspath, exitstatfunc=lambda x:0)
+    testCommand = multiget([kwargs, env, os.environ], 'CXXTEST_COMMAND')
+    if testCommand:
+        testCommand = testCommand.replace('%t', test[0].abspath)
     else:
-        runner = env.Action(test[0].abspath)
+        testCommand = test[0].abspath
+    if multiget([kwargs, env, os.environ], 'CXXTEST_SKIP_ERRORS', False):
+        runner = env.Action(testCommand, exitstatfunc=lambda x:0)
+    else:
+        runner = env.Action(testCommand)
     env.Alias(env['CXXTEST_TARGET'], test, runner)
     env.AlwaysBuild(env['CXXTEST_TARGET'])
     return test
@@ -224,6 +229,10 @@ def generate(env, **kwargs):
     CXXTEST_OPTS    - other options to pass to cxxtest.  Default: ''
     CXXTEST_SUFFIX  - the suffix of the test files.  Default: '.t.h'
     CXXTEST_TARGET  - the target to append the tests to.  Default: check
+    CXXTEST_COMMAND - the command that will be executed to run the test,
+                       %t will be replace with the test executable.
+                       Can be used for example for MPI or valgrind tests.
+                       Default: %t
     CXXTEST_CXXFLAGS_REMOVE - the flags that cxxtests can't compile with,
                               or give lots of warnings. Will be stripped.
                               Default: -pedantic -Weffc++
