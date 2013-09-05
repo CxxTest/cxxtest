@@ -46,8 +46,8 @@ else
 fi
 vpython/bin/easy_install nose
 if test "$PYTHON_VER" -gt 2; then
-    #vpython/bin/easy_install unittest2py3k
-    vpython/bin/pip install unittest2py3k
+    vpython/bin/easy_install unittest2py3k
+    #vpython/bin/pip install unittest2py3k
 else
     vpython/bin/easy_install unittest2
 fi
