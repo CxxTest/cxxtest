@@ -7,6 +7,7 @@
 # the U.S. Government retains certain rights in this software.
 #-------------------------------------------------------------------------
 
+import shutil
 import time
 import sys
 import os
@@ -298,9 +299,10 @@ class BaseTestCase(object):
         #
         self.passed=True
 
-    def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False):
+    def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False, init=True):
         """Run cxxtestgen and compile the code that is generated"""
-        self.init(prefix)
+        if init:
+            self.init(prefix)
         #
         if self.cxxtest_import:
             try:
@@ -697,6 +699,45 @@ class BaseTestCase(object):
             self.compile(prefix='bad1', args="--error-printer BadTest.h", failGen=True)
         else:
             self.compile(prefix='bad1', args="--error-printer BadTest.h", output='bad.out')
+
+    #
+    # Testing path manipulation
+    #
+
+    def test_normal_sympath(self):
+        """Normal Behavior - symbolic path"""
+        _files = " ".join(["LessThanEquals.h","Relation.h","DefaultTraits.h","DoubleCall.h","SameData.h","SameFiles.h","Tsm.h","TraitsTest.h","MockTest.h","SameZero.h"])
+        prefix = 'normal_sympath'
+        self.init(prefix=prefix)
+        try:
+            os.remove('test_sympath')
+        except:
+            pass
+        try:
+            shutil.rmtree('../test_sympath')
+        except:
+            pass
+        os.mkdir('../test_sympath')
+        os.symlink('../test_sympath', 'test_sympath')
+        self.py_cpp = 'test_sympath/'+prefix+'_py.cpp'
+        self.compile(prefix=prefix, init=False, args="--error-printer "+_files, output="normal.out")
+        os.remove('test_sympath')
+        shutil.rmtree('../test_sympath')
+
+    def test_normal_relpath(self):
+        """Normal Behavior - relative path"""
+        _files = " ".join(["LessThanEquals.h","Relation.h","DefaultTraits.h","DoubleCall.h","SameData.h","SameFiles.h","Tsm.h","TraitsTest.h","MockTest.h","SameZero.h"])
+        prefix = 'normal_relative'
+        self.init(prefix=prefix)
+        try:
+            shutil.rmtree('../test_relpath')
+        except:
+            pass
+        os.mkdir('../test_relpath')
+        self.py_cpp = '../test_relpath/'+prefix+'_py.cpp'
+        self.compile(prefix=prefix, init=False, args="--error-printer "+_files, output="normal.out")
+        shutil.rmtree('../test_relpath')
+
 
 
 class TestCpp(BaseTestCase, unittest.TestCase):

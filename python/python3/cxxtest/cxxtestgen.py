@@ -384,10 +384,23 @@ def isDynamic(suite):
 def writeInclude(output, file):
     '''Add #include "file" statement'''
     global lastIncluded
-    file = os.path.abspath(file)
-    if file == lastIncluded: return
-    output.writelines( [ '#include "', file, '"\n\n' ] )
-    lastIncluded = file
+    if options.outputFileName:
+        dirname = os.path.split(options.outputFileName)[0]
+        tfile = relpath(file, dirname) 
+        if os.path.exists(tfile):
+            if tfile == lastIncluded: return
+            output.writelines( [ '#include "', tfile, '"\n\n' ] )
+            lastIncluded = tfile
+            return
+    #
+    # Use an absolute path if the relative path failed
+    #
+    tfile = os.path.abspath(file)
+    if os.path.exists(tfile):
+        if tfile == lastIncluded: return
+        output.writelines( [ '#include "', tfile, '"\n\n' ] )
+        lastIncluded = tfile
+        return
 
 def generateSuite( output, suite ):
     '''Write a suite declared with CXXTEST_SUITE()'''
