@@ -261,7 +261,7 @@ class BaseTestCase(object):
             cmd = join_commands("cd %s" % currdir,
                             "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
             status = subprocess.call(cmd, shell=True)
-            self.assertEqual(status, 0, 'Error executing cxxtestgen')
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status,cmd))
         #
         files = [self.py_cpp]
         for i in [1,2]:
@@ -275,7 +275,7 @@ class BaseTestCase(object):
                 cmd = join_commands("cd %s" % currdir,
                                 "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
                 status = subprocess.call(cmd, shell=True)
-                self.assertEqual(status, 0, 'Error executing cxxtestgen')
+                self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status,cmd))
         #
         cmd = join_commands("cd %s" % currdir,
                             "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log))
@@ -283,7 +283,7 @@ class BaseTestCase(object):
         for file in files:
             if os.path.exists(file):
                 os.remove(file)
-        self.assertEqual(status, 0, 'Error executing command: '+cmd)
+        self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
         #
         cmd = join_commands("cd %s" % currdir,
                             "%s %s -v > %s 2>&1" % (self.valgrind, self.build_target, self.px_pre))
@@ -321,7 +321,7 @@ class BaseTestCase(object):
                 self.passed=True
                 return
         if not self.cxxtest_import:
-            self.assertEqual(status, 0, 'Error executing command: '+cmd)
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
         #
         if not main is None:
             # Compile with main
@@ -339,7 +339,7 @@ class BaseTestCase(object):
                 self.passed=True
                 return
         else:
-            self.assertEqual(status, 0, 'Error executing command: '+cmd)
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
         #
         if compile == '' and not output is None:
             if run is None:
