@@ -14,3 +14,28 @@ function(cxx_test target source)
     set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-Wno-effc++")
     add_test(${target} ${RUNTIME_OUTPUT_DIRECTORY}/${target})
 endfunction(cxx_test)
+
+if(NOT DEFINED CXXTEST_TESTGEN_ARGS)
+  set(CXXTEST_TESTGEN_ARGS --error-printer)
+endif()
+macro(CXXTEST_ADD_TEST _cxxtest_testname _cxxtest_outfname)
+  set(_cxxtest_real_outfname ${CMAKE_CURRENT_BINARY_DIR}/${_cxxtest_outfname})
+
+  include_directories(${CXXTEST_INCLUDE_DIRS})
+  add_custom_command(
+    OUTPUT  ${_cxxtest_real_outfname}
+    DEPENDS ${ARGN}
+    COMMAND ${CXXTESTGEN} ${CXXTEST_TESTGEN_ARGS} --world=${_cxxtest_outfname} -o ${_cxxtest_real_outfname} ${ARGN} 
+    )
+  set_source_file_properties(${_cxxtest_real_outfname} PROPERTIES GENERATED true)
+  add_executable(${_cxxtest_testname) ${_cxxtest_real_outfname} ${ARGN})
+  if(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    add_test(${_cxxtest_testname} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_cxxtest_testname})
+  elseif(EXECUTABLE_OUTPUT_PATH)
+    add_test(${_cxxtest_testname} ${EXECUTABLE_OUTPUT_PATH}/${_cxxtest_testname})
+  else()
+    add_test(${_cxxtest_testname} ${CMAKE_CURRENT_BINARY_DIR}/${_cxxtest_testname})
+  endif()
+
+macro(CXXTEST_ADD_TEST)
+
