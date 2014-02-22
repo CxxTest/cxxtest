@@ -214,9 +214,11 @@ def findCxxTestHeaders(env):
     alt_path = os_cxxtestgen[:-cxxtestgen_pathlen]
 
     searchpaths = [default_path, alt_path]
+    foundpaths = []
     for p in searchpaths:
         if os.path.exists(os.path.join(p, 'cxxtest', searchfile)):
-            return p
+            foundpaths.append(p)
+    return foundpaths
 
 def generate(env, **kwargs):
     """
@@ -286,7 +288,7 @@ def generate(env, **kwargs):
         env["CXXTEST"] = findCxxTestGen(env)
 
     # find and add the CxxTest headers to the path.
-    env.AppendUnique( CXXTEST_CPPPATH = [findCxxTestHeaders(env)]  )
+    env.AppendUnique( CXXTEST_CPPPATH = findCxxTestHeaders(env)  )
     
     cxxtest = env['CXXTEST']
     if cxxtest:
