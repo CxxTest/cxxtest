@@ -511,7 +511,7 @@ with complex inheritance relationships.
 The +--fog+ option is used to specify the use of the FOG parser for
 test discovery.  Although the FOG parser is more powerful, the
 simpler +cxxtestgen+ test discover process is the default because
-the FOG parser is slower execute.  Additionally, the FOG parser
+the FOG parser is slower to execute.  Additionally, the FOG parser
 requires the installation of +ply+ and, for Python version 2.6,
 ordereddict+.  If these packages are not available, then the +--fog+
 option is automatically disabled.
