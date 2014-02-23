@@ -142,8 +142,9 @@ public:
 
     void skippedTest(const char *file, int line, const char *expression)
     {
-        stop(file, line) << _warningString << ": Test skipped: " <<
-                         expression << endl;
+        if(expression && strlen(expression) > 0)
+            stop(file, line) << _warningString << ": Test skipped: " <<
+                             expression << endl;
     }
 
     void failedTest(const char *file, int line, const char *expression)
