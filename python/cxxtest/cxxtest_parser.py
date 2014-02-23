@@ -11,6 +11,7 @@ from __future__ import division
 
 import codecs
 import re
+import sys
 from cxxtest.cxxtest_misc import abort
 
 # Global variables
