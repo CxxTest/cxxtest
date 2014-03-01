@@ -1,0 +1,3 @@
+Import('env')
+env.CxxTest('test1.t.h', LIBS = ['foo'], LIBPATH = ['../src1'])
+env.CxxTest('test2.t.h', LIBS = ['bar'], LIBPATH = ['../src2'])
