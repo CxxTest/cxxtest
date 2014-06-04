@@ -330,14 +330,14 @@ void doAssertSameFiles(const char* file, int line,
 #       define _TS_CATCH_ABORT(b) _TS_CATCH_TYPE( (const CxxTest::AbortTest &), b )
 #       define _TS_CATCH_SKIPPED(b) _TS_CATCH_TYPE( (const CxxTest::SkipTest &), b )
 #       define _TS_LAST_CATCH(b) _TS_CATCH_TYPE( (...), b )
-#       define _TSM_LAST_CATCH(f,l,m) _TS_LAST_CATCH( { (CxxTest::tracker()).failedTest(f,l,m); TS_ABORT(); } )
+#       define _TSM_LAST_CATCH(f,l,m) _TS_LAST_CATCH( { (CxxTest::tracker()).failedTest(f,l,m); } )
 #       ifdef _CXXTEST_HAVE_STD
 #           define _TS_CATCH_STD(e,b) _TS_CATCH_TYPE( (const std::exception& e), b )
 #       else // !_CXXTEST_HAVE_STD
 #           define _TS_CATCH_STD(e,b)
 #       endif // _CXXTEST_HAVE_STD
 #       define ___TSM_CATCH(f,l,m) \
-            _TS_CATCH_STD(e, { (CxxTest::tracker()).failedTest(f,l,e.what()); TS_ABORT(); }) \
+            _TS_CATCH_STD(e, { (CxxTest::tracker()).failedTest(f,l,e.what()); }) \
             _TSM_LAST_CATCH(f,l,m)
 #       define __TSM_CATCH(f,l,m) \
                 _TS_CATCH_ABORT( { throw; } ) \
