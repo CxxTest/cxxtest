@@ -65,6 +65,7 @@
 
 from SCons.Script import *
 from SCons.Builder import Builder
+from SCons.Util import PrependPath, unique, uniquer
 import os
 
 # A warning class to notify users of problems
@@ -100,6 +101,25 @@ def envget(env, key, default=None):
     """Look in the env, then in os.environ. Otherwise same as multiget."""
     return multiget([env, os.environ], key, default)
 
+def prepend_ld_library_path(env, overrides, **kwargs):
+    """Prepend LD_LIBRARY_PATH with LIBPATH to run successfully programs that
+    were linked against local shared libraries."""
+    # make it unique but preserve order ...
+    libpath = uniquer(Split(kwargs.get('CXXTEST_LIBPATH', [])) +
+                      Split(env.get(   'CXXTEST_LIBPATH', [])))
+    if len(libpath) > 0:
+        libpath = env.arg2nodes(libpath, env.fs.Dir)
+        platform = env.get('PLATFORM','')
+        if platform == 'win32':
+            var = 'PATH'
+        else:
+            var = 'LD_LIBRARY_PATH'
+        eenv = overrides.get('ENV', env['ENV'].copy())
+        canonicalize = lambda p : p.abspath
+        eenv[var] = PrependPath(eenv.get(var,''), libpath, os.pathsep, 1, canonicalize)
+        overrides['ENV'] = eenv
+    return overrides
+
 def UnitTest(env, target, source = [], **kwargs):
     """
     Prepares the Program call arguments, calls Program and adds the result to
@@ -127,8 +147,10 @@ def UnitTest(env, target, source = [], **kwargs):
         runner = env.Action(testCommand, exitstatfunc=lambda x:0)
     else:
         runner = env.Action(testCommand)
-    env.Alias(env['CXXTEST_TARGET'], test, runner)
-    env.AlwaysBuild(env['CXXTEST_TARGET'])
+    overrides = prepend_ld_library_path(env, {}, **kwargs)
+    cxxtest_target = multiget([kwargs, env], 'CXXTEST_TARGET')
+    env.Alias(cxxtest_target, test, runner, **overrides)
+    env.AlwaysBuild(cxxtest_target)
     return test
 
 def isValidScriptPath(cxxtestgen):
@@ -248,6 +270,11 @@ def generate(env, **kwargs):
                         CxxTest header files and other stuff you only need for
                         your tests, this is the variable to set. Behaves as
                         CPPPATH does.
+    CXXTEST_LIBPATH - If your test is linked to shared libraries which are
+                        outside of standard directories. This is used as LIBPATH
+                        when compiling the test program and to modify
+                        LD_LIBRARY_PATH (or PATH on win32) when running the
+                        program.
     CXXTEST_INSTALL_DIR - this is where you tell the builder where CxxTest is
                             installed. The install directory has cxxtest,
                             python, docs and other subdirectories.
@@ -288,7 +315,7 @@ def generate(env, **kwargs):
         env["CXXTEST"] = findCxxTestGen(env)
 
     # find and add the CxxTest headers to the path.
-    env.AppendUnique( CXXTEST_CPPPATH = findCxxTestHeaders(env)  )
+    env.AppendUnique( CXXTEST_CPPPATH = findCxxTestHeaders(env) )
     
     cxxtest = env['CXXTEST']
     if cxxtest:
@@ -351,12 +378,18 @@ def generate(env, **kwargs):
                     for header in headers]
                 )
         deps.extend(linkins)
-        kwargs['CPPPATH'] = list(set(
+        kwargs['CPPPATH'] = unique(
             Split(kwargs.get('CPPPATH', [])) +
             Split(env.get(   'CPPPATH', [])) +
             Split(kwargs.get('CXXTEST_CPPPATH', [])) +
             Split(env.get(   'CXXTEST_CPPPATH', []))
-            ))
+            )
+        kwargs['LIBPATH'] = unique(
+            Split(kwargs.get('LIBPATH', [])) +
+            Split(env.get(   'LIBPATH', [])) +
+            Split(kwargs.get('CXXTEST_LIBPATH', [])) +
+            Split(env.get(   'CXXTEST_LIBPATH', []))
+            )
 
         return UnitTest(env, target, source = deps, **kwargs)
 
