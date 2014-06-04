@@ -580,6 +580,10 @@ class BaseTestCase(object):
         """GF:TDW throws"""
         self.compile(prefix='gf_tdw_throws', args="--error-printer TearDownWorldThrows.h", output="tdwt.out")
 
+    def test_gf_suw_fails_XML(self):
+        """GF:SUW fails"""
+        self.compile(prefix='gf_suw_fails', args="--xunit-printer SetUpWorldFails.h", output="suwf.out")
+
     #
     # GUI
     #
