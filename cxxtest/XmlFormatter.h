@@ -261,7 +261,9 @@ class XmlFormatter : public TestListener
 public:
     XmlFormatter(OutputStream *o, OutputStream *ostr, std::ostringstream *os)
         : _o(o), _ostr(ostr), _os(os), stream_redirect(NULL)
-    {}
+    {
+    testcase = info.end();
+    }
 
     std::list<TestCaseInfo> info;
     std::list<TestCaseInfo>::iterator testcase;
@@ -401,6 +403,9 @@ public:
 
     void trace(const char* /*file*/, int line, const char *expression)
     {
+        if (testcase == info.end()) {
+            return;
+        }
         element_t elt = testcase->add_element("trace");
         elt->add("line", line);
         elt->value << expression;
@@ -408,6 +413,9 @@ public:
 
     void warning(const char* /*file*/, int line, const char *expression)
     {
+        if (testcase == info.end()) {
+            return;
+        }
         element_t elt = testcase->add_element("warning");
         elt->add("line", line);
         elt->value << expression;
