@@ -16,8 +16,8 @@ http://xprogramming.com/software.html[xUnit].  CxxTest is easy to
 use because it does not require precompiling a CxxTest testing
 library, it employs no advanced features of C++ (e.g. RTTI) and it
 supports a very flexible form of test discovery.  This documentation
-describes CxxTest 4.3, which is an incremental release that includes
-better test discovery features and new test skipping features.
+describes CxxTest 4.4, which is an incremental release that includes
+a variety of bug fixes and minor enhancements.
 
 :numbered:
 
@@ -1211,7 +1211,7 @@ distribution model is very strategic for cxxtest.
 Status and Future Plans
 -----------------------
 
-The CxxTest 4.3 release is an incremental release that was driven
+The CxxTest 4.4 release is an incremental release that was driven
 by a variety of bug fixes and minor enhancements.  The CxxTest 4.0
 release reflected major changes in the management and focus of
 CxxTest:
@@ -1289,6 +1289,11 @@ developers contributed to the CxxTest 4.x releases:
 * Lionel Orry
 * John Siirola
 * Jon Schlueter
+* Andrei Korostelev
+* Sebastian Rettenberger
+* Piotr Kasprzyk
+* Gluttton
+* Pawel Tomulik
 
 The CxxTest documentation is generated using
 http://www.methods.co.nz/asciidoc/[AsciiDoc].

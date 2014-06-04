@@ -2,6 +2,16 @@
 CxxTest Releases
 ----------------
 
+* Version 4.4 (2014-06-03)
+ - Fixed compilation error on Windows (MSVC) in XmlFormatter.h (#86)
+ - Fix to ensure that tearDown() is called (#89)
+ - Add option run test with a user defined command in scons (#91)
+ - Use a Python path relative to the cxxtestgen script (#88)
+ - Add defensive guard in ErrorFormatter.h (#96)
+ - Fixed bug with "None" appearing in CXXTEST_CPPATH (#99)
+ - Added CXXTEST_LIBPATH to properly use shared libraries (#100)
+ - Added guards when XmlFormatter.h data is not initialize (#87)
+
 * Version 4.3 (2013-07-05)
  - Changes to assess code coverage of the cxxtestgen command
  - Standardizing C++ file formats (using astyle)
