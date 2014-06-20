@@ -36,11 +36,6 @@ namespace CxxTest
 class X11Gui : public GuiListener
 {
 public:
-    void enterGui(int &argc, char **argv)
-    {
-        parseCommandLine(argc, argv);
-    }
-
     void enterWorld(const WorldDescription &wd)
     {
         openDisplay();
@@ -98,6 +93,108 @@ public:
         }
     }
 
+#if defined(_CXXTEST_HAVE_STD)
+    virtual void print_help(const char* name)
+    {
+        CXXTEST_STD(cerr) << name << " -title <title>              Set the window caption\n";
+        CXXTEST_STD(cerr) << name << " -fn <font>                  Set the font\n";
+        CXXTEST_STD(cerr) << name << " -font <font>}\n";
+        CXXTEST_STD(cerr) << name << " -bg <color>                 Set the background color (default=Grey)\n";
+        CXXTEST_STD(cerr) << name << " -background <color>\n";
+        CXXTEST_STD(cerr) << name << " -fg <color>                 Set the text color (default=Black)\n";
+        CXXTEST_STD(cerr) << name << " -foreground <color>\n";
+        CXXTEST_STD(cerr) << name << " -green/-yellow/-red <color> Set the colors of the bar" << CXXTEST_STD(endl);
+    }
+#endif
+
+    virtual bool process_commandline_args(int& i, int& argc, char* argv[])
+    {
+        if (i == 0)
+        {
+            _programName = argv[0];
+
+            _fontName = 0;
+            _foregroundName = "Black";
+            _backgroundName = "Grey";
+            _greenName = "Green";
+            _yellowName = "Yellow";
+            _redName = "Red";
+            return true;
+        }
+
+        if (!strcmp(argv[i], "-title"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _programName = argv[i];
+            return true;
+        }
+        else if (!strcmp(argv[i], "-fn") || !strcmp(argv[i], "-font"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _fontName = argv[i];
+            return true;
+        }
+        else if (!strcmp(argv[i], "-fg") || !strcmp(argv[i], "-foreground"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _foregroundName = argv[i];
+            return true;
+        }
+        else if (!strcmp(argv[i], "-bg") || !strcmp(argv[i], "-background"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _backgroundName = argv[i];
+            return true;
+        }
+        else if (!strcmp(argv[i], "-green"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _greenName = argv[i];
+            return true;
+        }
+        else if (!strcmp(argv[i], "-yellow"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _yellowName = argv[i];
+            return true;
+        }
+        else if (!strcmp(argv[i], "-red"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _redName = argv[i];
+            return true;
+        }
+        return false;
+    }
+
 private:
     const char *_programName;
     Display *_display;
@@ -115,50 +212,6 @@ private:
     int _textHeight, _textDescent;
     long _eventMask;
     Colormap _colormap;
-
-    void parseCommandLine(int &argc, char **argv)
-    {
-        _programName = argv[0];
-
-        _fontName = 0;
-        _foregroundName = "Black";
-        _backgroundName = "Grey";
-        _greenName = "Green";
-        _yellowName = "Yellow";
-        _redName = "Red";
-
-        for (int i = 1; i + 1 < argc; ++ i)
-        {
-            if (!strcmp(argv[i], "-title"))
-            {
-                _programName = argv[++ i];
-            }
-            else if (!strcmp(argv[i], "-fn") || !strcmp(argv[i], "-font"))
-            {
-                _fontName = argv[++ i];
-            }
-            else if (!strcmp(argv[i], "-fg") || !strcmp(argv[i], "-foreground"))
-            {
-                _foregroundName = argv[++ i];
-            }
-            else if (!strcmp(argv[i], "-bg") || !strcmp(argv[i], "-background"))
-            {
-                _backgroundName = argv[++ i];
-            }
-            else if (!strcmp(argv[i], "-green"))
-            {
-                _greenName = argv[++ i];
-            }
-            else if (!strcmp(argv[i], "-yellow"))
-            {
-                _yellowName = argv[++ i];
-            }
-            else if (!strcmp(argv[i], "-red"))
-            {
-                _redName = argv[++ i];
-            }
-        }
-    }
 
     void openDisplay()
     {

@@ -41,12 +41,6 @@ namespace CxxTest
 class QtGui : public GuiListener
 {
 public:
-    void enterGui(int &argc, char **argv)
-    {
-        parseCommandLine(argc, argv);
-        createApplication(argc, argv);
-    }
-
     void enterWorld(const WorldDescription &wd)
     {
         createWindow(wd);
@@ -100,6 +94,42 @@ public:
         }
     }
 
+    virtual bool process_commandline_args(int& i, int& argc, char* argv[])
+    {
+        if (i == 0)
+        {
+            _startMinimized = _keep = false;
+            _title = argv[0];
+            // Removes arguments it recognizes
+            _application = new QApplication(argc, argv);
+            return true;
+        }
+
+        if (!strcmp(argv[i], "-minimized"))
+        {
+            _startMinimized = true;
+        }
+        else if (!strcmp(argv[i], "-keep"))
+        {
+            _keep = true;
+        }
+        else if (!strcmp(argv[i], "-title"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _title = argv[i];
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 private:
     QString _title;
     bool _startMinimized, _keep;
@@ -111,34 +141,6 @@ private:
     QProgressBar *_progressBar;
     QStatusBar *_statusBar;
     QLabel *_suiteName, *_testName, *_testsDone;
-
-    void parseCommandLine(int argc, char **argv)
-    {
-        _startMinimized = _keep = false;
-        _title = argv[0];
-
-        for (int i = 1; i < argc; ++ i)
-        {
-            QString arg(argv[i]);
-            if (arg == "-minimized")
-            {
-                _startMinimized = true;
-            }
-            else if (arg == "-keep")
-            {
-                _keep = true;
-            }
-            else if (arg == "-title" && (i + 1 < argc))
-            {
-                _title = argv[++i];
-            }
-        }
-    }
-
-    void createApplication(int &argc, char **argv)
-    {
-        _application = new QApplication(argc, argv);
-    }
 
     void createWindow(const WorldDescription &wd)
     {
