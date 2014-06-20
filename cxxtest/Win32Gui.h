@@ -38,11 +38,6 @@ namespace CxxTest
 class Win32Gui : public GuiListener
 {
 public:
-    void enterGui(int &argc, char **argv)
-    {
-        parseCommandLine(argc, argv);
-    }
-
     void enterWorld(const WorldDescription &wd)
     {
         getTotalTests(wd);
@@ -94,6 +89,40 @@ public:
         DestroyWindow(_mainWindow);
     }
 
+    virtual bool process_commandline_args(int& i, int& argc, char* argv[])
+    {
+        if (i == 0)
+        {
+            _startMinimized = _keep = false;
+            _title = argv[0];
+            return true;
+        }
+
+        if (!lstrcmpA(argv[i], "-minimized"))
+        {
+            _startMinimized = true;
+        }
+        else if (!lstrcmpA(argv[i], "-keep"))
+        {
+            _keep = false;
+        }
+        else if (!lstrcmpA(argv[i], "-title"))
+        {
+            if (++i >= argc)
+            {
+                return false;
+            }
+
+            _title = argv[i];
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 private:
     const char *_title;
     bool _startMinimized, _keep;
@@ -116,28 +145,6 @@ private:
     char _statusTestsDone[sizeof("1000000000 of  (100%)") + WorldDescription::MAX_STRLEN_TOTAL_TESTS];
     DWORD _worldStart, _suiteStart, _testStart;
     char _timeString[sizeof("00:00:00")];
-
-    void parseCommandLine(int argc, char **argv)
-    {
-        _startMinimized = _keep = false;
-        _title = argv[0];
-
-        for (int i = 1; i < argc; ++ i)
-        {
-            if (!lstrcmpA(argv[i], "-minimized"))
-            {
-                _startMinimized = true;
-            }
-            else if (!lstrcmpA(argv[i], "-keep"))
-            {
-                _keep = true;
-            }
-            else if (!lstrcmpA(argv[i], "-title") && (i + 1 < argc))
-            {
-                _title = argv[++i];
-            }
-        }
-    }
 
     void getTotalTests()
     {
