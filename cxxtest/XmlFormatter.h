@@ -597,15 +597,21 @@ private:
     {
         std::string retVal;
         const time_t now(time(NULL));
-        char current_date_string[27];
         
 #ifdef WIN32
+#ifdef _MSC_VER
+        char current_date_string[27];
         if (ctime_s(current_date_string, sizeof(current_date_string)-1, &now) == 0)
         {
             retVal = current_date_string;
             retVal.erase(retVal.find_last_not_of(" \n\r\t")+1); // trim trailing whitespace
         }
 #else
+        retVal.append(ctime(&now));
+        retVal.erase(retVal.find_last_not_of(" \n\r\t")+1); // trim trailing whitespace
+#endif
+#else
+        char current_date_string[27];
         const size_t n = strlen(ctime_r(&now, current_date_string));
         if (n) 
         {
