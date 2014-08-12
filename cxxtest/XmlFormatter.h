@@ -599,7 +599,7 @@ private:
         const time_t now(time(NULL));
         char current_date_string[27];
         
-#ifdef WIN32
+#ifdef _WIN32
         if (ctime_s(current_date_string, sizeof(current_date_string)-1, &now) == 0)
         {
             retVal = current_date_string;
