@@ -210,7 +210,7 @@ class BaseTestCase(object):
         files = []
         if os.path.exists(self.py_out):
             files.append(self.py_out)
-        if os.path.exists(self.py_cpp) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
+        if os.path.exists(self.py_cpp) and 'CXXTEST_GCOV_FLAGS' not in os.environ:
             files.append(self.py_cpp)
         if os.path.exists(self.px_pre):
             files.append(self.px_pre)
@@ -218,7 +218,7 @@ class BaseTestCase(object):
             files.append(self.px_out)
         if os.path.exists(self.build_log):
             files.append(self.build_log)
-        if os.path.exists(self.build_target) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
+        if os.path.exists(self.build_target) and 'CXXTEST_GCOV_FLAGS' not in os.environ:
             files.append(self.build_target)
         for file in files:
             try:
@@ -328,7 +328,7 @@ class BaseTestCase(object):
         if not self.cxxtest_import:
             self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
-        if not main is None:
+        if main is not None:
             # Compile with main
             cmd = join_commands("cd %s" % currdir,
                                 "%s %s %s %s. %s%s../ %s main.cpp %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log))
@@ -346,7 +346,7 @@ class BaseTestCase(object):
         else:
             self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
-        if compile == '' and not output is None:
+        if compile == '' and output is not None:
             if run is None:
                 cmd = join_commands("cd %s" % currdir,
                                     "%s %s -v > %s 2>&1" % (self.valgrind, self.build_target, self.px_pre))
@@ -364,7 +364,7 @@ class BaseTestCase(object):
                 self.fail("Unexpected differences in output:\n"+diffstr)
             if self.valgrind != '':
                 self.parse_valgrind(self.px_pre)
-            if not logfile is None:
+            if logfile is not None:
                 os.remove(currdir+logfile)
         #
         if compile == '' and output is None and os.path.exists(self.py_cpp):
