@@ -16,7 +16,6 @@ import glob
 import difflib
 import subprocess
 import re
-import string
 if sys.version_info < (2,7):
     import unittest2 as unittest
 else:
