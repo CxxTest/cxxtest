@@ -53,7 +53,8 @@ else:
     target_suffix = ''
     command_separator = '; '
     remove_extra_path_prefixes_on_windows = False
-    
+
+
 def find(filename, executable=False, isfile=True,  validate=None):
     #
     # Use the PATH environment if it is defined and not empty
@@ -70,10 +71,13 @@ def find(filename, executable=False, isfile=True,  validate=None):
                 return os.path.abspath(test_fname)
     return None
 
+
 def join_commands(command_one, command_two):
     return command_separator.join([command_one, command_two])
 
 _available = {}
+
+
 def available(compiler, exe_option):
     if (compiler,exe_option) in _available:
         return _available[compiler,exe_option]
@@ -91,6 +95,7 @@ def available(compiler, exe_option):
     _available[compiler,exe_option] = flag
     return flag
 
+
 def remove_absdir(filename):
     INPUT=open(filename, 'r')
     lines = [line.strip() for line in INPUT]
@@ -104,6 +109,7 @@ def remove_absdir(filename):
             line = dirre.sub("", parts['path']) + parts['rest']
         OUTPUT.write(line+'\n')
     OUTPUT.close()
+
 
 def normalize_line_for_diff(line):
     # add spaces around {}<>()
@@ -141,6 +147,7 @@ def normalize_line_for_diff(line):
     line = datere.sub( lambda match: 'date=""', line)
     return line
 
+
 def make_diff_readable(diff):
     i = 0
     while i+1 < len(diff):
@@ -157,6 +164,7 @@ def make_diff_readable(diff):
                         diff[i+1] = '+(...)' + l2
                     break
         i+=1
+
 
 def file_diff(filename1, filename2, filtered_reader):
     remove_absdir(filename1)
@@ -222,12 +230,10 @@ class BaseTestCase(object):
                 except:
                     print( "Error removing file '%s'" % file)
 
-
     # This is a "generator" that just reads a file and normalizes the lines
     def file_filter(self, file):
         for line in file:
             yield normalize_line_for_diff(line)
-
 
     def check_if_supported(self, filename, msg):
         target=currdir+'check'+'px'+target_suffix
@@ -612,7 +618,6 @@ class BaseTestCase(object):
         self.check_if_supported('wchar.cpp', "Cannot compile wchar.cpp")
         self.compile(prefix='x11_gui', args="--gui=X11Gui GoodSuite.h", compile=self.x11Flags)
 
-
     #
     # Tests for when the compiler doesn't support exceptions
     #
@@ -742,7 +747,6 @@ class BaseTestCase(object):
         shutil.rmtree('../test_relpath')
 
 
-
 class TestCpp(BaseTestCase, unittest.TestCase):
 
     # Compiler specifics
@@ -865,7 +869,6 @@ class TestGppValgrind(TestGpp):
             if tokens[1] == 'possibly' and tokens[2] == 'lost:':
                 if eval(tokens[3]) > min_leak:
                     self.fail("Valgrind Error: "+ ' '.join(tokens[1:]))
-            
 
 
 class TestGppFOGValgrind(TestGppValgrind):
