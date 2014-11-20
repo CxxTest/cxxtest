@@ -1,11 +1,11 @@
-#-------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 # CxxTest: A lightweight C++ unit testing library.
 # Copyright (c) 2008 Sandia Corporation.
 # This software is distributed under the LGPL License v3
 # For more information, see the COPYING file in the top CxxTest directory.
 # Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
 # the U.S. Government retains certain rights in this software.
-#-------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 
 import shutil
 import time
@@ -480,9 +480,9 @@ class BaseTestCase(object):
         self.check_if_supported('wchar.cpp', "The file wchar.cpp is not supported.")
         self.compile(prefix='wide_char', args="--error-printer WideCharTest.h", output="wchar.out")
 
-    #def test_factor(self):
-        #"""Factor"""
-        #self.compile(prefix='factor', args="--error-printer --factor Factor.h", output="factor.out")
+    # def test_factor(self):
+    #    """Factor"""
+    #    self.compile(prefix='factor', args="--error-printer --factor Factor.h", output="factor.out")
 
     def test_user_traits(self):
         """User traits"""
