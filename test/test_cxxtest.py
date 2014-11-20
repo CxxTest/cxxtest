@@ -16,7 +16,7 @@ import glob
 import difflib
 import subprocess
 import re
-if sys.version_info < (2,7):
+if sys.version_info < (2, 7):
     import unittest2 as unittest
 else:
     import unittest
@@ -55,7 +55,7 @@ else:
     remove_extra_path_prefixes_on_windows = False
 
 
-def find(filename, executable=False, isfile=True,  validate=None):
+def find(filename, executable=False, isfile=True, validate=None):
     #
     # Use the PATH environment if it is defined and not empty
     #
@@ -79,8 +79,8 @@ _available = {}
 
 
 def available(compiler, exe_option):
-    if (compiler,exe_option) in _available:
-        return _available[compiler,exe_option]
+    if (compiler, exe_option) in _available:
+        return _available[compiler, exe_option]
     cmd = join_commands("cd %s" % currdir,
                         "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log'))
     print("Testing for compiler "+compiler)
@@ -92,7 +92,7 @@ def available(compiler, exe_option):
     if os.path.exists(executable):
         os.remove(executable)
     print("Status: "+str(flag))
-    _available[compiler,exe_option] = flag
+    _available[compiler, exe_option] = flag
     return flag
 
 
@@ -261,26 +261,26 @@ class BaseTestCase(object):
         args = "--have-eh --abort-on-fail --root --error-printer"
         if self.cxxtest_import:
             os.chdir(currdir)
-            cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args), True)
+            cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+', args), True)
         else:
             cmd = join_commands("cd %s" % currdir,
                             "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
             status = subprocess.call(cmd, shell=True)
-            self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status,cmd))
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status, cmd))
         #
         files = [self.py_cpp]
-        for i in [1,2]:
+        for i in [1, 2]:
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
             file = currdir+self.prefix+'_py%s.cpp' % str(i)
             files.append(file)
             if self.cxxtest_import:
                 os.chdir(currdir)
-                cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file]+re.split('[ ]+',args), True)
+                cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file]+re.split('[ ]+', args), True)
             else:
                 cmd = join_commands("cd %s" % currdir,
                                 "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
                 status = subprocess.call(cmd, shell=True)
-                self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status,cmd))
+                self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status, cmd))
         #
         cmd = join_commands("cd %s" % currdir,
                             "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log))
@@ -288,7 +288,7 @@ class BaseTestCase(object):
         for file in files:
             if os.path.exists(file):
                 os.remove(file)
-        self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
+        self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
         cmd = join_commands("cd %s" % currdir,
                             "%s %s -v > %s 2>&1" % (self.valgrind, self.build_target, self.px_pre))
@@ -312,7 +312,7 @@ class BaseTestCase(object):
         if self.cxxtest_import:
             try:
                 os.chdir(currdir)
-                status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args), True)
+                status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+', args), True)
             except:
                 status = 1
         else:
@@ -326,7 +326,7 @@ class BaseTestCase(object):
                 self.passed=True
                 return
         if not self.cxxtest_import:
-            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
         if not main is None:
             # Compile with main
@@ -344,7 +344,7 @@ class BaseTestCase(object):
                 self.passed=True
                 return
         else:
-            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
         if compile == '' and not output is None:
             if run is None:
