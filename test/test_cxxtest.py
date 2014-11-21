@@ -37,9 +37,9 @@ sampledir = os.path.dirname(os.path.dirname(currdir)) + '/sample' + os.sep
 cxxtestdir = os.path.dirname(os.path.dirname(currdir)) + os.sep
 
 compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:.*)$")
-dirre      = re.compile("^([^%s]*/)*" % re.escape(os.sep))
-xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
-datere      = re.compile("date=\"[^\"]*\"")
+dirre = re.compile("^([^%s]*/)*" % re.escape(os.sep))
+xmlre = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
+datere = re.compile("date=\"[^\"]*\"")
 
 # Headers from the cxxtest/sample directory
 samples = ' '.join(file for file in sorted(glob.glob(sampledir + '*.h')))
@@ -65,9 +65,11 @@ def find(filename, executable=False, isfile=True, validate=None):
         search_path = os.defpath.split(os.pathsep)
     for path in search_path:
             test_fname = os.path.join(path, filename)
-            if os.path.exists(test_fname) \
-                   and (not isfile or os.path.isfile(test_fname)) \
-                   and (not executable or os.access(test_fname, os.X_OK)):
+            if (
+                    os.path.exists(test_fname)
+                    and (not isfile or os.path.isfile(test_fname))
+                    and (not executable or os.access(test_fname, os.X_OK))
+            ):
                 return os.path.abspath(test_fname)
     return None
 
@@ -140,9 +142,8 @@ def normalize_line_for_diff(line):
     # for xml, remove prefixes from everything that looks like a
     # file path inside ""
     line = xmlre.sub(
-            lambda match: '"' + re.sub("^[^/]+/", "", match.group(1)) + '"',
-            line
-            )
+        lambda match: '"' + re.sub("^[^/]+/", "", match.group(1)) + '"',
+        line)
     # Remove date info
     line = datere.sub(lambda match: 'date=""', line)
     return line
@@ -178,8 +179,10 @@ def file_diff(filename1, filename2, filtered_reader):
     lines2 = list(filtered_reader(INPUT))
     INPUT.close()
     #
-    diff = list(difflib.unified_diff(lines2, lines1,
-        fromfile=filename2, tofile=filename1))
+    diff = list(
+        difflib.unified_diff(
+            lines2, lines1,
+            fromfile=filename2, tofile=filename1))
     if diff:
         make_diff_readable(diff)
         raise Exception("ERROR: \n\n%s\n\n%s\n\n" % (lines1, lines2))
@@ -263,8 +266,9 @@ class BaseTestCase(object):
             os.chdir(currdir)
             cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp] + re.split('[ ]+', args), True)
         else:
-            cmd = join_commands("cd %s" % currdir,
-                            "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
+            cmd = join_commands(
+                "cd %s" % currdir,
+                "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
             status = subprocess.call(cmd, shell=True)
             self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status, cmd))
         #
@@ -277,8 +281,9 @@ class BaseTestCase(object):
                 os.chdir(currdir)
                 cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file] + re.split('[ ]+', args), True)
             else:
-                cmd = join_commands("cd %s" % currdir,
-                                "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
+                cmd = join_commands(
+                    "cd %s" % currdir,
+                    "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
                 status = subprocess.call(cmd, shell=True)
                 self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status, cmd))
         #
@@ -316,8 +321,9 @@ class BaseTestCase(object):
             except:
                 status = 1
         else:
-            cmd = join_commands("cd %s" % currdir,
-                            "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
+            cmd = join_commands(
+                "cd %s" % currdir,
+                "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
             status = subprocess.call(cmd, shell=True)
         if failGen:
             if status == 0:
