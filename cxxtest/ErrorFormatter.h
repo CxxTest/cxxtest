@@ -131,32 +131,31 @@ public:
     void trace(const char *file, int line, const char *expression)
     {
         stop(file, line) << "Trace: " <<
-                         expression << endl;
+                         (expression ? expression : "") << endl;
     }
 
     void warning(const char *file, int line, const char *expression)
     {
         stop(file, line) << _warningString << ": " <<
-                         expression << endl;
+                         (expression ? expression : "") << endl;
     }
 
     void skippedTest(const char *file, int line, const char *expression)
     {
-        if(expression && strlen(expression) > 0)
-            stop(file, line) << _warningString << ": Test skipped: " <<
-                             expression << endl;
+        stop(file, line) << _warningString << ": Test skipped: " <<
+                         (expression ? expression : "") << endl;
     }
 
     void failedTest(const char *file, int line, const char *expression)
     {
         stop(file, line) << _errorString << ": Test failed: " <<
-                         expression << endl;
+                         (expression ? expression : "") << endl;
     }
 
     void failedAssert(const char *file, int line, const char *expression)
     {
         stop(file, line) << _errorString << ": Assertion failed: " <<
-                         expression << endl;
+                         (expression ? expression : "") << endl;
     }
 
     void failedAssertEquals(const char *file, int line,
