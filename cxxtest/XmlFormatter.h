@@ -156,6 +156,7 @@ public:
             if (curr->first.compare("type")) {
                 os << curr->first.c_str()
                    << "=\"" << escape(value.str()).c_str() << "\" ";
+                processedValue = true;
             }
             else {
                 os << curr->first.c_str()
