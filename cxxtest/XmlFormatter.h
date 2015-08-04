@@ -150,21 +150,28 @@ public:
         os << "        <" << name.c_str() << " ";
         std::map<std::string, std::string>::iterator curr = attribute.begin();
         std::map<std::string, std::string>::iterator end = attribute.end();
+        bool processedValue = false;
         while (curr != end)
         {
-            os << curr->first.c_str()
-               << "=\"" << curr->second.c_str() << "\" ";
+            if (curr->first.compare("type")) {
+                os << curr->first.c_str()
+                   << "=\"" << escape(value.str()).c_str() << "\" ";
+            }
+            else {
+                os << curr->first.c_str()
+                   << "=\"" << curr->second.c_str() << "\" ";
+            }
             curr++;
+
         }
-        if (value.str().empty())
-        {
-            os << "/>";
+        os << ">";
+        if (!processedValue) {
+            if (!value.str().empty())
+            {
+                os << escape(value.str()).c_str()
+            }
         }
-        else
-        {
-            os << ">" << escape(value.str()).c_str()
-               << "</" << name.c_str() << ">";
-        }
+        os << "</" << name.c_str() << ">";
         os.endl(os);
     }
 
@@ -226,34 +233,23 @@ public:
 
     void write(OutputStream &o)
     {
-        o << "    <testcase classname=\"" << className.c_str()
-          << "\" name=\"" << testName.c_str()
-          << "\" line=\"" << line.c_str() << "\"";
-        bool elts = false;
+        o << "    <testcase name=\"" << testName.c_str() << "\" "
+          << "classname=\"" << className.c_str() << "\" "
+          << "line=\"" << line.c_str() << "\" "
+          << ">";
+
         element_t curr = elements.begin();
         element_t end  = elements.end();
         while (curr != end)
         {
-            if (!elts)
-            {
-                o << ">";
-                o.endl(o);
-                elts = true;
-            }
+            o.endl(o);
             curr->write(o);
             curr++;
         }
-        if (elts)
-        {
-            o << "    </testcase>";
-        }
-        else
-        {
-            o << " />";
-        }
+
+        o << "    </testcase>";
         o.endl(o);
     }
-
 };
 
 class XmlFormatter : public TestListener
@@ -388,16 +384,20 @@ public:
         const std::string currentDateTime = currentDateTimeStr();
         os << totaltime;
         (*_o) << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
+        (*_o) << "<testsuites>" << endl;
         (*_o) << "<testsuite name=\"" << desc.worldName() << "\" ";
-        (*_o) << "date=\"" << currentDateTime.c_str();
-        (*_o) << "\" tests=\"" << ntests
-              << "\" errors=\"" << nerror
-              << "\" failures=\"" << nfail
-              << "\" time=\"" << os.str().c_str() << "\" >";
+        (*_o) << "tests=\"" << ntests << "\" "
+              << "failures=\"" << nfail << "\" "
+              << "errors=\"" << nerror << "\" "
+              << "time=\"" << os.str().c_str() << "\" "
+              << "timestamp=\"" << currentDateTime.c_str() << "\" "
+              << "file=\"" << desc.firstSuite()->file() << "\" "
+              << ">";
         _o->endl(*_o);
         (*_o) << _os->str().c_str();
         _os->clear();
         (*_o) << "</testsuite>" << endl;
+        (*_o) << "</testsuites>" << endl;
         _o->flush();
     }
 
@@ -558,15 +558,16 @@ private:
     XmlFormatter(const XmlFormatter &);
     XmlFormatter &operator=(const XmlFormatter &);
 
-    std::stringstream& testFailure(const char* file, int line, const char *failureType)
+    std::stringstream& testFailure(const char* /*file*/, int /*line*/, const char *failureType)
     {
         testcase->fail = true;
         element_t elt = testcase->update_element("failure");
         if (elt->value.str().empty())
         {
             elt->add("type", failureType);
-            elt->add("line", line);
-            elt->add("file", file);
+//            elt->add("line", line);
+//            elt->add("file", file);
+            elt->add("message", failureType);
         }
         else
         {
@@ -576,15 +577,16 @@ private:
         //failedTest(file,line,message.c_str());
     }
 
-    std::stringstream& testSkipped(const char* file, int line, const char *failureType)
+    std::stringstream& testSkipped(const char* /*file*/, int /*line*/, const char *failureType)
     {
         //testcase->fail = true;
         element_t elt = testcase->update_element("skipped");
         if (elt->value.str().empty())
         {
             elt->add("type", failureType);
-            elt->add("line", line);
-            elt->add("file", file);
+//            elt->add("line", line);
+//            elt->add("file", file);
+            elt->add("message", failureType);
         }
         else
         {
