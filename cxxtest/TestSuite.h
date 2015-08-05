@@ -168,6 +168,70 @@ struct differs
     }
 };
 
+template<>
+struct differs<const char*, const char*>
+{
+    static bool test(const char *x, const  char *y)
+    {
+        if ((x != 0) && (y != 0))
+        {
+            return (CXXTEST_STD(strcmp(x, y)) != 0);
+        }
+        else
+        {
+            return (x != y);
+        }
+    }
+};
+
+template<>
+struct differs<char*, char*>
+{
+    static bool test(char *x, char *y)
+    {
+        if ((x != 0) && (y != 0))
+        {
+            return (CXXTEST_STD(strcmp(x, y)) != 0);
+        }
+        else
+        {
+            return (x != y);
+        }
+    }
+};
+
+template<>
+struct differs<const char*, char*>
+{
+    static bool test(const char *x, char *y)
+    {
+        if ((x != 0) && (y != 0))
+        {
+            return (CXXTEST_STD(strcmp(x, y)) != 0);
+        }
+        else
+        {
+            return (x != y);
+        }
+    }
+};
+
+template<>
+struct differs<char*, const char*>
+{
+    static bool test(char *x, const char *y)
+    {
+        if ((x != 0) && (y != 0))
+        {
+            return (CXXTEST_STD(strcmp(x, y)) != 0);
+        }
+        else
+        {
+            return (x != y);
+        }
+    }
+};
+
 template<class X, class Y>
 void doAssertDiffers(const char *file, int line,
                      const char *xExpr, X x,
