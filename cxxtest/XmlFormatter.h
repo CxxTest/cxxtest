@@ -150,13 +150,14 @@ public:
         os << "        <" << name.c_str() << " ";
         std::map<std::string, std::string>::iterator curr = attribute.begin();
         std::map<std::string, std::string>::iterator end = attribute.end();
-        bool processedValue = false;
         while (curr != end)
         {
+//            os << curr->first.c_str()
+//               << "=\"" << curr->second.c_str() << "\" ";
+//            curr++;
             if (curr->first.compare("type")) {
                 os << curr->first.c_str()
                    << "=\"" << escape(value.str()).c_str() << "\" ";
-                processedValue = true;
             }
             else {
                 os << curr->first.c_str()
@@ -166,12 +167,10 @@ public:
 
         }
         os << ">";
-        if (!processedValue) {
-            if (!value.str().empty())
-            {
-                os << escape(value.str()).c_str()
-            }
-        }
+//        if (!value.str().empty())
+//        {
+//            os << escape(value.str()).c_str()
+//        }
         os << "</" << name.c_str() << ">";
         os.endl(os);
     }
@@ -251,6 +250,7 @@ public:
         o << "    </testcase>";
         o.endl(o);
     }
+
 };
 
 class XmlFormatter : public TestListener
