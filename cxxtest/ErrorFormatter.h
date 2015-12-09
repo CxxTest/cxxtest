@@ -25,9 +25,67 @@
 #include <cxxtest/TestTracker.h>
 #include <cxxtest/ValueTraits.h>
 #include <cstdio>
+#include <ctime>
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 namespace CxxTest
 {
+namespace {
+#ifdef _WIN32
+    struct timespec
+    {
+        time_t tv_sec;
+        long tv_nsec;
+    };
+
+    static const int NANOS = 1000000000; // nanoseconds in a second (10^9)
+    typedef int clockid_t;
+    static const clockid_t CLOCK_MONOTONIC = 0;
+    int clock_gettime(const clockid_t, timespec* tp)
+    {
+        LARGE_INTEGER freq; // ticks / second
+        LARGE_INTEGER count; // current tick count
+        bool success(QueryPerformanceFrequency(&freq));
+        success = success && QueryPerformanceCounter(&count);
+        if (success)
+        {
+            tp->tv_sec = count.QuadPart / freq.QuadPart;
+            tp->tv_nsec = static_cast<long>(
+                    (count.QuadPart % freq.QuadPart)
+                        * (static_cast<double>(NANOS) / freq.QuadPart)
+                );
+        }
+
+        return (success ? 0 : -1);
+    }
+#endif
+
+    static const timespec invalidTime = { -1, -1 };
+
+    bool operator!=(const timespec& left, const timespec& right)
+    {
+        return !(left.tv_sec == right.tv_sec && left.tv_nsec == right.tv_nsec);
+    }
+
+    timespec operator-(const timespec& left, const timespec& right)
+    {
+        timespec retval = {
+            static_cast<time_t>(std::difftime(left.tv_sec, right.tv_sec)),
+            left.tv_nsec - right.tv_nsec
+        };
+        if (retval.tv_nsec < 0)
+        {
+            retval.tv_sec -= 1;
+            retval.tv_nsec += 1000000000;
+        }
+
+        return retval;
+    }
+}
+
 class OutputStream
 {
 public:
@@ -54,7 +112,8 @@ public:
         _preLine(preLine),
         _postLine(postLine),
         _errorString(errorString),
-        _warningString(warningString)
+        _warningString(warningString),
+        _testEnterTime()
     {
     }
 
@@ -79,18 +138,60 @@ public:
         o << wd.strTotalTests(s) << (wd.numTotalTests() == 1 ? " test" : " tests");
     }
 
-    void enterSuite(const SuiteDescription &)
+    void enterSuite(const SuiteDescription& suite)
     {
+        if (tracker().print_tracing)
+        {
+            // enterTest() starts with a newline, so don't put one here
+            // to avoid an unnecessary empty line.
+            (*_o) << "\nStarting " << suite.suiteName();
+            _o->flush();
+            fflush(stdout);
+        }
         _reported = false;
     }
 
-    void enterTest(const TestDescription &)
+    void enterTest(const TestDescription& test)
     {
+        if (tracker().print_tracing)
+        {
+            // Print the name on its own line with indent so that the suite
+            // names stand out a bit better in a wall of text.  Append
+            // a space and do not use a newline so that leaveTest()
+            // will print the '.' or 's' in way that makes some sense.
+            (*_o) << "\n  Starting " << test.testName() << " ";
+            _o->flush();
+            fflush(stdout);
+        }
+        if (clock_gettime(CLOCK_MONOTONIC, &_testEnterTime) != 0)
+        {
+            _testEnterTime = invalidTime;
+        }
         _reported = false;
     }
 
     void leaveTest(const TestDescription &)
     {
+        if (!tracker().testSkipped()
+                && tracker().print_tracing
+                && _testEnterTime != invalidTime)
+        {
+            timespec testLeaveTime;
+            if (clock_gettime(CLOCK_MONOTONIC, &testLeaveTime) == 0)
+            {
+                timespec duration(testLeaveTime - _testEnterTime);
+                // OutputStream does not have setw(), can't use snprintf
+                // because of Microsoft's non-conformant compiler.
+                static const std::size_t SIZE(10);
+                char nsecBuf[SIZE];
+                std::sprintf(nsecBuf, "%0*ld", SIZE - 1, duration.tv_nsec);
+                (*_o) << (tracker().testFailed() ? "\n" : "")
+                    << "test took "
+                    << duration.tv_sec << "." << nsecBuf
+                    << " seconds ";
+            }
+        }
+
         if (tracker().testSkipped())
         {
             (*_o) << "s";
@@ -339,6 +440,8 @@ private:
     const char *_postLine;
     const char *_errorString;
     const char *_warningString;
+
+    timespec _testEnterTime;
 };
 }
 
