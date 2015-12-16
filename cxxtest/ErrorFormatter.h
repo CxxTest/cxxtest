@@ -140,7 +140,7 @@ public:
 
     void enterSuite(const SuiteDescription& suite)
     {
-        if (tracker().print_tracing)
+        if (tracker().print_verbose_tracing)
         {
             // enterTest() starts with a newline, so don't put one here
             // to avoid an unnecessary empty line.
@@ -153,7 +153,7 @@ public:
 
     void enterTest(const TestDescription& test)
     {
-        if (tracker().print_tracing)
+        if (tracker().print_verbose_tracing)
         {
             // Print the name on its own line with indent so that the suite
             // names stand out a bit better in a wall of text.  Append
@@ -173,7 +173,7 @@ public:
     void leaveTest(const TestDescription &)
     {
         if (!tracker().testSkipped()
-                && tracker().print_tracing
+                && tracker().print_verbose_tracing
                 && _testEnterTime != invalidTime)
         {
             timespec testLeaveTime;
