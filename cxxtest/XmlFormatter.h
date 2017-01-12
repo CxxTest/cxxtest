@@ -598,7 +598,7 @@ private:
         std::string retVal;
         const time_t now(time(NULL));
         char current_date_string[27];
-        
+
 #ifdef WIN32
         if (ctime_s(current_date_string, sizeof(current_date_string)-1, &now) == 0)
         {
@@ -607,11 +607,11 @@ private:
         }
 #else
         const size_t n = strlen(ctime_r(&now, current_date_string));
-        if (n) 
+        if (n)
         {
             current_date_string[n-1] = '\0'; // remove the ending \n
             retVal = current_date_string;
-        } 
+        }
 #endif
         return retVal;
     }

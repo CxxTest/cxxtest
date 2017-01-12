@@ -27,7 +27,7 @@ Overview
 CxxTest is a unit testing framework for C++ that is similar in
 spirit to http://junit.org/[JUnit],
 http://cppunit.sourceforge.net[CppUnit], and
-http://xprogramming.com/software.html[xUnit].  
+http://xprogramming.com/software.html[xUnit].
 CxxTest is designed to be as portable as possible;  it does not require
 
  - RTTI
@@ -365,7 +365,7 @@ The only difference is the parentheses used in the output.  This test listener p
 The +StdioPrinter+ makes reference to +stdout+ as the default output
 stream. In some environments, the +stdio.h+ header may be defined
 but not +stdout+.  The +StdioFilePrinter+ test listener can be used
-in this case, though the main() function needs to be adapted to specify the 
+in this case, though the main() function needs to be adapted to specify the
 stream that is used in output.
 ////
 
@@ -422,7 +422,7 @@ should use the standard library, and the +--no-std+ option indicates
 that the test runner should not use the standard library. The
 --have-eh+ options indicates that the test runner should use
 exception handling, and the +--no-eh+ indicates that the test runner
-should not not use exception handling.  
+should not not use exception handling.
 
 The +--longlong+ option specifies the type used for long long
 integers.  The default is for _no_ long long integer type to be specified,
@@ -439,7 +439,7 @@ Creating Test Runners from Parts
 
 The default behavior of +cxxtestgen+ is to generate a test runner
 that directly integrates classes that define the tests along with
-a +main()+ function that executes all test suites.  It is often useful to 
+a +main()+ function that executes all test suites.  It is often useful to
 allow test suites to be processes separately and then linked together.  The +--root+ and +--part+ options
 support this logic.  For example, suppose that we wish to define a test runner for tests in the headers
 MyTestSuite1.h+ and +MyTestSuite2.h+.  We execute +cxxtestgen+ with the +--part+ option to generate source files for each of the test suites:
@@ -676,15 +676,15 @@ CxxTest recognizes a variety of preprocessor macros that can be used to modify t
 
 [options="header"]
 |====================================================================================
-| Preprocessor Macro  | Description 
-| +CXXTEST_HAVE_STD+              | Use the standard library. 
-| +CXXTEST_HAVE_EH+               | Use exception handling.   
-| +CXXTEST_ABORT_TEST_ON_FAIL+    | Abort tests on failed asserts. 
-| +CXXTEST_USER_VALUE_TRAITS+     | Enable user-defined value traits.  The default traits dump up to 8 bytes of the data as hex values. 
-| +CXXTEST_OLD_TEMPLATE_SYNTAX+   | Use old template syntax that is used by some compilers (e.g. Borland C++ 5). 
-| +CXXTEST_OLD_STD+               | Use old syntax for libraries where +std::+ is not recognized. 
-| +CXXTEST_MAX_DUMP_SIZE+         | The value of this macro defines the maximum number of bytes to dump if +TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit. 
-| +CXXTEST_DEFAULT_ABORT+         | The value of this macro is the default value of the dynamic _abort on fail_ flag. 
+| Preprocessor Macro  | Description
+| +CXXTEST_HAVE_STD+              | Use the standard library.
+| +CXXTEST_HAVE_EH+               | Use exception handling.
+| +CXXTEST_ABORT_TEST_ON_FAIL+    | Abort tests on failed asserts.
+| +CXXTEST_USER_VALUE_TRAITS+     | Enable user-defined value traits.  The default traits dump up to 8 bytes of the data as hex values.
+| +CXXTEST_OLD_TEMPLATE_SYNTAX+   | Use old template syntax that is used by some compilers (e.g. Borland C++ 5).
+| +CXXTEST_OLD_STD+               | Use old syntax for libraries where +std::+ is not recognized.
+| +CXXTEST_MAX_DUMP_SIZE+         | The value of this macro defines the maximum number of bytes to dump if +TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit.
+| +CXXTEST_DEFAULT_ABORT+         | The value of this macro is the default value of the dynamic _abort on fail_ flag.
 | +CXXTEST_LONGLONG+              | The value of this macro is used to define long long integers.
 |=====================================
 
@@ -737,7 +737,7 @@ virtual functions `TestSuite::setUp()` and `TestSuite::tearDown()`.
 The `setUp()` function is called before each test, and `tearDown()`
 is called after each test.
 
-For example, the following test suite employs +setUp()+ and +tearDown()+ methods to 
+For example, the following test suite employs +setUp()+ and +tearDown()+ methods to
 allocate and deallocate memory for a string buffer:
 [source,{cpp}]
 -----
@@ -821,7 +821,7 @@ CxxTest defines several functions that can be called in a test suite to modify t
 |==================================
 | Test Suite Method | Description
 | +setAbortTestOnFail(bool)+ |  This function specifies whether tests abort after a failure.  The default value of the flag is +false+.  This function only has an effect if exception handling is enabled.
-| +setMaxDumpSize(unsigned)+ | This function sets the maximum number of bytes that are dumped when 
+| +setMaxDumpSize(unsigned)+ | This function sets the maximum number of bytes that are dumped when
 +TS_ASSERT_SAME_DATA()+ fails. The default is 0, which indicates no limit.
 |=============
 
@@ -897,7 +897,7 @@ include::examples/buildRunner19.txt[]
 -----
 The enumeration value traits print strings that represent the elements of the enumeration, except where a numeric value is provided.
 
-Note that the `CXXTEST_ENUM_TRAITS` macros has two arguments;  the list of `CXXTEST_ENUM_MEMBER` macros is not separated by commas!  
+Note that the `CXXTEST_ENUM_TRAITS` macros has two arguments;  the list of `CXXTEST_ENUM_MEMBER` macros is not separated by commas!
 
 
 Defining New Value Traits
@@ -966,9 +966,9 @@ when ``bad'' things happen (e.g., when `fopen()` fails).  Handling
 these types of exceptional conditions is often a very challenging
 issue for software testing.
 
-CxxTest addresses this challenge by providing a generic mechanism for 
-defining mock global functions.  The next section illustrates this mechanism for a single 
-global function.  The following section provides more detail about specific features of CxxTest's 
+CxxTest addresses this challenge by providing a generic mechanism for
+defining mock global functions.  The next section illustrates this mechanism for a single
+global function.  The following section provides more detail about specific features of CxxTest's
 support for mock testing.
 
 
@@ -1029,7 +1029,7 @@ Test Suites using Mock Functions
 A mock object for the `time()` function is created using the `T::Base_time` class,
 which is automatically created by CxxTest.  This class includes a `time()` method whose
 API is the same as the global `time()` function.  Thus, this method can be defined to have
-whatever behavior is desired during testing.  For example, the following example defines a 
+whatever behavior is desired during testing.  For example, the following example defines a
 mock object that increments a counter to define an incremental value for `time()`.
 [source,{cpp}]
 -----
@@ -1066,7 +1066,7 @@ Advanced Topics
 Void Functions
 ^^^^^^^^^^^^^^
 
-The `CXXTEST_MOCK_VOID_GLOBAL` is used to define mock global functions that return `void`.  
+The `CXXTEST_MOCK_VOID_GLOBAL` is used to define mock global functions that return `void`.
 This is identical to
 `CXXTEST_MOCK_GLOBAL` except that it does not specify the return
 type.  Take a look in `sample/mock/T/stdlib.h` for a demonstation.
@@ -1114,7 +1114,7 @@ Functions in Namespaces
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 The `CXXTEST_MOCK` macro is used to declare a mock global function that is associated
-with a function in a namespace, including static class member functions.  
+with a function in a namespace, including static class member functions.
 For example, consider the function `bool Files::FileExists( const
 String &name )`;  the namespace `Files` contains the function
 `FileExists`.  The mock class will be called `T::Base_Files_FileExists`
@@ -1148,14 +1148,14 @@ Overloaded Functions
 The `CXXTEST_MOCK` and `CXXTEST_MOCK_VOID` macros have a flexible
 interface that can provide mock global function definitions for
 overloaded functions.  The arguments simply need to specify different
-mock class names, mock member names and different prototype definitions.  
+mock class names, mock member names and different prototype definitions.
 These different mock declarations will generate different mock objects that can be explicitly
 referenced in a test suite.
 
 The Mock Namespace
 ^^^^^^^^^^^^^^^^^^
 
-The default namespace for mock functions is `T::`.  This namespace can be changed by defining the 
+The default namespace for mock functions is `T::`.  This namespace can be changed by defining the
 `CXXTEST_MOCK_NAMESPACE` macro.
 
 
@@ -1176,7 +1176,7 @@ The FOG parser requires two Python packages:
  - +ply+
  - +ordereddict+ (This is needed when running Python 2.4, 2.5 or 2.6)
 
-If these packages are not available, then +cxxtestgen+ will generate an error when the 
+If these packages are not available, then +cxxtestgen+ will generate an error when the
 FOG parser option is selected.
 If you have
 http://pypi.python.org/pypi/setuptools[setuptools] or
@@ -1272,7 +1272,7 @@ CXXTEST_LONGLONG
 
 :numbered!:
 
-[[acknowledgements]] 
+[[acknowledgements]]
 Acknowledgements
 ----------------
 
@@ -1283,7 +1283,7 @@ developers contributed to the CxxTest 4.x releases:
 * Andrey Batyiev
 * Olivier Charloton
 * Dave Elcock
-* Kevin Fitch 
+* Kevin Fitch
 * William Hart
 * Allan Odgaard
 * Lionel Orry
@@ -1304,7 +1304,7 @@ mechanism that is based on a parser of the Flexible Object Language
 extract high-level class structure for test discovery.  FOG was
 developed by Edward Willink:
 
-* Edward D. Willink.  'Meta-Compilation for C++', PhD Thesis, Computer Science Research Group, University of Surrey, January 2000. 
+* Edward D. Willink.  'Meta-Compilation for C++', PhD Thesis, Computer Science Research Group, University of Surrey, January 2000.
 
 The FOG parser in CxxTest critically relies on the excellent LALR
 parser provided by Dave Beazley's `ply` Python package.  The scalable
@@ -1322,7 +1322,7 @@ National Nuclear Security Administration under contract DE-AC04-94AL85000.
 
 
 [appendix]
-[[appendix_A]] 
+[[appendix_A]]
 Test Assertion Examples
 -----------------------
 
@@ -1388,8 +1388,8 @@ This test assertion takes as an argument the name of a class, similar to a STL +
 ----
 include::examples/.Assertions_assertPredicate.h[]
 ----
-This test assertion can be seen as a generalization of <<ts_assert,TS_ASSERT>>, but it 
-allows the tester to see the failed value. 
+This test assertion can be seen as a generalization of <<ts_assert,TS_ASSERT>>, but it
+allows the tester to see the failed value.
 
 [[ts_assert_relation]] TS_ASSERT_RELATION::
 It takes as an argument the name of a class, similar to a STL +binary_function+, and evaluates the +operator()+ method:
@@ -1397,8 +1397,8 @@ It takes as an argument the name of a class, similar to a STL +binary_function+,
 ----
 include::examples/.Assertions_assertRelation.h[]
 ----
-This test assertion can be seen as a generalization of <<ts_assert_equals,TS_ASSERT_EQUALS>>, <<ts_assert_differs,TS_ASSERT_DIFFERS>>, <<ts_assert_less_than,TS_ASSERT_LESS_THAN>> and <<ts_assert_less_than_equals,TS_ASSERT_LESS_THAN_EQUALS>>. 
-This can be used to assert comparisons which are not covered by the builtin test assertions. 
+This test assertion can be seen as a generalization of <<ts_assert_equals,TS_ASSERT_EQUALS>>, <<ts_assert_differs,TS_ASSERT_DIFFERS>>, <<ts_assert_less_than,TS_ASSERT_LESS_THAN>> and <<ts_assert_less_than_equals,TS_ASSERT_LESS_THAN_EQUALS>>.
+This can be used to assert comparisons which are not covered by the builtin test assertions.
 
 [[ts_assert_same_data]] TS_ASSERT_SAME_DATA::
 This test assertion is similar to <<ts_assert_equals,TS_ASSERT_EQUALS>>,
@@ -1424,7 +1424,7 @@ include::examples/.Assertions_assertThrowsAnything.h[]
 ----
 
 [[ts_assert_throws_assert]] TS_ASSERT_THROWS_ASSERT::
-This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third argument is executed to test that 
+This test assertion verifies that an exception is thrown when executing the first argument.  The second argument specifies a variable declaration for the exception, and the third argument is executed to test that
 exception value:
 [source,{cpp}]
 ----
@@ -1490,7 +1490,7 @@ include::examples/.Assertions_warn.h[]
 
 
 [appendix]
-[[appendix_B]] 
+[[appendix_B]]
 Integrating with Your Build Environment
 ---------------------------------------
 
@@ -1745,7 +1745,7 @@ runner.cpp: SimpleTest.h ComplicatedTest.h
 Using Cons
 ~~~~~~~~~~
 
-http://dsmit.com/cons/[Cons] is a powerful and 
+http://dsmit.com/cons/[Cons] is a powerful and
 versatile make replacement which uses Perl scripts instead of Makefiles.
 
 See `cxxtest/sample/Construct` in the CxxTest distribution for an
@@ -1782,14 +1782,14 @@ how to do this is in the CxxTest distribution under `sample/winddk`.
 
 
 [appendix]
-[[appendix_C]] 
+[[appendix_C]]
 Testing CxxTest
 ---------------
 
 In the +cxxtest/test+ directory, you can execute
 [source,bash]
 ----
-python test_cxxtest.py 
+python test_cxxtest.py
 ----
 to launch all tests.  By default, this script executes test suites
 for a variety of compilers if they are found on the user's path:
@@ -1835,7 +1835,7 @@ If these packages are not available, then +test_cxxtest.py+ will skip the FOG te
 
 
 [appendix]
-[[appendix_D]] 
+[[appendix_D]]
 include::../Versions[]
 
 // vim: ft=asciidoc

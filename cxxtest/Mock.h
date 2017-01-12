@@ -225,14 +225,14 @@ namespace dummy_mock_ns {}
     { \
         CXXTEST_MOCK_NAMESPACE::Base_##MOCK::current().NAME CALL; \
     } \
- 
+
 //
 // Error for calling mock function w/o object
 //
 #define __CXXTEST_MOCK_UNIMPLEMENTED( NAME, ARGS ) \
     TS_FAIL( CXXTEST_MOCK_NAMESPACE_STR #NAME #ARGS " called with no " \
              CXXTEST_MOCK_NAMESPACE_STR "Base_" #NAME " object" ); \
- 
+
 #define CXXTEST_MOCK_NAMESPACE_STR __CXXTEST_STR(CXXTEST_MOCK_NAMESPACE) "::"
 #define __CXXTEST_STR(X) __CXXTEST_XSTR(X)
 #define __CXXTEST_XSTR(X) #X

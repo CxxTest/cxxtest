@@ -6,7 +6,7 @@
 
 class stack_test : public CxxTest::TestSuite
 {
-    
+
   private:
     stack_t* stack;
   public:
@@ -31,11 +31,11 @@ class stack_test : public CxxTest::TestSuite
       stack_push(stack, 1);
       TS_ASSERT_EQUALS(1, stack_size(stack));
     }
-   
+
     void test_push_pop_doesnt_change_size() {
       stack_push(stack, 1);
       (void)stack_pop(stack);
-      TS_ASSERT_EQUALS(0, stack_size(stack));      
+      TS_ASSERT_EQUALS(0, stack_size(stack));
     }
 
     void test_peak_after_push() {

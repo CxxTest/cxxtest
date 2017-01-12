@@ -10,7 +10,7 @@
 # vim: fileencoding=utf-8
 
 #
-# This is a PLY parser for the entire ANSI C++ grammar.  This grammar was 
+# This is a PLY parser for the entire ANSI C++ grammar.  This grammar was
 # adapted from the FOG grammar developed by E. D. Willink.  See
 #
 #    http://www.computing.surrey.ac.uk/research/dsrg/fog/
@@ -18,7 +18,7 @@
 # for further details.
 #
 # The goal of this grammar is to extract information about class, function and
-# class method declarations, along with their associated scope.  Thus, this 
+# class method declarations, along with their associated scope.  Thus, this
 # grammar can be used to analyze classes in an inheritance heirarchy, and then
 # enumerate the methods in a derived class.
 #
@@ -35,9 +35,9 @@
 #
 # 2. Template class specialization.  Although the goal of this grammar is to
 #       extract class information, specialization of templated classes is
-#       not supported.  When a template class definition is parsed, it's 
+#       not supported.  When a template class definition is parsed, it's
 #       declaration is archived without information about the template
-#       parameters.  Class specializations will be stored separately, and 
+#       parameters.  Class specializations will be stored separately, and
 #       thus they can be processed after the fact.  However, this grammar
 #       does not attempt to correctly process properties of class inheritence
 #       when template class specialization is employed.
@@ -82,7 +82,7 @@ class Scope(object):
         self.base_classes=base_classes
         self.abs_name=abs_name
         self.lineno=lineno
-   
+
     def insert(self,scope):
         self.sub_scopes.append(scope)
 
@@ -137,13 +137,13 @@ class CppInfo(object):
             else:
                 fns += self.get_functions(cname,quiet)
         return fns
-        
+
     def find_class(self,name,scope):
         if ':' in name:
             if name in self.index:
                 return name
             else:
-                return None           
+                return None
         tmp = scope.abs_name.split(':')
         name1 = ":".join(tmp[:-1] + [name])
         if name1 in self.index:
@@ -289,11 +289,11 @@ reserved = {
     '__attribute__' : 'ATTRIBUTE',
     '__cdecl__' : 'CDECL',
     '__typeof' : 'uTYPEOF',
-    'typeof' : 'TYPEOF', 
+    'typeof' : 'TYPEOF',
 
     'CXXTEST_STD' : 'CXXTEST_STD'
 }
-   
+
 tokens = [
     "CharacterLiteral",
     "FloatingLiteral",
@@ -402,17 +402,17 @@ start = 'translation_unit'
 #
 #  The %prec resolves the 14.2-3 ambiguity:
 #  Identifier '<' is forced to go through the is-it-a-template-name test
-#  All names absorb TEMPLATE with the name, so that no template_test is 
-#  performed for them.  This requires all potential declarations within an 
-#  expression to perpetuate this policy and thereby guarantee the ultimate 
+#  All names absorb TEMPLATE with the name, so that no template_test is
+#  performed for them.  This requires all potential declarations within an
+#  expression to perpetuate this policy and thereby guarantee the ultimate
 #  coverage of explicit_instantiation.
 #
-#  The %prec also resolves a conflict in identifier : which is forced to be a 
-#  shift of a label for a labeled-statement rather than a reduction for the 
-#  name of a bit-field or generalised constructor.  This is pretty dubious 
-#  syntactically but correct for all semantic possibilities.  The shift is 
-#  only activated when the ambiguity exists at the start of a statement. 
-#  In this context a bit-field declaration or constructor definition are not 
+#  The %prec also resolves a conflict in identifier : which is forced to be a
+#  shift of a label for a labeled-statement rather than a reduction for the
+#  name of a bit-field or generalised constructor.  This is pretty dubious
+#  syntactically but correct for all semantic possibilities.  The shift is
+#  only activated when the ambiguity exists at the start of a statement.
+#  In this context a bit-field declaration or constructor definition are not
 #  allowed.
 #
 
@@ -469,10 +469,10 @@ def p_scoped_id(p):
         p[0] = "".join(data)
 
 #
-#  destructor_id has to be held back to avoid a conflict with a one's 
-#  complement as per 5.3.1-9, It gets put back only when scoped or in a 
+#  destructor_id has to be held back to avoid a conflict with a one's
+#  complement as per 5.3.1-9, It gets put back only when scoped or in a
 #  declarator_id, which is only used as an explicit member name.
-#  Declarations of an unscoped destructor are always parsed as a one's 
+#  Declarations of an unscoped destructor are always parsed as a one's
 #  complement.
 #
 def p_destructor_id(p):
@@ -526,10 +526,10 @@ def p_declarator_id(p):
     p[0]=p[1]
 
 #
-# The standard defines pseudo-destructors in terms of type-name, which is 
-# class/enum/typedef, of which class-name is covered by a normal destructor. 
-# pseudo-destructors are supposed to support ~int() in templates, so the 
-# grammar here covers built-in names. Other names are covered by the lack 
+# The standard defines pseudo-destructors in terms of type-name, which is
+# class/enum/typedef, of which class-name is covered by a normal destructor.
+# pseudo-destructors are supposed to support ~int() in templates, so the
+# grammar here covers built-in names. Other names are covered by the lack
 # of identifier/type discrimination.
 #
 def p_built_in_type_id(p):
@@ -584,39 +584,39 @@ def p_translation_unit(p):
 # A.4 Expressions
 #-------------------------------------------------------------------------------
 #
-#  primary_expression covers an arbitrary sequence of all names with the 
-#  exception of an unscoped destructor, which is parsed as its unary expression 
-#  which is the correct disambiguation (when ambiguous).  This eliminates the 
-#  traditional A(B) meaning A B ambiguity, since we never have to tack an A 
-#  onto the front of something that might start with (. The name length got 
-#  maximised ab initio. The downside is that semantic interpretation must split 
+#  primary_expression covers an arbitrary sequence of all names with the
+#  exception of an unscoped destructor, which is parsed as its unary expression
+#  which is the correct disambiguation (when ambiguous).  This eliminates the
+#  traditional A(B) meaning A B ambiguity, since we never have to tack an A
+#  onto the front of something that might start with (. The name length got
+#  maximised ab initio. The downside is that semantic interpretation must split
 #  the names up again.
 #
-#  Unification of the declaration and expression syntax means that unary and 
+#  Unification of the declaration and expression syntax means that unary and
 #  binary pointer declarator operators:
 #      int * * name
-#  are parsed as binary and unary arithmetic operators (int) * (*name). Since 
+#  are parsed as binary and unary arithmetic operators (int) * (*name). Since
 #  type information is not used
 #  ambiguities resulting from a cast
 #      (cast)*(value)
-#  are resolved to favour the binary rather than the cast unary to ease AST 
-#  clean-up. The cast-call ambiguity must be resolved to the cast to ensure 
+#  are resolved to favour the binary rather than the cast unary to ease AST
+#  clean-up. The cast-call ambiguity must be resolved to the cast to ensure
 #  that (a)(b)c can be parsed.
 #
 #  The problem of the functional cast ambiguity
 #      name(arg)
-#  as call or declaration is avoided by maximising the name within the parsing 
-#  kernel. So  primary_id_expression picks up 
+#  as call or declaration is avoided by maximising the name within the parsing
+#  kernel. So  primary_id_expression picks up
 #      extern long int const var = 5;
-#  as an assignment to the syntax parsed as "extern long int const var". The 
-#  presence of two names is parsed so that "extern long into const" is 
-#  distinguished from "var" considerably simplifying subsequent 
+#  as an assignment to the syntax parsed as "extern long int const var". The
+#  presence of two names is parsed so that "extern long into const" is
+#  distinguished from "var" considerably simplifying subsequent
 #  semantic resolution.
 #
-#  The generalised name is a concatenation of potential type-names (scoped 
-#  identifiers or built-in sequences) plus optionally one of the special names 
-#  such as an operator-function-id, conversion-function-id or destructor as the 
-#  final name. 
+#  The generalised name is a concatenation of potential type-names (scoped
+#  identifiers or built-in sequences) plus optionally one of the special names
+#  such as an operator-function-id, conversion-function-id or destructor as the
+#  final name.
 #
 
 def get_rest(p):
@@ -648,7 +648,7 @@ def p_postfix_expression(p):
     |                               postfix_expression '.' declarator_id
     |                               postfix_expression '.' scoped_pseudo_destructor_id
     |                               postfix_expression ARROW declarator_id
-    |                               postfix_expression ARROW scoped_pseudo_destructor_id   
+    |                               postfix_expression ARROW scoped_pseudo_destructor_id
     |                               postfix_expression INC
     |                               postfix_expression DEC
     |                               DYNAMIC_CAST '<' nonlgt_seq_opt '>' '(' expression ')'
@@ -755,8 +755,8 @@ def p_new_initializer_opt(p):
     pass
 
 #
-# cast-expression is generalised to support a [] as well as a () prefix. This covers the omission of 
-# DELETE[] which when followed by a parenthesised expression was ambiguous. It also covers the gcc 
+# cast-expression is generalised to support a [] as well as a () prefix. This covers the omission of
+# DELETE[] which when followed by a parenthesised expression was ambiguous. It also covers the gcc
 # indexed array initialisation for free.
 #
 def p_cast_expression(p):
@@ -848,7 +848,7 @@ def p_conditional_expression(p):
 
 
 #
-# assignment-expression is generalised to cover the simple assignment of a braced initializer in order to 
+# assignment-expression is generalised to cover the simple assignment of a braced initializer in order to
 # contribute to the coverage of parameter-declaration and init-declaration.
 #
 #    |                               logical_or_expression assignment_operator assignment_expression
@@ -861,7 +861,7 @@ def p_assignment_expression(p):
     p[0]=get_rest(p)
 
 def p_assignment_operator(p):
-    '''assignment_operator :        '=' 
+    '''assignment_operator :        '='
                            | ASS_ADD
                            | ASS_AND
                            | ASS_DIV
@@ -990,7 +990,7 @@ def p_declaration_statement(p):
 # A.6 Declarations
 #---------------------------------------------------------------------------------------------------
 def p_compound_declaration(p):
-    '''compound_declaration :       LBRACE declaration_seq_opt RBRACE                            
+    '''compound_declaration :       LBRACE declaration_seq_opt RBRACE
     '''
     pass
 
@@ -1052,7 +1052,7 @@ def p_simple_declaration(p):
 #
 #  A decl-specifier following a ptr_operator provokes a shift-reduce conflict for * const name which is resolved in favour of the pointer, and implemented by providing versions of decl-specifier guaranteed not to start with a cv_qualifier.  decl-specifiers are implemented type-centrically. That is the semantic constraint that there must be a type is exploited to impose structure, but actually eliminate very little syntax. built-in types are multi-name and so need a different policy.
 #
-#  non-type decl-specifiers are bound to the left-most type in a decl-specifier-seq, by parsing from the right and attaching suffixes to the right-hand type. Finally residual prefixes attach to the left.                
+#  non-type decl-specifiers are bound to the left-most type in a decl-specifier-seq, by parsing from the right and attaching suffixes to the right-hand type. Finally residual prefixes attach to the left.
 #
 def p_suffix_built_in_decl_specifier_raw(p):
     '''suffix_built_in_decl_specifier_raw : built_in_type_specifier
@@ -1070,8 +1070,8 @@ def p_suffix_built_in_decl_specifier(p):
 #    |                                       id_scope_seq
 #    |                                       SCOPE id_scope_seq
 def p_suffix_named_decl_specifier(p):
-    '''suffix_named_decl_specifier :        scoped_id 
-    |                               elaborate_type_specifier 
+    '''suffix_named_decl_specifier :        scoped_id
+    |                               elaborate_type_specifier
     |                               suffix_named_decl_specifier decl_specifier_suffix
     '''
     p[0]=get_rest(p)
@@ -1135,8 +1135,8 @@ def p_decl_specifier_prefix(p):
     pass
 
 def p_storage_class_specifier(p):
-    '''storage_class_specifier :    REGISTER 
-    |                               STATIC 
+    '''storage_class_specifier :    REGISTER
+    |                               STATIC
     |                               MUTABLE
     |                               EXTERN                  %prec SHIFT_THERE
     |                               EXTENSION
@@ -1190,16 +1190,16 @@ def p_attribute(p):
     '''
 
 def p_Xbuilt_in_type_specifier(p):
-    '''Xbuilt_in_type_specifier :    CHAR 
-    | WCHAR_T 
-    | BOOL 
-    | SHORT 
-    | INT 
-    | LONG 
-    | SIGNED 
-    | UNSIGNED 
-    | FLOAT 
-    | DOUBLE 
+    '''Xbuilt_in_type_specifier :    CHAR
+    | WCHAR_T
+    | BOOL
+    | SHORT
+    | INT
+    | LONG
+    | SIGNED
+    | UNSIGNED
+    | FLOAT
+    | DOUBLE
     | VOID
     | uTYPEOF parameters_clause
     | TYPEOF parameters_clause
@@ -1383,7 +1383,7 @@ def p_cv_qualifier_seq_opt(p):
 
 # TODO: verify that we should include attributes here
 def p_cv_qualifier(p):
-    '''cv_qualifier :               CONST 
+    '''cv_qualifier :               CONST
     |                               VOLATILE
     |                               attributes
     '''
@@ -1516,7 +1516,7 @@ def p_function_block(p):
     pass
 
 def p_function_body(p):
-    '''function_body :              LBRACE nonbrace_seq_opt RBRACE 
+    '''function_body :              LBRACE nonbrace_seq_opt RBRACE
     '''
     p[0] = ['{','}']
 
@@ -1549,8 +1549,8 @@ def p_initializer_list(p):
 #  The two usages are too distant to try to create and enforce a common prefix so we have to resort to
 #  a parser hack by backtracking. Inheritance is much the most likely so we mark the input stream context
 #  and try to parse a base-clause. If we successfully reach a { the base-clause is ok and inheritance was
-#  the correct choice so we unmark and continue. If we fail to find the { an error token causes 
-#  back-tracking to the alternative parse in elaborated_type_specifier which regenerates the : and 
+#  the correct choice so we unmark and continue. If we fail to find the { an error token causes
+#  back-tracking to the alternative parse in elaborated_type_specifier which regenerates the : and
 #  declares unconditional success.
 #
 
@@ -1572,11 +1572,11 @@ def p_class_specifier_head(p):
     else:
         scope = ""
     _parse_info.push_scope(scope,p[1],base_classes)
-    
+
 
 def p_class_key(p):
-    '''class_key :                  CLASS 
-    | STRUCT 
+    '''class_key :                  CLASS
+    | STRUCT
     | UNION
     '''
     p[0] = p[1]
@@ -1680,8 +1680,8 @@ def p_base_specifier(p):
         p[0] = p[2]
 
 def p_access_specifier(p):
-    '''access_specifier :           PRIVATE 
-    |                               PROTECTED 
+    '''access_specifier :           PRIVATE
+    |                               PROTECTED
     |                               PUBLIC
     '''
     pass
@@ -2184,7 +2184,7 @@ import sys
 if __name__ == '__main__':  #pragma: no cover
     #
     # This MAIN routine parses a sequence of files provided at the command
-    # line.  If '-v' is included, then a verbose parsing output is 
+    # line.  If '-v' is included, then a verbose parsing output is
     # generated.
     #
     for arg in sys.argv[1:]:
@@ -2197,8 +2197,8 @@ if __name__ == '__main__':  #pragma: no cover
             parse_cpp(filename=arg,verbose=2)
         #
         # Print the _parse_info object summary for this file.
-        # This illustrates how class inheritance can be used to 
+        # This illustrates how class inheritance can be used to
         # deduce class members.
-        # 
+        #
         print(str(_parse_info))
 

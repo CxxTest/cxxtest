@@ -196,7 +196,7 @@ def parseCommandline(args):
     if options.error_printer:
       options.runner= "ErrorPrinter"
       options.haveStandardLibrary = True
-    
+
     if options.noStaticInit and (options.root or options.part):
         abort( '--no-static-init cannot be used with --root/--part' )
 
@@ -386,7 +386,7 @@ def writeInclude(output, file):
     global lastIncluded
     if options.outputFileName:
         dirname = os.path.split(options.outputFileName)[0]
-        tfile = relpath(file, dirname) 
+        tfile = relpath(file, dirname)
         if os.path.exists(tfile):
             if tfile == lastIncluded: return
             output.writelines( [ '#include "', tfile, '"\n\n' ] )
@@ -446,7 +446,7 @@ def writeTestDescription( output, suite, test ):
         output.write( 'static class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
     else:
         output.write( 'class %s : public CxxTest::RealTestDescription {\n' % test['class'] )
-    #   
+    #
     output.write( 'public:\n' )
     if not options.noStaticInit:
         output.write( ' %s() : CxxTest::RealTestDescription( %s, %s, %s, "%s" ) {}\n' %
@@ -461,7 +461,7 @@ def writeTestDescription( output, suite, test ):
                       (test['class'], suite['fullname'], suite['object'], suite['object'], suite['object']) )
             output.write( ' %s& %s;\n' % (suite['fullname'], suite['object']) )
     output.write( ' void runTest() { %s }\n' % runBody( suite, test ) )
-    #   
+    #
     if not options.noStaticInit:
         output.write( '} %s;\n\n' % test['object'] )
     else:
@@ -475,11 +475,11 @@ def runBody( suite, test ):
 def dynamicRun( suite, test ):
     '''Body of TestDescription::run() for test in a dynamic suite'''
     return 'if ( ' + suite['object'] + ' ) ' + suite['object'] + '->' + test['name'] + '();'
-    
+
 def staticRun( suite, test ):
     '''Body of TestDescription::run() for test in a non-dynamic suite'''
     return suite['object'] + '.' + test['name'] + '();'
-    
+
 def writeSuiteDescription( output, suite ):
     '''Write SuiteDescription object'''
     if isDynamic( suite ):

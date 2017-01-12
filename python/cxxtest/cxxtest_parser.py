@@ -73,7 +73,7 @@ def scanInputFile(fileName):
             prev = ""
     if contNo:
         scanInputLine( fileName, lineNo - contNo, prev + line )
-        
+
     closeSuite()
     file.close()
 
@@ -193,7 +193,7 @@ def addLineToBlock( suite, lineNo, line ):
     '''Append the line to the current CXXTEST_CODE() block'''
     line = fixBlockLine( suite, lineNo, line )
     line = re.sub( r'^.*\{\{', '', line )
-    
+
     e = re.search( r'\}\}', line )
     if e:
         line = line[:e.start()]
