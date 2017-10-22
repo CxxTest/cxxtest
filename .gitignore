@@ -7,3 +7,8 @@ guide.pdf
 guide.html
 parsetab.py
 TEST-cxxtest.xml
+TestGpp_*
+TestClang_*
+TestGppPy_*
+*.dSYM
+TestCpp_*

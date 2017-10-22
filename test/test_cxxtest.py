@@ -175,7 +175,8 @@ def file_diff(filename1, filename2, filtered_reader):
         fromfile=filename2, tofile=filename1))
     if diff:
         make_diff_readable(diff)
-        raise Exception("ERROR: \n\n%s\n\n%s\n\n" % (lines1, lines2))
+        raise Exception("ERROR: \n\n%s\n\n%s\n\n" %
+                        ('\n'.join(lines1), '\n'.join(lines2)))
     diff = '\n'.join(diff)
     return diff
 
@@ -475,10 +476,17 @@ class BaseTestCase(object):
         """Max dump size"""
         self.compile(prefix='max_dump_size', args="--error-printer --include=MaxDump.h DynamicMax.h SameData.h", output='max.out')
 
+    def test_char_assertions(self):
+        """char* assertions"""
+        self.compile(prefix='char_assertions',
+                     args='--error-printer CharAssertions.h',
+                     output='char_assertions.out')
+
     def test_wide_char(self):
         """Wide char"""
         self.check_if_supported('wchar.cpp', "The file wchar.cpp is not supported.")
         self.compile(prefix='wide_char', args="--error-printer WideCharTest.h", output="wchar.out")
+
 
     #def test_factor(self):
         #"""Factor"""
@@ -710,23 +718,31 @@ class BaseTestCase(object):
 
     def test_normal_sympath(self):
         """Normal Behavior - symbolic path"""
-        _files = " ".join(["LessThanEquals.h","Relation.h","DefaultTraits.h","DoubleCall.h","SameData.h","SameFiles.h","Tsm.h","TraitsTest.h","MockTest.h","SameZero.h"])
+        files = ["LessThanEquals.h","Relation.h","DefaultTraits.h",
+                 "DoubleCall.h","SameData.h","SameFiles.h","Tsm.h",
+                 "TraitsTest.h","MockTest.h","SameZero.h"]
+
+        sympath_name = 'test_sympath'
+        sympath_dir = '../%s' % (sympath_name,)
         prefix = 'normal_sympath'
+
+        _files = " ".join(files)
         self.init(prefix=prefix)
-        try:
-            os.remove('test_sympath')
-        except:
-            pass
-        try:
-            shutil.rmtree('../test_sympath')
-        except:
-            pass
-        os.mkdir('../test_sympath')
-        os.symlink('../test_sympath', 'test_sympath')
-        self.py_cpp = 'test_sympath/'+prefix+'_py.cpp'
-        self.compile(prefix=prefix, init=False, args="--error-printer "+_files, output="normal.out")
-        os.remove('test_sympath')
-        shutil.rmtree('../test_sympath')
+        # need to ignore very specific errors here
+        if os.path.islink(sympath_name):
+            os.remove(sympath_name)
+        if os.path.isdir(sympath_dir):
+            shutil.rmtree(sympath_dir)
+        if not os.path.exists('../.git'):
+            raise ValueError("Wrong local directory, run from the tests folder.")
+        os.mkdir(sympath_dir)
+        os.symlink(sympath_dir, sympath_name)
+        self.py_cpp = 'test_sympath/%s_py.cpp' % (prefix,)
+        self.compile(prefix=prefix, init=False, args="--error-printer "+_files,
+                     output="normal.out")
+        os.remove(sympath_name)
+        shutil.rmtree(sympath_dir)
+
 
     def test_normal_relpath(self):
         """Normal Behavior - relative path"""
