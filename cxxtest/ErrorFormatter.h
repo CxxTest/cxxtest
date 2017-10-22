@@ -130,8 +130,7 @@ public:
 
     void trace(const char *file, int line, const char *expression)
     {
-        stop(file, line) << "Trace: " <<
-                         (expression ? expression : "") << endl;
+        stop(file, line) << "Trace: " << (expression ? expression : "") << endl;
     }
 
     void warning(const char *file, int line, const char *expression)
@@ -184,7 +183,8 @@ public:
                                const char* explanation
                               )
     {
-        stop(file, line) << _errorString << ": " << explanation << endl;
+        stop(file, line) << _errorString << ": " <<
+                         (explanation ? explanation : "") << endl;
     }
 
     void failedAssertDelta(const char *file, int line,

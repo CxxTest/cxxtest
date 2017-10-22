@@ -185,8 +185,10 @@ def file_diff(filename1, filename2, filtered_reader):
             fromfile=filename2, tofile=filename1))
     if diff:
         make_diff_readable(diff)
-        raise Exception("ERROR: \n\n%s\n\n%s\n\n" %
-                        ('\n'.join(lines1), '\n'.join(lines2)))
+        raise Exception("ERROR: \n\n%s\n\n%s\n\n%s\n\n" %
+                        ('\n'.join(lines1),
+                         '\n'.join(lines2),
+                         '\n'.join(diff)))
     diff = '\n'.join(diff)
     return diff
 
@@ -442,6 +444,12 @@ class BaseTestCase(object):
     def test_include(self):
         """Include"""
         self.compile(prefix='include', args="--include=VoidTraits.h --include=LongTraits.h --error-printer IncludeTest.h", output="include.out")
+
+    def test_nullptr_guards(self):
+        """Nullptr Messages"""
+        self.compile(prefix='nullptr_guards',
+                     args="--error-printer NullPtrGuards.h --have-eh",
+                     output="nullptr_guards.out")
 
     #
     # Template file tests
