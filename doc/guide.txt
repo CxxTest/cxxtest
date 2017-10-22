@@ -402,7 +402,10 @@ This test runner generates the following output:
 ----
 include::examples/buildRunner7.txt[]
 ----
-The default filename for the XML results is +TEST-cxxtest.xml+.  The +--xunit-file+ option can be used to specify an alternative filename.  Additionally, the value of the +--world+ option can be used to specify the filename +TEST-<world>.xml+.
+The default filename for the XML results is +TEST-cxxtest.xml+.  The
++--xunit-file+ option can be used to specify an alternative filename.
+Additionally, the value of the +--world+ option can be used to specify the
+filename +TEST-<world>.xml+.
 
 
 Language Options
@@ -437,12 +440,14 @@ for compilers or linkers that have trouble compiling the default test runner.
 Creating Test Runners from Parts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The default behavior of +cxxtestgen+ is to generate a test runner
-that directly integrates classes that define the tests along with
-a +main()+ function that executes all test suites.  It is often useful to
-allow test suites to be processes separately and then linked together.  The +--root+ and +--part+ options
-support this logic.  For example, suppose that we wish to define a test runner for tests in the headers
-MyTestSuite1.h+ and +MyTestSuite2.h+.  We execute +cxxtestgen+ with the +--part+ option to generate source files for each of the test suites:
+The default behavior of +cxxtestgen+ is to generate a test runner that directly
+integrates classes that define the tests along with a +main()+ function that
+executes all test suites.  It is often useful to allow test suites to be
+processes separately and then linked together.  The +--root+ and +--part+
+options support this logic.  For example, suppose that we wish to define a test
+runner for tests in the headers MyTestSuite1.h+ and +MyTestSuite2.h+.  We
+execute +cxxtestgen+ with the +--part+ option to generate source files for each
+of the test suites:
 [source,bash]
 ----
 include::examples/.buildRunner9_part.sh[]
@@ -479,7 +484,8 @@ For example, consider the following template file:
 ----
 include::examples/runner10.tpl[]
 ----
-This file specifies macros that customize the test runner, and output is generated before and after the tests are run.
+This file specifies macros that customize the test runner, and output is
+generated before and after the tests are run.
 
 Note that CxxTest needs to insert certain definitions and +#include+
 directives in the runner file. It normally does that before the
@@ -1194,26 +1200,7 @@ of Python:  2.4 - 3.3, though future releases will not support
 Python 2.4.  Note that this script has only been tested with the
 CPython implementation.  CxxTest has been tested on Linux and
 Mac platforms using the `g++` and `clang++` compilers.
-### Mac
-If when using a makefile such as
----
-test:
-    cxxtestgen --runner=ErrorPrinter -o slinkedlist-runner.cpp slinkedlist-test.cpp
-    cxxtestgen --runner=ErrorPrinter -o dlinkedlist-runner.cpp dlinkedlist-test.cpp
-    g++ -o test-runner slinkedlist-runner.cpp
-    g++ -o test-runner dlinkedlist-runner.cpp
-    ./test-runner
----
-you receive the error
----
-fatal error: 'cxxtest/TestListener.h' file not found
----
-And your PATH is correc try running
----
-xcode-select --install
----
-to authorize Xcode and let your header files work
-See http://stackoverflow.com/questions/23905661/on-mac-g-fails-to-search-usr-local-include-and-usr-local-lib-by-default
+
 ////
 
 WEH - I thought about moving this section into the Getting Started
@@ -1223,6 +1210,30 @@ distribution model is very strategic for cxxtest.
 
 ////
 
+### Mac
+
+If when using a makefile such as
+---
+test:
+    cxxtestgen --runner=ErrorPrinter -o slinkedlist-runner.cpp slinkedlist-test.cpp
+    cxxtestgen --runner=ErrorPrinter -o dlinkedlist-runner.cpp dlinkedlist-test.cpp
+    g++ -o test-runner slinkedlist-runner.cpp
+    g++ -o test-runner dlinkedlist-runner.cpp
+    ./test-runner
+---
+
+you receive the error
+---
+fatal error: 'cxxtest/TestListener.h' file not found
+---
+
+And your PATH is correct, try running
+---
+xcode-select --install
+---
+
+to authorize Xcode and let your header files work
+See http://stackoverflow.com/questions/23905661/on-mac-g-fails-to-search-usr-local-include-and-usr-local-lib-by-default
 
 
 [[discussion]]
@@ -1266,7 +1277,8 @@ default output stream.  This test listener can be used in contexts
 where a custom output stream must be specified.
 
 ////
-WEH - I'd like to say more about future support for CxxTest, but I don't know more basic things like how we should plan to host CxxTest in the future.
+WEH - I'd like to say more about future support for CxxTest, but I don't know
+more basic things like how we should plan to host CxxTest in the future.
 
 Discuss support for ...
 
