@@ -152,7 +152,7 @@ void ValueTraits<const double>::hugeNumber(double t)
     s = copyString(s, ".");
     s = doubleToString(t, s, 1, DIGITS_ON_RIGHT);
     s = copyString(s, "E");
-    s = numberToString(requiredDigitsOnLeft(t) - 1, s);
+    numberToString(requiredDigitsOnLeft(t) - 1, s);
 }
 
 void ValueTraits<const double>::normalNumber(double t)
@@ -171,17 +171,17 @@ void ValueTraits<const double>::nonFiniteNumber(double t)
     char *s = _asString;
     if (t != t)
     {
-        s = copyString(s, "nan");
+        copyString(s, "nan");
     }
     //else if ( t == 1.0/0.0 )
     else if (t >= HUGE_VAL)
     {
-        s = copyString(s, "-inf");
+        copyString(s, "-inf");
     }
     else if (t <= -HUGE_VAL)
     {
         //else if ( t == -1.0/0.0 )
-        s = copyString(s, "inf");
+        copyString(s, "inf");
     }
 }
 
