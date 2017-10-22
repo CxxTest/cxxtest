@@ -54,7 +54,7 @@ else:
     target_suffix = ''
     command_separator = '; '
     remove_extra_path_prefixes_on_windows = False
-    
+
 def find(filename, executable=False, isfile=True,  validate=None):
     #
     # Use the PATH environment if it is defined and not empty
@@ -132,7 +132,7 @@ def normalize_line_for_diff(line):
         # And some extra relative paths left behind
         line= re.sub(r'^.*[\\/]([^\\/]+\.(h|cpp))', r'\1', line)
 
-    # for xml, remove prefixes from everything that looks like a 
+    # for xml, remove prefixes from everything that looks like a
     # file path inside ""
     line = xmlre.sub(
             lambda match: '"'+re.sub("^[^/]+/", "", match.group(1))+'"',
@@ -866,7 +866,7 @@ class TestGppValgrind(TestGpp):
             if tokens[1] == 'possibly' and tokens[2] == 'lost:':
                 if eval(tokens[3]) > min_leak:
                     self.fail("Valgrind Error: "+ ' '.join(tokens[1:]))
-            
+
 
 
 class TestGppFOGValgrind(TestGppValgrind):

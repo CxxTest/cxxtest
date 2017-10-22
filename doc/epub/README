@@ -5,42 +5,42 @@
 These are XSL stylesheets for transforming DocBook XML document
 instances into .epub format.
 
-.epub is an open standard of the The International Digital Publishing Forum (IDPF), 
-a the trade and standards association for the digital publishing industry. 
+.epub is an open standard of the The International Digital Publishing Forum (IDPF),
+a the trade and standards association for the digital publishing industry.
 
-An alpha-quality reference implementation (dbtoepub) for a DocBook to .epub 
-converter (written in Ruby) is available under bin/. 
+An alpha-quality reference implementation (dbtoepub) for a DocBook to .epub
+converter (written in Ruby) is available under bin/.
 
 From http://idpf.org
   What is EPUB, .epub, OPS/OCF & OEB?
 
-  ".epub" is the file extension of an XML format for reflowable digital 
-  books and publications.  ".epub" is composed of three open standards, 
-  the Open Publication Structure (OPS), Open Packaging Format (OPF) and 
-  Open Container Format (OCF), produced by the IDPF. "EPUB" allows 
-  publishers to produce and send a single digital publication file 
-  through distribution and offers consumers interoperability between 
-  software/hardware for unencrypted reflowable digital books and other 
-  publications. The Open eBook Publication Structure or "OEB", 
-  originally produced in 1999, is the precursor to OPS. 
+  ".epub" is the file extension of an XML format for reflowable digital
+  books and publications.  ".epub" is composed of three open standards,
+  the Open Publication Structure (OPS), Open Packaging Format (OPF) and
+  Open Container Format (OCF), produced by the IDPF. "EPUB" allows
+  publishers to produce and send a single digital publication file
+  through distribution and offers consumers interoperability between
+  software/hardware for unencrypted reflowable digital books and other
+  publications. The Open eBook Publication Structure or "OEB",
+  originally produced in 1999, is the precursor to OPS.
 
 ----------------------------------------------------------------------
-.epub Constraints 
+.epub Constraints
 ----------------------------------------------------------------------
 
 .epub does not support all of the image formats that DocBook supports.
 When an image is available in an accepted format, it will be used. The
 accepted @formats are: 'GIF','GIF87a','GIF89a','JPEG','JPG','PNG','SVG'
-A mime-type for the image will be guessed from the file extension, 
+A mime-type for the image will be guessed from the file extension,
 which may not work if your file extensions are non-standard.
 
 Non-supported elements:
-  * <mediaobjectco> 
-  * <inlinegraphic>, <graphic>, <textdata>, <imagedata> with text/XML 
+  * <mediaobjectco>
+  * <inlinegraphic>, <graphic>, <textdata>, <imagedata> with text/XML
     @filerefs
   * <olink>
   * <cmdsynopsis> in lists (generic XHTML rendering inability)
-  * <footnote><para><programlisting> (just make your programlistings 
+  * <footnote><para><programlisting> (just make your programlistings
     siblings, rather than descendents of paras)
 
 ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ dbtoepub Reference Implementation
 ----------------------------------------------------------------------
 
 An alpha-quality DocBook to .epub conversion program, dbtoepub, is provided
-in bin/dbtoepub. 
+in bin/dbtoepub.
 
 This tool requires:
  - 'xsltproc' in your PATH
@@ -65,7 +65,7 @@ $ dbtoepub --help
 
   .epub is defined by the IDPF at www.idpf.org and is made up of 3 standards:
   - Open Publication Structure (OPS)
-  - Open Packaging Format (OPF) 
+  - Open Packaging Format (OPF)
   - Open Container Format (OCF)
 
   Specific options:
@@ -78,7 +78,7 @@ $ dbtoepub --help
 Validation
 ----------------------------------------------------------------------
 
-The epubcheck project provides limited validation for .epub documents. 
+The epubcheck project provides limited validation for .epub documents.
 See http://code.google.com/p/epubcheck/ for details.
 
 ----------------------------------------------------------------------

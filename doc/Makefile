@@ -19,7 +19,7 @@ A2X_OPTS      := -a toc -a icons -L -d article -v --xsltproc-opts "$(XSLTPROC_OP
 
 all: guide.html guide.pdf guide.epub
 
-manpages: 
+manpages:
 	cd man; ./create_manpage;
 	cd man; asciidoc -v -d manpage ./cxxtestgen.1.txt
 

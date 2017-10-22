@@ -36,7 +36,7 @@ def scanInputFiles(files, _options):
             print(" error.")
             print(str(err))
             continue
-        print("done.") 
+        print("done.")
         sys.stdout.flush()
         #
         # WEH: see if it really makes sense to use parse information to
@@ -55,7 +55,7 @@ def scanInputFiles(files, _options):
                     fullname = key[2:]
                 else:
                     fullname = key
-                suite = { 
+                suite = {
                         'fullname'     : fullname,
                         'name'         : name,
                         'file'         : file,
