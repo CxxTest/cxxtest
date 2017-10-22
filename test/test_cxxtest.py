@@ -1,11 +1,11 @@
-#-------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 # CxxTest: A lightweight C++ unit testing library.
 # Copyright (c) 2008 Sandia Corporation.
 # This software is distributed under the LGPL License v3
 # For more information, see the COPYING file in the top CxxTest directory.
 # Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
 # the U.S. Government retains certain rights in this software.
-#-------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 
 import shutil
 import time
@@ -16,35 +16,34 @@ import glob
 import difflib
 import subprocess
 import re
-import string
-if sys.version_info < (2,7):
+if sys.version_info < (2, 7):
     import unittest2 as unittest
 else:
     import unittest
 try:
     import ply
-    ply_available=True
+    ply_available = True
 except:
-    ply_available=False
+    ply_available = False
 try:
     import cxxtest
-    cxxtest_available=True
+    cxxtest_available = True
     import cxxtest.cxxtestgen
 except:
-    cxxtest_available=False
+    cxxtest_available = False
 
-currdir = os.path.dirname(os.path.abspath(__file__))+os.sep
-sampledir = os.path.dirname(os.path.dirname(currdir))+'/sample'+os.sep
-cxxtestdir = os.path.dirname(os.path.dirname(currdir))+os.sep
+currdir = os.path.dirname(os.path.abspath(__file__)) + os.sep
+sampledir = os.path.dirname(os.path.dirname(currdir)) + '/sample' + os.sep
+cxxtestdir = os.path.dirname(os.path.dirname(currdir)) + os.sep
 
 compilerre = re.compile("^(?P<path>[^:]+)(?P<rest>:.*)$")
-dirre      = re.compile("^([^%s]*/)*" % re.escape(os.sep))
-xmlre      = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
-datere      = re.compile("date=\"[^\"]*\"")
+dirre = re.compile("^([^%s]*/)*" % re.escape(os.sep))
+xmlre = re.compile("\"(?P<path>[^\"]*/[^\"]*)\"")
+datere = re.compile("date=\"[^\"]*\"")
 
 # Headers from the cxxtest/sample directory
-samples = ' '.join(file for file in sorted(glob.glob(sampledir+'*.h')))
-guiInputs=currdir+'../sample/gui/GreenYellowRed.h'
+samples = ' '.join(file for file in sorted(glob.glob(sampledir + '*.h')))
+guiInputs = currdir + '../sample/gui/GreenYellowRed.h'
 if sys.platform.startswith('win'):
     target_suffix = '.exe'
     command_separator = ' && '
@@ -55,7 +54,8 @@ else:
     command_separator = '; '
     remove_extra_path_prefixes_on_windows = False
 
-def find(filename, executable=False, isfile=True,  validate=None):
+
+def find(filename, executable=False, isfile=True, validate=None):
     #
     # Use the PATH environment if it is defined and not empty
     #
@@ -65,46 +65,53 @@ def find(filename, executable=False, isfile=True,  validate=None):
         search_path = os.defpath.split(os.pathsep)
     for path in search_path:
             test_fname = os.path.join(path, filename)
-            if os.path.exists(test_fname) \
-                   and (not isfile or os.path.isfile(test_fname)) \
-                   and (not executable or os.access(test_fname, os.X_OK)):
+            if (
+                    os.path.exists(test_fname)
+                    and (not isfile or os.path.isfile(test_fname))
+                    and (not executable or os.access(test_fname, os.X_OK))
+            ):
                 return os.path.abspath(test_fname)
     return None
+
 
 def join_commands(command_one, command_two):
     return command_separator.join([command_one, command_two])
 
 _available = {}
+
+
 def available(compiler, exe_option):
-    if (compiler,exe_option) in _available:
-        return _available[compiler,exe_option]
+    if (compiler, exe_option) in _available:
+        return _available[compiler, exe_option]
     cmd = join_commands("cd %s" % currdir,
-                        "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir+'anything', currdir+'anything.cpp', currdir+'anything.log'))
-    print("Testing for compiler "+compiler)
-    print("Command: "+cmd)
+                        "%s %s %s %s > %s 2>&1" % (compiler, exe_option, currdir + 'anything', currdir + 'anything.cpp', currdir + 'anything.log'))
+    print("Testing for compiler " + compiler)
+    print("Command: " + cmd)
     status = subprocess.call(cmd, shell=True)
-    executable = currdir+'anything'+target_suffix
+    executable = currdir + 'anything' + target_suffix
     flag = status == 0 and os.path.exists(executable)
-    os.remove(currdir+'anything.log')
+    os.remove(currdir + 'anything.log')
     if os.path.exists(executable):
         os.remove(executable)
-    print("Status: "+str(flag))
-    _available[compiler,exe_option] = flag
+    print("Status: " + str(flag))
+    _available[compiler, exe_option] = flag
     return flag
 
+
 def remove_absdir(filename):
-    INPUT=open(filename, 'r')
+    INPUT = open(filename, 'r')
     lines = [line.strip() for line in INPUT]
     INPUT.close()
-    OUTPUT=open(filename, 'w')
+    OUTPUT = open(filename, 'w')
     for line in lines:
         # remove basedir at front of line
-        match = compilerre.match(line) # see if we can remove the basedir
+        match = compilerre.match(line)  # see if we can remove the basedir
         if match:
             parts = match.groupdict()
             line = dirre.sub("", parts['path']) + parts['rest']
-        OUTPUT.write(line+'\n')
+        OUTPUT.write(line + '\n')
     OUTPUT.close()
+
 
 def normalize_line_for_diff(line):
     # add spaces around {}<>()
@@ -130,49 +137,52 @@ def normalize_line_for_diff(line):
         line = ''.join(line.split(os.path.normcase(cxxtestdir)))
         line = ''.join(line.split(os.path.normpath(cxxtestdir)))
         # And some extra relative paths left behind
-        line= re.sub(r'^.*[\\/]([^\\/]+\.(h|cpp))', r'\1', line)
+        line = re.sub(r'^.*[\\/]([^\\/]+\.(h|cpp))', r'\1', line)
 
     # for xml, remove prefixes from everything that looks like a
     # file path inside ""
     line = xmlre.sub(
-            lambda match: '"'+re.sub("^[^/]+/", "", match.group(1))+'"',
-            line
-            )
+        lambda match: '"' + re.sub("^[^/]+/", "", match.group(1)) + '"',
+        line)
     # Remove date info
-    line = datere.sub( lambda match: 'date=""', line)
+    line = datere.sub(lambda match: 'date=""', line)
     return line
+
 
 def make_diff_readable(diff):
     i = 0
-    while i+1 < len(diff):
-        if diff[i][0] == '-' and diff[i+1][0] == '+':
+    while i + 1 < len(diff):
+        if diff[i][0] == '-' and diff[i + 1][0] == '+':
             l1 = diff[i]
-            l2 = diff[i+1]
+            l2 = diff[i + 1]
             for j in range(1, min([len(l1), len(l2)])):
                 if l1[j] != l2[j]:
                     if j > 4:
-                        j = j-2;
+                        j = j - 2
                         l1 = l1[j:]
                         l2 = l2[j:]
                         diff[i] = '-(...)' + l1
-                        diff[i+1] = '+(...)' + l2
+                        diff[i + 1] = '+(...)' + l2
                     break
-        i+=1
+        i += 1
+
 
 def file_diff(filename1, filename2, filtered_reader):
     remove_absdir(filename1)
     remove_absdir(filename2)
     #
-    INPUT=open(filename1, 'r')
+    INPUT = open(filename1, 'r')
     lines1 = list(filtered_reader(INPUT))
     INPUT.close()
     #
-    INPUT=open(filename2, 'r')
+    INPUT = open(filename2, 'r')
     lines2 = list(filtered_reader(INPUT))
     INPUT.close()
     #
-    diff = list(difflib.unified_diff(lines2, lines1,
-        fromfile=filename2, tofile=filename1))
+    diff = list(
+        difflib.unified_diff(
+            lines2, lines1,
+            fromfile=filename2, tofile=filename1))
     if diff:
         make_diff_readable(diff)
         raise Exception("ERROR: \n\n%s\n\n%s\n\n" %
@@ -183,20 +193,20 @@ def file_diff(filename1, filename2, filtered_reader):
 
 class BaseTestCase(object):
 
-    fog=''
-    valgrind=''
-    cxxtest_import=False
+    fog = ''
+    valgrind = ''
+    cxxtest_import = False
 
     def setUp(self):
-        sys.stderr.write("("+self.__class__.__name__+") ")
-        self.passed=False
-        self.prefix=''
-        self.py_out=''
-        self.py_cpp=''
-        self.px_pre=''
-        self.px_out=''
-        self.build_log=''
-        self.build_target=''
+        sys.stderr.write("(" + self.__class__.__name__ + ") ")
+        self.passed = False
+        self.prefix = ''
+        self.py_out = ''
+        self.py_cpp = ''
+        self.px_pre = ''
+        self.px_out = ''
+        self.build_log = ''
+        self.build_target = ''
 
     def tearDown(self):
         if not self.passed:
@@ -204,7 +214,7 @@ class BaseTestCase(object):
         files = []
         if os.path.exists(self.py_out):
             files.append(self.py_out)
-        if os.path.exists(self.py_cpp) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
+        if os.path.exists(self.py_cpp) and 'CXXTEST_GCOV_FLAGS' not in os.environ:
             files.append(self.py_cpp)
         if os.path.exists(self.px_pre):
             files.append(self.px_pre)
@@ -212,7 +222,7 @@ class BaseTestCase(object):
             files.append(self.px_out)
         if os.path.exists(self.build_log):
             files.append(self.build_log)
-        if os.path.exists(self.build_target) and not 'CXXTEST_GCOV_FLAGS' in os.environ:
+        if os.path.exists(self.build_target) and 'CXXTEST_GCOV_FLAGS' not in os.environ:
             files.append(self.build_target)
         for file in files:
             try:
@@ -222,18 +232,16 @@ class BaseTestCase(object):
                 try:
                     os.remove(file)
                 except:
-                    print( "Error removing file '%s'" % file)
-
+                    print("Error removing file '%s'" % file)
 
     # This is a "generator" that just reads a file and normalizes the lines
     def file_filter(self, file):
         for line in file:
             yield normalize_line_for_diff(line)
 
-
     def check_if_supported(self, filename, msg):
-        target=currdir+'check'+'px'+target_suffix
-        log=currdir+'check'+'_build.log'
+        target = currdir + 'check' + 'px' + target_suffix
+        log = currdir + 'check' + '_build.log'
         cmd = join_commands("cd %s" % currdir,
                             "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, target, self.include_option, self.include_option, currdir, filename, log))
         status = subprocess.call(cmd, shell=True)
@@ -244,39 +252,41 @@ class BaseTestCase(object):
 
     def init(self, prefix):
         #
-        self.prefix = self.__class__.__name__+'_'+prefix
-        self.py_out = currdir+self.prefix+'_py.out'
-        self.py_cpp = currdir+self.prefix+'_py.cpp'
-        self.px_pre = currdir+self.prefix+'_px.pre'
-        self.px_out = currdir+self.prefix+'_px.out'
-        self.build_log = currdir+self.prefix+'_build.log'
-        self.build_target = currdir+self.prefix+'px'+target_suffix
+        self.prefix = self.__class__.__name__ + '_' + prefix
+        self.py_out = currdir + self.prefix + '_py.out'
+        self.py_cpp = currdir + self.prefix + '_py.cpp'
+        self.px_pre = currdir + self.prefix + '_px.pre'
+        self.px_out = currdir + self.prefix + '_px.out'
+        self.build_log = currdir + self.prefix + '_build.log'
+        self.build_target = currdir + self.prefix + 'px' + target_suffix
 
     def check_root(self, prefix='', output=None):
         self.init(prefix)
         args = "--have-eh --abort-on-fail --root --error-printer"
         if self.cxxtest_import:
             os.chdir(currdir)
-            cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args), True)
+            cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp] + re.split('[ ]+', args), True)
         else:
-            cmd = join_commands("cd %s" % currdir,
-                            "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
+            cmd = join_commands(
+                "cd %s" % currdir,
+                "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
             status = subprocess.call(cmd, shell=True)
-            self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status,cmd))
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status, cmd))
         #
         files = [self.py_cpp]
-        for i in [1,2]:
+        for i in [1, 2]:
             args = "--have-eh --abort-on-fail --part Part%s.h" % str(i)
-            file = currdir+self.prefix+'_py%s.cpp' % str(i)
+            file = currdir + self.prefix + '_py%s.cpp' % str(i)
             files.append(file)
             if self.cxxtest_import:
                 os.chdir(currdir)
-                cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file]+re.split('[ ]+',args), True)
+                cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', file] + re.split('[ ]+', args), True)
             else:
-                cmd = join_commands("cd %s" % currdir,
-                                "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
+                cmd = join_commands(
+                    "cd %s" % currdir,
+                    "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, file, args, self.py_out))
                 status = subprocess.call(cmd, shell=True)
-                self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status,cmd))
+                self.assertEqual(status, 0, 'Bad return code: %d   Error executing cxxtestgen: %s' % (status, cmd))
         #
         cmd = join_commands("cd %s" % currdir,
                             "%s %s %s %s. %s%s../ %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, ' '.join(files), self.build_log))
@@ -284,21 +294,21 @@ class BaseTestCase(object):
         for file in files:
             if os.path.exists(file):
                 os.remove(file)
-        self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
+        self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
         cmd = join_commands("cd %s" % currdir,
                             "%s %s -v > %s 2>&1" % (self.valgrind, self.build_target, self.px_pre))
         status = subprocess.call(cmd, shell=True)
-        OUTPUT = open(self.px_pre,'a')
-        OUTPUT.write('Error level = '+str(status)+'\n')
+        OUTPUT = open(self.px_pre, 'a')
+        OUTPUT.write('Error level = ' + str(status) + '\n')
         OUTPUT.close()
-        diffstr = file_diff(self.px_pre, currdir+output, self.file_filter)
+        diffstr = file_diff(self.px_pre, currdir + output, self.file_filter)
         if not diffstr == '':
-            self.fail("Unexpected differences in output:\n"+diffstr)
+            self.fail("Unexpected differences in output:\n" + diffstr)
         if self.valgrind != '':
             self.parse_valgrind(self.px_pre)
         #
-        self.passed=True
+        self.passed = True
 
     def compile(self, prefix='', args=None, compile='', output=None, main=None, failGen=False, run=None, logfile=None, failBuild=False, init=True):
         """Run cxxtestgen and compile the code that is generated"""
@@ -308,23 +318,24 @@ class BaseTestCase(object):
         if self.cxxtest_import:
             try:
                 os.chdir(currdir)
-                status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp]+re.split('[ ]+',args), True)
+                status = cxxtest.cxxtestgen.main(['cxxtestgen', self.fog, '-o', self.py_cpp] + re.split('[ ]+', args), True)
             except:
                 status = 1
         else:
-            cmd = join_commands("cd %s" % currdir,
-                            "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
+            cmd = join_commands(
+                "cd %s" % currdir,
+                "%s %s../bin/cxxtestgen %s -o %s %s > %s 2>&1" % (sys.executable, currdir, self.fog, self.py_cpp, args, self.py_out))
             status = subprocess.call(cmd, shell=True)
         if failGen:
             if status == 0:
                 self.fail('Expected cxxtestgen to fail.')
             else:
-                self.passed=True
+                self.passed = True
                 return
         if not self.cxxtest_import:
-            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
-        if not main is None:
+        if main is not None:
             # Compile with main
             cmd = join_commands("cd %s" % currdir,
                                 "%s %s %s %s. %s%s../ %s main.cpp %s > %s 2>&1" % (self.compiler, self.exe_option, self.build_target, self.include_option, self.include_option, currdir, compile, self.py_cpp, self.build_log))
@@ -337,36 +348,36 @@ class BaseTestCase(object):
             if status == 0:
                 self.fail('Expected compiler to fail.')
             else:
-                self.passed=True
+                self.passed = True
                 return
         else:
-            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status,cmd))
+            self.assertEqual(status, 0, 'Bad return code: %d   Error executing command: %s' % (status, cmd))
         #
-        if compile == '' and not output is None:
+        if compile == '' and output is not None:
             if run is None:
                 cmd = join_commands("cd %s" % currdir,
                                     "%s %s -v > %s 2>&1" % (self.valgrind, self.build_target, self.px_pre))
             else:
                 cmd = run % (self.valgrind, self.build_target, self.px_pre)
             status = subprocess.call(cmd, shell=True)
-            OUTPUT = open(self.px_pre,'a')
-            OUTPUT.write('Error level = '+str(status)+'\n')
+            OUTPUT = open(self.px_pre, 'a')
+            OUTPUT.write('Error level = ' + str(status) + '\n')
             OUTPUT.close()
             if logfile is None:
-                diffstr = file_diff(self.px_pre, currdir+output, self.file_filter)
+                diffstr = file_diff(self.px_pre, currdir + output, self.file_filter)
             else:
-                diffstr = file_diff(currdir+logfile, currdir+output, self.file_filter)
+                diffstr = file_diff(currdir + logfile, currdir + output, self.file_filter)
             if not diffstr == '':
-                self.fail("Unexpected differences in output:\n"+diffstr)
+                self.fail("Unexpected differences in output:\n" + diffstr)
             if self.valgrind != '':
                 self.parse_valgrind(self.px_pre)
-            if not logfile is None:
-                os.remove(currdir+logfile)
+            if logfile is not None:
+                os.remove(currdir + logfile)
         #
         if compile == '' and output is None and os.path.exists(self.py_cpp):
             self.fail("Output cpp file %s should not have been generated." % self.py_cpp)
         #
-        self.passed=True
+        self.passed = True
 
     #
     # Tests for cxxtestgen
@@ -378,7 +389,7 @@ class BaseTestCase(object):
 
     def test_root_plus_part(self):
         """Root + Part"""
-        self.compile(prefix='root_plus_part', args="--error-printer --root --part "+samples, output="error.out")
+        self.compile(prefix='root_plus_part', args="--error-printer --root --part " + samples, output="error.out")
 
     def test_wildcard(self):
         """Wildcard input"""
@@ -386,29 +397,29 @@ class BaseTestCase(object):
 
     def test_stdio_printer(self):
         """Stdio printer"""
-        self.compile(prefix='stdio_printer', args="--runner=StdioPrinter "+samples, output="error.out")
+        self.compile(prefix='stdio_printer', args="--runner=StdioPrinter " + samples, output="error.out")
 
     def test_paren_printer(self):
         """Paren printer"""
-        self.compile(prefix='paren_printer', args="--runner=ParenPrinter "+samples, output="paren.out")
+        self.compile(prefix='paren_printer', args="--runner=ParenPrinter " + samples, output="paren.out")
 
     def test_yn_runner(self):
         """Yes/No runner"""
-        self.compile(prefix='yn_runner', args="--runner=YesNoRunner "+samples, output="runner.out")
+        self.compile(prefix='yn_runner', args="--runner=YesNoRunner " + samples, output="runner.out")
 
     def test_no_static_init(self):
         """No static init"""
-        self.compile(prefix='no_static_init', args="--error-printer --no-static-init "+samples, output="error.out")
+        self.compile(prefix='no_static_init', args="--error-printer --no-static-init " + samples, output="error.out")
 
     def test_samples_file(self):
         """Samples file"""
         # Create a file with the list of sample files
-        OUTPUT = open(currdir+'Samples.txt','w')
-        for line in sorted(glob.glob(sampledir+'*.h')):
-            OUTPUT.write(line+'\n')
+        OUTPUT = open(currdir + 'Samples.txt', 'w')
+        for line in sorted(glob.glob(sampledir + '*.h')):
+            OUTPUT.write(line + '\n')
         OUTPUT.close()
         self.compile(prefix='samples_file', args="--error-printer --headers Samples.txt", output="error.out")
-        os.remove(currdir+'Samples.txt')
+        os.remove(currdir + 'Samples.txt')
 
     def test_have_std(self):
         """Have Std"""
@@ -438,11 +449,11 @@ class BaseTestCase(object):
 
     def test_preamble(self):
         """Preamble"""
-        self.compile(prefix='preamble', args="--template=preamble.tpl "+samples, output="preamble.out")
+        self.compile(prefix='preamble', args="--template=preamble.tpl " + samples, output="preamble.out")
 
     def test_activate_all(self):
         """Activate all"""
-        self.compile(prefix='activate_all', args="--template=activate.tpl "+samples, output="error.out")
+        self.compile(prefix='activate_all', args="--template=activate.tpl " + samples, output="error.out")
 
     def test_only_suite(self):
         """Only Suite"""
@@ -458,7 +469,7 @@ class BaseTestCase(object):
 
     def test_exceptions_tpl(self):
         """Exceptions - Template"""
-        self.compile(prefix='exceptions_tpl', args="--template=HaveEH.tpl "+self.ehNormals, output="eh_normals.out")
+        self.compile(prefix='exceptions_tpl', args="--template=HaveEH.tpl " + self.ehNormals, output="eh_normals.out")
 
     #
     # Test cases which do not require exception handling
@@ -487,28 +498,27 @@ class BaseTestCase(object):
         self.check_if_supported('wchar.cpp', "The file wchar.cpp is not supported.")
         self.compile(prefix='wide_char', args="--error-printer WideCharTest.h", output="wchar.out")
 
-
-    #def test_factor(self):
-        #"""Factor"""
-        #self.compile(prefix='factor', args="--error-printer --factor Factor.h", output="factor.out")
+    # def test_factor(self):
+    #    """Factor"""
+    #    self.compile(prefix='factor', args="--error-printer --factor Factor.h", output="factor.out")
 
     def test_user_traits(self):
         """User traits"""
         self.compile(prefix='user_traits', args="--template=UserTraits.tpl UserTraits.h", output='user.out')
 
-    normals = " ".join(currdir+file for file in ["LessThanEquals.h","Relation.h","DefaultTraits.h","DoubleCall.h","SameData.h","SameFiles.h","Tsm.h","TraitsTest.h","MockTest.h","SameZero.h"])
+    normals = " ".join(currdir + file for file in ["LessThanEquals.h", "Relation.h", "DefaultTraits.h", "DoubleCall.h", "SameData.h", "SameFiles.h", "Tsm.h", "TraitsTest.h", "MockTest.h", "SameZero.h"])
 
     def test_normal_behavior_xunit(self):
         """Normal Behavior with XUnit Output"""
-        self.compile(prefix='normal_behavior_xunit', args="--xunit-printer "+self.normals, logfile='TEST-cxxtest.xml', output="normal.xml")
+        self.compile(prefix='normal_behavior_xunit', args="--xunit-printer " + self.normals, logfile='TEST-cxxtest.xml', output="normal.xml")
 
     def test_normal_behavior(self):
         """Normal Behavior"""
-        self.compile(prefix='normal_behavior', args="--error-printer "+self.normals, output="normal.out")
+        self.compile(prefix='normal_behavior', args="--error-printer " + self.normals, output="normal.out")
 
     def test_normal_plus_abort(self):
         """Normal + Abort"""
-        self.compile(prefix='normal_plus_abort', args="--error-printer --have-eh --abort-on-fail "+self.normals, output="abort.out")
+        self.compile(prefix='normal_plus_abort', args="--error-printer --have-eh --abort-on-fail " + self.normals, output="abort.out")
 
     def test_stl_traits(self):
         """STL Traits"""
@@ -517,7 +527,7 @@ class BaseTestCase(object):
 
     def test_normal_behavior_world(self):
         """Normal Behavior with World"""
-        self.compile(prefix='normal_behavior_world', args="--error-printer --world=myworld "+self.normals, output="world.out")
+        self.compile(prefix='normal_behavior_world', args="--error-printer --world=myworld " + self.normals, output="world.out")
 
     #
     # Test cases which do require exception handling
@@ -530,7 +540,7 @@ class BaseTestCase(object):
 
     def test_exceptions(self):
         """Exceptions"""
-        self.compile(prefix='exceptions', args="--error-printer --have-eh "+self.ehNormals, output="eh_normals.out")
+        self.compile(prefix='exceptions', args="--error-printer --have-eh " + self.ehNormals, output="eh_normals.out")
 
     def test_exceptions_plus_abort(self):
         """Exceptions plus abort"""
@@ -538,11 +548,11 @@ class BaseTestCase(object):
 
     def test_default_abort(self):
         """Default abort"""
-        self.compile(prefix='default_abort', args="--error-printer --include=DefaultAbort.h "+self.ehNormals+ " DeepAbort.h ThrowsAssert.h", output="default_abort.out")
+        self.compile(prefix='default_abort', args="--error-printer --include=DefaultAbort.h " + self.ehNormals + " DeepAbort.h ThrowsAssert.h", output="default_abort.out")
 
     def test_default_no_abort(self):
         """Default no abort"""
-        self.compile(prefix='default_no_abort', args="--error-printer "+self.ehNormals+" DeepAbort.h ThrowsAssert.h", output="default_abort.out")
+        self.compile(prefix='default_no_abort', args="--error-printer " + self.ehNormals + " DeepAbort.h ThrowsAssert.h", output="default_abort.out")
 
     #
     # Global Fixtures
@@ -598,7 +608,7 @@ class BaseTestCase(object):
 
     def test_gui(self):
         """GUI"""
-        self.compile(prefix='gui', args='--gui=DummyGui %s' % guiInputs, output ="gui.out")
+        self.compile(prefix='gui', args='--gui=DummyGui %s' % guiInputs, output="gui.out")
 
     def test_gui_runner(self):
         """GUI + runner"""
@@ -614,13 +624,12 @@ class BaseTestCase(object):
 
     def test_win32_unicode(self):
         """Win32 Unicode"""
-        self.compile(prefix='win32_unicode', args="--gui=Win32Gui GoodSuite.h", compile=self.w32Flags+' -DUNICODE')
+        self.compile(prefix='win32_unicode', args="--gui=Win32Gui GoodSuite.h", compile=self.w32Flags + ' -DUNICODE')
 
     def test_x11_gui(self):
         """X11 GUI"""
         self.check_if_supported('wchar.cpp', "Cannot compile wchar.cpp")
         self.compile(prefix='x11_gui', args="--gui=X11Gui GoodSuite.h", compile=self.x11Flags)
-
 
     #
     # Tests for when the compiler doesn't support exceptions
@@ -652,7 +661,7 @@ class BaseTestCase(object):
 
     def test_missing_template(self):
         """Missing template"""
-        self.compile(prefix='missing_template', args='--template=NoSuchFile.h '+samples, failGen=True)
+        self.compile(prefix='missing_template', args='--template=NoSuchFile.h ' + samples, failGen=True)
 
     def test_inheritance(self):
         """Test relying on inheritance"""
@@ -718,9 +727,9 @@ class BaseTestCase(object):
 
     def test_normal_sympath(self):
         """Normal Behavior - symbolic path"""
-        files = ["LessThanEquals.h","Relation.h","DefaultTraits.h",
-                 "DoubleCall.h","SameData.h","SameFiles.h","Tsm.h",
-                 "TraitsTest.h","MockTest.h","SameZero.h"]
+        files = ["LessThanEquals.h", "Relation.h", "DefaultTraits.h",
+                 "DoubleCall.h", "SameData.h", "SameFiles.h", "Tsm.h",
+                 "TraitsTest.h", "MockTest.h", "SameZero.h"]
 
         sympath_name = 'test_sympath'
         sympath_dir = '../%s' % (sympath_name,)
@@ -738,7 +747,9 @@ class BaseTestCase(object):
         os.mkdir(sympath_dir)
         os.symlink(sympath_dir, sympath_name)
         self.py_cpp = 'test_sympath/%s_py.cpp' % (prefix,)
-        self.compile(prefix=prefix, init=False, args="--error-printer "+_files,
+        self.compile(prefix=prefix,
+                     init=False,
+                     args="--error-printer " + _files,
                      output="normal.out")
         os.remove(sympath_name)
         shutil.rmtree(sympath_dir)
@@ -746,7 +757,10 @@ class BaseTestCase(object):
 
     def test_normal_relpath(self):
         """Normal Behavior - relative path"""
-        _files = " ".join(["LessThanEquals.h","Relation.h","DefaultTraits.h","DoubleCall.h","SameData.h","SameFiles.h","Tsm.h","TraitsTest.h","MockTest.h","SameZero.h"])
+        files = ["LessThanEquals.h", "Relation.h", "DefaultTraits.h",
+                 "DoubleCall.h", "SameData.h", "SameFiles.h", "Tsm.h",
+                 "TraitsTest.h", "MockTest.h", "SameZero.h"]
+        _files = " ".join(files)
         prefix = 'normal_relative'
         self.init(prefix=prefix)
         try:
@@ -754,10 +768,12 @@ class BaseTestCase(object):
         except:
             pass
         os.mkdir('../test_relpath')
-        self.py_cpp = '../test_relpath/'+prefix+'_py.cpp'
-        self.compile(prefix=prefix, init=False, args="--error-printer "+_files, output="normal.out")
+        self.py_cpp = '../test_relpath/' + prefix + '_py.cpp'
+        self.compile(prefix=prefix,
+                     init=False,
+                     args="--error-printer " + _files,
+                     output="normal.out")
         shutil.rmtree('../test_relpath')
-
 
 
 class TestCpp(BaseTestCase, unittest.TestCase):
@@ -765,11 +781,11 @@ class TestCpp(BaseTestCase, unittest.TestCase):
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='c++ -Wall -W -Werror -g'
+    compiler = 'c++ -Wall -W -Werror -g'
     no_eh_option = None
-    qtFlags='-Ifake'
-    x11Flags='-Ifake'
-    w32Flags='-Ifake'
+    qtFlags = '-Ifake'
+    x11Flags = '-Ifake'
+    w32Flags = '-Ifake'
 
     def run(self, *args, **kwds):
         if available('c++', '-o'):
@@ -784,7 +800,7 @@ class TestCpp(BaseTestCase, unittest.TestCase):
 
 class TestCppFOG(TestCpp):
 
-    fog='-f'
+    fog = '-f'
 
     def run(self, *args, **kwds):
         if ply_available:
@@ -796,11 +812,11 @@ class TestGpp(BaseTestCase, unittest.TestCase):
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='g++ -g -ansi -pedantic -Wmissing-declarations -Werror -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo %s' % os.environ.get('CXXTEST_GCOV_FLAGS','')
+    compiler = 'g++ -g -ansi -pedantic -Wmissing-declarations -Werror -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo %s' % os.environ.get('CXXTEST_GCOV_FLAGS', '')
     no_eh_option = '-fno-exceptions'
-    qtFlags='-Ifake'
-    x11Flags='-Ifake'
-    w32Flags='-Ifake'
+    qtFlags = '-Ifake'
+    x11Flags = '-Ifake'
+    w32Flags = '-Ifake'
 
     def run(self, *args, **kwds):
         if available('g++', '-o'):
@@ -825,7 +841,7 @@ class TestGppPy(TestGpp):
 
 class TestGppFOG(TestGpp):
 
-    fog='-f'
+    fog = '-f'
 
     def run(self, *args, **kwds):
         if ply_available:
@@ -844,7 +860,7 @@ class TestGppFOGPy(TestGppFOG):
 
 class TestGppValgrind(TestGpp):
 
-    valgrind='valgrind --tool=memcheck --leak-check=yes'
+    valgrind = 'valgrind --tool=memcheck --leak-check=yes'
 
     def file_filter(self, file):
         for line in file:
@@ -873,21 +889,20 @@ class TestGppValgrind(TestGpp):
         for line in INPUT:
             if not line.startswith('=='):
                 continue
-            tokens = re.split('[ \t]+', line)
+            tokens = re.split('[ \t]+ ', line)
             if len(tokens) < 4:
                 continue
             if tokens[1] == 'definitely' and tokens[2] == 'lost:':
                 if eval(tokens[3]) > min_leak:
-                    self.fail("Valgrind Error: "+ ' '.join(tokens[1:]))
+                    self.fail("Valgrind Error: " + ' '.join(tokens[1:]))
             if tokens[1] == 'possibly' and tokens[2] == 'lost:':
                 if eval(tokens[3]) > min_leak:
-                    self.fail("Valgrind Error: "+ ' '.join(tokens[1:]))
-
+                    self.fail("Valgrind Error: " + ' '.join(tokens[1:]))
 
 
 class TestGppFOGValgrind(TestGppValgrind):
 
-    fog='-f'
+    fog = '-f'
 
     def run(self, *args, **kwds):
         if ply_available:
@@ -899,11 +914,11 @@ class TestClang(BaseTestCase, unittest.TestCase):
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='clang++ -v -g -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo'
+    compiler = 'clang++ -v -g -Wall -W -Wshadow -Woverloaded-virtual -Wnon-virtual-dtor -Wreorder -Wsign-promo'
     no_eh_option = '-fno-exceptions'
-    qtFlags='-Ifake'
-    x11Flags='-Ifake'
-    w32Flags='-Ifake'
+    qtFlags = '-Ifake'
+    x11Flags = '-Ifake'
+    w32Flags = '-Ifake'
 
     def run(self, *args, **kwds):
         if available('clang++', '-o'):
@@ -918,7 +933,7 @@ class TestClang(BaseTestCase, unittest.TestCase):
 
 class TestClangFOG(TestClang):
 
-    fog='-f'
+    fog = '-f'
 
     def run(self, *args, **kwds):
         if ply_available:
@@ -930,11 +945,11 @@ class TestCL(BaseTestCase, unittest.TestCase):
     # Compiler specifics
     exe_option = '-o'
     include_option = '-I'
-    compiler='cl -nologo -GX -W4'# -WX'
+    compiler = 'cl -nologo -GX -W4'  # -WX'
     no_eh_option = '-GX-'
-    qtFlags='-Ifake'
-    x11Flags='-Ifake'
-    w32Flags='-Ifake'
+    qtFlags = '-Ifake'
+    x11Flags = '-Ifake'
+    w32Flags = '-Ifake'
 
     def run(self, *args, **kwds):
         if available('cl', '-o'):
@@ -949,7 +964,7 @@ class TestCL(BaseTestCase, unittest.TestCase):
 
 class TestCLFOG(TestCL):
 
-    fog='-f'
+    fog = '-f'
 
     def run(self, *args, **kwds):
         if ply_available:
