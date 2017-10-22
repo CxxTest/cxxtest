@@ -1194,8 +1194,26 @@ of Python:  2.4 - 3.3, though future releases will not support
 Python 2.4.  Note that this script has only been tested with the
 CPython implementation.  CxxTest has been tested on Linux and
 Mac platforms using the `g++` and `clang++` compilers.
-
-
+### Mac
+If when using a makefile such as
+---
+test:
+    cxxtestgen --runner=ErrorPrinter -o slinkedlist-runner.cpp slinkedlist-test.cpp
+    cxxtestgen --runner=ErrorPrinter -o dlinkedlist-runner.cpp dlinkedlist-test.cpp
+    g++ -o test-runner slinkedlist-runner.cpp
+    g++ -o test-runner dlinkedlist-runner.cpp
+    ./test-runner
+---
+you receive the error
+---
+fatal error: 'cxxtest/TestListener.h' file not found
+---
+And your PATH is correc try running
+---
+xcode-select --install
+---
+to authorize Xcode and let your header files work
+See http://stackoverflow.com/questions/23905661/on-mac-g-fails-to-search-usr-local-include-and-usr-local-lib-by-default
 ////
 
 WEH - I thought about moving this section into the Getting Started
