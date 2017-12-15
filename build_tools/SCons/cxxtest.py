@@ -280,9 +280,6 @@ def generate(env, **kwargs):
                             python, docs and other subdirectories.
     ... and all others that Program() accepts, like CPPPATH etc.
     """
-
-    print "Loading CxxTest tool..."
-
     #
     # Expected behaviour: keyword arguments override environment variables;
     # environment variables override default settings.
@@ -397,4 +394,3 @@ def generate(env, **kwargs):
 
 def exists(env):
     return os.path.exists(env['CXXTEST'])
-
