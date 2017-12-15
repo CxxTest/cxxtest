@@ -7,12 +7,10 @@ try:
     import cxxtest.cxxtestgen
 except ImportError:
     currdir = os.path.dirname(os.path.abspath(__file__))
-
-    if sys.version_info < (3,0):
-        sys.path.append( os.path.abspath( os.path.sep.join([currdir, '..']) ) )
-    else:
-        sys.path.append( os.path.abspath( os.path.sep.join([currdir, '..', 'python3']) ) )
-
+    pydir = os.path.dirname(currdir)
+    if sys.version_info[0] >= 3:
+        pydir = os.path.join(pydir, 'python3')
+    sys.path.append(pydir)
     import cxxtest.cxxtestgen
 
 cxxtest.cxxtestgen.main()
