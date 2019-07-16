@@ -60,7 +60,7 @@ public:
         if (tracker().failedTests())
         {
             (*_o) << "Failed " << tracker().failedTests() << " of " << totalTests << endl;
-            unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracer().skippedTests();
+            unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracker().skippedTests();
             unsigned numTotal = desc.numTotalTests() - tracker().skippedTests();
             if (numTotal == 0)
             {
