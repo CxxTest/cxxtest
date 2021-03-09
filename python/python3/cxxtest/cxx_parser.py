@@ -2087,7 +2087,7 @@ def p_error(p):
         tmp = "Syntax error at end of file."
     else:
         tmp = "Syntax error at token "
-        if p.type is "":
+        if p.type == "":
             tmp = tmp + "''"
         else:
             tmp = tmp + str(p.type)
