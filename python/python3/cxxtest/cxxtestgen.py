@@ -15,27 +15,27 @@
 
 __all__ = ['main', 'create_manpage']
 
-from . import __release__
+import __release__
 import os
 import sys
 import re
 import glob
 from optparse import OptionParser
-from . import cxxtest_parser
+import cxxtest_parser
 from string import Template
 
 try:
-    from . import cxxtest_fog
+    import cxxtest_fog
     imported_fog=True
 except ImportError:
     imported_fog=False
 
-from .cxxtest_misc import abort
+from cxxtest_misc import abort
 
 try:
     from os.path import relpath
 except ImportError:
-    from .cxxtest_misc import relpath
+    from cxxtest_misc import relpath
 
 # Global data is initialized by main()
 options = []
@@ -627,4 +627,4 @@ def create_manpage():
     OUTPUT.write( man_template.substitute(usage=usage, description=description, options=options) )
     OUTPUT.close()
 
-
+main()
