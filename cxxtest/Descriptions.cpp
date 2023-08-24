@@ -13,6 +13,7 @@
 #define __cxxtest__Descriptions_cpp__
 
 #include <cxxtest/Descriptions.h>
+#include <cxxtest/ValueTraits.h>
 
 namespace CxxTest
 {
