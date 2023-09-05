@@ -111,7 +111,7 @@ public:
     {
         if (!tracker().failedTests())
         {
-            (*_o) << "OK!" << endl;
+            (*_o) << " OK!" << endl;
             return;
         }
         newLine();
