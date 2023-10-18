@@ -35,12 +35,15 @@ namespace CxxTest
 
 inline void print_help(const char* name)
 {
+    CXXTEST_STD(cerr) << CXXTEST_STD(endl);
+    CXXTEST_STD(cerr) << "CxxTest test runner usage: " << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " <suitename>" << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " <suitename> <testname>" << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " -h" << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " --help" << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " --help-tests" << CXXTEST_STD(endl);
     CXXTEST_STD(cerr) << name << " -v             Enable tracing output." << CXXTEST_STD(endl);
+    CXXTEST_STD(cerr) << name << " -v -v          Enable verbose tracing output." << CXXTEST_STD(endl);
 }
 #endif
 
@@ -86,7 +89,19 @@ int Main(TesterT& tmp, int argc, char* argv[])
     {
         if (CXXTEST_STD(strcmp)(argv[1], "-v") == 0)
         {
+            if (tracker().print_tracing)
+            {
+                tracker().print_verbose_tracing = true;
+            }
+            else
+            {
+                tracker().print_tracing = true;
+            }
+        }
+        else if (CXXTEST_STD(strcmp)(argv[1], "-vv") == 0)
+        {
             tracker().print_tracing = true;
+            tracker().print_verbose_tracing = true;
         }
         else
         {

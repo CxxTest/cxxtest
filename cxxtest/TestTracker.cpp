@@ -18,6 +18,7 @@ namespace CxxTest
 {
 bool TestTracker::_created = false;
 bool TestTracker::print_tracing = false;
+bool TestTracker::print_verbose_tracing = false;
 
 TestTracker::TestTracker()
 {
