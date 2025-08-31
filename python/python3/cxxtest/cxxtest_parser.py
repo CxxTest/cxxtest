@@ -40,7 +40,7 @@ def scanInputFiles(files, _options):
         abort( 'No tests defined' )
     return [options,suites]
 
-lineCont_re = re.compile('(.*)\\\s*$')
+lineCont_re = re.compile(r'(.*)\s*$')
 def scanInputFile(fileName):
     '''Scan single input file for test suites'''
     # mode 'rb' is problematic in python3 - byte arrays don't behave the same as
@@ -127,11 +127,11 @@ def scanLineForExceptionHandling( line ):
         if not options.noExceptionHandling:
             options.haveExceptionHandling = 1
 
-classdef = '(?:::\s*)?(?:\w+\s*::\s*)*\w+'
-baseclassdef = '(?:public|private|protected)\s+%s' % (classdef,)
+classdef = r'(?:::\s*)?(?:\w+\s*::\s*)*\w+'
+baseclassdef = r'(?:public|private|protected)\s+%s' % (classdef,)
 general_suite = r"\bclass\s+(%s)\s*:(?:\s*%s\s*,)*\s*public\s+" \
                 % (classdef, baseclassdef,)
-testsuite = '(?:(?:::)?\s*CxxTest\s*::\s*)?TestSuite'
+testsuite = r'(?:(?:::)?\s*CxxTest\s*::\s*)?TestSuite'
 suites_re = { re.compile( general_suite + testsuite ) : None }
 generatedSuite_re = re.compile( r'\bCXXTEST_SUITE\s*\(\s*(\w*)\s*\)' )
 def scanLineForSuiteStart( fileName, lineNo, line ):
