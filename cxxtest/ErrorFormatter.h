@@ -20,6 +20,7 @@
 // analogout to std::ostream.
 //
 
+#include <cxxtest/OutputStream.h>
 #include <cxxtest/TestRunner.h>
 #include <cxxtest/TestListener.h>
 #include <cxxtest/TestTracker.h>
@@ -28,20 +29,6 @@
 
 namespace CxxTest
 {
-class OutputStream
-{
-public:
-    virtual ~OutputStream() {}
-    virtual void flush() {};
-    virtual OutputStream &operator<<(unsigned /*number*/) { return *this; }
-    virtual OutputStream &operator<<(const char * /*string*/) { return *this; }
-
-    typedef void (*Manipulator)(OutputStream &);
-
-    virtual OutputStream &operator<<(Manipulator m) { m(*this); return *this; }
-    static void endl(OutputStream &o) { (o << "\n").flush(); }
-};
-
 class ErrorFormatter : public TestListener
 {
 public:
@@ -327,11 +314,6 @@ private:
         (*_o) << "}" << endl;
     }
 
-    static void endl(OutputStream &o)
-    {
-        OutputStream::endl(o);
-    }
-
     bool _dotting;
     bool _reported;
     OutputStream *_o;
@@ -343,4 +325,3 @@ private:
 }
 
 #endif // __cxxtest__ErrorFormatter_h__
-
