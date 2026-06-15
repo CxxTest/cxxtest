@@ -126,8 +126,9 @@ char *bytesToString(const unsigned char *bytes, unsigned numBytes, unsigned maxB
 #ifndef CXXTEST_USER_VALUE_TRAITS
 unsigned ValueTraits<const double>::requiredDigitsOnLeft(double t)
 {
+    int base = BASE;
     unsigned digits = 1;
-    for (t = (t < 0.0) ? -t : t; t > 1.0; t /= BASE)
+    for (t = (t < 0.0) ? -t : t; t > 1.0; t /= base)
     {
         ++ digits;
     }
@@ -157,12 +158,13 @@ void ValueTraits<const double>::hugeNumber(double t)
 
 void ValueTraits<const double>::normalNumber(double t)
 {
+    int base = BASE;
     char *s = doNegative(t);
     s = doubleToString(t, s);
     s = copyString(s, ".");
     for (unsigned i = 0; i < DIGITS_ON_RIGHT; ++ i)
     {
-        s = numberToString((unsigned)(t *= BASE) % BASE, s);
+        s = numberToString((unsigned)(t *= base) % base, s);
     }
 }
 

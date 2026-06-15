@@ -37,6 +37,15 @@
 
 namespace CxxTest
 {
+    /// remove_const
+    template<typename T>
+    struct remove_const
+    { typedef T type; };
+
+    template<typename T>
+    struct remove_const<T const>
+    { typedef T type; };
+
 //
 // This is how we use the value traits
 //
@@ -117,7 +126,7 @@ inline ValueTraits<T> traits(T t)
     { \
         ValueTraits< CXXTEST_OLD_CLASS > _old; \
     public: \
-        ValueTraits( CXXTEST_NEW_CLASS n ) : _old( (CXXTEST_OLD_CLASS)n ) {} \
+        ValueTraits( CXXTEST_NEW_CLASS n ) : _old( static_cast<remove_const<CXXTEST_OLD_CLASS>::type>(n) ) {} \
         const char *asString( void ) const { return _old.asString(); } \
     }
 
